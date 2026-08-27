@@ -3,7 +3,7 @@
  * RU/EN открывает эквивалент текущей страницы, чужие разделы недоступны.
  */
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   directionHomeHref,
   equivalentPath,
@@ -101,5 +101,39 @@ describe('доступность разделов по веткам', () => {
       expect(isSectionAvailable(direction, 'about')).toBe(true);
       expect(isSectionAvailable(direction, 'contact')).toBe(true);
     }
+  });
+});
+
+describe('канонический домен (§12)', () => {
+  const saved = {
+    explicit: process.env.NEXT_PUBLIC_SITE_URL,
+    hosted: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  };
+
+  afterEach(async () => {
+    const keys = ['NEXT_PUBLIC_SITE_URL', 'VERCEL_PROJECT_PRODUCTION_URL'] as const;
+    for (const key of keys) delete process.env[key];
+    if (saved.explicit) process.env.NEXT_PUBLIC_SITE_URL = saved.explicit;
+    if (saved.hosted) process.env.VERCEL_PROJECT_PRODUCTION_URL = saved.hosted;
+  });
+
+  it('явная настройка важнее всего и теряет хвостовой слэш', async () => {
+    process.env.NEXT_PUBLIC_SITE_URL = 'https://nikitasokolov.ru/';
+    const { siteUrl } = await import('@/lib/site');
+    expect(siteUrl()).toBe('https://nikitasokolov.ru');
+  });
+
+  it('без неё берётся домен хостинга, а не localhost', async () => {
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+    process.env.VERCEL_PROJECT_PRODUCTION_URL = 'nik-sokolov-sait.vercel.app';
+    const { siteUrl } = await import('@/lib/site');
+    expect(siteUrl()).toBe('https://nik-sokolov-sait.vercel.app');
+  });
+
+  it('на своей машине остаётся локальный адрес', async () => {
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+    delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    const { siteUrl } = await import('@/lib/site');
+    expect(siteUrl()).toBe('http://localhost:3000');
   });
 });

@@ -64,7 +64,20 @@ export function otherLocale(locale: Locale): Locale {
   return locale === 'ru' ? 'en' : 'ru';
 }
 
-/** Канонический домен для canonical, hreflang, sitemap и OG (§12). */
+/**
+ * Канонический домен для canonical, hreflang, sitemap и OG (ТЗ §12).
+ *
+ * Порядок: явная настройка → домен, который подставляет хостинг → локальный
+ * адрес. Средний шаг важен: без него первая же выкладка ушла бы в поиск с
+ * адресами вида `http://localhost:3000`, и это пришлось бы переиндексировать.
+ */
 export function siteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.replace(/\/$/, '');
+
+  // Vercel сообщает домен проекта сам, ещё до подключения своего.
+  const hosted = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (hosted) return `https://${hosted.replace(/\/$/, '')}`;
+
+  return 'http://localhost:3000';
 }
