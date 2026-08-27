@@ -17,3 +17,8 @@ coverage/
 # Ключи задаются в .env.local локально и в настройках хостинга на проде.
 *.pem
 *.key
+
+# Служебная папка Vercel CLI
+.vercel/
+.vercel
+.env*
