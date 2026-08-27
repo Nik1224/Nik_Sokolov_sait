@@ -7,8 +7,7 @@
  *  • постер виден сразу и остаётся, если видео не загрузилось;
  *  • воспроизведение только muted + playsinline — иначе браузер его запретит;
  *  • при prefers-reduced-motion движения нет вовсе (§10);
- *  • на узких экранах видео не грузится: мобильному трафику нечего платить
- *    за декорацию, а карточки там всё равно идут вертикально;
+ *  • при включённой в системе экономии трафика видео не грузится;
  *  • поверх лежит затемнение — без него текст на светлых кадрах теряется.
  */
 
@@ -24,9 +23,6 @@ type Props = {
   alt?: string;
 };
 
-/** Ниже этой ширины фоновое видео не грузим. */
-const MIN_WIDTH_FOR_VIDEO = 768;
-
 export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
   const [playVideo, setPlayVideo] = useState(false);
 
@@ -34,17 +30,16 @@ export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
     if (!loopSrc) return;
 
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const wide = window.matchMedia(`(min-width: ${MIN_WIDTH_FOR_VIDEO}px)`);
 
-    const decide = () => setPlayVideo(!motion.matches && wide.matches);
+    const decide = () => {
+      // Экономия трафика — осознанный выбор человека, и он важнее украшений.
+      const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
+      setPlayVideo(!motion.matches && !connection?.saveData);
+    };
     decide();
 
     motion.addEventListener('change', decide);
-    wide.addEventListener('change', decide);
-    return () => {
-      motion.removeEventListener('change', decide);
-      wide.removeEventListener('change', decide);
-    };
+    return () => motion.removeEventListener('change', decide);
   }, [loopSrc]);
 
   // z-0, а не отрицательный индекс: слой с z-index < 0 уходит под фон body и

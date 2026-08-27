@@ -227,13 +227,35 @@ test('фоновое видео играет само, без звука и по
   expect(state).toEqual({ playing: true, muted: true, loop: true, inline: true });
 });
 
-test('на телефоне фоновое видео не грузится', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильного трафика');
+test('на телефоне фон и видео карточки играют без всякого наведения', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильной подачи');
 
   await page.goto('/ru');
-  await page.waitForTimeout(1000);
-  // Ни фонового, ни карточных: на touch наведения нет, платить трафиком не за что.
-  await expect(page.locator('video')).toHaveCount(0);
+  await page.waitForTimeout(2500);
+
+  const backdrop = page.locator('video[data-backdrop="showreel"]');
+  await expect(backdrop).toHaveCount(1);
+  await expect(backdrop).toHaveJSProperty('paused', false);
+
+  // Вертикальное видео стоит внутри карточки и играет само: наведения нет (§5.1).
+  const cardVideo = page.getByRole('main').getByRole('link', { name: /Private/ }).locator('video');
+  await expect(cardVideo).toHaveCount(1);
+  await expect(cardVideo).toHaveJSProperty('paused', false);
+});
+
+test('на телефоне видео занимает часть карточки, а не всю', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильной раскладки');
+
+  await page.goto('/ru');
+  const card = page.getByRole('main').getByRole('link', { name: /Private/ });
+  const cardBox = (await card.boundingBox())!;
+  const videoBox = (await card.locator('video').boundingBox())!;
+
+  // Видео справа, текст слева — они не наезжают друг на друга.
+  expect(videoBox.width).toBeLessThan(cardBox.width * 0.5);
+  expect(videoBox.x).toBeGreaterThan(cardBox.x + cardBox.width * 0.5);
 });
 
 test('при уменьшенной анимации движения нет', async ({ page }) => {
