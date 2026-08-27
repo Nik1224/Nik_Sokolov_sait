@@ -32,6 +32,7 @@ type Props = {
 type Mode = 'none' | 'hover' | 'always';
 
 export function DirectionCard({ index, direction, label, description, media, locale }: Props) {
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [mode, setMode] = useState<Mode>('none');
   const [source, setSource] = useState<string | null>(null);
@@ -61,9 +62,34 @@ export function DirectionCard({ index, direction, label, description, media, loc
     };
   }, []);
 
-  // Без наведения ждать нечего: подключаем файл сразу.
+  /**
+   * Без наведения видео живёт по видимости карточки: играет, когда она на
+   * экране, и стоит, когда нет. Простого autoplay мало — браузер не запускает
+   * ролик, который в момент загрузки был за пределами экрана, и после
+   * прокрутки он так и остаётся на паузе.
+   */
   useEffect(() => {
-    if (mode === 'always' && loop?.loopSrc) setSource(loop.loopSrc);
+    if (mode !== 'always' || !loop?.loopSrc) return;
+    const card = cardRef.current;
+    if (!card) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current;
+        if (entry.isIntersecting) {
+          setSource((current) => current ?? loop.loopSrc ?? null);
+          void video?.play().catch(() => {
+            /* автозапуск может быть запрещён — карточка работает и без видео */
+          });
+        } else {
+          video?.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    observer.observe(card);
+    return () => observer.disconnect();
   }, [mode, loop]);
 
   const activate = useCallback(() => {
@@ -86,6 +112,7 @@ export function DirectionCard({ index, direction, label, description, media, loc
 
   return (
     <Link
+      ref={cardRef}
       href={directionHomeHref(locale, direction)}
       onClick={() => track('direction_select', { direction })}
       onMouseEnter={activate}

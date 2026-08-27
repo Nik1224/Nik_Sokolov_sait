@@ -213,3 +213,36 @@ describe('шоурил на стартовой странице (§5.1)', () => 
     expect(embedUrl('file', 'x')).toBeNull();
   });
 });
+
+describe('видео карточек направлений (§5.1)', () => {
+  it('у каждого направления есть своё видео с постером и правами', async () => {
+    const { getDirections } = await import('@/content/queries');
+
+    for (const direction of await getDirections()) {
+      const media = direction.gatewayMedia;
+      expect(media, `у ${direction.key} нет медиа для карточки`).toBeDefined();
+      expect(media!.type).toBe('video');
+      if (media!.type !== 'video') continue;
+
+      expect(media!.loopSrc, `у ${direction.key} нет файла петли`).toBeTruthy();
+      // Файл должен лежать у нас: сторонний домен грузился бы до согласия (§7).
+      expect(media!.loopSrc!.startsWith('/')).toBe(true);
+      expect(media!.poster.width).toBeGreaterThan(0);
+      expect(media!.poster.height).toBeGreaterThan(0);
+      expect(media!.rights).not.toBe('pending');
+      expect(media!.alt.ru).toBeTruthy();
+    }
+  });
+
+  it('все карточки вертикальные: под колонку рядом с текстом', async () => {
+    const { getDirections } = await import('@/content/queries');
+
+    for (const direction of await getDirections()) {
+      const media = direction.gatewayMedia;
+      if (media?.type !== 'video') continue;
+      expect(media.poster.height, `${direction.key}: постер не вертикальный`).toBeGreaterThan(
+        media.poster.width,
+      );
+    }
+  });
+});

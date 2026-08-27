@@ -146,7 +146,17 @@ export const directions: DirectionDoc[] = [
       en: 'Business needs: events, interviews, brand, advertising, content.',
     },
     hero: decorative('hero-business', 'wide', 3),
-    gatewayMedia: decorative('gw-business', 'tall', 3),
+    // Вертикальная петля 22 с без звука, 873 КБ. Исходник снят в 480 px —
+    // вверх не растягиваем, иначе вырастет вес без прибавки в качестве.
+    gatewayMedia: {
+      _key: 'gw-business',
+      type: 'video',
+      provider: 'file',
+      poster: { src: '/media/business-poster.jpg', width: 480, height: 852 },
+      loopSrc: '/media/business-loop.mp4',
+      alt: { ru: 'Съёмка в студии для бренда', en: 'Studio shoot for a brand' },
+      rights: 'owned',
+    },
   },
   {
     _id: 'direction.production',
@@ -163,7 +173,16 @@ export const directions: DirectionDoc[] = [
       en: 'For producers and production houses: showreel, work, credits.',
     },
     hero: decorative('hero-production', 'wide', 4),
-    gatewayMedia: decorative('gw-production', 'tall', 4),
+    // Вертикальная петля 17 с без звука, 1,4 МБ.
+    gatewayMedia: {
+      _key: 'gw-production',
+      type: 'video',
+      provider: 'file',
+      poster: { src: '/media/production-poster.jpg', width: 720, height: 1282 },
+      loopSrc: '/media/production-loop.mp4',
+      alt: { ru: 'Работа на съёмочной площадке', en: 'Work on a film set' },
+      rights: 'owned',
+    },
   },
 ];
 

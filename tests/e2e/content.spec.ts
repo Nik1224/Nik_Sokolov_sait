@@ -305,3 +305,28 @@ test('текст карточки доступен без наведения', a
   await expect(card).toContainText('Личные съёмки');
   await expect(card).toHaveAttribute('href', '/ru/private');
 });
+
+test('видео карточки стартует при прокрутке к ней и встаёт на паузу за экраном', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильной подачи');
+
+  await page.goto('/ru');
+  await page.waitForTimeout(2000);
+
+  const third = page.getByRole('main').getByRole('link', { name: /Production/ });
+  // Браузер не запускает ролик, который при загрузке был за пределами экрана.
+  await expect(third.locator('video')).toHaveJSProperty('paused', true);
+
+  await third.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(2000);
+  await expect(third.locator('video')).toHaveJSProperty('paused', false);
+
+  // Ушедшая с экрана карточка не тратит батарею впустую. Прокручиваем до
+  // конца страницы: после scrollIntoView первая карточка ещё видна краем.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(1500);
+
+  const first = page.getByRole('main').getByRole('link', { name: /Private/ });
+  await expect(first.locator('video')).toHaveJSProperty('paused', true);
+});
