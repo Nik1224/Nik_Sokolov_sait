@@ -67,6 +67,7 @@ export type Dictionary = {
   };
   media: {
     playVideo: string;
+    watchShowreel: string;
     videoConsent: string;
     videoConsentAction: string;
     openGallery: string;
@@ -173,6 +174,7 @@ const ru: Dictionary = {
   },
   media: {
     playVideo: 'Смотреть видео',
+    watchShowreel: 'Смотреть шоурил со звуком',
     videoConsent:
       'Плеер загрузится со стороннего сервиса и получит данные вашего браузера.',
     videoConsentAction: 'Загрузить и воспроизвести',
@@ -279,6 +281,7 @@ const en: Dictionary = {
   },
   media: {
     playVideo: 'Play video',
+    watchShowreel: 'Watch showreel with sound',
     videoConsent:
       'The player loads from a third-party service and receives your browser data.',
     videoConsentAction: 'Load and play',

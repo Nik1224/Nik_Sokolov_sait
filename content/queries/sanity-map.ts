@@ -41,6 +41,7 @@ type RawMedia = {
   provider?: VideoProvider | null;
   videoId?: string | null;
   url?: string | null;
+  loopSrc?: string | null;
   durationSeconds?: number | null;
   image?: RawImage;
   poster?: RawImage;
@@ -69,6 +70,7 @@ export function mapMedia(raw: RawMedia): MediaAsset | null {
       provider: raw.provider ?? 'file',
       videoId: raw.videoId ?? undefined,
       url: raw.url ?? undefined,
+      loopSrc: raw.loopSrc ?? undefined,
       poster,
       durationSeconds: raw.durationSeconds ?? undefined,
     };

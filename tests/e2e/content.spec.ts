@@ -106,21 +106,30 @@ test('видео не грузит сторонний плеер до дейст
   await expect(page.getByRole('button', { name: /Смотреть видео/ }).first()).toBeVisible();
 });
 
-test('шоурил на START: постер свой, плеер грузится только по клику', async ({ page }) => {
+test('шоурил идёт фоном, сторонний плеер не грузится сам', async ({ page }) => {
   await page.goto('/ru');
 
-  const section = page.getByRole('region', { name: 'Шоурил' });
-  await expect(section).toBeVisible();
+  // Фон — наш файл, а не картинка с чужого CDN.
+  const backdrop = page.locator('img[src^="/media/"]').first();
+  await expect(backdrop).toBeVisible();
 
-  // Ни одного запроса к стороннему сервису до клика.
+  // Пока не попросили — ни одного стороннего плеера на странице.
   await expect(page.locator('iframe')).toHaveCount(0);
-  await expect(section.locator('img')).toHaveAttribute('src', /^\/media\//);
+});
 
-  // Предупреждение видно заранее — это и есть осознанное согласие.
-  await expect(section.getByText(/стороннего сервиса/)).toBeVisible();
+test('полный шоурил открывается по кнопке и грузит плеер только тогда', async ({ page }) => {
+  await page.goto('/ru');
 
-  await section.getByRole('button', { name: /Смотреть видео/ }).click();
-  await expect(page.locator('iframe')).toHaveAttribute('src', /kinescope\.io\/embed\//);
+  await expect(page.getByText(/стороннего сервиса/)).toBeVisible();
+  await page.getByRole('button', { name: /Смотреть шоурил со звуком/ }).click();
+
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('iframe')).toHaveAttribute('src', /kinescope\.io\/embed\//);
+
+  // Закрытие выгружает плеер: иначе видео продолжало бы играть за кадром.
+  await page.keyboard.press('Escape');
+  await expect(page.locator('iframe')).toHaveCount(0);
 });
 
 test('выбор направления остаётся в первом экране (§5.1)', async ({ page }, testInfo) => {

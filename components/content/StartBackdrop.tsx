@@ -1,0 +1,85 @@
+'use client';
+
+/**
+ * Фон стартовой страницы: шоурил на всю площадь экрана (ТЗ §5.1, §10).
+ *
+ * Правила безопасного фонового видео:
+ *  • постер виден сразу и остаётся, если видео не загрузилось;
+ *  • воспроизведение только muted + playsinline — иначе браузер его запретит;
+ *  • при prefers-reduced-motion движения нет вовсе (§10);
+ *  • на узких экранах видео не грузится: мобильному трафику нечего платить
+ *    за декорацию, а карточки там всё равно идут вертикально;
+ *  • поверх лежит затемнение — без него текст на светлых кадрах теряется.
+ */
+
+import { useEffect, useState } from 'react';
+import type { ImageRef } from '@/content/types';
+import { imageSrc, objectPosition } from '@/lib/media';
+
+type Props = {
+  poster: ImageRef;
+  /** Облегчённая петля. Пока её нет, фон остаётся статичным постером. */
+  loopSrc?: string;
+  /** Фон декоративный: содержание страницы от него не зависит (§11). */
+  alt?: string;
+};
+
+/** Ниже этой ширины фоновое видео не грузим. */
+const MIN_WIDTH_FOR_VIDEO = 768;
+
+export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
+  const [playVideo, setPlayVideo] = useState(false);
+
+  useEffect(() => {
+    if (!loopSrc) return;
+
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const wide = window.matchMedia(`(min-width: ${MIN_WIDTH_FOR_VIDEO}px)`);
+
+    const decide = () => setPlayVideo(!motion.matches && wide.matches);
+    decide();
+
+    motion.addEventListener('change', decide);
+    wide.addEventListener('change', decide);
+    return () => {
+      motion.removeEventListener('change', decide);
+      wide.removeEventListener('change', decide);
+    };
+  }, [loopSrc]);
+
+  // z-0, а не отрицательный индекс: слой с z-index < 0 уходит под фон body и
+  // становится невидимым. Содержимое страницы поднято на z-10.
+  return (
+    <div aria-hidden={alt ? undefined : 'true'} className="fixed inset-0 z-0 overflow-hidden bg-ink">
+      <img
+        src={imageSrc(poster, 1920)}
+        alt={alt}
+        width={poster.width}
+        height={poster.height}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ objectPosition: objectPosition(poster) }}
+      />
+
+      {playVideo && loopSrc ? (
+        <video
+          src={loopSrc}
+          poster={poster.src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          // Постер остаётся под видео: если файл не доедет, фон не почернеет.
+          onError={() => setPlayVideo(false)}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : null}
+
+      {/* Затемнение точечное, а не сплошное: сверху под заголовком и снизу под
+          футером — плотное, в середине за карточками — почти прозрачное.
+          Сплошная заливка съедала кадр целиком и лишала фон смысла. */}
+      <div className="absolute inset-0 bg-ink/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/10 to-ink" />
+    </div>
+  );
+}

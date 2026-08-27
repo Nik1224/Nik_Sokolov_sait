@@ -1,28 +1,33 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-/* --- База ---------------------------------------------------------------- */
+/* --- База ----------------------------------------------------------------
+   Всё в @layer base: правила вне слоёв побеждают утилиты Tailwind независимо
+   от специфичности, и тогда `h-full` на картинке перестаёт работать.
+   ------------------------------------------------------------------------- */
 
-html {
-  background-color: var(--color-ink);
-  -webkit-text-size-adjust: 100%;
-}
+@layer base {
+  html {
+    background-color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+  }
 
-body {
-  background-color: var(--color-ink);
-  color: var(--color-bone);
-  font-family: var(--font-sans);
-  font-synthesis-weight: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-/* Изображения никогда не выталкивают layout за пределы вьюпорта. */
-img,
-video {
-  max-width: 100%;
-  height: auto;
+  /* Изображения никогда не выталкивают layout за пределы вьюпорта. */
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* --- Фокус (§11: видимый keyboard focus) --------------------------------- */

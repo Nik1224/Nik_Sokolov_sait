@@ -79,6 +79,14 @@ export const mediaAsset = defineType({
         }),
     }),
     defineField({
+      name: 'loopSrc',
+      title: 'Файл петли для фона',
+      description:
+        'Короткий ролик без звука для фонового воспроизведения. Полный ролик сюда класть нельзя — он слишком тяжёлый.',
+      type: 'url',
+      hidden: ({ parent }) => parent?.type !== 'video',
+    }),
+    defineField({
       name: 'durationSeconds',
       title: 'Длительность, сек',
       type: 'number',

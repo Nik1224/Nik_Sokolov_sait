@@ -8,7 +8,8 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { DirectionCard } from '@/components/content/DirectionCard';
-import { VideoFacade } from '@/components/media/VideoFacade';
+import { ShowreelDialog } from '@/components/content/ShowreelDialog';
+import { StartBackdrop } from '@/components/content/StartBackdrop';
 import { Footer } from '@/components/global/Footer';
 import { JsonLd } from '@/components/global/misc';
 import { LocaleSwitcher } from '@/components/global/LocaleSwitcher';
@@ -43,6 +44,10 @@ export default async function StartPage({ params }: Props) {
   const [settings, directions] = await Promise.all([getGlobalSettings(), getDirections()]);
   const origin = siteUrl();
 
+  // Шоурил идёт фоном всей страницы, поэтому карточки своих картинок не несут:
+  // иначе за полупрозрачными плашками спорили бы два изображения.
+  const showreel = settings.showreel?.type === 'video' ? settings.showreel : null;
+
   return (
     <>
       <JsonLd
@@ -53,7 +58,11 @@ export default async function StartPage({ params }: Props) {
         )}
       />
 
-      <div className="flex min-h-dvh flex-col">
+      {showreel ? (
+        <StartBackdrop poster={showreel.poster} loopSrc={showreel.loopSrc} />
+      ) : null}
+
+      <div className="relative z-10 flex min-h-dvh flex-col">
         <header className="container-content flex items-center justify-between py-6">
           {/* На START логотип остаётся на месте: уходить отсюда некуда (§4). */}
           <p className="label m-0 text-bone">{settings.siteName}</p>
@@ -76,31 +85,23 @@ export default async function StartPage({ params }: Props) {
                 direction={direction.key}
                 label={dict.directions[direction.key]}
                 description={localizedString(direction.gatewayDescription, locale)}
-                media={direction.gatewayMedia}
+                media={showreel ? undefined : direction.gatewayMedia}
                 locale={locale}
               />
             ))}
           </div>
-        </main>
 
-        {settings.showreel?.type === 'video' ? (
-          <section aria-labelledby="showreel-heading" className="container-content pb-[var(--spacing-section)] pt-8">
-            <div className="mb-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
-              <h2 id="showreel-heading" className="text-h2 m-0">
-                {dict.nav.showreel}
-              </h2>
-              <p className="label m-0 text-bone-faint">
-                {localizedString(settings.descriptor, locale)}
-              </p>
+          {showreel?.videoId ? (
+            <div className="mt-10 lg:mt-14">
+              <ShowreelDialog
+                provider={showreel.provider}
+                videoId={showreel.videoId}
+                label={dict.media.watchShowreel}
+                dict={dict}
+              />
             </div>
-            <VideoFacade
-              media={settings.showreel}
-              locale={locale}
-              dict={dict}
-              sizes="(min-width: 1024px) 78rem, 100vw"
-            />
-          </section>
-        ) : null}
+          ) : null}
+        </main>
 
         <Footer locale={locale} settings={settings} dict={dict} showStartLink={false} />
       </div>

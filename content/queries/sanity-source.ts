@@ -30,7 +30,7 @@ const IMAGE = groq`{ hotspot, asset->{ url, metadata { dimensions, lqip } } }`;
 
 const MEDIA = groq`{
   _key, type, decorative, alt, caption, credit, rights,
-  provider, videoId, url, durationSeconds,
+  provider, videoId, url, loopSrc, durationSeconds,
   image ${IMAGE},
   poster ${IMAGE}
 }`;
