@@ -38,6 +38,11 @@ export const globalSettings: GlobalSettings = {
     provider: 'kinescope',
     videoId: 'dSK6QkqpEZJt7vHY6rCgpD',
     poster: { src: '/media/showreel-poster.jpg', width: 1920, height: 1080 },
+    // Петля 40 с без звука, 2,4 МБ. Полный ролик — 146 с и 104 МБ: фоном такое
+    // грузить нельзя. Постер вырезан из первого кадра петли, поэтому старт
+    // видео не даёт скачка картинки.
+    loopSrc: '/media/showreel-loop.mp4',
+    durationSeconds: 146,
     alt: { ru: 'Шоурил Никиты Соколова', en: 'Nikita Sokolov showreel' },
     rights: 'owned',
   },

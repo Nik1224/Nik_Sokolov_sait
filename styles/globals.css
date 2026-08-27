@@ -80,6 +80,26 @@
   padding-inline: var(--spacing-gutter);
 }
 
+/**
+ * Затемнение поверх шоурила на START.
+ *
+ * Не сплошная заливка, а точная кривая: плотно там, где лежит текст
+ * (заголовок сверху, футер снизу), и почти прозрачно за карточками. Кадр
+ * при этом остаётся живым, а читаемость не зависит от того, какой момент
+ * ролика сейчас на экране.
+ */
+@utility start-scrim {
+  background: linear-gradient(
+    to bottom,
+    var(--color-ink) 0%,
+    color-mix(in srgb, var(--color-ink) 78%, transparent) 18%,
+    color-mix(in srgb, var(--color-ink) 40%, transparent) 34%,
+    color-mix(in srgb, var(--color-ink) 12%, transparent) 55%,
+    color-mix(in srgb, var(--color-ink) 55%, transparent) 82%,
+    var(--color-ink) 100%
+  );
+}
+
 /* Ссылка «к основному содержимому» — видима только при фокусе (§11). */
 @utility skip-link {
   position: absolute;

@@ -207,3 +207,39 @@ test('незаполненная форма не отправляется и о�
   await expect(page.getByText('Обязательное поле').first()).toBeVisible();
   await expect(page.getByText('Заявка отправлена')).toHaveCount(0);
 });
+
+test('фоновое видео играет само, без звука и по кругу', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'на узких экранах видео намеренно не грузится');
+
+  await page.goto('/ru');
+  const video = page.locator('video');
+  await expect(video).toHaveCount(1);
+
+  await page.waitForTimeout(1500);
+  const state = await video.evaluate((el: HTMLVideoElement) => ({
+    playing: !el.paused,
+    muted: el.muted,
+    loop: el.loop,
+    inline: el.playsInline,
+  }));
+
+  expect(state).toEqual({ playing: true, muted: true, loop: true, inline: true });
+});
+
+test('на телефоне фоновое видео не грузится', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильного трафика');
+
+  await page.goto('/ru');
+  await page.waitForTimeout(1000);
+  await expect(page.locator('video')).toHaveCount(0);
+});
+
+test('при уменьшенной анимации движения нет', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru');
+  await page.waitForTimeout(1000);
+
+  await expect(page.locator('video')).toHaveCount(0);
+  // Кадр при этом остаётся: содержание не зависит от движения (§10).
+  await expect(page.locator('img[src^="/media/"]').first()).toBeVisible();
+});

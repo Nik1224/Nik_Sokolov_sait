@@ -75,11 +75,11 @@ export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
         />
       ) : null}
 
-      {/* Затемнение точечное, а не сплошное: сверху под заголовком и снизу под
-          футером — плотное, в середине за карточками — почти прозрачное.
-          Сплошная заливка съедала кадр целиком и лишала фон смысла. */}
-      <div className="absolute inset-0 bg-ink/30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/10 to-ink" />
+      {/* Кривая затемнения описана в styles/globals.css: плотно под текстом,
+          прозрачно за карточками. Лёгкая общая подложка страхует от кадров,
+          которые окажутся ярче постера. */}
+      <div className="absolute inset-0 bg-ink/22" />
+      <div className="start-scrim absolute inset-0" />
     </div>
   );
 }
