@@ -1,0 +1,114 @@
+/**
+ * Листинг работ: Cases (BUSINESS), Work (PRODUCTION), Portfolio (PRIVATE).
+ *
+ * Один шаблон на три ветки (ТЗ §15.2: не дублировать три почти одинаковых
+ * приложения). Сетка не зависит от количества записей (§8).
+ */
+
+import Link from 'next/link';
+import { ProjectCard } from '@/components/content/cards';
+import { EmptyState } from '@/components/content/Section';
+import { Breadcrumbs } from '@/components/global/misc';
+import type { Category, Project } from '@/content/types';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
+import { localizedString } from '@/lib/i18n/localize';
+import { href } from '@/lib/routing';
+import type { Direction, Locale } from '@/lib/site';
+
+type Props = {
+  locale: Locale;
+  direction: Direction;
+  section: 'cases' | 'work' | 'portfolio';
+  dict: Dictionary;
+  title: string;
+  lead?: string;
+  projects: Project[];
+  categories: Category[];
+  activeCategory?: string;
+};
+
+export function ProjectListing({
+  locale,
+  direction,
+  section,
+  dict,
+  title,
+  lead,
+  projects,
+  categories,
+  activeCategory,
+}: Props) {
+  const listingHref = href({ locale, direction, section });
+
+  return (
+    <div className="container-content py-16 lg:py-24">
+      <Breadcrumbs
+        dict={dict}
+        items={[
+          { label: dict.common.home, href: href({ locale, direction }) },
+          { label: dict.nav[section] },
+        ]}
+      />
+
+      <h1 className="text-h1 m-0 max-w-3xl text-balance">{title}</h1>
+      {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
+
+      {categories.length > 0 ? (
+        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">
+          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
+            <li>
+              <Link
+                href={listingHref}
+                aria-current={!activeCategory ? 'true' : undefined}
+                className={`label transition-colors ${
+                  !activeCategory ? 'text-accent' : 'text-bone-faint hover:text-bone'
+                }`}
+              >
+                {dict.common.viewAll}
+              </Link>
+            </li>
+            {categories.map((category) => {
+              const isActive = category.slug === activeCategory;
+              return (
+                <li key={category._id}>
+                  <Link
+                    // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
+                    href={`${listingHref}?category=${category.slug}`}
+                    aria-current={isActive ? 'true' : undefined}
+                    className={`label transition-colors ${
+                      isActive ? 'text-accent' : 'text-bone-faint hover:text-bone'
+                    }`}
+                  >
+                    {localizedString(category.title, locale)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : null}
+
+      <div className="mt-12">
+        {projects.length === 0 ? (
+          <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
+        ) : (
+          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+            {projects.map((project, index) => (
+              <li key={project._id}>
+                <ProjectCard
+                  project={project}
+                  locale={locale}
+                  direction={direction}
+                  dict={dict}
+                  categories={categories}
+                  section={section}
+                  priority={index < 3}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}

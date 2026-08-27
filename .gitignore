@@ -1,0 +1,19 @@
+node_modules/
+.next/
+out/
+build/
+.env
+.env.local
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+test-results/
+playwright-report/
+coverage/
+.playwright/
+
+# Секреты никогда не попадают в репозиторий.
+# Ключи задаются в .env.local локально и в настройках хостинга на проде.
+*.pem
+*.key

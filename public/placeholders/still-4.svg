@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1333" width="2000" height="1333" role="img">
+  <defs>
+    <linearGradient id="g10a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c2020"/>
+      <stop offset="1" stop-color="#090a0a"/>
+    </linearGradient>
+    <radialGradient id="g10b" cx="0.72" cy="0.24" r="0.75">
+      <stop offset="0" stop-color="#2f4a42" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#2f4a42" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="g10n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+  <rect width="2000" height="1333" fill="url(#g10a)"/>
+  <rect width="2000" height="1333" fill="url(#g10b)"/>
+  <rect width="2000" height="1333" filter="url(#g10n)" opacity="0.06"/>
+  <g fill="#f2f0ec" fill-opacity="0.34" font-family="ui-monospace, monospace" font-size="37" letter-spacing="8">
+    <text x="100" y="1240">DEMO 10 — 2000×1333</text>
+  </g>
+</svg>
