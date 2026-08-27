@@ -44,7 +44,7 @@ export default async function DirectionLayout({
   }));
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div data-theme={direction} className="flex min-h-dvh flex-col bg-ink text-bone">
       <GlobalHeader
         locale={locale}
         direction={direction}

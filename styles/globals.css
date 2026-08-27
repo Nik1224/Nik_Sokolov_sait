@@ -6,6 +6,48 @@
    от специфичности, и тогда `h-full` на картинке перестаёт работать.
    ------------------------------------------------------------------------- */
 
+/* --- Тема направления PRIVATE --------------------------------------------
+   Частному клиенту нужна другая интонация: мягкая бумага вместо кинематогра-
+   фичной черноты и красный акцент вместо песочного (ТЗ §5.2 — эмоциональная
+   подача). BUSINESS и PRODUCTION остаются на базовой палитре.
+
+   Переопределяются только токены. Компоненты не меняются вовсе — ради этого
+   цвета и вынесены в переменные.
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    --private-ground: #f6f1e9;
+  }
+
+  [data-theme='private'] {
+    --color-ink: var(--private-ground);
+    --color-ink-raised: #ede4d8;
+    --color-ink-sunken: #e9dfd1;
+    --color-bone: #2a211c;
+    --color-bone-dim: #5a4e45;
+    /* Проверено на всех трёх подложках темы, включая самую тёмную —
+       футер #e9dfd1. Худший контраст 4.95:1. */
+    --color-bone-faint: #6a5b4e;
+    --color-accent: #b23a2f;
+    --color-accent-dim: #8a2c24;
+    --color-danger: #a32318;
+    --color-line: rgba(42, 33, 28, 0.14);
+    --color-line-strong: rgba(42, 33, 28, 0.32);
+
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    color-scheme: light;
+  }
+
+  /* Подложка страницы и «резинка» прокрутки тоже должны быть светлыми,
+     иначе по краям проглядывает тёмный фон. */
+  html:has([data-theme='private']),
+  body:has([data-theme='private']) {
+    background-color: var(--private-ground);
+  }
+}
+
 @layer base {
   html {
     background-color: var(--color-ink);

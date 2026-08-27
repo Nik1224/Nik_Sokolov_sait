@@ -108,3 +108,69 @@ test('мобильное меню содержит разделы, направ�
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
 });
+
+test('PRIVATE открывается в светлой теме, остальные ветки — в тёмной', async ({ page }) => {
+  await page.goto('/ru/private');
+  const light = await page
+    .locator('[data-theme="private"]')
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+
+  await page.goto('/ru/business');
+  const dark = await page
+    .locator('[data-theme="business"]')
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+
+  expect(light).not.toBe(dark);
+  // Светлая подложка PRIVATE: сумма каналов заведомо выше, чем у тёмной.
+  const sum = (rgb: string) =>
+    (rgb.match(/\d+/g) ?? []).slice(0, 3).reduce((a, v) => a + Number(v), 0);
+  expect(sum(light)).toBeGreaterThan(600);
+  expect(sum(dark)).toBeLessThan(100);
+});
+
+test('переход краской закрывает экран прежде, чем меняется страница', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'замер по одному разрешению');
+
+  await page.goto('/ru');
+  await page.waitForTimeout(600);
+
+  await page.evaluate(() => {
+    (window as unknown as { __seen: string[] }).__seen = [];
+    const layer = document.querySelector('[data-paint-layer]') as HTMLElement;
+    const sheet = layer.firstElementChild as HTMLElement;
+    const tick = () => {
+      const shift = new DOMMatrixReadOnly(getComputedStyle(sheet).transform).m42;
+      const showing = getComputedStyle(layer).visibility === 'visible';
+      // Запоминаем адрес в моменты, когда краска видна, но экран ещё не закрыт.
+      // После завершения слой прячется и сбрасывается наверх — это не в счёт.
+      if (showing && shift < -20) {
+        (window as unknown as { __seen: string[] }).__seen.push(location.pathname);
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+
+  await page.getByRole('main').getByRole('link', { name: /Private/ }).click();
+  await expect(page).toHaveURL('/ru/private');
+
+  const seen = await page.evaluate(() => (window as unknown as { __seen: string[] }).__seen);
+  // Пока экран не закрыт, адрес обязан оставаться прежним — иначе виден скачок.
+  expect(new Set(seen.filter((p) => p !== '/ru'))).toEqual(new Set());
+});
+
+test('слой перехода скрыт от ассистивных технологий', async ({ page }) => {
+  await page.goto('/ru');
+  await expect(page.locator('[data-paint-layer]')).toHaveAttribute('aria-hidden', 'true');
+});
+
+test('при уменьшенной анимации переход мгновенный, без краски', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru');
+
+  await page.getByRole('main').getByRole('link', { name: /Private/ }).click();
+  await expect(page).toHaveURL('/ru/private');
+
+  // Слой краски даже не показывался.
+  await expect(page.locator('[data-paint-layer]')).toHaveCSS('visibility', 'hidden');
+});

@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { getGlobalSettings, hasDemoContent } from '@/content/queries';
 import { DemoBanner, SkipLink } from '@/components/global/misc';
+import { PaintTransition } from '@/components/global/PaintTransition';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
@@ -66,6 +67,7 @@ export default async function LocaleLayout({
         <SkipLink label={dict.common.skipToContent} />
         {showDemoBanner ? <DemoBanner dict={dict} /> : null}
         {children}
+        <PaintTransition />
       </body>
     </html>
   );

@@ -18,6 +18,7 @@ import type { MediaAsset } from '@/content/types';
 import { track } from '@/lib/analytics';
 import { localizedString } from '@/lib/i18n/localize';
 import { directionHomeHref } from '@/lib/routing';
+import { DIRECTION_PAINT, motionAllowed, requestPaintTransition } from '@/lib/transition';
 import type { Direction, Locale } from '@/lib/site';
 
 type Props = {
@@ -114,7 +115,21 @@ export function DirectionCard({ index, direction, label, description, media, loc
     <Link
       ref={cardRef}
       href={directionHomeHref(locale, direction)}
-      onClick={() => track('direction_select', { direction })}
+      onClick={(event) => {
+        track('direction_select', { direction });
+
+        // Обычный переход оставляем как есть: средняя кнопка, Cmd/Ctrl-клик и
+        // «открыть в новой вкладке» ломать нельзя. Анимация — только для
+        // простого клика и только когда движение разрешено (§10).
+        if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+        if (event.button !== 0 || !motionAllowed()) return;
+
+        event.preventDefault();
+        requestPaintTransition({
+          href: directionHomeHref(locale, direction),
+          colorVar: DIRECTION_PAINT[direction],
+        });
+      }}
       onMouseEnter={activate}
       onMouseLeave={deactivate}
       onFocus={activate}
