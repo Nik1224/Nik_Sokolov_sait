@@ -38,7 +38,7 @@ export type ImageRef = {
   focalPoint?: FocalPoint;
 };
 
-export type VideoProvider = 'youtube' | 'vimeo' | 'file';
+export type VideoProvider = 'kinescope' | 'youtube' | 'vimeo' | 'file';
 
 type MediaCommon = {
   _key: string;
@@ -205,6 +205,8 @@ export type SocialLink = { label: string; href: string };
 
 export type GlobalSettings = {
   siteName: string;
+  /** Шоурил на START. Один на весь сайт, поэтому живёт в настройках (§8). */
+  showreel?: MediaAsset;
   descriptor: LocaleString;
   /** География работы: показывается в контактах и футере (§5.8). */
   location?: LocaleString;

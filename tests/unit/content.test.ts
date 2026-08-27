@@ -180,3 +180,36 @@ describe('настройки сайта (§8, §18)', () => {
     for (const link of settings.legalLinks) expect(link.href).toMatch(/^https:\/\//);
   });
 });
+
+describe('шоурил на стартовой странице (§5.1)', () => {
+  it('это видео с постером и подтверждёнными правами', async () => {
+    const { getGlobalSettings } = await import('@/content/queries');
+    const showreel = (await getGlobalSettings()).showreel;
+
+    expect(showreel?.type).toBe('video');
+    if (showreel?.type !== 'video') return;
+
+    expect(showreel.poster.width).toBeGreaterThan(0);
+    expect(showreel.poster.height).toBeGreaterThan(0);
+    expect(showreel.rights).not.toBe('pending');
+    expect(showreel.alt.ru).toBeTruthy();
+  });
+
+  it('постер лежит локально, а не на стороннем CDN', async () => {
+    const { getGlobalSettings } = await import('@/content/queries');
+    const showreel = (await getGlobalSettings()).showreel;
+    if (showreel?.type !== 'video') throw new Error('шоурил должен быть видео');
+
+    // Постер с чужого домена загрузился бы при открытии страницы — до того,
+    // как посетитель нажал «play». Это ломает отложенную загрузку (§7, §10).
+    expect(showreel.poster.src.startsWith('/')).toBe(true);
+  });
+
+  it('ссылка на плеер собирается корректно', async () => {
+    const { embedUrl } = await import('@/lib/media');
+    expect(embedUrl('kinescope', 'dSK6QkqpEZJt7vHY6rCgpD')).toBe(
+      'https://kinescope.io/embed/dSK6QkqpEZJt7vHY6rCgpD?autoplay=1',
+    );
+    expect(embedUrl('file', 'x')).toBeNull();
+  });
+});

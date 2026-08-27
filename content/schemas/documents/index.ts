@@ -68,6 +68,12 @@ export const globalSettings = defineType({
     defineField({ name: 'siteName', title: 'Название', type: 'string', validation: (rule) => rule.required() }),
     defineField({ name: 'descriptor', title: 'Дескриптор', type: 'localeString' }),
     defineField({
+      name: 'showreel',
+      title: 'Шоурил на стартовой странице',
+      description: 'Постер обязателен — сторонний плеер грузится только по клику.',
+      type: 'mediaAsset',
+    }),
+    defineField({
       name: 'location',
       title: 'География',
       description: 'Например: Москва / Санкт-Петербург.',

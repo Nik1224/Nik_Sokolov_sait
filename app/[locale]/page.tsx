@@ -8,6 +8,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { DirectionCard } from '@/components/content/DirectionCard';
+import { VideoFacade } from '@/components/media/VideoFacade';
 import { Footer } from '@/components/global/Footer';
 import { JsonLd } from '@/components/global/misc';
 import { LocaleSwitcher } from '@/components/global/LocaleSwitcher';
@@ -59,7 +60,7 @@ export default async function StartPage({ params }: Props) {
           <LocaleSwitcher locale={locale} dict={dict} />
         </header>
 
-        <main id="main" className="container-content flex flex-1 flex-col justify-center py-8 lg:py-12">
+        <main id="main" className="container-content flex min-h-[calc(100dvh-9rem)] flex-1 flex-col justify-center py-8 lg:py-12">
           <p className="label text-accent">{localizedString(settings.descriptor, locale)}</p>
           <h1 className="text-h1 mt-5 max-w-3xl text-balance">
             {locale === 'ru'
@@ -81,6 +82,25 @@ export default async function StartPage({ params }: Props) {
             ))}
           </div>
         </main>
+
+        {settings.showreel?.type === 'video' ? (
+          <section aria-labelledby="showreel-heading" className="container-content pb-[var(--spacing-section)] pt-8">
+            <div className="mb-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-end md:justify-between">
+              <h2 id="showreel-heading" className="text-h2 m-0">
+                {dict.nav.showreel}
+              </h2>
+              <p className="label m-0 text-bone-faint">
+                {localizedString(settings.descriptor, locale)}
+              </p>
+            </div>
+            <VideoFacade
+              media={settings.showreel}
+              locale={locale}
+              dict={dict}
+              sizes="(min-width: 1024px) 78rem, 100vw"
+            />
+          </section>
+        ) : null}
 
         <Footer locale={locale} settings={settings} dict={dict} showStartLink={false} />
       </div>

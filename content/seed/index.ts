@@ -29,6 +29,19 @@ export const globalSettings: GlobalSettings = {
   descriptor: { ru: 'Photo / Video / Visual Production', en: 'Photo / Video / Visual Production' },
   location: { ru: 'Москва / Санкт-Петербург', en: 'Moscow / St. Petersburg' },
 
+  // Настоящий шоурил, подтверждён владельцем. Постер лежит локально: если
+  // тянуть его с CDN Kinescope, браузер посетителя свяжется со сторонним
+  // сервисом ещё до нажатия «play», и отложенная загрузка теряет смысл (§7, §10).
+  showreel: {
+    _key: 'showreel',
+    type: 'video',
+    provider: 'kinescope',
+    videoId: 'dSK6QkqpEZJt7vHY6rCgpD',
+    poster: { src: '/media/showreel-poster.jpg', width: 1920, height: 1080 },
+    alt: { ru: 'Шоурил Никиты Соколова', en: 'Nikita Sokolov showreel' },
+    rights: 'owned',
+  },
+
   // Контакты подтверждены владельцем и взяты с lokos.pro/contacts.
   // Электронной почты на источнике нет — до неё приём заявок формой выключен.
   contacts: [

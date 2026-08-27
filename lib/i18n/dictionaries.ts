@@ -174,7 +174,7 @@ const ru: Dictionary = {
   media: {
     playVideo: 'Смотреть видео',
     videoConsent:
-      'Видео размещено на стороннем сервисе. При воспроизведении он получит данные вашего браузера.',
+      'Плеер загрузится со стороннего сервиса и получит данные вашего браузера.',
     videoConsentAction: 'Загрузить и воспроизвести',
     openGallery: 'Открыть в галерее',
     closeGallery: 'Закрыть галерею',
@@ -280,7 +280,7 @@ const en: Dictionary = {
   media: {
     playVideo: 'Play video',
     videoConsent:
-      'This video is hosted by a third-party service. Playing it shares your browser data with them.',
+      'The player loads from a third-party service and receives your browser data.',
     videoConsentAction: 'Load and play',
     openGallery: 'Open in gallery',
     closeGallery: 'Close gallery',

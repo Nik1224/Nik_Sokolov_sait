@@ -49,6 +49,9 @@ export function aspectRatio(image: ImageRef): number | undefined {
 
 /** Ссылка на встроенный плеер стороннего сервиса (грузится только по согласию). */
 export function embedUrl(provider: string, videoId: string): string | null {
+  if (provider === 'kinescope') {
+    return `https://kinescope.io/embed/${encodeURIComponent(videoId)}?autoplay=1`;
+  }
   if (provider === 'youtube') {
     return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
   }

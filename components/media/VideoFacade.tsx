@@ -26,18 +26,18 @@ type Props = {
 };
 
 export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = false }: Props) {
-  const [stage, setStage] = useState<'poster' | 'consent' | 'playing'>('poster');
+  const [playing, setPlaying] = useState(false);
 
   const alt = localizedString(media.alt, locale);
   const caption = localizedString(media.caption, locale);
-  const isThirdParty = media.provider === 'youtube' || media.provider === 'vimeo';
+  const isThirdParty = media.provider !== 'file';
   const src = media.videoId ? embedUrl(media.provider, media.videoId) : null;
   const duration = formatDuration(media.durationSeconds);
   const playable = Boolean(src) || Boolean(media.url);
 
   function start() {
     track('video_start', { provider: media.provider });
-    setStage(isThirdParty ? 'consent' : 'playing');
+    setPlaying(true);
   }
 
   return (
@@ -46,7 +46,7 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
         className="relative overflow-hidden bg-ink-raised"
         style={{ aspectRatio: String(media.poster.width / media.poster.height || 16 / 9) }}
       >
-        {stage === 'playing' && src ? (
+        {playing && src ? (
           <iframe
             src={src}
             title={alt || dict.media.playVideo}
@@ -54,7 +54,7 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
             allowFullScreen
             className="absolute inset-0 h-full w-full border-0"
           />
-        ) : stage === 'playing' && media.url ? (
+        ) : playing && media.url ? (
           // eslint-disable-next-line jsx-a11y/media-has-caption -- субтитры добавляются вместе с реальными роликами (§11)
           <video
             src={media.url}
@@ -75,45 +75,40 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
             />
             <div className="absolute inset-0 bg-ink/35" aria-hidden="true" />
 
-            {stage === 'consent' ? (
-              <div className="absolute inset-0 flex items-center justify-center p-6">
-                <div className="max-w-sm bg-ink/90 p-6 text-center backdrop-blur">
-                  <p className="text-sm text-bone-dim">{dict.media.videoConsent}</p>
-                  <button
-                    type="button"
-                    onClick={() => setStage('playing')}
-                    className="mt-4 inline-flex items-center gap-2 bg-bone px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-accent"
-                  >
-                    {dict.media.videoConsentAction}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={start}
-                disabled={!playable}
-                className="group absolute inset-0 flex items-center justify-center disabled:cursor-not-allowed"
+            <button
+              type="button"
+              onClick={start}
+              disabled={!playable}
+              className="group absolute inset-0 flex items-center justify-center disabled:cursor-not-allowed"
+            >
+              {/* Предупреждение о стороннем плеере не дублируем: оно стоит
+                  отдельной строкой сразу после кнопки и читается один раз. */}
+              <span className="sr-only">
+                {dict.media.playVideo}
+                {alt ? `: ${alt}` : ''}
+              </span>
+              <span
+                aria-hidden="true"
+                className="flex h-16 w-16 items-center justify-center rounded-full border border-bone/50 bg-ink/40 backdrop-blur transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:scale-110 group-focus-visible:scale-110"
               >
-                <span className="sr-only">
-                  {dict.media.playVideo}
-                  {alt ? `: ${alt}` : ''}
+                <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-bone">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+              {duration ? (
+                <span aria-hidden="true" className="label absolute bottom-4 right-4 text-bone/80">
+                  {duration}
                 </span>
-                <span
-                  aria-hidden="true"
-                  className="flex h-16 w-16 items-center justify-center rounded-full border border-bone/50 bg-ink/40 backdrop-blur transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:scale-110 group-focus-visible:scale-110"
-                >
-                  <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-bone">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </span>
-                {duration ? (
-                  <span aria-hidden="true" className="label absolute bottom-4 right-4 text-bone/70">
-                    {duration}
-                  </span>
-                ) : null}
-              </button>
-            )}
+              ) : null}
+            </button>
+
+            {/* Предупреждение видно ДО клика: это и есть осознанное согласие (§7).
+                Отдельный экран подтверждения только добавлял бы второй клик. */}
+            {isThirdParty ? (
+              <p className="pointer-events-none absolute inset-x-0 bottom-0 m-0 bg-gradient-to-t from-ink/85 to-transparent px-4 pb-4 pt-10 text-center text-xs text-bone-dim">
+                {dict.media.videoConsent}
+              </p>
+            ) : null}
           </>
         )}
       </div>

@@ -56,6 +56,7 @@ function mapSeo(raw: { ogImage?: unknown } | null | undefined) {
 
 const GLOBAL_SETTINGS = groq`*[_type == "globalSettings"][0]{
   siteName, descriptor, location, contacts, socials, legalLinks, analytics, featureFlags,
+  showreel ${MEDIA},
   defaultSeo ${SEO}
 }`;
 
@@ -140,6 +141,7 @@ export const sanitySource: ContentSource = {
       contacts: (raw.contacts as GlobalSettings['contacts']) ?? [],
       socials: (raw.socials as GlobalSettings['socials']) ?? [],
       legalLinks: (raw.legalLinks as GlobalSettings['legalLinks']) ?? [],
+      showreel: mapMedia(raw.showreel as never) ?? undefined,
       defaultSeo: mapSeo(raw.defaultSeo as Raw) ?? {},
       featureFlags: {
         ...((raw.featureFlags as GlobalSettings['featureFlags']) ?? {}),

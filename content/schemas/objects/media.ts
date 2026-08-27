@@ -44,6 +44,7 @@ export const mediaAsset = defineType({
       type: 'string',
       options: {
         list: [
+          { title: 'Kinescope', value: 'kinescope' },
           { title: 'YouTube', value: 'youtube' },
           { title: 'Vimeo', value: 'vimeo' },
           { title: 'Файл по прямой ссылке', value: 'file' },

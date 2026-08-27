@@ -106,6 +106,35 @@ test('видео не грузит сторонний плеер до дейст
   await expect(page.getByRole('button', { name: /Смотреть видео/ }).first()).toBeVisible();
 });
 
+test('шоурил на START: постер свой, плеер грузится только по клику', async ({ page }) => {
+  await page.goto('/ru');
+
+  const section = page.getByRole('region', { name: 'Шоурил' });
+  await expect(section).toBeVisible();
+
+  // Ни одного запроса к стороннему сервису до клика.
+  await expect(page.locator('iframe')).toHaveCount(0);
+  await expect(section.locator('img')).toHaveAttribute('src', /^\/media\//);
+
+  // Предупреждение видно заранее — это и есть осознанное согласие.
+  await expect(section.getByText(/стороннего сервиса/)).toBeVisible();
+
+  await section.getByRole('button', { name: /Смотреть видео/ }).click();
+  await expect(page.locator('iframe')).toHaveAttribute('src', /kinescope\.io\/embed\//);
+});
+
+test('выбор направления остаётся в первом экране (§5.1)', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'на мобильном карточки идут вертикально');
+
+  await page.goto('/ru');
+  const viewport = page.viewportSize()!.height;
+
+  // Третья карточка должна быть видна без прокрутки: шоурил её не выдавливает.
+  const third = page.getByRole('main').getByRole('link', { name: /Production/ });
+  const box = await third.boundingBox();
+  expect(box!.y).toBeLessThan(viewport);
+});
+
 test('sitemap содержит только канонический адрес статьи', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
   const body = await response.text();
