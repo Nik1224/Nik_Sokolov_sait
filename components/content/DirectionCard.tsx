@@ -109,9 +109,12 @@ export function DirectionCard({ index, direction, label, description, media, loc
             aria-hidden="true"
             className="pointer-events-none absolute inset-y-0 right-0 w-[42%] object-cover opacity-100 transition-opacity duration-[var(--duration-slow)] lg:inset-0 lg:w-full lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100"
           />
+          {/* Затемнение нужно только на широком экране, где текст лежит поверх
+              видео. На телефоне текст стоит рядом с кадром, и накладка там
+              выглядела чёрной полосой на плашке. */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 w-[52%] bg-gradient-to-r from-ink via-ink/45 to-transparent lg:inset-0 lg:w-full lg:bg-gradient-to-t lg:from-ink lg:via-ink/55 lg:to-ink/10 lg:opacity-0 lg:transition-opacity lg:duration-[var(--duration-slow)] lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100"
+            className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-ink via-ink/55 to-ink/10 opacity-0 transition-opacity duration-[var(--duration-slow)] lg:block lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100"
           />
         </>
       ) : null}
