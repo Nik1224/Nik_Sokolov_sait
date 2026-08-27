@@ -212,7 +212,8 @@ test('фоновое видео играет само, без звука и по
   test.skip(testInfo.project.name === 'mobile', 'на узких экранах видео намеренно не грузится');
 
   await page.goto('/ru');
-  const video = page.locator('video');
+  // Именно фоновое видео: в карточках направлений есть свои.
+  const video = page.locator('video[data-backdrop="showreel"]');
   await expect(video).toHaveCount(1);
 
   await page.waitForTimeout(1500);
@@ -231,6 +232,7 @@ test('на телефоне фоновое видео не грузится', as
 
   await page.goto('/ru');
   await page.waitForTimeout(1000);
+  // Ни фонового, ни карточных: на touch наведения нет, платить трафиком не за что.
   await expect(page.locator('video')).toHaveCount(0);
 });
 
@@ -242,4 +244,42 @@ test('при уменьшенной анимации движения нет', a
   await expect(page.locator('video')).toHaveCount(0);
   // Кадр при этом остаётся: содержание не зависит от движения (§10).
   await expect(page.locator('img[src^="/media/"]').first()).toBeVisible();
+});
+
+test('карточка направления раскрывается при наведении и играет видео', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'наведения на touch-устройствах нет (§5.1)');
+
+  await page.goto('/ru');
+  const card = page.getByRole('main').getByRole('link', { name: /Private/ });
+
+  const collapsed = (await card.boundingBox())!.height;
+  // Файл подключается только при наведении: три ролика на старте были бы
+  // мегабайтами впустую.
+  await expect(card.locator('video')).toHaveJSProperty('currentSrc', '');
+
+  await card.hover();
+  await page.waitForTimeout(1200);
+
+  const expanded = (await card.boundingBox())!.height;
+  expect(expanded).toBeGreaterThan(collapsed * 1.5);
+
+  const state = await card.locator('video').evaluate((el: HTMLVideoElement) => ({
+    playing: !el.paused,
+    muted: el.muted,
+    loop: el.loop,
+  }));
+  expect(state).toEqual({ playing: true, muted: true, loop: true });
+
+  // Соседняя карточка остаётся компактной.
+  const other = page.getByRole('main').getByRole('link', { name: /Business/ });
+  expect((await other.boundingBox())!.height).toBeCloseTo(collapsed, -1);
+});
+
+test('текст карточки доступен без наведения', async ({ page }) => {
+  await page.goto('/ru');
+  const card = page.getByRole('main').getByRole('link', { name: /Private/ });
+
+  // Ни описание, ни ссылка не зависят от наведения (§5.1, §11).
+  await expect(card).toContainText('Личные съёмки');
+  await expect(card).toHaveAttribute('href', '/ru/private');
 });

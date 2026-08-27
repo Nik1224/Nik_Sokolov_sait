@@ -44,8 +44,6 @@ export default async function StartPage({ params }: Props) {
   const [settings, directions] = await Promise.all([getGlobalSettings(), getDirections()]);
   const origin = siteUrl();
 
-  // Шоурил идёт фоном всей страницы, поэтому карточки своих картинок не несут:
-  // иначе за полупрозрачными плашками спорили бы два изображения.
   const showreel = settings.showreel?.type === 'video' ? settings.showreel : null;
 
   return (
@@ -77,7 +75,7 @@ export default async function StartPage({ params }: Props) {
               : 'Three different ways of working together. Choose yours.'}
           </h1>
 
-          <div className="mt-10 flex flex-col gap-4 lg:mt-14 lg:flex-row lg:gap-6">
+          <div className="mt-10 flex flex-col gap-4 lg:mt-14 lg:flex-row lg:items-end lg:gap-6">
             {directions.map((direction, index) => (
               <DirectionCard
                 key={direction._id}
@@ -85,7 +83,7 @@ export default async function StartPage({ params }: Props) {
                 direction={direction.key}
                 label={dict.directions[direction.key]}
                 description={localizedString(direction.gatewayDescription, locale)}
-                media={showreel ? undefined : direction.gatewayMedia}
+                media={direction.gatewayMedia}
                 locale={locale}
               />
             ))}

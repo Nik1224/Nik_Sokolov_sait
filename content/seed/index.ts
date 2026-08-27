@@ -118,7 +118,18 @@ export const directions: DirectionDoc[] = [
       en: 'Personal shoots: weddings, portraits, family, love stories.',
     },
     hero: decorative('hero-private', 'wide', 2),
-    gatewayMedia: decorative('gw-private', 'tall', 2),
+    // Вертикальная петля 16 с без звука, 1,8 МБ. Играет только в раскрытой
+    // карточке и подключается при первом наведении. Водяной знак Instagram
+    // в кадре оставлен намеренно — по решению владельца.
+    gatewayMedia: {
+      _key: 'gw-private',
+      type: 'video',
+      provider: 'file',
+      poster: { src: '/media/private-poster.jpg', width: 720, height: 1280 },
+      loopSrc: '/media/private-loop.mp4',
+      alt: { ru: 'Кадр из частной съёмки', en: 'Frame from a private shoot' },
+      rights: 'owned',
+    },
   },
   {
     _id: 'direction.business',

@@ -62,6 +62,7 @@ export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
 
       {playVideo && loopSrc ? (
         <video
+          data-backdrop="showreel"
           src={loopSrc}
           poster={poster.src}
           autoPlay

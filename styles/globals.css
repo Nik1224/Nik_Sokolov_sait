@@ -100,6 +100,38 @@
   );
 }
 
+/**
+ * Вспышка при наведении на карточку направления.
+ *
+ * Ровно одна короткая вспышка на наведение — не серия. Мигание чаще трёх раз
+ * в секунду опасно для людей с фоточувствительностью (WCAG 2.3.1), поэтому
+ * повторов здесь нет и быть не должно.
+ *
+ * При prefers-reduced-motion глобальное правило выше сводит длительность
+ * анимации к нулю, и вспышка не проигрывается вовсе.
+ */
+@keyframes direction-card-flash {
+  0% { opacity: 0; }
+  14% { opacity: 0.72; }
+  100% { opacity: 0; }
+}
+
+@layer components {
+  .direction-card-flash {
+    opacity: 0;
+  }
+
+  @media (hover: hover) {
+    .group:hover .direction-card-flash {
+      animation: direction-card-flash 420ms ease-out;
+    }
+  }
+
+  .group:focus-visible .direction-card-flash {
+    animation: direction-card-flash 420ms ease-out;
+  }
+}
+
 /* Ссылка «к основному содержимому» — видима только при фокусе (§11). */
 @utility skip-link {
   position: absolute;
