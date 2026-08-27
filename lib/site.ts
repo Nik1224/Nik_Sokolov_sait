@@ -69,6 +69,11 @@ export function otherLocale(locale: Locale): Locale {
  * Возвращает null для всего, из чего нельзя собрать адрес: пустой строки,
  * пробелов, мусора. Протокол дописывается, если его забыли указать.
  */
+const LOCAL_ORIGIN = 'http://localhost:3000';
+
+/** Предупреждение о ненастроенном домене печатается один раз на процесс. */
+let warnedAboutMissingOrigin = false;
+
 function normalizeOrigin(value: string | undefined): string | null {
   const trimmed = value?.trim();
   if (!trimmed) return null;
@@ -91,9 +96,34 @@ function normalizeOrigin(value: string | undefined): string | null {
  * строка проходила мимо запасного значения и доходила до `new URL('')`.
  */
 export function siteUrl(): string {
-  return (
+  const resolved =
     normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
-    normalizeOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
-    'http://localhost:3000'
-  );
+    normalizeOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL);
+
+  if (resolved) return resolved;
+
+  // Заметная строка в логе сборки: с localhost в canonical и sitemap сайт
+  // выкладывать нельзя, и молча это пропускать не стоит.
+  if (process.env.NODE_ENV === 'production' && !warnedAboutMissingOrigin) {
+    warnedAboutMissingOrigin = true;
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[site] Домен не определён. Задайте NEXT_PUBLIC_SITE_URL — иначе в canonical, ' +
+        'hreflang и sitemap попадёт http://localhost:3000.',
+    );
+  }
+  return LOCAL_ORIGIN;
+}
+
+/**
+ * Готовый URL для `metadataBase`. Отдельная функция ровно потому, что
+ * `new URL()` на некорректном значении роняет ВСЮ сборку — одна страница с
+ * плохим адресом не должна стоить сайта целиком.
+ */
+export function siteUrlObject(): URL {
+  try {
+    return new URL(siteUrl());
+  } catch {
+    return new URL(LOCAL_ORIGIN);
+  }
 }

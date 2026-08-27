@@ -9,7 +9,7 @@ import { getGlobalSettings, hasDemoContent } from '@/content/queries';
 import { DemoBanner, SkipLink } from '@/components/global/misc';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
-import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrl } from '@/lib/site';
+import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -38,7 +38,7 @@ export async function generateMetadata({
   const settings = await getGlobalSettings();
 
   return {
-    metadataBase: new URL(siteUrl()),
+    metadataBase: siteUrlObject(),
     title: {
       default: localizedString(settings.defaultSeo.title, locale, settings.siteName),
       template: `%s — ${settings.siteName}`,

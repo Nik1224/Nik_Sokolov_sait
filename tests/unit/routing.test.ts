@@ -165,3 +165,31 @@ describe('канонический домен (§12)', () => {
     expect(siteUrl()).toBe('https://nikitasokolov.ru');
   });
 });
+
+describe('metadataBase не может уронить сборку', () => {
+  const saved = process.env.NEXT_PUBLIC_SITE_URL;
+
+  afterEach(() => {
+    delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    if (saved) process.env.NEXT_PUBLIC_SITE_URL = saved;
+    else delete process.env.NEXT_PUBLIC_SITE_URL;
+  });
+
+  // Падение здесь стоит не одной страницы, а всей выкладки: Next прерывает
+  // сборку целиком на первой же ошибке в generateMetadata.
+  it.each(['', '   ', 'мусор', 'https://', '://', 'ok.ru', 'https://ok.ru/путь'])(
+    'значение %j даёт корректный URL, а не исключение',
+    async (value) => {
+      process.env.NEXT_PUBLIC_SITE_URL = value;
+      const { siteUrlObject } = await import('@/lib/site');
+      expect(() => siteUrlObject()).not.toThrow();
+      expect(siteUrlObject()).toBeInstanceOf(URL);
+    },
+  );
+
+  it('путь и хвостовой слэш отбрасываются: остаётся только домен', async () => {
+    process.env.NEXT_PUBLIC_SITE_URL = 'https://ok.ru/lang/ru/';
+    const { siteUrlObject } = await import('@/lib/site');
+    expect(siteUrlObject().href).toBe('https://ok.ru/');
+  });
+});
