@@ -246,3 +246,57 @@ describe('видео карточек направлений (§5.1)', () => {
     }
   });
 });
+
+describe('наполнение PRIVATE с lokos.pro', () => {
+  it('пакеты содержат подтверждённые цены и состав', async () => {
+    const { getPricing } = await import('@/content/queries');
+    const packages = (await getPricing('private')).filter((entry) => entry.kind === 'package');
+
+    expect(packages.length).toBeGreaterThanOrEqual(9);
+    for (const entry of packages) {
+      expect(entry.price, `${entry.slug}: нет цены`).toBeGreaterThan(0);
+      expect(entry.currency).toBe('RUB');
+      expect(entry.includes.length, `${entry.slug}: не описан состав`).toBeGreaterThan(0);
+      // Это перенесённый реальный контент, а не заглушка.
+      expect(entry.isDemo).not.toBe(true);
+    }
+  });
+
+  it('цена пакета не помечается как «от», а дополнения — да', async () => {
+    const { getPricing } = await import('@/content/queries');
+    const entries = await getPricing('private');
+
+    for (const entry of entries.filter((item) => item.kind === 'package')) {
+      expect(entry.priceFrom, `${entry.slug}: пакет не должен быть «от»`).not.toBe(true);
+    }
+    expect(entries.some((entry) => entry.kind === 'extra')).toBe(true);
+  });
+
+  it('отзывы подписаны автором и относятся к направлению', async () => {
+    const { getTestimonials } = await import('@/content/queries');
+    const items = await getTestimonials('private');
+
+    expect(items.length).toBeGreaterThan(5);
+    for (const item of items) {
+      expect(item.author.trim(), 'отзыв без автора ничего не подтверждает').toBeTruthy();
+      expect(item.text.ru?.trim()).toBeTruthy();
+      expect(item.directions).toContain('private');
+    }
+  });
+
+  it('отзыв не попадает в чужое направление', async () => {
+    const { getTestimonials } = await import('@/content/queries');
+    const production = await getTestimonials('production');
+    for (const item of production) expect(item.directions).toContain('production');
+  });
+
+  it('на странице PRIVATE больше нет пометок «к подтверждению»', async () => {
+    const { getPage, getDirection } = await import('@/content/queries');
+    const about = await getPage('private', 'about');
+    const direction = await getDirection('private');
+
+    const text = JSON.stringify([about, direction]);
+    expect(text).not.toMatch(/ПОДТВЕРЖДЕНИЮ/i);
+    expect(direction?.highlights.length).toBeGreaterThan(0);
+  });
+});

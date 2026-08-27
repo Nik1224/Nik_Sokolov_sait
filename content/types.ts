@@ -187,12 +187,18 @@ export type PricingEntry = {
   _id: string;
   slug: string;
   direction: Direction;
+  /** Пакет показывается карточкой, дополнение — строкой в общем списке. */
+  kind: 'package' | 'extra';
   title: LocaleString;
   description: LocaleString;
   /** Цены только подтверждённые. Пусто → «по запросу» (§5.8). */
   price?: number;
   currency?: string;
+  /** true — цена нижняя граница («от»), false — фиксированная за пакет. */
+  priceFrom?: boolean;
   unit?: LocaleString;
+  /** Что входит в пакет: часы, число фотографий, сроки, дополнения. */
+  includes: LocaleString[];
   disclaimer?: LocaleString;
   ctaLabel?: LocaleString;
   order?: number;
@@ -208,6 +214,21 @@ export type ContactChannel = {
 };
 
 export type SocialLink = { label: string; href: string };
+
+/**
+ * Отзыв клиента (ТЗ §5.2: «отзывы только подтверждённые»).
+ * Публикуется лишь то, что клиент оставил публично и разрешил показывать.
+ */
+export type Testimonial = {
+  _id: string;
+  author: string;
+  text: LocaleString;
+  directions: Direction[];
+  /** Откуда отзыв: страница отзывов, площадка, переписка. */
+  source?: string;
+  order?: number;
+  isDemo?: boolean;
+};
 
 export type GlobalSettings = {
   siteName: string;
@@ -239,6 +260,8 @@ export type DirectionDoc = {
   gatewayDescription: LocaleString;
   hero?: MediaAsset;
   gatewayMedia?: MediaAsset;
+  /** Что входит в работу всегда: короткие пункты для Home (§5.2). */
+  highlights: { title: LocaleString; body?: LocaleString }[];
   /** Порядок и состав пунктов меню; подписи берутся из словаря интерфейса. */
   navOrder?: string[];
   seo?: SeoFields;

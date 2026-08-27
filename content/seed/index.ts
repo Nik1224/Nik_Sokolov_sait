@@ -18,6 +18,7 @@ import type {
   Project,
   Redirect,
   Service,
+  Testimonial,
   WorkFormat,
 } from '../types';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
@@ -110,13 +111,21 @@ export const directions: DirectionDoc[] = [
     isDemo: true,
     title: { ru: 'Частные съёмки', en: 'Private shoots' },
     lead: {
-      ru: 'Свадьбы, портрет, семья, love story и частные события — съёмка, за которой остаётся история, а не набор кадров.',
-      en: 'Weddings, portraits, family, love stories and private events — photography that keeps the story, not just the frames.',
+      ru: 'Свадьбы, портрет, семья и частные события. Снимаю с четырнадцати лет, работаю с командой и отдаю первые кадры уже на следующий день.',
+      en: 'Weddings, portraits, family and private events. I have been shooting since I was fourteen, I work with a team, and the first frames arrive the next day.',
     },
     gatewayDescription: {
       ru: 'Личные съёмки: свадьбы, портрет, семья, love story.',
       en: 'Personal shoots: weddings, portraits, family, love stories.',
     },
+    highlights: [
+      { title: { ru: 'Анонс в течение суток', en: 'Preview within 24 hours' }, body: { ru: 'До 50 кадров приходят на следующий день после съёмки.', en: 'Up to 50 frames arrive the day after the shoot.' } },
+      { title: { ru: 'Все кадры, а не выборка', en: 'Every frame, not a selection' }, body: { ru: 'В свадебных пакетах отдаются все фотографии с цветокоррекцией и ретушью.', en: 'Wedding packages deliver every photo, colour-corrected and retouched.' } },
+      { title: { ru: 'Помощь в позировании', en: 'Help with posing' }, body: { ru: 'Не нужно уметь позировать: подскажу и покажу на съёмке.', en: 'You do not need to know how to pose — I will guide you on the day.' } },
+      { title: { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' }, body: { ru: 'Готовые кадры лежат по ссылке — делиться и скачивать удобно.', en: 'Finished frames live behind a link — easy to share and download.' } },
+      { title: { ru: 'Договор', en: 'A written agreement' }, body: { ru: 'Условия, дата и объём фиксируются заранее.', en: 'Terms, date and scope are fixed in advance.' } },
+      { title: { ru: 'Цвет', en: 'Colour' }, body: { ru: 'Чистый и верный цвет — то, на чём построена вся работа.', en: 'Clean, true colour is what the whole craft is built on.' } },
+    ],
     hero: decorative('hero-private', 'wide', 2),
     // Вертикальная петля 16 с без звука, 1,8 МБ. Играет только в раскрытой
     // карточке и подключается при первом наведении. Водяной знак Instagram
@@ -145,6 +154,7 @@ export const directions: DirectionDoc[] = [
       ru: 'Задачи компаний: события, интервью, бренд, реклама, контент.',
       en: 'Business needs: events, interviews, brand, advertising, content.',
     },
+    highlights: [],
     hero: decorative('hero-business', 'wide', 3),
     // Вертикальная петля 22 с без звука, 873 КБ. Исходник снят в 480 px —
     // вверх не растягиваем, иначе вырастет вес без прибавки в качестве.
@@ -172,6 +182,7 @@ export const directions: DirectionDoc[] = [
       ru: 'Для продюсеров и продакшенов: шоурил, работы, credits.',
       en: 'For producers and production houses: showreel, work, credits.',
     },
+    highlights: [],
     hero: decorative('hero-production', 'wide', 4),
     // Вертикальная петля 17 с без звука, 1,4 МБ.
     gatewayMedia: {
@@ -648,16 +659,224 @@ export const articles: Article[] = [
 ];
 
 export const pricingEntries: PricingEntry[] = [
-  // Цены НЕ ЗАПОЛНЕНЫ намеренно: §5.8 и §1.2 запрещают публиковать
-  // неподтверждённые цифры. Поле `price` заполняется владельцем в CMS.
-  { _id: 'pr.private-portrait', slug: 'private-portrait', direction: 'private', order: 1, active: true, isDemo: true, title: { ru: 'Портретная съёмка', en: 'Portrait session' }, description: { ru: 'Съёмка на локации, отобранные и обработанные кадры.', en: 'On-location shoot, selected and edited frames.' }, disclaimer: { ru: 'Стоимость подтверждается владельцем.', en: 'Pricing to be confirmed by the owner.' } },
-  { _id: 'pr.private-wedding', slug: 'private-wedding', direction: 'private', order: 2, active: true, isDemo: true, title: { ru: 'Свадебный день', en: 'Wedding day' }, description: { ru: 'Полный день съёмки, от сборов до вечерней части.', en: 'Full-day coverage, from getting ready to the evening.' }, disclaimer: { ru: 'Стоимость подтверждается владельцем.', en: 'Pricing to be confirmed by the owner.' } },
-  { _id: 'pr.private-family', slug: 'private-family', direction: 'private', order: 3, active: true, isDemo: true, title: { ru: 'Семейная съёмка', en: 'Family session' }, description: { ru: 'Съёмка дома или на прогулке.', en: 'At home or on a walk.' }, disclaimer: { ru: 'Стоимость подтверждается владельцем.', en: 'Pricing to be confirmed by the owner.' } },
-  { _id: 'pr.business-event', slug: 'business-event', direction: 'business', order: 1, active: true, isDemo: true, title: { ru: 'События и конференции', en: 'Events & conferences' }, description: { ru: 'Расчёт зависит от длительности программы, числа площадок и состава группы.', en: 'Calculated from programme length, number of venues and crew size.' }, disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-interview', slug: 'business-interview', direction: 'business', order: 2, active: true, isDemo: true, title: { ru: 'Интервью и подкасты', en: 'Interviews & podcasts' }, description: { ru: 'Расчёт зависит от числа выпусков и глубины монтажа.', en: 'Calculated from episode count and depth of editing.' }, disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-brand', slug: 'business-brand', direction: 'business', order: 3, active: true, isDemo: true, title: { ru: 'Бренд и имидж', en: 'Brand & image' }, description: { ru: 'Расчёт зависит от числа площадок и объёма съёмки.', en: 'Calculated from number of locations and shooting volume.' }, disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-social', slug: 'business-social', direction: 'business', order: 4, active: true, isDemo: true, title: { ru: 'Контент для соцсетей', en: 'Social content' }, description: { ru: 'Расчёт зависит от объёма пакета и периодичности.', en: 'Calculated from package size and frequency.' }, disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-custom', slug: 'business-custom', direction: 'business', order: 5, active: true, isDemo: true, title: { ru: 'Рекламные и сложные проекты', en: 'Advertising and complex projects' }, description: { ru: 'Индивидуальная смета: препродакшн, команда, локации, постпродакшн.', en: 'Individual estimate: pre-production, crew, locations, post-production.' }, disclaimer: { ru: 'Только индивидуальный расчёт.', en: 'Individual estimate only.' } },
+  // PRIVATE — пакеты перенесены с lokos.pro. Цифры взяты с действующего
+  // сайта владельца; перед публикацией стоит подтвердить их актуальность (§5.8).
+  {
+    _id: 'pr.wedding-3h',
+    slug: 'wedding-3h',
+    direction: 'private',
+    kind: 'package',
+    order: 1,
+    active: true,
+    title: { ru: 'Свадьба, до 3 часов', en: 'Wedding, up to 3 hours' },
+    description: {
+      ru: 'Роспись и короткая прогулка. Отдаются все кадры, а не выборка.',
+      en: 'Registry and a short walk. You get every frame, not a selection.',
+    },
+    price: 24000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: 'До 3 часов съёмки', en: 'Up to 3 hours of shooting' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 150–300 кадров', en: 'All photos colour-corrected and retouched — roughly 150–300 frames' },
+      { ru: 'Первые 10 фотографий в течение суток', en: 'First 10 photos within 24 hours' },
+      { ru: 'Готовый материал от 7 до 25 дней', en: 'Full delivery in 7 to 25 days' },
+    ],
+  },
+  {
+    _id: 'pr.wedding-8h',
+    slug: 'wedding-8h',
+    direction: 'private',
+    kind: 'package',
+    order: 2,
+    active: true,
+    title: { ru: 'Свадьба, до 8 часов', en: 'Wedding, up to 8 hours' },
+    description: {
+      ru: 'Основной формат: сборы, церемония, прогулка и начало банкета.',
+      en: 'The main format: getting ready, ceremony, walk and the start of the reception.',
+    },
+    price: 80000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: 'До 8 часов съёмки', en: 'Up to 8 hours of shooting' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 450–500 кадров', en: 'All photos colour-corrected and retouched — roughly 450–500 frames' },
+      { ru: 'До 50 фотографий в течение суток', en: 'Up to 50 photos within 24 hours' },
+      { ru: 'Готовый материал от 7 до 14 дней', en: 'Full delivery in 7 to 14 days' },
+    ],
+  },
+  {
+    _id: 'pr.wedding-12h',
+    slug: 'wedding-12h',
+    direction: 'private',
+    kind: 'package',
+    order: 3,
+    active: true,
+    title: { ru: 'Свадьба, 10–12 часов', en: 'Wedding, 10–12 hours' },
+    description: {
+      ru: 'День целиком — от утренних сборов до финала вечера.',
+      en: 'The whole day — from the morning preparations to the end of the evening.',
+    },
+    price: 100000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: '10–12 часов съёмки', en: '10–12 hours of shooting' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 500–800 кадров', en: 'All photos colour-corrected and retouched — roughly 500–800 frames' },
+      { ru: 'Первые 100 фотографий в течение суток', en: 'First 100 photos within 24 hours' },
+      { ru: 'Готовый материал от 7 до 14 дней', en: 'Full delivery in 7 to 14 days' },
+    ],
+  },
+  {
+    _id: 'pr.portrait-family',
+    slug: 'portrait-family',
+    direction: 'private',
+    kind: 'package',
+    order: 4,
+    active: true,
+    title: { ru: 'Семейный портрет', en: 'Family portrait' },
+    description: {
+      ru: 'Час на локации или в студии, до пяти человек в кадре.',
+      en: 'An hour on location or in a studio, up to five people in frame.',
+    },
+    price: 10000,
+    currency: 'RUB',
+    includes: [
+      { ru: '1 час съёмки, до 5 человек', en: '1 hour of shooting, up to 5 people' },
+      { ru: 'Помощь в подборе одежды', en: 'Help choosing outfits' },
+      { ru: '20 фотографий в ретуши — выбираете сами', en: '20 retouched photos — you choose them yourself' },
+      { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
+      { ru: 'Первые кадры в течение суток, готовый материал за 7 дней', en: 'First frames within 24 hours, full delivery in 7 days' },
+    ],
+  },
+  {
+    _id: 'pr.portrait-solo',
+    slug: 'portrait-solo',
+    direction: 'private',
+    kind: 'package',
+    order: 5,
+    active: true,
+    title: { ru: 'Индивидуальный портрет', en: 'Individual portrait' },
+    description: {
+      ru: 'Съёмка одного человека: спокойный ритм, без списка обязательных поз.',
+      en: 'A shoot for one person: a calm pace, no mandatory pose list.',
+    },
+    price: 10000,
+    currency: 'RUB',
+    includes: [
+      { ru: '1 час съёмки', en: '1 hour of shooting' },
+      { ru: 'Помощь в подборе одежды', en: 'Help choosing outfits' },
+      { ru: '15 фотографий в ретуши — выбираете сами', en: '15 retouched photos — you choose them yourself' },
+      { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
+      { ru: 'Первые кадры в течение суток, готовый материал за 7 дней', en: 'First frames within 24 hours, full delivery in 7 days' },
+    ],
+  },
+  {
+    _id: 'pr.portrait-max',
+    slug: 'portrait-max',
+    direction: 'private',
+    kind: 'package',
+    order: 6,
+    active: true,
+    title: { ru: 'Максимальный портрет', en: 'Premium portrait' },
+    description: {
+      ru: 'Съёмка со стилистом, визажистом и студией — всё организовано заранее.',
+      en: 'A shoot with a stylist, make-up artist and studio — all arranged in advance.',
+    },
+    price: 50000,
+    currency: 'RUB',
+    includes: [
+      { ru: '2 часа съёмки', en: '2 hours of shooting' },
+      { ru: 'Консультация стилиста', en: 'Stylist consultation' },
+      { ru: 'Макияж и причёска', en: 'Make-up and hair' },
+      { ru: 'Аренда студии', en: 'Studio rental' },
+      { ru: '40 фотографий в ретуши', en: '40 retouched photos' },
+      { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
+    ],
+  },
+  {
+    _id: 'pr.video-hourly',
+    slug: 'video-hourly',
+    direction: 'private',
+    kind: 'package',
+    order: 7,
+    active: true,
+    title: { ru: 'Видео, почасовая съёмка', en: 'Video, hourly' },
+    description: {
+      ru: 'Один оператор на короткое событие или роспись.',
+      en: 'One operator for a short event or a registry ceremony.',
+    },
+    price: 35000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'До 3 часов съёмки, 1 оператор', en: 'Up to 3 hours, 1 operator' },
+      { ru: 'Ролик 3–10 минут', en: 'A 3–10 minute film' },
+      { ru: 'Цветокоррекция и саунд-дизайн', en: 'Colour correction and sound design' },
+      { ru: 'Встреча и консультация до съёмки', en: 'Meeting and consultation before the shoot' },
+      { ru: 'Готовый материал от 7 до 60 дней', en: 'Delivery in 7 to 60 days' },
+    ],
+  },
+  {
+    _id: 'pr.video-wedding-day',
+    slug: 'video-wedding-day',
+    direction: 'private',
+    kind: 'package',
+    order: 8,
+    active: true,
+    title: { ru: 'Видео, свадебный день', en: 'Video, wedding day' },
+    description: {
+      ru: 'Два оператора, полный фильм и короткие версии для соцсетей.',
+      en: 'Two operators, a full film and short versions for social media.',
+    },
+    price: 100000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'До 10 часов съёмки, 2 оператора', en: 'Up to 10 hours, 2 operators' },
+      { ru: 'Фильм от 60 минут', en: 'A film from 60 minutes' },
+      { ru: 'Ролик по всей свадьбе 3–5 минут', en: 'A 3–5 minute wedding reel' },
+      { ru: 'Вертикальный ролик 1 минута', en: 'A 1-minute vertical reel' },
+      { ru: 'Видеосвет, цветокоррекция, саунд-дизайн', en: 'Video lighting, colour correction, sound design' },
+      { ru: 'Готовый материал от 7 до 90 дней', en: 'Delivery in 7 to 90 days' },
+    ],
+  },
+  {
+    _id: 'pr.video-max',
+    slug: 'video-max',
+    direction: 'private',
+    kind: 'package',
+    order: 9,
+    active: true,
+    title: { ru: 'Видео, максимальный', en: 'Video, maximum' },
+    description: {
+      ru: 'Три оператора, кран и монтаж SDE — фильм показывают уже на банкете.',
+      en: 'Three operators, a crane and a same-day edit — the film screens at the reception.',
+    },
+    price: 180000,
+    currency: 'RUB',
+    includes: [
+      { ru: 'До 12 часов съёмки, 3 оператора', en: 'Up to 12 hours, 3 operators' },
+      { ru: 'Фильм любой длительности', en: 'A film of any length' },
+      { ru: 'Монтаж SDE — показ в день свадьбы', en: 'Same-day edit, screened on the wedding day' },
+      { ru: 'Вертикальные ролики для соцсетей', en: 'Vertical reels for social media' },
+      { ru: 'Видеокран, видеосвет, цветокоррекция, саунд-дизайн', en: 'Crane, video lighting, colour correction, sound design' },
+      { ru: 'Готовый материал от 30 до 120 дней', en: 'Delivery in 30 to 120 days' },
+    ],
+  },
+
+  // BUSINESS — расчёт индивидуальный, подтверждённых цифр пока нет.
+  { _id: 'pr.business-event', slug: 'business-event', direction: 'business', kind: 'package', order: 1, active: true, isDemo: true, title: { ru: 'События и конференции', en: 'Events & conferences' }, description: { ru: 'Расчёт зависит от длительности программы, числа площадок и состава группы.', en: 'Calculated from programme length, number of venues and crew size.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-interview', slug: 'business-interview', direction: 'business', kind: 'package', order: 2, active: true, isDemo: true, title: { ru: 'Интервью и подкасты', en: 'Interviews & podcasts' }, description: { ru: 'Расчёт зависит от числа выпусков и глубины монтажа.', en: 'Calculated from episode count and depth of editing.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-brand', slug: 'business-brand', direction: 'business', kind: 'package', order: 3, active: true, isDemo: true, title: { ru: 'Бренд и имидж', en: 'Brand & image' }, description: { ru: 'Расчёт зависит от числа площадок и объёма съёмки.', en: 'Calculated from number of locations and shooting volume.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-social', slug: 'business-social', direction: 'business', kind: 'package', order: 4, active: true, isDemo: true, title: { ru: 'Контент для соцсетей', en: 'Social content' }, description: { ru: 'Расчёт зависит от объёма пакета и периодичности.', en: 'Calculated from package size and frequency.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-custom', slug: 'business-custom', direction: 'business', kind: 'package', order: 5, active: true, isDemo: true, title: { ru: 'Рекламные и сложные проекты', en: 'Advertising and complex projects' }, description: { ru: 'Индивидуальная смета: препродакшн, команда, локации, постпродакшн.', en: 'Individual estimate: pre-production, crew, locations, post-production.' }, includes: [], disclaimer: { ru: 'Только индивидуальный расчёт.', en: 'Individual estimate only.' } },
+
+  // Дополнительные услуги — с lokos.pro. Показываются списком, а не карточками.
+  { _id: 'pr.extra-hour', slug: 'extra-hour', direction: 'private', kind: 'extra', order: 20, active: true, title: { ru: 'Дополнительный час съёмки', en: 'Additional hour' }, description: { ru: '', en: '' }, price: 8000, currency: 'RUB', includes: [] },
+  { _id: 'pr.extra-second-photographer', slug: 'second-photographer', direction: 'private', kind: 'extra', order: 21, active: true, title: { ru: 'Второй фотограф', en: 'Second photographer' }, description: { ru: '', en: '' }, price: 30000, currency: 'RUB', priceFrom: true, includes: [], disclaimer: { ru: 'от 30 000 до 80 000 ₽', en: 'from 30,000 to 80,000 ₽' } },
+  { _id: 'pr.extra-photobook', slug: 'photobook', direction: 'private', kind: 'extra', order: 22, active: true, title: { ru: 'Фотокнига', en: 'Photo book' }, description: { ru: '', en: '' }, price: 10000, currency: 'RUB', priceFrom: true, includes: [], disclaimer: { ru: 'от 10 000 до 100 000 ₽ — зависит от формата и объёма', en: 'from 10,000 to 100,000 ₽ depending on format and size' } },
+  { _id: 'pr.extra-reels', slug: 'reels-maker', direction: 'private', kind: 'extra', order: 23, active: true, title: { ru: 'Reels-мейкер на съёмке', en: 'Reels maker on set' }, description: { ru: '', en: '' }, price: 15000, currency: 'RUB', priceFrom: true, includes: [] },
+  { _id: 'pr.extra-rush', slug: 'rush', direction: 'private', kind: 'extra', order: 24, active: true, title: { ru: 'Срочная обработка', en: 'Expedited processing' }, description: { ru: '', en: '' }, includes: [], disclaimer: { ru: '30% от стоимости пакета', en: '30% of the package price' } },
+  { _id: 'pr.extra-raw', slug: 'raw', direction: 'private', kind: 'extra', order: 25, active: true, title: { ru: 'Исходники RAW', en: 'RAW files' }, description: { ru: '', en: '' }, price: 3000, currency: 'RUB', includes: [] },
 ];
 
 function aboutPage(
@@ -682,15 +901,20 @@ function aboutPage(
 export const pages: Page[] = [
   aboutPage(
     'private',
-    { ru: 'Снимаю людей так, чтобы через год фотографии смотрели не из вежливости.', en: 'I photograph people so that a year later the pictures are not looked at out of politeness.' },
+    {
+      ru: 'Меня зовут Никита Соколов, я руководитель медиагруппы Lokos.pro.',
+      en: 'My name is Nikita Sokolov and I lead the Lokos.pro media group.',
+    },
     {
       ru: [
-        'Частная съёмка — это прежде всего разговор. До камеры мы обсуждаем, что для вас важно и чего не хочется совсем: это экономит время и снимает большую часть напряжения.',
-        'Дальше остаётся техника: свет, ритм и умение не мешать. КОНТЕНТ К ПОДТВЕРЖДЕНИЮ: профессиональная история, стаж и география.',
+        'Занимаюсь фото и видеосъёмкой с четырнадцати лет. С детства держу в руках только профессиональную технику и делаю кадры, которые находят признание на фото- и видеоконкурсах.',
+        'Никогда не останавливаюсь в развитии и постоянно обучаю свою команду — поэтому с каждым годом мы становимся только лучше.',
+        'Частная съёмка начинается с разговора. До камеры мы обсуждаем, что для вас важно и чего не хочется совсем: это экономит время и снимает большую часть напряжения. Дальше остаётся ремесло — свет, ритм и умение не мешать.',
       ],
       en: [
-        'A private shoot is a conversation first. Before the camera comes out we agree on what matters to you and what you would rather avoid entirely — that saves time and removes most of the tension.',
-        'After that it is craft: light, rhythm and knowing when to stay out of the way. CONTENT TO BE CONFIRMED: professional background, years of experience and geography.',
+        'I have been shooting photo and video since I was fourteen. I have held nothing but professional gear since childhood, and my frames have been recognised at photo and video competitions.',
+        'I never stop learning and I keep teaching my team — which is why we only get better each year.',
+        'A private shoot starts with a conversation. Before the camera comes out we agree on what matters to you and what you would rather avoid entirely — that saves time and removes most of the tension. After that it is craft: light, rhythm and knowing when to stay out of the way.',
       ],
     },
   ),
@@ -722,6 +946,181 @@ export const pages: Page[] = [
       ],
     },
   ),
+];
+
+/**
+ * Отзывы, перенесённые с lokos.pro/comments — оставлены клиентами публично.
+ * На сайте-источнике их больше шестидесяти; здесь отобраны содержательные:
+ * односложные «супер!» ничего не сообщают о работе. Остальные добавляются
+ * в CMS без правки кода.
+ */
+export const testimonials: Testimonial[] = [
+  {
+    _id: 'tst.viktoriya-wedding',
+    author: 'Виктория',
+    directions: ['private'],
+    order: 1,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Профессионалы своего дела! С ребятами очень комфортно было! Весело, не постановочные фотографии! Первые фото в течении суток. Благодаря команде у нас остались на память прекрасные фотографии и видео со свадьбы! Спасибо большое!',
+    },
+  },
+  {
+    _id: 'tst.yana-petrunina',
+    author: 'Яна Петрунина',
+    directions: ['private'],
+    order: 2,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'От души хочется поблагодарить Никиту за прекрасные фото! Каждый кадр — это эмоция, которую хочется прожить снова…. яркую весёлую и лёгкую! Огромная благодарность за проделанную работу!!! С уверенностью буду рекомендовать!',
+    },
+  },
+  {
+    _id: 'tst.grigoreva-olesya',
+    author: 'Олеся Григорьева',
+    directions: ['private'],
+    order: 3,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Фото огонь!!! Живые, креативные, очень характерные! Я давно не встречала таких достойных работ! Моего сына очень сложно понять и сфоткать, но вы сделали это! В одном фото в профиль под дождём весь его характер и мировоззрение! Обязательно придём на семейную фотосессию.',
+    },
+  },
+  {
+    _id: 'tst.ekaterina-family',
+    author: 'Екатерина',
+    directions: ['private'],
+    order: 4,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Фотографии просто великолепные! Очень легко и приятно прошла съёмка, много весёлых, запоминающихся моментов. Не было напряжения в общении и чувства усталости от фотосессии. Мы с мужем очень довольны!',
+    },
+  },
+  {
+    _id: 'tst.anishina-yuliya',
+    author: 'Юлия Анишина',
+    directions: ['private'],
+    order: 5,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Никита супер фотограф! Профессионал своего дела, который находит подход к каждому своему клиенту. Дети слышат его и слушают — что очень важно в семейной фотосессии.',
+    },
+  },
+  {
+    _id: 'tst.elizaveta-portrait',
+    author: 'Елизавета',
+    directions: ['private'],
+    order: 6,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Мои самые лучшие фотки, через которые передаётся уверенность, женственность, красота и сила. Такое ощущение, что я снималась в фильме, по ходу которого делали такие крутые фотографии.',
+    },
+  },
+  {
+    _id: 'tst.aleksey-wedding',
+    author: 'Алексей',
+    directions: ['private'],
+    order: 7,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Мы в шоке! Фото просто супер! Получили ссылку на следующий день после свадьбы! Ник Соколов профессионал своего дела!',
+    },
+  },
+  {
+    _id: 'tst.egor-family',
+    author: 'Егор',
+    directions: ['private'],
+    order: 8,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Обратился к Никите провести семейную фотосессию, оценю помощь в подборе студии, особенно учитывая, что всё уже было забронировано, нашли выход. Сама фотосессия прошла легко и непринуждённо, родители остались в восторге. А анонс фото получили через несколько часов после фотосессии!',
+    },
+  },
+  {
+    _id: 'tst.vera',
+    author: 'Вера',
+    directions: ['private'],
+    order: 9,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Фото потрясающие! Эмоциональные и живые! Никита понял задачу с двух слов и выполнил её на все сто.',
+    },
+  },
+  {
+    _id: 'tst.margarita-egor',
+    author: 'Маргарита и Егор',
+    directions: ['private'],
+    order: 10,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Это не первая наша съёмка у Никиты, и мы как всегда в полном восторге от скорости отдачи готовых фото, качества исполнения, профессионализма и приятной атмосферы на съёмках.',
+    },
+  },
+  {
+    _id: 'tst.polina',
+    author: 'Полина',
+    directions: ['private'],
+    order: 11,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Все в восторге от того, как вы работаете и от результата, человек пятнадцать у меня взяли твои контакты. Я не знаю, какую фотографию выбрать для печати на холсте — печатать все мне не хватит места в доме. Спасибо огромное тебе и твоей команде.',
+    },
+  },
+  {
+    _id: 'tst.elena-izonova',
+    author: 'Елена Изонова',
+    directions: ['private'],
+    order: 12,
+    source: 'lokos.pro/comments',
+    text: { ru: 'Шикарные фото, идеально по цвету, видение мастера — в самое сердце!' },
+  },
+  {
+    _id: 'tst.oksana-samoylova',
+    author: 'Оксана Самойлова',
+    directions: ['private'],
+    order: 13,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Высокий профессионализм фотографа, его почерк, взгляд на композицию в целом — всё супер!',
+    },
+  },
+  {
+    _id: 'tst.igor',
+    author: 'Игорь',
+    directions: ['private'],
+    order: 14,
+    source: 'lokos.pro/comments',
+    text: { ru: 'Лучший выбор на нашей свадьбе, фотографы просто замечательные и очень креативные.' },
+  },
+  {
+    _id: 'tst.aren',
+    author: 'Арен',
+    directions: ['private'],
+    order: 15,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Никита не упустил ни одной мелочи и запечатлел такие моменты, которые не заметит глаз.',
+    },
+  },
+  {
+    _id: 'tst.elvira-business',
+    author: 'Эльвира',
+    directions: ['business'],
+    order: 1,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'От вас не было ни одного лишнего вопроса. Взяли и всё сразу сделали: студию и реквизит посоветовали, забронировали всё, референсы сразу, анонс в день съёмки. Находясь в Казани, я спокойно смогла организовать съёмку в Москве для клиентов за один день.',
+    },
+  },
+  {
+    _id: 'tst.sergey-band',
+    author: 'Сергей, группа «Живые люди»',
+    directions: ['business', 'production'],
+    order: 2,
+    source: 'lokos.pro/comments',
+    text: {
+      ru: 'Все музыканты группы «Живые люди» выражают огромную благодарность за постоянное сотрудничество и высочайшее качество работы!',
+    },
+  },
 ];
 
 /** Таблица редиректов (§6). Заполняется при переносе старых адресов. */

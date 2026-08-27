@@ -12,6 +12,7 @@ import type { Metadata } from 'next';
 import { HeroMedia } from '@/components/content/HeroMedia';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
+import { Testimonials } from '@/components/content/Testimonials';
 import { ArticleCard, ProjectCard, ServiceCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
 import { VideoFacade } from '@/components/media/VideoFacade';
@@ -24,6 +25,7 @@ import {
   getPricing,
   getProjects,
   getServices,
+  getTestimonials,
   getWorkFormats,
 } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
@@ -86,6 +88,8 @@ export default async function DirectionHome({ params }: Props) {
       getPricing(direction),
       getWorkFormats(),
     ]);
+
+  const testimonials = await getTestimonials(direction, 6);
 
   // Если featured-работ ещё нет, берём последние: пустая главная бесполезна.
   const selected = featured.length > 0 ? featured : await getProjects({ direction, limit: 6 });
@@ -173,6 +177,21 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
+      {doc.highlights.length > 0 ? (
+        <Section eyebrow={step()} title={dict.common.included}>
+          <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {doc.highlights.map((item, index) => (
+              <li key={index} className="bg-ink p-6 lg:p-8">
+                <h3 className="text-h3 m-0 text-bone">{localizedString(item.title, locale)}</h3>
+                {item.body ? (
+                  <p className="mt-3 text-bone-dim">{localizedString(item.body, locale)}</p>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
+
       {selected.length > 0 ? (
         <Section
           eyebrow={step()}
@@ -209,6 +228,12 @@ export default async function DirectionHome({ params }: Props) {
             dict={dict}
             contactHref={href({ locale, direction, section: 'contact' })}
           />
+        </Section>
+      ) : null}
+
+      {testimonials.length > 0 ? (
+        <Section eyebrow={step()} title={dict.common.testimonials}>
+          <Testimonials items={testimonials} locale={locale} dict={dict} />
         </Section>
       ) : null}
 

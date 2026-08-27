@@ -18,6 +18,7 @@ import type {
   Project,
   Redirect,
   Service,
+  Testimonial,
   WorkFormat,
 } from '../types';
 import { getClient } from './sanity-client';
@@ -61,7 +62,7 @@ const GLOBAL_SETTINGS = groq`*[_type == "globalSettings"][0]{
 }`;
 
 const DIRECTIONS = groq`*[_type == "direction"]{
-  _id, key, title, lead, gatewayDescription, navOrder, order, isDemo,
+  _id, key, title, lead, gatewayDescription, highlights, navOrder, order, isDemo,
   hero ${MEDIA}, gatewayMedia ${MEDIA}, seo ${SEO}
 }`;
 
@@ -104,8 +105,12 @@ const ARTICLES = groq`*[_type == "article"]{
 }`;
 
 const PRICING = groq`*[_type == "pricingEntry"]{
-  _id, "slug": slug.current, direction, title, description, price, currency,
-  unit, disclaimer, ctaLabel, order, active, isDemo
+  _id, "slug": slug.current, direction, kind, title, description, price, currency, priceFrom,
+  unit, includes, disclaimer, ctaLabel, order, active, isDemo
+}`;
+
+const TESTIMONIALS = groq`*[_type == "testimonial"]{
+  _id, author, text, directions, source, order, isDemo
 }`;
 
 const PAGES = groq`*[_type == "page"]{
@@ -232,6 +237,10 @@ export const sanitySource: ContentSource = {
 
   async pricing() {
     return fetchQuery<PricingEntry[]>(PRICING);
+  },
+
+  async testimonials() {
+    return fetchQuery<Testimonial[]>(TESTIMONIALS);
   },
 
   async pages() {

@@ -21,6 +21,7 @@ import {
   person,
   pricingEntry,
   project,
+  testimonial,
   redirect,
   service,
   workFormat,
@@ -50,6 +51,7 @@ export const schemaTypes = [
   service,
   article,
   pricingEntry,
+  testimonial,
   page,
   redirect,
 ];

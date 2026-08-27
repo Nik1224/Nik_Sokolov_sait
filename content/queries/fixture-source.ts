@@ -35,6 +35,9 @@ export const fixtureSource: ContentSource = {
   async pricing() {
     return seed.pricingEntries;
   },
+  async testimonials() {
+    return seed.testimonials;
+  },
   async pages() {
     return seed.pages;
   },

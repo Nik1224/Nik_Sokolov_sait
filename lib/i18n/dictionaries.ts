@@ -41,6 +41,8 @@ export type Dictionary = {
     backstageNotes: string;
     finalCase: string;
     moreFromDirection: string;
+    testimonials: string;
+    included: string;
     formats: string;
     deliverables: string;
     process: string;
@@ -76,7 +78,13 @@ export type Dictionary = {
     next: string;
     imageOf: string;
   };
-  pricing: { from: string; onRequest: string; individualEstimate: string };
+  pricing: {
+    from: string;
+    onRequest: string;
+    individualEstimate: string;
+    extras: string;
+    combinedDiscount: string;
+  };
   form: {
     heading: string;
     name: string;
@@ -149,6 +157,8 @@ const ru: Dictionary = {
     backstageNotes: 'Backstage и заметки',
     finalCase: 'Финальный кейс',
     moreFromDirection: 'Ещё из этого направления',
+    testimonials: 'Отзывы',
+    included: 'Что входит всегда',
     formats: 'Форматы',
     deliverables: 'Что получает клиент',
     process: 'Этапы работы',
@@ -184,7 +194,13 @@ const ru: Dictionary = {
     next: 'Следующее',
     imageOf: 'из',
   },
-  pricing: { from: 'от', onRequest: 'по запросу', individualEstimate: 'Индивидуальная смета' },
+  pricing: {
+    from: 'от',
+    onRequest: 'по запросу',
+    individualEstimate: 'Индивидуальная смета',
+    extras: 'Дополнительно',
+    combinedDiscount: 'При заказе фото и видео вместе — скидка 10% на общий чек.',
+  },
   form: {
     heading: 'Оставить заявку',
     name: 'Имя',
@@ -256,6 +272,8 @@ const en: Dictionary = {
     backstageNotes: 'Backstage & notes',
     finalCase: 'Final case',
     moreFromDirection: 'More from this direction',
+    testimonials: 'Reviews',
+    included: 'Always included',
     formats: 'Formats',
     deliverables: 'What you get',
     process: 'Process',
@@ -291,7 +309,13 @@ const en: Dictionary = {
     next: 'Next',
     imageOf: 'of',
   },
-  pricing: { from: 'from', onRequest: 'on request', individualEstimate: 'Individual estimate' },
+  pricing: {
+    from: 'from',
+    onRequest: 'on request',
+    individualEstimate: 'Individual estimate',
+    extras: 'Extras',
+    combinedDiscount: 'Book photo and video together and the total is 10% lower.',
+  },
   form: {
     heading: 'Send a request',
     name: 'Name',

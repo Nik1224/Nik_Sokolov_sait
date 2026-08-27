@@ -21,6 +21,7 @@ import type {
   Project,
   Redirect,
   Service,
+  Testimonial,
   WorkFormat,
 } from '../types';
 
@@ -35,6 +36,7 @@ export type ContentSource = {
   projects(): Promise<Project[]>;
   articles(): Promise<Article[]>;
   pricing(): Promise<PricingEntry[]>;
+  testimonials(): Promise<Testimonial[]>;
   pages(): Promise<Page[]>;
   redirects(): Promise<Redirect[]>;
 };

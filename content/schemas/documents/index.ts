@@ -140,6 +140,22 @@ export const direction = defineType({
     defineField({ name: 'hero', title: 'Hero-медиа', type: 'mediaAsset' }),
     defineField({ name: 'gatewayMedia', title: 'Медиа карточки на START', type: 'mediaAsset' }),
     defineField({
+      name: 'highlights',
+      title: 'Что входит всегда',
+      description: 'Короткие пункты для главной страницы направления.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'title', title: 'Заголовок', type: 'localeString' },
+            { name: 'body', title: 'Пояснение', type: 'localeString' },
+          ],
+          preview: { select: { title: 'title.ru' } },
+        },
+      ],
+    }),
+    defineField({
       name: 'navOrder',
       title: 'Порядок разделов в меню',
       description: 'Ключи разделов. Пусто — порядок по умолчанию.',
@@ -419,6 +435,27 @@ export const pricingEntry = defineType({
     }),
     defineField({ name: 'description', title: 'Описание', type: 'localeText', validation: requiredRu }),
     defineField({
+      name: 'kind',
+      title: 'Тип',
+      type: 'string',
+      initialValue: 'package',
+      options: {
+        list: [
+          { title: 'Пакет — отдельной карточкой', value: 'package' },
+          { title: 'Дополнение — строкой в списке', value: 'extra' },
+        ],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'priceFrom',
+      title: 'Цена «от»',
+      description: 'Включите, если это нижняя граница, а не точная стоимость.',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'price',
       title: 'Цена',
       description: 'Только подтверждённая цифра. Пусто — покажем «по запросу» (§5.8).',
@@ -426,6 +463,13 @@ export const pricingEntry = defineType({
     }),
     defineField({ name: 'currency', title: 'Валюта', type: 'string' }),
     defineField({ name: 'unit', title: 'Единица', type: 'localeString' }),
+    defineField({
+      name: 'includes',
+      title: 'Что входит',
+      description: 'Часы, количество фотографий, сроки, дополнения — по пункту на строку.',
+      type: 'array',
+      of: [{ type: 'localeString' }],
+    }),
     defineField({ name: 'disclaimer', title: 'Примечание', type: 'localeText' }),
     defineField({ name: 'ctaLabel', title: 'Подпись кнопки', type: 'localeString' }),
     defineField({ name: 'order', title: 'Порядок', type: 'number' }),
@@ -472,6 +516,34 @@ export const page = defineType({
     demoField,
   ],
   preview: { select: { title: 'title.ru', subtitle: 'direction' } },
+});
+
+export const testimonial = defineType({
+  name: 'testimonial',
+  title: 'Отзыв',
+  type: 'document',
+  description: 'Публикуются только отзывы, которые клиент оставил публично (§5.2).',
+  fields: [
+    defineField({ name: 'author', title: 'Кто оставил', type: 'string', validation: (rule) => rule.required() }),
+    defineField({ name: 'text', title: 'Текст', type: 'localeText', validation: requiredRu }),
+    defineField({
+      name: 'directions',
+      title: 'Показывать в направлениях',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { list: DIRECTION_OPTIONS },
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: 'source',
+      title: 'Источник',
+      description: 'Где отзыв оставлен: страница отзывов, площадка, переписка.',
+      type: 'string',
+    }),
+    defineField({ name: 'order', title: 'Порядок', type: 'number' }),
+    demoField,
+  ],
+  preview: { select: { title: 'author', subtitle: 'text.ru' } },
 });
 
 export const redirect = defineType({

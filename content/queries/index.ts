@@ -21,6 +21,7 @@ import type {
   Project,
   Redirect,
   Service,
+  Testimonial,
   WorkFormat,
 } from '../types';
 import { getSource } from './source';
@@ -210,6 +211,15 @@ export const getPricingEntry = cache(async (slug: string): Promise<PricingEntry 
   const items = await (await getSource()).pricing();
   return items.find((item) => item.slug === slug && item.active) ?? null;
 });
+
+/** Отзывы направления. Публикуются только подтверждённые (§5.2). */
+export const getTestimonials = cache(
+  async (direction: Direction, limit?: number): Promise<Testimonial[]> => {
+    const items = await (await getSource()).testimonials();
+    const filtered = byOrder(items.filter((item) => item.directions.includes(direction)));
+    return limit ? filtered.slice(0, limit) : filtered;
+  },
+);
 
 export const getPage = cache(
   async (direction: Direction, pageType: Page['pageType']): Promise<Page | null> => {
