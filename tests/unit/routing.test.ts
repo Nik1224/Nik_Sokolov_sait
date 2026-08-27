@@ -136,4 +136,32 @@ describe('канонический домен (§12)', () => {
     const { siteUrl } = await import('@/lib/site');
     expect(siteUrl()).toBe('http://localhost:3000');
   });
+
+  // Переменная, заведённая на хостинге с пустым значением, роняла сборку:
+  // пустая строка доходила до `new URL('')`.
+  it.each(['', '   ', 'не адрес'])(
+    'мусорное значение %j не ломает сборку, а игнорируется',
+    async (value) => {
+      process.env.NEXT_PUBLIC_SITE_URL = value;
+      process.env.VERCEL_PROJECT_PRODUCTION_URL = 'nik-sokolov-sait.vercel.app';
+      const { siteUrl } = await import('@/lib/site');
+      expect(siteUrl()).toBe('https://nik-sokolov-sait.vercel.app');
+    },
+  );
+
+  it('результат всегда пригоден для new URL() — иначе падает вся сборка', async () => {
+    const { siteUrl } = await import('@/lib/site');
+    for (const value of ['', ' ', 'мусор', 'https://ok.ru/', 'ok.ru', undefined]) {
+      if (value === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
+      else process.env.NEXT_PUBLIC_SITE_URL = value;
+      delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
+      expect(() => new URL(siteUrl())).not.toThrow();
+    }
+  });
+
+  it('домен без протокола понимается как https', async () => {
+    process.env.NEXT_PUBLIC_SITE_URL = 'nikitasokolov.ru';
+    const { siteUrl } = await import('@/lib/site');
+    expect(siteUrl()).toBe('https://nikitasokolov.ru');
+  });
 });

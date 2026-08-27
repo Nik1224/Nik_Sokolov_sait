@@ -65,19 +65,35 @@ export function otherLocale(locale: Locale): Locale {
 }
 
 /**
+ * Приводит значение из окружения к origin вида `https://домен`.
+ * Возвращает null для всего, из чего нельзя собрать адрес: пустой строки,
+ * пробелов, мусора. Протокол дописывается, если его забыли указать.
+ */
+function normalizeOrigin(value: string | undefined): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed) return null;
+
+  const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    return new URL(candidate).origin;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Канонический домен для canonical, hreflang, sitemap и OG (ТЗ §12).
  *
- * Порядок: явная настройка → домен, который подставляет хостинг → локальный
- * адрес. Средний шаг важен: без него первая же выкладка ушла бы в поиск с
- * адресами вида `http://localhost:3000`, и это пришлось бы переиндексировать.
+ * Порядок: явная настройка → домен, который сообщает хостинг → локальный адрес.
+ *
+ * Результат всегда пригоден для `new URL()`. Это не перестраховка: переменная,
+ * заведённая на хостинге с пустым значением, роняла сборку целиком — пустая
+ * строка проходила мимо запасного значения и доходила до `new URL('')`.
  */
 export function siteUrl(): string {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
-  if (explicit) return explicit.replace(/\/$/, '');
-
-  // Vercel сообщает домен проекта сам, ещё до подключения своего.
-  const hosted = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (hosted) return `https://${hosted.replace(/\/$/, '')}`;
-
-  return 'http://localhost:3000';
+  return (
+    normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
+    normalizeOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+    'http://localhost:3000'
+  );
 }
