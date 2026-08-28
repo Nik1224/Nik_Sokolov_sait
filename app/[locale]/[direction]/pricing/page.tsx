@@ -10,7 +10,7 @@ import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock, PricingExtras } from '@/components/content/PricingBlock';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
-import { getDirection, getPricing } from '@/content/queries';
+import { getDirection, getGlobalSettings, getPricing } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
@@ -40,7 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { locale, direction } = await resolveDirectionRoute(params, 'pricing');
   const dict = getDictionary(locale);
-  const [entries, doc] = await Promise.all([getPricing(direction), getDirection(direction)]);
+  const [entries, doc, settings] = await Promise.all([
+    getPricing(direction),
+    getDirection(direction),
+    getGlobalSettings(),
+  ]);
 
   return (
     <div className="container-content py-16 lg:py-24">
@@ -64,7 +68,7 @@ export default async function Page({ params }: Props) {
               config={doc.calculator}
               locale={locale}
               dict={dict}
-              contactHref={href({ locale, direction, section: 'contact' })}
+              contacts={settings.contacts}
             />
           </div>
         </div>
@@ -79,7 +83,7 @@ export default async function Page({ params }: Props) {
               entries={entries}
               locale={locale}
               dict={dict}
-              contactHref={href({ locale, direction, section: 'contact' })}
+              contacts={settings.contacts}
             />
 
             {entries.some((entry) => entry.kind === 'extra') ? (

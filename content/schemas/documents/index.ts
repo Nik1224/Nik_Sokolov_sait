@@ -103,13 +103,6 @@ export const globalSettings = defineType({
           description: 'Пока часть Private живёт снаружи — переход будет явно обозначен (§5.2).',
           type: 'url',
         }),
-        defineField({
-          name: 'contactFormEnabled',
-          title: 'Приём заявок через форму включён',
-          description: 'Включать только после подтверждения получателя и канала (§18).',
-          type: 'boolean',
-          initialValue: false,
-        }),
       ],
     }),
   ],

@@ -239,3 +239,28 @@
     transform: translateY(0);
   }
 }
+
+@layer components {
+  /* Окно выбора мессенджера. Позиционируется браузером, здесь только вид. */
+  .contact-dialog {
+    margin: auto;
+    max-height: calc(100dvh - 2rem);
+  }
+
+  .contact-dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.76);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .contact-dialog[open] {
+      animation: contact-dialog-in 180ms ease-out;
+    }
+  }
+}
+
+@keyframes contact-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}

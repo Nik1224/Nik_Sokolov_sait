@@ -21,6 +21,5 @@ export default defineConfig({
     timeout: 240_000,
     // Путь заявки проверяется целиком, но письма не уходят: иначе каждый
     // прогон тестов слал бы владельцу проверочные заявки.
-    env: { CONTACT_DRY_RUN: '1', CONTACT_RECIPIENT: 'dry-run@example.test' },
   },
 });

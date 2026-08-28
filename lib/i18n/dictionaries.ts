@@ -93,6 +93,8 @@ export type Dictionary = {
     total: string;
     perHourNow: string;
     cta: string;
+    /** Как перечислить форматы в предложении: «фото и видео». */
+    formatsJoiner: string;
   };
   pricing: {
     from: string;
@@ -101,29 +103,29 @@ export type Dictionary = {
     extras: string;
     combinedDiscount: string;
   };
-  form: {
+  contact: {
+    /** Заголовок блока связи и подпись кнопки. */
     heading: string;
-    name: string;
-    email: string;
-    phone: string;
-    taskType: string;
-    date: string;
-    city: string;
-    formatsField: string;
-    budget: string;
-    budgetOptional: string;
-    message: string;
-    consent: string;
-    submit: string;
-    required: string;
-    invalidEmail: string;
-    successTitle: string;
-    successBody: string;
-    deliveryFailed: string;
-    tooManyRequests: string;
-    /** Транспорт заявок не подключён до подтверждения получателя (§18). */
-    channelPending: string;
+    button: string;
+    /** Подпись под заголовком блока связи на главной. */
+    homeLead: string;
+    /** Заголовок окна выбора мессенджера. */
+    pickChannel: string;
+    pickChannelLead: string;
+    close: string;
+    messageLabel: string;
+    copy: string;
+    copied: string;
+    /** MAX открывает чат, но текст в ссылке не принимает. */
+    pasteHint: string;
+    call: string;
     directContacts: string;
+    /** Заготовка первого сообщения. */
+    greeting: string;
+    subjectPrefix: string;
+    packageWord: string;
+    serviceWord: string;
+    estimatePrefix: string;
   };
   content: {
     /** Метка обязательна там, где факт не подтверждён владельцем (§0, §15.1). */
@@ -224,6 +226,7 @@ const ru: Dictionary = {
     total: 'Итого',
     perHourNow: 'Последний час',
     cta: 'Обсудить съёмку',
+    formatsJoiner: ' и ',
   },
   pricing: {
     from: 'от',
@@ -232,29 +235,24 @@ const ru: Dictionary = {
     extras: 'Дополнительно',
     combinedDiscount: 'При заказе фото и видео вместе — скидка 10% на общий чек.',
   },
-  form: {
-    heading: 'Оставить заявку',
-    name: 'Имя',
-    email: 'Email',
-    phone: 'Телефон или мессенджер',
-    taskType: 'Тип задачи',
-    date: 'Дата съёмки',
-    city: 'Город',
-    formatsField: 'Нужные форматы',
-    budget: 'Бюджет',
-    budgetOptional: 'необязательно',
-    message: 'Сообщение',
-    consent: 'Согласен на обработку персональных данных',
-    submit: 'Отправить заявку',
-    required: 'Обязательное поле',
-    invalidEmail: 'Проверьте адрес электронной почты',
-    successTitle: 'Заявка отправлена',
-    successBody: 'Спасибо! Отвечу в ближайшее время. Если вопрос срочный — пишите в мессенджер.',
-    deliveryFailed: 'Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.',
-    tooManyRequests: 'Слишком много попыток подряд. Подождите минуту и повторите.',
-    channelPending:
-      'Отправка заявок через форму пока не подключена. Напишите напрямую — отвечу так же быстро.',
+  contact: {
+    heading: 'Связаться',
+    button: 'Связаться',
+    homeLead: 'Напишите в удобный мессенджер — отвечу лично, без анкет и ожидания.',
+    pickChannel: 'Где вам удобнее написать?',
+    pickChannelLead: 'Сообщение уже готово — останется отправить.',
+    close: 'Закрыть',
+    messageLabel: 'Сообщение',
+    copy: 'Скопировать',
+    copied: 'Скопировано',
+    pasteHint: 'MAX не подставляет текст: сообщение скопируется, вставьте его в чат.',
+    call: 'Позвонить',
     directContacts: 'Прямые контакты',
+    greeting: 'Добрый день! Пишу с сайта.',
+    subjectPrefix: 'Интересует',
+    packageWord: 'пакет',
+    serviceWord: 'услуга',
+    estimatePrefix: 'Расчёт на сайте —',
   },
   content: {
     unconfirmed: 'КОНТЕНТ К ПОДТВЕРЖДЕНИЮ',
@@ -354,6 +352,7 @@ const en: Dictionary = {
     total: 'Total',
     perHourNow: 'Last hour',
     cta: 'Discuss the shoot',
+    formatsJoiner: ' and ',
   },
   pricing: {
     from: 'from',
@@ -362,29 +361,24 @@ const en: Dictionary = {
     extras: 'Extras',
     combinedDiscount: 'Book photo and video together and the total is 10% lower.',
   },
-  form: {
-    heading: 'Send a request',
-    name: 'Name',
-    email: 'Email',
-    phone: 'Phone or messenger',
-    taskType: 'Type of work',
-    date: 'Shooting date',
-    city: 'City',
-    formatsField: 'Formats needed',
-    budget: 'Budget',
-    budgetOptional: 'optional',
-    message: 'Message',
-    consent: 'I consent to the processing of my personal data',
-    submit: 'Send request',
-    required: 'This field is required',
-    invalidEmail: 'Please check the email address',
-    successTitle: 'Request sent',
-    successBody: 'Thank you — I will reply shortly. For anything urgent, use a messenger.',
-    deliveryFailed: 'The request could not be sent. Please try again or get in touch directly.',
-    tooManyRequests: 'Too many attempts in a row. Please wait a minute and try again.',
-    channelPending:
-      'Form submissions are not connected yet. Please use the direct contacts below — I reply just as fast.',
+  contact: {
+    heading: 'Get in touch',
+    button: 'Get in touch',
+    homeLead: 'Write in whichever messenger suits you — I answer personally, no forms, no waiting.',
+    pickChannel: 'Where would you like to write?',
+    pickChannelLead: 'The message is ready — just hit send.',
+    close: 'Close',
+    messageLabel: 'Message',
+    copy: 'Copy',
+    copied: 'Copied',
+    pasteHint: 'MAX cannot prefill text: the message will be copied, paste it into the chat.',
+    call: 'Call',
     directContacts: 'Direct contacts',
+    greeting: 'Hello! I am writing from your website.',
+    subjectPrefix: 'I am interested in',
+    packageWord: 'the package',
+    serviceWord: 'the service',
+    estimatePrefix: 'Website estimate —',
   },
   content: {
     unconfirmed: 'CONTENT TO BE CONFIRMED',

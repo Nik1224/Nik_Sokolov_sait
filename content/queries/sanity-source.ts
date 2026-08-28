@@ -138,7 +138,7 @@ export const sanitySource: ContentSource = {
         socials: [],
         legalLinks: [],
         defaultSeo: {},
-        featureFlags: { contactFormEnabled: false },
+        featureFlags: {},
       };
     }
     return {
@@ -148,12 +148,7 @@ export const sanitySource: ContentSource = {
       legalLinks: (raw.legalLinks as GlobalSettings['legalLinks']) ?? [],
       showreel: mapMedia(raw.showreel as never) ?? undefined,
       defaultSeo: mapSeo(raw.defaultSeo as Raw) ?? {},
-      featureFlags: {
-        ...((raw.featureFlags as GlobalSettings['featureFlags']) ?? {}),
-        // Форма включается только явным флагом в CMS (§18).
-        contactFormEnabled:
-          (raw.featureFlags as GlobalSettings['featureFlags'])?.contactFormEnabled === true,
-      },
+      featureFlags: (raw.featureFlags as GlobalSettings['featureFlags']) ?? {},
     };
   },
 

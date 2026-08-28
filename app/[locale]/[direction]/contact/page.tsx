@@ -1,14 +1,14 @@
 /**
  * Контакты (ТЗ §5.8).
  *
- * У каждой ветки своя форма: набор полей и список типов задач отличаются.
- * PRIVATE спрашивает дату и город, BUSINESS — услугу, PRODUCTION — проект.
+ * Формы заявки нет: человек пишет напрямую в свой мессенджер и получает ответ
+ * там же. Анкета откладывала разговор на «когда-нибудь ответят на почту».
  */
 
 import type { Metadata } from 'next';
-import { ContactForm } from '@/components/forms/ContactForm';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { Breadcrumbs } from '@/components/global/misc';
-import { getCategories, getGlobalSettings, getServices, getWorkFormats } from '@/content/queries';
+import { getGlobalSettings } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
@@ -37,23 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { locale, direction } = await resolveDirectionRoute(params, 'contact');
   const dict = getDictionary(locale);
-
-  const [settings, formats, services, categories] = await Promise.all([
-    getGlobalSettings(),
-    getWorkFormats(),
-    direction === 'business' ? getServices() : Promise.resolve([]),
-    getCategories(direction),
-  ]);
-
-  // Типы задач берутся из данных ветки: услуги для BUSINESS, категории для
-  // остальных. Список редактируется в CMS и не прошит в коде (§8).
-  const taskTypes =
-    direction === 'business'
-      ? services.map((service) => ({ value: service.slug, label: localizedString(service.title, locale) }))
-      : categories.map((category) => ({
-          value: category.slug,
-          label: localizedString(category.title, locale),
-        }));
+  const settings = await getGlobalSettings();
 
   return (
     <div className="container-content py-16 lg:py-24">
@@ -62,22 +46,35 @@ export default async function Page({ params }: Props) {
         items={[{ label: dict.common.home, href: href({ locale, direction }) }, { label: dict.nav.contact }]}
       />
 
-      <h1 className="text-h1 m-0 max-w-3xl text-balance">{dict.form.heading}</h1>
+      <h1 className="text-h1 m-0 max-w-3xl text-balance">{dict.contact.heading}</h1>
+      <p className="mt-6 max-w-2xl text-lead text-bone-dim">{dict.contact.homeLead}</p>
       {settings.location ? (
-        <p className="label mt-6 text-bone-dim">{localizedString(settings.location, locale)}</p>
+        <p className="label mt-6 text-bone-faint">{localizedString(settings.location, locale)}</p>
       ) : null}
 
-      <div className="mt-14">
-        <ContactForm
-          locale={locale}
-          direction={direction}
-          dict={dict}
-          taskTypes={taskTypes}
-          formats={formats}
-          contacts={settings.contacts}
-          showDateAndCity={direction === 'private'}
-        />
-      </div>
+      <ContactButton dict={dict} contacts={settings.contacts} className="mt-10" />
+
+      {/* Тот же список без окна: кому-то удобнее скопировать номер или ник. */}
+      {settings.contacts.length > 0 ? (
+        <section className="mt-16 border-t border-line pt-10">
+          <h2 className="label m-0 text-accent">{dict.contact.directContacts}</h2>
+          <ul className="m-0 mt-6 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {settings.contacts.map((contact) => (
+              <li key={contact.href} className="m-0">
+                <p className="label m-0 text-bone-faint">{contact.label}</p>
+                <a
+                  href={contact.href}
+                  target={contact.href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-bone transition-colors hover:text-accent"
+                >
+                  {contact.value}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </div>
   );
 }

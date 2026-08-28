@@ -99,8 +99,7 @@ export const globalSettings: GlobalSettings = {
     },
   },
   // Получатель заявок подтверждён владельцем. Реальная отправка включится,
-  // как только в окружении появятся RESEND_API_KEY и CONTACT_RECIPIENT.
-  featureFlags: { contactFormEnabled: true },
+  featureFlags: {},
 };
 
 export const directions: DirectionDoc[] = [
@@ -158,6 +157,7 @@ export const directions: DirectionDoc[] = [
       types: [
         {
           slug: 'wedding',
+          messageTitle: { ru: 'свадебная съёмка', en: 'a wedding shoot' },
           title: { ru: 'Свадебная', en: 'Wedding' },
           minHours: 3,
           maxHours: 12,
@@ -170,6 +170,7 @@ export const directions: DirectionDoc[] = [
         },
         {
           slug: 'portrait',
+          messageTitle: { ru: 'портретная съёмка', en: 'a portrait shoot' },
           title: { ru: 'Портрет', en: 'Portrait' },
           minHours: 1,
           maxHours: 5,
@@ -182,6 +183,7 @@ export const directions: DirectionDoc[] = [
         },
         {
           slug: 'family',
+          messageTitle: { ru: 'семейная съёмка', en: 'a family shoot' },
           title: { ru: 'Семейная', en: 'Family' },
           minHours: 2,
           maxHours: 5,
@@ -194,6 +196,7 @@ export const directions: DirectionDoc[] = [
         },
         {
           slug: 'love-story',
+          messageTitle: { ru: 'love story', en: 'a love story shoot' },
           title: { ru: 'Love story', en: 'Love story' },
           minHours: 1,
           maxHours: 5,
@@ -204,6 +207,7 @@ export const directions: DirectionDoc[] = [
           // Снижение ставки пока не применяется: владелец описал его только
           // для свадеб. Для длинных праздников вопрос открыт.
           slug: 'events',
+          messageTitle: { ru: 'съёмка события', en: 'an event shoot' },
           title: { ru: 'События', en: 'Events' },
           minHours: 2,
           maxHours: 8,

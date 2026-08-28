@@ -11,11 +11,12 @@
  * разработчика.
  */
 
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import type { CalculatorConfig } from '@/content/types';
+import { ContactButton } from '@/components/contact/ContactButton';
+import type { CalculatorConfig, ContactChannel } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
+import type { MessageDraft } from '@/lib/contact/message';
 import { buildQuote, type ShootFormat } from '@/lib/pricing/calculator';
 import type { Locale } from '@/lib/site';
 
@@ -23,10 +24,10 @@ type Props = {
   config: CalculatorConfig;
   locale: Locale;
   dict: Dictionary;
-  contactHref: string;
+  contacts: ContactChannel[];
 };
 
-export function PriceCalculator({ config, locale, dict, contactHref }: Props) {
+export function PriceCalculator({ config, locale, dict, contacts }: Props) {
   const [formats, setFormats] = useState<ShootFormat[]>(['photo']);
   const [typeSlug, setTypeSlug] = useState(config.types[0]?.slug ?? '');
   const [hours, setHours] = useState(config.types[0]?.defaultHours ?? 1);
@@ -86,6 +87,27 @@ export function PriceCalculator({ config, locale, dict, contactHref }: Props) {
   }
 
   if (!type) return null;
+
+  /**
+   * Текст, с которым человек уйдёт в мессенджер: то же, что он видит на экране.
+   * Владельцу не приходится переспрашивать объём, а клиенту — пересказывать.
+   */
+  const draft: MessageDraft = {
+    subject: localizedString(type.messageTitle ?? type.title, locale).toLocaleLowerCase(
+      locale === 'ru' ? 'ru-RU' : 'en-GB',
+    ),
+    details: [
+      quote.lines
+        .map((line) =>
+          (line.format === 'photo' ? dict.calculator.photo : dict.calculator.video).toLocaleLowerCase(
+            locale === 'ru' ? 'ru-RU' : 'en-GB',
+          ),
+        )
+        .join(dict.calculator.formatsJoiner),
+      hoursLabel(hours),
+    ].filter(Boolean),
+    estimate: quote.total > 0 ? money.format(quote.total) : undefined,
+  };
 
   const hint = localizedString(type.hint, locale);
   const note = localizedString(config.note, locale);
@@ -215,12 +237,13 @@ export function PriceCalculator({ config, locale, dict, contactHref }: Props) {
           </>
         )}
 
-        <Link
-          href={contactHref}
-          className="label mt-8 inline-block bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent"
-        >
-          {dict.calculator.cta}
-        </Link>
+        <ContactButton
+          dict={dict}
+          contacts={contacts}
+          draft={draft}
+          label={dict.calculator.cta}
+          className="mt-8 px-6 py-3.5"
+        />
 
         {note ? <p className="mt-6 text-sm text-bone-faint">{note}</p> : null}
       </div>

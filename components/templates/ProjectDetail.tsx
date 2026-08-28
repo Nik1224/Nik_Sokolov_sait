@@ -224,7 +224,7 @@ export function ProjectDetail({
           href={href({ locale, direction, section: 'contact' })}
           className="label inline-block bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent"
         >
-          {dict.form.heading}
+          {dict.contact.heading}
         </Link>
       </Section>
     </article>

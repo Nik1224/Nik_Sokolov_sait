@@ -3,7 +3,7 @@
  *
  * Порядок: hero и обещание результата → showreel/галерея → что снимаем,
  * форматы, deliverables → связанные кейсы → принцип расчёта → этапы → FAQ →
- * форма с предзаполненным типом услуги.
+ * связаться: сообщение в мессенджер уже содержит название услуги.
  */
 
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import { PortableBody } from '@/components/content/PortableBody';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
 import { ProjectCard } from '@/components/content/cards';
-import { ContactForm } from '@/components/forms/ContactForm';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { Breadcrumbs, FallbackNotice } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
 import {
@@ -27,6 +27,7 @@ import {
   getWorkFormats,
   resolveFormats,
 } from '@/content/queries';
+import { quotedSubject } from '@/lib/contact/message';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString, pageNeedsFallbackNotice, resolveLocalized } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
@@ -121,7 +122,7 @@ export default async function Page({ params }: Props) {
         title={title}
         lead={localizedString(service.summary, locale)}
         media={service.hero}
-        cta={{ label: dict.form.heading, href: '#contact-form' }}
+        cta={{ label: dict.contact.heading, href: '#contact' }}
         compact
       />
 
@@ -194,7 +195,7 @@ export default async function Page({ params }: Props) {
 
       {pricing ? (
         <Section title={dict.nav.pricing}>
-          <PricingBlock entries={[pricing]} locale={locale} dict={dict} contactHref={contactHref} />
+          <PricingBlock entries={[pricing]} locale={locale} dict={dict} contacts={settings.contacts} />
           <p className="mt-6">
             <Link
               href={href({ locale, direction, section: 'pricing' })}
@@ -235,19 +236,14 @@ export default async function Page({ params }: Props) {
         </Section>
       ) : null}
 
-      <Section id="contact-form" title={dict.form.heading}>
-        <ContactForm
-          locale={locale}
-          direction={direction}
+      <Section id="contact" title={dict.contact.heading}>
+        <p className="max-w-xl text-bone-dim">{dict.contact.homeLead}</p>
+        <ContactButton
           dict={dict}
-          // Тип задачи предзаполнен услугой, с которой пришёл пользователь (§5.4).
-          defaultTaskType={service.slug}
-          taskTypes={(await getServices()).map((item) => ({
-            value: item.slug,
-            label: localizedString(item.title, locale),
-          }))}
-          formats={allFormats}
           contacts={settings.contacts}
+          className="mt-8"
+          // Название услуги едет в сообщение: разговор начинается по делу (§5.4).
+          draft={{ subject: quotedSubject(dict.contact.serviceWord, title) }}
         />
       </Section>
     </article>

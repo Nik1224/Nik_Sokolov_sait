@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
@@ -130,7 +131,7 @@ export default async function DirectionHome({ params }: Props) {
           title={localizedString(doc.title, locale)}
           lead={localizedString(doc.lead, locale)}
           media={doc.hero}
-          cta={{ label: dict.form.heading, href: href({ locale, direction, section: 'contact' }) }}
+          cta={{ label: dict.contact.heading, href: href({ locale, direction, section: 'contact' }) }}
           secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
         />
       ) : (
@@ -140,7 +141,7 @@ export default async function DirectionHome({ params }: Props) {
           title={localizedString(doc.title, locale)}
           lead={localizedString(doc.lead, locale)}
           media={doc.hero}
-          cta={{ label: dict.form.heading, href: href({ locale, direction, section: 'contact' }) }}
+          cta={{ label: dict.contact.heading, href: href({ locale, direction, section: 'contact' }) }}
           secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
         />
       )}
@@ -251,14 +252,14 @@ export default async function DirectionHome({ params }: Props) {
               config={doc.calculator}
               locale={locale}
               dict={dict}
-              contactHref={href({ locale, direction, section: 'contact' })}
+              contacts={settings.contacts}
             />
           ) : (
             <PricingBlock
               entries={pricing.slice(0, 3)}
               locale={locale}
               dict={dict}
-              contactHref={href({ locale, direction, section: 'contact' })}
+              contacts={settings.contacts}
             />
           )}
         </Section>
@@ -301,13 +302,9 @@ export default async function DirectionHome({ params }: Props) {
 
       <Section>
         <div className="border-t border-line pt-10">
-          <h2 className="text-h2 m-0 max-w-2xl text-balance">{dict.form.heading}</h2>
-          <Link
-            href={href({ locale, direction, section: 'contact' })}
-            className="label mt-8 inline-block bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent"
-          >
-            {dict.nav.contact}
-          </Link>
+          <h2 className="text-h2 m-0 max-w-2xl text-balance">{dict.contact.heading}</h2>
+          <p className="mt-4 max-w-xl text-bone-dim">{dict.contact.homeLead}</p>
+          <ContactButton dict={dict} contacts={settings.contacts} className="mt-8" />
         </div>
       </Section>
     </>

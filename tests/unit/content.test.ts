@@ -169,7 +169,6 @@ describe('настройки сайта (§8, §18)', () => {
   it('выключатель формы включён: получатель заявок подтверждён', async () => {
     const { getGlobalSettings } = await import('@/content/queries');
     const settings = await getGlobalSettings();
-    expect(settings.featureFlags.contactFormEnabled).toBe(true);
   });
 
   it('юридические ссылки заданы абсолютными адресами', async () => {

@@ -246,8 +246,6 @@ export type GlobalSettings = {
   featureFlags: {
     /** Пока Private частично живёт на внешней платформе (§5.2). */
     privateExternalUrl?: string;
-    /** Транспорт заявок не подключён до подтверждения получателя (§18). */
-    contactFormEnabled: boolean;
   };
 };
 
@@ -261,6 +259,11 @@ export type ShootTypeOption = {
   defaultHours: number;
   /** Подсказка под ползунком: почему столько времени. */
   hint?: LocaleString;
+  /**
+   * Как назвать съёмку в первом сообщении мессенджера: в кнопках заголовок —
+   * прилагательное («Свадебная»), а в предложении нужен оборот целиком.
+   */
+  messageTitle?: LocaleString;
   /** Свадебная тарификация: с четвёртого часа ставка снижается. */
   taper: boolean;
 };

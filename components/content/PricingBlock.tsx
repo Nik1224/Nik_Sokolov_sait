@@ -5,8 +5,9 @@
  * пишем «по запросу» — придумывать значения запрещено (§1.2).
  */
 
-import Link from 'next/link';
-import type { PricingEntry } from '@/content/types';
+import { ContactButton } from '@/components/contact/ContactButton';
+import type { ContactChannel, PricingEntry } from '@/content/types';
+import { quotedSubject } from '@/lib/contact/message';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
@@ -15,7 +16,7 @@ type Props = {
   entries: PricingEntry[];
   locale: Locale;
   dict: Dictionary;
-  contactHref: string;
+  contacts: ContactChannel[];
 };
 
 function formatPrice(entry: PricingEntry, locale: Locale, dict: Dictionary): string {
@@ -32,7 +33,7 @@ function formatPrice(entry: PricingEntry, locale: Locale, dict: Dictionary): str
   return `${prefix}${formatted}${unit ? ` / ${unit}` : ''}`;
 }
 
-export function PricingBlock({ entries, locale, dict, contactHref }: Props) {
+export function PricingBlock({ entries, locale, dict, contacts }: Props) {
   const packages = entries.filter((entry) => entry.kind !== 'extra');
   if (packages.length === 0) return null;
 
@@ -40,7 +41,7 @@ export function PricingBlock({ entries, locale, dict, contactHref }: Props) {
     <ul className="m-0 grid list-none gap-px bg-line p-0 md:grid-cols-2 lg:grid-cols-3">
       {packages.map((entry) => {
         const disclaimer = localizedString(entry.disclaimer, locale);
-        const ctaLabel = localizedString(entry.ctaLabel, locale) || dict.form.heading;
+        const ctaLabel = localizedString(entry.ctaLabel, locale) || dict.contact.heading;
 
         return (
           <li key={entry._id} className="flex flex-col bg-ink p-6 lg:p-8">
@@ -62,12 +63,19 @@ export function PricingBlock({ entries, locale, dict, contactHref }: Props) {
             )}
 
             {disclaimer ? <p className="mt-6 text-sm text-bone-faint">{disclaimer}</p> : null}
-            <Link
-              href={contactHref}
-              className="label mt-6 text-bone transition-colors hover:text-accent"
-            >
-              {ctaLabel} →
-            </Link>
+            <ContactButton
+              dict={dict}
+              contacts={contacts}
+              variant="quiet"
+              label={ctaLabel}
+              className="mt-6 self-start text-left"
+              draft={{
+                subject: quotedSubject(
+                  dict.contact.packageWord,
+                  localizedString(entry.title, locale),
+                ),
+              }}
+            />
           </li>
         );
       })}
@@ -79,7 +87,7 @@ export function PricingBlock({ entries, locale, dict, contactHref }: Props) {
  * Дополнения к пакетам: доплаты и опции. Карточка на каждую строку выглядела
  * бы как отдельная услуга, хотя это надбавка к основному пакету.
  */
-export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contactHref'>) {
+export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contacts'>) {
   const extras = entries.filter((entry) => entry.kind === 'extra');
   if (extras.length === 0) return null;
 

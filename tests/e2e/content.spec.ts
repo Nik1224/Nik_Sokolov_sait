@@ -183,29 +183,63 @@ test('на странице контактов есть прямые конта�
   await page.goto('/ru/private/contact');
 
   await expect(page.getByText('Москва / Санкт-Петербург').first()).toBeVisible();
-  await expect(page.getByRole('complementary').getByRole('link').first()).toBeVisible();
+
+  // Каналы доступны и без окна: номер и ник можно просто скопировать.
+  const direct = page.getByRole('link', { name: '+7 989 527 70 70' });
+  await expect(direct.first()).toHaveAttribute('href', 'tel:+79895277070');
+  await expect(page.getByRole('link', { name: '@Nik_Sokolov_pro' }).first()).toHaveAttribute(
+    'href',
+    'https://t.me/Nik_Sokolov_pro',
+  );
 });
 
-test('заявка отправляется и форма очищается', async ({ page }) => {
+test('кнопка «Связаться» открывает мессенджеры с готовым сообщением', async ({ page }) => {
   await page.goto('/ru/private/contact');
+  await page.getByRole('button', { name: 'Связаться', exact: true }).click();
 
-  await page.getByLabel('Имя').fill('Тест');
-  await page.getByLabel('Email', { exact: true }).fill('test@example.com');
-  await page.getByLabel('Сообщение').fill('Проверка формы');
-  await page.getByLabel(/Согласен на обработку/).check();
-  await page.getByRole('button', { name: 'Отправить заявку' }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
 
-  await expect(page.getByText('Заявка отправлена')).toBeVisible();
-  // Поля очищены, чтобы случайно не отправить дубль.
-  await expect(page.getByLabel('Имя')).toHaveValue('');
+  // Все четыре канала, о которых договаривались, и все с рабочей ссылкой.
+  // Регистр не проверяем: заглавные буквы даёт CSS, в разметке имя как в CMS.
+  for (const [name, pattern] of [
+    ['telegram', /^https:\/\/t\.me\//],
+    ['max', /^https:\/\/max\.ru\//],
+    ['whatsapp', /^https:\/\/wa\.me\//],
+    ['sms', /^sms:/],
+  ] as const) {
+    await expect(dialog.getByRole('link', { name: new RegExp(name, 'i') })).toHaveAttribute(
+      'href',
+      pattern,
+    );
+  }
 });
 
-test('незаполненная форма не отправляется и объясняет почему', async ({ page }) => {
-  await page.goto('/ru/private/contact');
-  await page.getByRole('button', { name: 'Отправить заявку' }).click();
+test('расчёт из калькулятора уезжает в сообщение мессенджера', async ({ page }) => {
+  await page.goto('/ru/private/pricing');
 
-  await expect(page.getByText('Обязательное поле').first()).toBeVisible();
-  await expect(page.getByText('Заявка отправлена')).toHaveCount(0);
+  await page.getByText('Свадебная', { exact: true }).click();
+  await page.getByText('Видео', { exact: true }).click();
+  await page.locator('#calc-hours').fill('8');
+  await page.getByRole('button', { name: 'Обсудить съёмку' }).click();
+
+  const dialog = page.getByRole('dialog');
+  // Ровно то, что человек видел на экране: тип, форматы, часы и сумма.
+  await expect(dialog).toContainText('свадебная съёмка — фото и видео, 8 часов');
+  await expect(dialog).toContainText('183 500');
+
+  // Тот же текст должен уехать в чат, иначе подстановка бессмысленна.
+  const href = await dialog.getByRole('link', { name: /telegram/i }).getAttribute('href');
+  expect(decodeURIComponent(href ?? '')).toContain('фото и видео, 8 часов');
+});
+
+test('окно выбора мессенджера закрывается с клавиатуры', async ({ page }) => {
+  await page.goto('/ru/private/contact');
+  await page.getByRole('button', { name: 'Связаться', exact: true }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
 });
 
 test('фоновое видео играет само, без звука и по кругу', async ({ page }, testInfo) => {

@@ -18,9 +18,6 @@ export type AnalyticsEvent =
   | 'video_start'
   | 'video_complete'
   | 'contact_start'
-  | 'contact_submit'
-  | 'contact_success'
-  | 'contact_error'
   | 'outbound_contact';
 
 /** Только безопасные значения: без имён, адресов и текста сообщений. */
