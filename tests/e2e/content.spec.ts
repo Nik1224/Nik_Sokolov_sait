@@ -330,3 +330,60 @@ test('видео карточки стартует при прокрутке к 
   const first = page.getByRole('main').getByRole('link', { name: /Private/ });
   await expect(first.locator('video')).toHaveJSProperty('paused', true);
 });
+
+test('видеообложка PRIVATE показывается целиком и не обрезается', async ({ page }) => {
+  await page.goto('/ru/private');
+  await page.waitForTimeout(1500);
+
+  const cover = page.locator('section video').first();
+  await expect(cover).toHaveCount(1);
+
+  const box = (await cover.boundingBox())!;
+  const source = await cover.evaluate((el: HTMLVideoElement) => ({
+    w: el.videoWidth,
+    h: el.videoHeight,
+  }));
+
+  // Блок повторяет пропорции ролика — значит object-cover ничего не срезает.
+  expect(box.width / box.height).toBeCloseTo(source.w / source.h, 1);
+
+  // И занимает всю ширину страницы.
+  const viewport = page.viewportSize()!.width;
+  expect(box.width).toBeCloseTo(viewport, -1);
+});
+
+test('обложка играет без звука и по кругу', async ({ page }) => {
+  await page.goto('/ru/private');
+  await page.waitForTimeout(2000);
+
+  const state = await page.locator('section video').first().evaluate((el: HTMLVideoElement) => ({
+    playing: !el.paused,
+    muted: el.muted,
+    loop: el.loop,
+  }));
+  expect(state).toEqual({ playing: true, muted: true, loop: true });
+});
+
+test('при уменьшенной анимации обложка остаётся кадром', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru/private');
+  await page.waitForTimeout(1200);
+
+  await expect(page.locator('section video')).toHaveCount(0);
+  // Содержание не зависит от движения: кадр и заголовок на месте (§10).
+  await expect(page.locator('img[src*="private-cover-poster"]')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});
+
+test('на телефоне текст обложки идёт под видео, а не поверх', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка мобильной раскладки');
+
+  await page.goto('/ru/private');
+  await page.waitForTimeout(1500);
+
+  const cover = (await page.locator('section video, img[src*="private-cover-poster"]').first().boundingBox())!;
+  const heading = (await page.getByRole('heading', { level: 1 }).boundingBox())!;
+
+  // Полоса высотой в пятую часть ширины не вместила бы подпись поверх себя.
+  expect(heading.y).toBeGreaterThan(cover.y + cover.height - 4);
+});

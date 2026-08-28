@@ -9,6 +9,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
@@ -113,15 +114,28 @@ export default async function DirectionHome({ params }: Props) {
         )}
       />
 
-      <HeroMedia
-        locale={locale}
-        eyebrow={dict.directions[direction]}
-        title={localizedString(doc.title, locale)}
-        lead={localizedString(doc.lead, locale)}
-        media={doc.hero}
-        cta={{ label: dict.form.heading, href: href({ locale, direction, section: 'contact' }) }}
-        secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
-      />
+      {/* Видеообложка показывается целиком, поэтому у неё своя раскладка. */}
+      {doc.hero?.type === 'video' ? (
+        <CoverHero
+          locale={locale}
+          eyebrow={dict.directions[direction]}
+          title={localizedString(doc.title, locale)}
+          lead={localizedString(doc.lead, locale)}
+          media={doc.hero}
+          cta={{ label: dict.form.heading, href: href({ locale, direction, section: 'contact' }) }}
+          secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
+        />
+      ) : (
+        <HeroMedia
+          locale={locale}
+          eyebrow={dict.directions[direction]}
+          title={localizedString(doc.title, locale)}
+          lead={localizedString(doc.lead, locale)}
+          media={doc.hero}
+          cta={{ label: dict.form.heading, href: href({ locale, direction, section: 'contact' }) }}
+          secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
+        />
+      )}
 
       {/* PRODUCTION: шоурил — главный элемент страницы (§5.6). */}
       {direction === 'production' && showreel && showreel.type === 'video' ? (

@@ -126,7 +126,17 @@ export const directions: DirectionDoc[] = [
       { title: { ru: 'Договор', en: 'A written agreement' }, body: { ru: 'Условия, дата и объём фиксируются заранее.', en: 'Terms, date and scope are fixed in advance.' } },
       { title: { ru: 'Цвет', en: 'Colour' }, body: { ru: 'Чистый и верный цвет — то, на чём построена вся работа.', en: 'Clean, true colour is what the whole craft is built on.' } },
     ],
-    hero: decorative('hero-private', 'wide', 2),
+    // Обложка направления: коллаж со съёмок, 19 с без звука, 2,4 МБ.
+    // Кадр 1,85:1 шире экрана, поэтому показывается целиком по ширине.
+    hero: {
+      _key: 'hero-private',
+      type: 'video',
+      provider: 'file',
+      poster: { src: '/media/private-cover-poster.jpg', width: 1920, height: 1038 },
+      loopSrc: '/media/private-cover.mp4',
+      alt: { ru: 'Кадры со съёмок: свадьбы, портреты, студия', en: 'Frames from shoots: weddings, portraits, studio' },
+      rights: 'owned',
+    },
     // Вертикальная петля 16 с без звука, 1,8 МБ. Играет только в раскрытой
     // карточке и подключается при первом наведении. Водяной знак Instagram
     // в кадре оставлен намеренно — по решению владельца.
