@@ -230,6 +230,13 @@ export const category = defineType({
       options: { list: DIRECTION_OPTIONS },
       validation: (rule) => rule.required().min(1),
     }),
+    defineField({
+      name: 'fullSeries',
+      title: 'Бывают полные серии',
+      description: 'Включите, если у этой категории бывает полная выдача одной съёмки. На такие категории ведёт переход к альбомам.',
+      type: 'boolean',
+      initialValue: false,
+    }),
     defineField({ name: 'order', title: 'Порядок', type: 'number' }),
     demoField,
   ],

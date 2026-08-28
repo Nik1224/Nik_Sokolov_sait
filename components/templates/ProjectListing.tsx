@@ -129,7 +129,13 @@ export function ProjectListing({
 
       <div className="mt-12">
         {gallery.length > 0 ? (
-          <MediaGallery items={gallery} locale={locale} dict={dict} layout="masonry" />
+          <MediaGallery
+            items={gallery}
+            locale={locale}
+            dict={dict}
+            layout="masonry"
+            initialCount={36}
+          />
         ) : projects.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (

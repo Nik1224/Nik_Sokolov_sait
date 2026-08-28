@@ -68,7 +68,7 @@ const DIRECTIONS = groq`*[_type == "direction"]{
 }`;
 
 const CATEGORIES = groq`*[_type == "category"]{
-  _id, "slug": slug.current, title, directions, order, isDemo
+  _id, "slug": slug.current, title, directions, fullSeries, order, isDemo
 }`;
 
 const ALBUMS = groq`*[_type == "album"]{

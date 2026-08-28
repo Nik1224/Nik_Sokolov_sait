@@ -77,6 +77,7 @@ export type Dictionary = {
     previous: string;
     next: string;
     imageOf: string;
+    showMore: string;
   };
   calculator: {
     heading: string;
@@ -231,6 +232,7 @@ const ru: Dictionary = {
     previous: 'Предыдущее',
     next: 'Следующее',
     imageOf: 'из',
+    showMore: 'Показать ещё',
   },
   calculator: {
     heading: 'Посчитать стоимость',
@@ -372,6 +374,7 @@ const en: Dictionary = {
     previous: 'Previous',
     next: 'Next',
     imageOf: 'of',
+    showMore: 'Show more',
   },
   calculator: {
     heading: 'Estimate the cost',

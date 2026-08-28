@@ -122,7 +122,7 @@ test('фильтр портфолио сужает галерею, а не ло�
   expect(await page.locator('main figure button').count()).toBe(all);
 
   // У категории без снятых кадров галереи нет — и пустой сетки тоже.
-  await page.goto('/ru/private/portfolio?category=portrait');
+  await page.goto('/ru/private/portfolio?category=love-story');
   expect(await page.locator('main figure button').count()).toBe(0);
 });
 
@@ -787,4 +787,37 @@ test('из полных свадеб можно вернуться в портф
 
   await path.getByRole('link', { name: 'Портфолио' }).click();
   await expect(page).toHaveURL(/\/ru\/private\/portfolio$/);
+});
+
+test('переход к альбомам показывается только там, где полные серии бывают', async ({ page }) => {
+  const promo = () => page.getByRole('link', { name: /Открыть альбомы/ });
+
+  for (const category of ['wedding', 'private-event']) {
+    await page.goto(`/ru/private/portfolio?category=${category}`);
+    await expect(promo(), category).toHaveCount(1);
+  }
+
+  // У портрета и семьи полной выдачи одной съёмки не бывает — предлагать нечего.
+  for (const category of ['portrait', 'family']) {
+    await page.goto(`/ru/private/portfolio?category=${category}`);
+    await expect(promo(), category).toHaveCount(0);
+  }
+});
+
+test('большая галерея открывается порциями, а просмотр листает её целиком', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=portrait');
+
+  const frames = page.locator('main figure button');
+  const first = await frames.count();
+  // Две сотни кадров сразу — это бесконечная страница без ориентиров.
+  expect(first).toBeLessThan(60);
+
+  const more = page.getByRole('button', { name: 'Показать ещё' });
+  await more.click();
+  expect(await frames.count()).toBeGreaterThan(first);
+
+  // В полноэкранном просмотре доступны все кадры категории, а не только видимые.
+  await frames.first().click();
+  const counter = page.getByRole('dialog').locator('p').first();
+  await expect(counter).toHaveText(new RegExp(`из \\d{3}`));
 });

@@ -23,7 +23,7 @@ import type {
   Testimonial,
   WorkFormat,
 } from '../types';
-import { weddingGallery } from './wedding-gallery';
+import { familyGallery, portraitGallery, weddingGallery } from './portfolio-galleries';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
 
 const demo = { isDemo: true, status: 'published' } as const;
@@ -323,12 +323,13 @@ export const directions: DirectionDoc[] = [
 ];
 
 export const categories: Category[] = [
-  // Единственная категория с настоящим портфолио: 74 кадра с реальных съёмок.
-  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery },
-  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, isDemo: true },
-  { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, isDemo: true },
+  // Категории с настоящим портфолио. fullSeries — там, где бывает полная
+  // выдача одной съёмки: на такие категории ведёт переход к альбомам.
+  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, fullSeries: true },
+  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery },
+  { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, isDemo: true },
-  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, isDemo: true },
+  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, isDemo: true, fullSeries: true },
   { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, directions: ['business', 'production'], order: 6, isDemo: true },
   { _id: 'cat.interview', slug: 'interview', title: { ru: 'Интервью и подкасты', en: 'Interviews and podcasts' }, directions: ['business'], order: 7, isDemo: true },
   { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, directions: ['business', 'production'], order: 8, isDemo: true },

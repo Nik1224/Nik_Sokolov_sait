@@ -31,9 +31,21 @@ type Props = {
   locale: Locale;
   dict: Dictionary;
   layout?: 'feature' | 'masonry';
+  /**
+   * Сколько кадров показать сразу. Остальные открываются кнопкой: две сотни
+   * снимков разом — это бесконечная страница, по которой нечем ориентироваться.
+   */
+  initialCount?: number;
 };
 
-export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props) {
+export function MediaGallery({
+  items,
+  locale,
+  dict,
+  layout = 'feature',
+  initialCount,
+}: Props) {
+  const [shown, setShown] = useState(initialCount ?? items.length);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   /**
@@ -114,7 +126,7 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
             : 'grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6'
         }
       >
-        {items.map((item, position) => {
+        {items.slice(0, shown).map((item, position) => {
           const alt = localizedString(item.alt, locale);
           const caption = localizedString(item.caption, locale);
 
@@ -184,6 +196,21 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
           );
         })}
       </ul>
+
+      {shown < items.length ? (
+        <div className="mt-10 flex flex-col items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setShown((current) => current + (initialCount ?? items.length))}
+            className="label border border-line px-7 py-4 text-bone transition-colors hover:border-line-strong hover:bg-ink-raised"
+          >
+            {dict.media.showMore}
+          </button>
+          <p className="label m-0 text-bone-faint">
+            {shown} {dict.media.imageOf} {items.length}
+          </p>
+        </div>
+      ) : null}
 
       <dialog
         ref={dialogRef}

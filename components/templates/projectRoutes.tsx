@@ -102,7 +102,17 @@ export async function ProjectListingRoute({
 
   // Полные серии показываем только там, где они есть: пустой переход хуже,
   // чем его отсутствие.
-  const albums = isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
+  /*
+   * Переход к альбомам показывается там, где полная выдача одной съёмки вообще
+   * бывает: у портрета и семьи её не существует, и предлагать её бессмысленно.
+   * Без фильтра — показываем, раз в ветке такие категории есть.
+   */
+  const fullSeriesHere = activeCategory
+    ? (categories.find((item) => item.slug === activeCategory)?.fullSeries ?? false)
+    : categories.some((item) => item.fullSeries);
+
+  const albums =
+    fullSeriesHere && isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
 
   return (
     <ProjectListing
