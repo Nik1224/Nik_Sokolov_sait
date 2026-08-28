@@ -778,3 +778,13 @@ test('у альбома есть обложка, и она не грузится
   await expect(cover).toHaveAttribute('srcset', /600w/);
   await expect(cover).toHaveAttribute('srcset', /1200w/);
 });
+
+test('из полных свадеб можно вернуться в портфолио по пути, а не через меню', async ({ page }) => {
+  await page.goto('/ru/private/albums');
+
+  const path = page.getByRole('navigation', { name: 'Вы здесь' });
+  await expect(path.getByRole('link')).toHaveText(['Главная', 'Портфолио']);
+
+  await path.getByRole('link', { name: 'Портфолио' }).click();
+  await expect(page).toHaveURL(/\/ru\/private\/portfolio$/);
+});

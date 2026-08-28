@@ -15,6 +15,7 @@ import { getDictionary } from '@/lib/i18n/dictionaries';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
 import { href } from '@/lib/routing';
 import { buildMetadata } from '@/lib/seo';
+import { isSectionAvailable } from '@/lib/site';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
 
@@ -43,9 +44,22 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="container-content py-16 lg:py-24">
+      {/* Полные свадьбы — продолжение портфолио, и путь это показывает: назад
+          возвращаются по цепочке, а не через меню наверху. */}
       <Breadcrumbs
         dict={dict}
-        items={[{ label: dict.common.home, href: href({ locale, direction }) }, { label: dict.nav.albums }]}
+        items={[
+          { label: dict.common.home, href: href({ locale, direction }) },
+          ...(isSectionAvailable(direction, 'portfolio')
+            ? [
+                {
+                  label: dict.nav.portfolio,
+                  href: href({ locale, direction, section: 'portfolio' }),
+                },
+              ]
+            : []),
+          { label: dict.nav.albums },
+        ]}
       />
 
       <h1 className="text-h1 m-0 max-w-3xl text-balance">{dict.nav.albums}</h1>
