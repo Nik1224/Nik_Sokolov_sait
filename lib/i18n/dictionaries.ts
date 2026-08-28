@@ -101,6 +101,8 @@ export type Dictionary = {
     /** Заголовок раскрывающегося списка пакетов. */
     packages: string;
     packagesUnit: { one: string; few: string; many: string };
+    /** Третий вариант переключателя форматов внутри группы. */
+    bothFormats: string;
     onRequest: string;
     individualEstimate: string;
     extras: string;
@@ -235,6 +237,7 @@ const ru: Dictionary = {
     from: 'от',
     packages: 'Пакетные предложения',
     packagesUnit: { one: 'пакет', few: 'пакета', many: 'пакетов' },
+    bothFormats: 'Фото и видео',
     onRequest: 'по запросу',
     individualEstimate: 'Индивидуальная смета',
     extras: 'Дополнительно',
@@ -363,6 +366,7 @@ const en: Dictionary = {
     from: 'from',
     packages: 'Packages',
     packagesUnit: { one: 'package', few: 'packages', many: 'packages' },
+    bothFormats: 'Photo and video',
     onRequest: 'on request',
     individualEstimate: 'Individual estimate',
     extras: 'Extras',

@@ -105,7 +105,7 @@ const ARTICLES = groq`*[_type == "article"]{
 }`;
 
 const PRICING = groq`*[_type == "pricingEntry"]{
-  _id, "slug": slug.current, direction, kind, groupSlug, title, description, price, currency, priceFrom,
+  _id, "slug": slug.current, direction, kind, groupSlug, format, title, description, price, currency, priceFrom,
   unit, includes, disclaimer, ctaLabel, order, active, isDemo
 }`;
 

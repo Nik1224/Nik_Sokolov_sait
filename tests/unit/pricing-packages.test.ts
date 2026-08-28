@@ -106,6 +106,31 @@ describe('группы пакетов', () => {
     }
   });
 
+  it('у каждого пакета указан формат съёмки', () => {
+    // Без формата пакет провалится в первую вкладку переключателя и окажется
+    // не там, где его ищут.
+    for (const entry of packages) {
+      expect(entry.format, entry.slug).toBeDefined();
+    }
+  });
+
+  it('свадьба предлагает все три формата, портрет — только фото', () => {
+    const formats = (group: string) =>
+      new Set(packages.filter((entry) => entry.groupSlug === group).map((entry) => entry.format));
+
+    expect([...formats('wedding')].sort()).toEqual(['both', 'photo', 'video']);
+    expect([...formats('portrait')]).toEqual(['photo']);
+  });
+
+  it('в каждом свадебном формате одинаковый выбор по длительности', () => {
+    // Иначе переключение формата выглядит как потеря пакетов.
+    const counts = ['photo', 'video', 'both'].map(
+      (format) =>
+        packages.filter((entry) => entry.groupSlug === 'wedding' && entry.format === format).length,
+    );
+    expect(new Set(counts).size).toBe(1);
+  });
+
   it('пустых групп нет: раскрывать нечего — показывать незачем', () => {
     for (const group of privateDirection.pricingGroups ?? []) {
       expect(packages.some((entry) => entry.groupSlug === group.slug), group.slug).toBe(true);

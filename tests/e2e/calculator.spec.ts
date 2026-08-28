@@ -163,3 +163,38 @@ test('цена пакета совпадает с калькулятором н�
     .locator('xpath=ancestor::li[1]');
   await expect(card).toContainText('90 600');
 });
+
+test('внутри свадьбы формат переключается, а не лежит отдельным разделом', async ({ page }) => {
+  await page.goto('/ru/private/pricing');
+  await page.getByRole('button', { name: /^Свадьба/ }).click();
+
+  const panel = page.locator('#pricing-group-wedding');
+  // По умолчанию фото: самый частый запрос.
+  await expect(panel.getByRole('heading', { name: 'Свадьба, до 8 часов' })).toBeVisible();
+
+  await panel.getByText('Видео', { exact: true }).click();
+  await expect(panel.getByRole('heading', { name: 'Видео, свадебный день' })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: 'Свадьба, до 8 часов' })).toHaveCount(0);
+
+  await panel.getByText('Фото и видео', { exact: true }).click();
+  await expect(panel.getByRole('heading', { name: 'Фото и видео, свадебный день' })).toBeVisible();
+
+  // Отдельного раздела «Видеосъёмка» больше нет: видео живёт внутри свадьбы.
+  await expect(page.getByRole('button', { name: /Видеосъёмка/ })).toHaveCount(0);
+});
+
+test('совмещённый пакет дешевле, чем те же съёмки по отдельности', async ({ page }) => {
+  await page.goto('/ru/private/pricing');
+  await page.getByRole('button', { name: /^Свадьба/ }).click();
+  const panel = page.locator('#pricing-group-wedding');
+
+  await panel.getByText('Фото и видео', { exact: true }).click();
+  const card = panel
+    .getByRole('heading', { name: 'Фото и видео, до 3 часов' })
+    .locator('xpath=ancestor::li[1]');
+
+  // Цена и её расклад должны сходиться: по нему клиент и считает.
+  await expect(card).toContainText('72 900');
+  await expect(card).toContainText('81 000');
+  await expect(card).toContainText('8 100');
+});

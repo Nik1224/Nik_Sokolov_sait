@@ -451,6 +451,20 @@ export const pricingEntry = defineType({
       type: 'string',
     }),
     defineField({
+      name: 'format',
+      title: 'Что снимаем',
+      description: 'Если в группе есть пакеты разных форматов, на странице появится переключатель.',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Фото', value: 'photo' },
+          { title: 'Видео', value: 'video' },
+          { title: 'Фото и видео', value: 'both' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
       name: 'kind',
       title: 'Тип',
       type: 'string',

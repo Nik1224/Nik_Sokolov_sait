@@ -3,17 +3,22 @@
 /**
  * Пакетные предложения (ТЗ §5.8, §7).
  *
- * Девять пакетов подряд читались как свалка: человек ищет свадьбу, а листает
- * портреты и видео. Здесь они разложены по группам, которые раскрываются на
- * месте — без перехода на другую страницу, чтобы выбор оставался перед глазами.
+ * Пакеты подряд читались как свалка: человек ищет свадьбу, а листает портреты
+ * и видео. Здесь они разложены по группам, которые раскрываются на месте — без
+ * перехода на другую страницу, чтобы выбор оставался перед глазами.
+ *
+ * Внутри группы форматы переключаются, а не лежат отдельными разделами: свадьба
+ * — это один выбор («фото, видео или всё вместе»), а не три разных места на
+ * странице.
  *
  * Свёрнутая группа всё равно отвечает на главный вопрос: сколько пакетов и в
- * какие деньги. Иначе список превратился бы в три безмолвные строки.
+ * какие деньги. Иначе список превратился бы в пару безмолвных строк.
  */
 
 import { useMemo, useState } from 'react';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import type { ContactChannel, PricingEntry, PricingGroup } from '@/content/types';
+import type { ShootFormat } from '@/lib/pricing/calculator';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
@@ -26,8 +31,15 @@ type Props = {
   contacts: ContactChannel[];
 };
 
+type PackageFormat = ShootFormat | 'both';
+
+/** Порядок переключателя: от простого к полному. */
+const FORMATS: PackageFormat[] = ['photo', 'video', 'both'];
+
 export function PricingPackages({ groups, entries, locale, dict, contacts }: Props) {
   const [open, setOpen] = useState<string[]>([]);
+  /** Выбранный формат внутри каждой группы. */
+  const [format, setFormat] = useState<Record<string, PackageFormat>>({});
 
   const money = useMemo(
     () =>
@@ -69,6 +81,12 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
     return <PricingBlock entries={entries} locale={locale} dict={dict} contacts={contacts} />;
   }
 
+  function formatLabel(value: PackageFormat): string {
+    if (value === 'photo') return dict.calculator.photo;
+    if (value === 'video') return dict.calculator.video;
+    return dict.pricing.bothFormats;
+  }
+
   function toggle(slug: string) {
     setOpen((current) =>
       current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug],
@@ -92,6 +110,16 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
         const description = localizedString(group.description, locale);
         const summary = priceSummary(items);
         const panelId = `pricing-group-${group.slug}`;
+
+        // Переключатель появляется сам, когда в группе форматов больше одного.
+        const available = FORMATS.filter((value) =>
+          items.some((entry) => (entry.format ?? 'photo') === value),
+        );
+        const active = format[group.slug] ?? available[0];
+        const shown =
+          available.length > 1
+            ? items.filter((entry) => (entry.format ?? 'photo') === active)
+            : items;
 
         return (
           <section key={group.slug} className="border-b border-line">
@@ -140,8 +168,37 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
 
             {expanded ? (
               <div id={panelId} className="pricing-panel pb-10">
+                {available.length > 1 ? (
+                  <fieldset className="m-0 mb-8 border-0 p-0">
+                    <legend className="label mb-4 p-0 text-accent">{dict.calculator.formats}</legend>
+                    <div className="flex flex-wrap gap-3">
+                      {available.map((value) => (
+                        <label
+                          key={value}
+                          className={`label cursor-pointer border px-5 py-3 transition-colors ${
+                            value === active
+                              ? 'border-bone bg-bone text-ink'
+                              : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name={`format-${group.slug}`}
+                            className="sr-only"
+                            checked={value === active}
+                            onChange={() =>
+                              setFormat((current) => ({ ...current, [group.slug]: value }))
+                            }
+                          />
+                          {formatLabel(value)}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                ) : null}
+
                 <PricingBlock
-                  entries={items}
+                  entries={shown}
                   locale={locale}
                   dict={dict}
                   contacts={contacts}
