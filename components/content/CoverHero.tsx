@@ -112,48 +112,35 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           />
         ) : null}
 
-        {/* Подложка под текстом.
-            Купол обхватывает только текст. Заливка почти прозрачная и
-            набирает плотность лишь у самого низа, где встречается со
-            следующей секцией.
-
-            Читаемость держит не заливка, а стекло: размытие поднимает тени и
-            светлоту, поэтому тёмный текст остаётся виден даже на чёрном
-            кадре — а кадр при этом просвечивает и продолжает двигаться. */}
-        <div aria-hidden="true" className="absolute inset-0 hidden overflow-hidden lg:block">
-          <div
-            className="absolute bottom-0 left-[-7%] h-[47%] w-[66%]"
-            style={{
-              borderRadius: '20% 20% 0 0 / 38% 38% 0 0',
-              // Одного размытия мало: чёрное остаётся чёрным, сколько ни
-              // размывай. contrast поднимает тени, brightness — светлоту.
-              // Радиус подобран по замеру кадров: размытие поверх играющего
-              // видео пересчитывается каждый кадр.
-              backdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
-              WebkitBackdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
-              background: [
-                'linear-gradient(to bottom,',
-                ' transparent 0%,',
-                ' color-mix(in srgb, var(--color-ink) 8%, transparent) 46%,',
-                ' color-mix(in srgb, var(--color-ink) 24%, transparent) 70%,',
-                ' color-mix(in srgb, var(--color-ink) 66%, transparent) 88%,',
-                ' var(--color-ink) 100%)',
-              ].join(''),
-              maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)',
-            }}
-          />
-          {/* Узкая полоса у самого низа сшивает обложку со следующим блоком. */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-[9%]"
-            style={{
-              background: 'linear-gradient(to top, var(--color-ink) 55%, transparent 100%)',
-            }}
-          />
-        </div>
-
         <div className="container-content absolute inset-x-0 bottom-0 hidden pb-10 lg:block">
-          <div className="max-w-xl">{text}</div>
+          <div className="relative w-fit max-w-xl">
+            {/* Тонированное стекло.
+                Панель обхватывает ровно текст и уходит за левый и нижний край
+                кадра — там она встречается со следующей секцией, поэтому шва
+                не видно и «полосы» сверху тоже: край остаётся только у
+                скошенного угла, и он читается как форма, а не как обрез.
+
+                Тонировка идёт градиентом: сверху почти нет, к низу набирает
+                плотность. Читаемость держит стекло — размытие с подъёмом
+                теней: без него чёрные участки кадра остаются чёрными. */}
+            <div
+              aria-hidden="true"
+              className="absolute bottom-[-2.5rem] left-[-7.5rem] right-[-3rem] top-[-2.25rem]"
+              style={{
+                borderRadius: '0 8rem 0 0',
+                backdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
+                WebkitBackdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
+                background: [
+                  'linear-gradient(to bottom,',
+                  ' color-mix(in srgb, var(--color-ink) 10%, transparent) 0%,',
+                  ' color-mix(in srgb, var(--color-ink) 26%, transparent) 45%,',
+                  ' color-mix(in srgb, var(--color-ink) 62%, transparent) 80%,',
+                  ' var(--color-ink) 100%)',
+                ].join(''),
+              }}
+            />
+            <div className="relative">{text}</div>
+          </div>
         </div>
       </div>
 
