@@ -215,7 +215,7 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
             <div
               // touch-action: none — жесты обрабатываем сами, иначе браузер
               // перехватит их прокруткой и «потянуть, чтобы обновить».
-              className="relative flex min-h-0 flex-1 touch-none items-center justify-center p-4"
+              className="relative flex min-h-0 flex-1 touch-none items-center justify-center px-4 py-4 sm:px-24"
               onTouchStart={(event) => {
                 const touch = event.touches[0];
                 gesture.current = { x: touch.clientX, y: touch.clientY, axis: 'none' };
@@ -250,50 +250,56 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
                 if (Math.abs(dx) > SWIPE_DISTANCE) step(dx < 0 ? 1 : -1);
               }}
             >
-              <div
-                className={dragY === 0 ? 'lightbox-frame is-settling' : 'lightbox-frame'}
-                style={{
-                  transform: `translateY(${dragY}px)`,
-                  // Чем дальше кадр от центра, тем прозрачнее: жест сообщает,
-                  // что просмотр вот-вот закроется.
-                  opacity: 1 - Math.min(Math.abs(dragY) / 520, 0.55),
-                }}
-              >
-                <div key={openIndex} className={`lightbox-slide is-${slide}`}>
-                  <Picture
-                    image={active.image}
-                    alt={localizedString(active.alt, locale)}
-                    sizes="100vw"
-                    priority
-                    className="max-h-full w-auto max-w-full object-contain"
-                  />
+              {/* Сцена сжимается по кадру, поэтому стрелки стоят рядом с ним,
+                  а не у краёв экрана. */}
+              <div className="lightbox-stage">
+                <div
+                  className={dragY === 0 ? 'lightbox-frame is-settling' : 'lightbox-frame'}
+                  style={{
+                    transform: `translateY(${dragY}px)`,
+                    // Чем дальше кадр от центра, тем прозрачнее: жест сообщает,
+                    // что просмотр вот-вот закроется.
+                    opacity: 1 - Math.min(Math.abs(dragY) / 520, 0.55),
+                  }}
+                >
+                  <div key={openIndex} className={`lightbox-slide is-${slide}`}>
+                    <Picture
+                      image={active.image}
+                      alt={localizedString(active.alt, locale)}
+                      sizes="100vw"
+                      priority
+                      className="max-h-full w-auto max-w-full object-contain"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {images.length > 1 ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => step(-1)}
-                    aria-label={dict.media.previous}
-                    className="lightbox-arrow left-2 sm:left-4"
-                  >
-                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-                      <path d="M15 5 8 12l7 7" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => step(1)}
-                    aria-label={dict.media.next}
-                    className="lightbox-arrow right-2 sm:right-4"
-                  >
-                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-                      <path d="m9 5 7 7-7 7" />
-                    </svg>
-                  </button>
-                </>
-              ) : null}
+                {images.length > 1 ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => step(-1)}
+                      aria-label={dict.media.previous}
+                      className="lightbox-arrow"
+                      data-side="prev"
+                    >
+                      <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="M15 5 8 12l7 7" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => step(1)}
+                      aria-label={dict.media.next}
+                      className="lightbox-arrow"
+                      data-side="next"
+                    >
+                      <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="m9 5 7 7-7 7" />
+                      </svg>
+                    </button>
+                  </>
+                ) : null}
+              </div>
             </div>
           </div>
         ) : null}

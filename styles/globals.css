@@ -306,24 +306,49 @@
     position: absolute;
     top: 50%;
     display: grid;
-    height: 3rem;
-    width: 3rem;
+    height: 3.25rem;
+    width: 3.25rem;
     translate: 0 -50%;
     place-items: center;
-    border: 1px solid var(--color-line);
-    background-color: color-mix(in srgb, var(--color-ink) 72%, transparent);
+    border: 1px solid var(--color-line-strong);
+    /* Плотнее прежнего: кнопка обязана читаться и на светлом кадре, и на
+       тёмном, оставаясь тонкой. */
+    background-color: color-mix(in srgb, var(--color-ink) 82%, transparent);
     color: var(--color-bone);
-    backdrop-filter: blur(6px);
-    transition: background-color var(--duration-fast) var(--ease-out-soft);
+    backdrop-filter: blur(8px);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-soft),
+      border-color var(--duration-fast) var(--ease-out-soft);
+  }
+
+  /* На узком экране кадр занимает почти всю ширину, места сбоку нет —
+     кнопки лежат на его краю. С 640px они выходят наружу, к самому кадру. */
+  .lightbox-arrow[data-side='prev'] {
+    left: 0.5rem;
+  }
+
+  .lightbox-arrow[data-side='next'] {
+    right: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .lightbox-arrow[data-side='prev'] {
+      left: -4.5rem;
+    }
+
+    .lightbox-arrow[data-side='next'] {
+      right: -4.5rem;
+    }
   }
 
   .lightbox-arrow:hover {
+    border-color: var(--color-bone-faint);
     background-color: var(--color-ink);
   }
 
   .lightbox-arrow svg {
-    height: 1.25rem;
-    width: 1.25rem;
+    height: 1.5rem;
+    width: 1.5rem;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.5;
@@ -334,20 +359,41 @@
   /* Кадр в полноэкранном просмотре: тянется за пальцем, отпущенный —
      возвращается на место. Пока палец ведёт, переход выключен, иначе кадр
      догонял бы движение с задержкой. */
+  .lightbox-stage,
   .lightbox-frame,
   .lightbox-slide {
     /*
      * Высота именно заданная, а не max-height: процент от родителя с
      * неопределённой высотой не разрешается, и кадр вырастал до натурального
      * размера, вылезая за экран.
+     *
+     * Ширина, наоборот, по содержимому: сцена сжимается ровно по кадру, и от
+     * её краёв отмеряются стрелки — иначе они стояли бы у краёв экрана, далеко
+     * от фотографии.
      */
     display: flex;
     height: 100%;
-    width: 100%;
+    max-width: 100%;
     min-height: 0;
     min-width: 0;
     align-items: center;
     justify-content: center;
+  }
+
+  /*
+   * На узком экране сцена не служит точкой отсчёта: кадр там почти во всю
+   * ширину, и стрелки, привязанные к нему, закрывали бы пятую часть снимка.
+   * Они отмеряются от всей области и стоят у краёв экрана. С 640px точкой
+   * отсчёта становится сам кадр.
+   */
+  .lightbox-stage {
+    position: static;
+  }
+
+  @media (min-width: 640px) {
+    .lightbox-stage {
+      position: relative;
+    }
   }
 
   /*
