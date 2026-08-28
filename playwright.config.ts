@@ -13,6 +13,12 @@ export default defineConfig({
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
+    /*
+     * Safari — отдельный движок, и ошибки у него свои: пустая прокрутка под
+     * подвалом была видна только там. Гоняем в нём помеченные тесты, а не всё
+     * подряд: полный прогон в двух движках стоит вдвое дороже.
+     */
+    { name: 'safari', use: { ...devices['iPhone 13'] }, grep: /@safari/ },
   ],
   webServer: {
     command: 'npm run build && npx next start --port 3100',

@@ -835,3 +835,40 @@ test('в галерее нет «Смотреть все», в списке ра
     page.getByRole('navigation', { name: 'Фильтр' }).getByRole('link', { name: 'Смотреть все' }),
   ).toBeVisible();
 });
+
+test('страница не прокручивается дальше подвала @safari', async ({ page }) => {
+  // Проверяется в Safari: его многоколоночная раскладка добавляла к высоте
+  // страницы тысячи пикселей пустоты, которых не было ни у одного элемента.
+  for (const path of ['/ru/private/portfolio', '/ru/private/portfolio?category=portrait']) {
+    await page.goto(path);
+    await page.waitForTimeout(600);
+
+    const tail = await page.evaluate(() => {
+      const footer = document.querySelector('footer')!.getBoundingClientRect();
+      return document.documentElement.scrollHeight - Math.round(footer.bottom + window.scrollY);
+    });
+    expect(tail, path).toBeLessThanOrEqual(1);
+  }
+});
+
+test('«Показать ещё» добавляет кадры вниз, не сдвигая показанные @safari', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=portrait');
+
+  const frames = page.locator('main figure button');
+  const positions = () =>
+    frames.evaluateAll((items) =>
+      items.map((item) => {
+        const box = item.getBoundingClientRect();
+        return `${Math.round(box.x)}:${Math.round(box.y + window.scrollY)}`;
+      }),
+    );
+
+  const before = await positions();
+  await page.getByRole('button', { name: 'Показать ещё' }).click();
+  await expect(frames).not.toHaveCount(before.length);
+
+  // Ни один уже показанный кадр не должен переехать: иначе они разбегаются
+  // вверх и в середину, и человек их просто не замечает.
+  const after = await positions();
+  expect(after.slice(0, before.length)).toEqual(before);
+});

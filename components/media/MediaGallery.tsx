@@ -117,16 +117,28 @@ export function MediaGallery({
 
   const active = openIndex !== null ? images[openIndex] : null;
 
+  /*
+   * Порции — каждая своей сеткой. У колонок высоты выравниваются по всему
+   * содержимому: если досыпать кадры в общую сетку, она перекладывает и уже
+   * показанные, и снимки разбегаются вверх и в середину.
+   */
+  const batchSize = layout === 'masonry' && initialCount ? initialCount : items.length;
+  const visible = items.slice(0, shown);
+  const batches: MediaAsset[][] = [];
+  for (let start = 0; start < visible.length; start += batchSize || visible.length) {
+    batches.push(visible.slice(start, start + (batchSize || visible.length)));
+  }
+  if (batches.length === 0) batches.push([]);
+
   return (
     <>
+      {batches.map((batch, batchIndex) => (
       <ul
-        className={
-          layout === 'masonry'
-            ? 'm-0 list-none p-0 [column-gap:1rem] columns-2 lg:[column-gap:1.5rem] lg:columns-3'
-            : 'grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6'
-        }
+        key={batchIndex}
+        className={layout === 'masonry' ? 'masonry m-0 list-none p-0' : 'grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6'}
       >
-        {items.slice(0, shown).map((item, position) => {
+        {batch.map((item, indexInBatch) => {
+          const position = batchIndex * batchSize + indexInBatch;
           const alt = localizedString(item.alt, locale);
           const caption = localizedString(item.caption, locale);
 
@@ -196,6 +208,7 @@ export function MediaGallery({
           );
         })}
       </ul>
+      ))}
 
       {shown < items.length ? (
         <div className="mt-10 flex flex-col items-center gap-3">
