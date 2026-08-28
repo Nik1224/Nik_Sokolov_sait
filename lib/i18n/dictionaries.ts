@@ -98,6 +98,9 @@ export type Dictionary = {
   };
   pricing: {
     from: string;
+    /** Заголовок раскрывающегося списка пакетов. */
+    packages: string;
+    packagesUnit: { one: string; few: string; many: string };
     onRequest: string;
     individualEstimate: string;
     extras: string;
@@ -230,6 +233,8 @@ const ru: Dictionary = {
   },
   pricing: {
     from: 'от',
+    packages: 'Пакетные предложения',
+    packagesUnit: { one: 'пакет', few: 'пакета', many: 'пакетов' },
     onRequest: 'по запросу',
     individualEstimate: 'Индивидуальная смета',
     extras: 'Дополнительно',
@@ -356,6 +361,8 @@ const en: Dictionary = {
   },
   pricing: {
     from: 'from',
+    packages: 'Packages',
+    packagesUnit: { one: 'package', few: 'packages', many: 'packages' },
     onRequest: 'on request',
     individualEstimate: 'Individual estimate',
     extras: 'Extras',

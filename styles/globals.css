@@ -264,3 +264,19 @@
     transform: translateY(0.75rem);
   }
 }
+
+@layer components {
+  /* Раскрытая группа пакетов. Появление короткое: это не переход, а показ. */
+  @media (prefers-reduced-motion: no-preference) {
+    .pricing-panel {
+      animation: pricing-panel-in 200ms ease-out;
+    }
+  }
+}
+
+@keyframes pricing-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}

@@ -261,12 +261,17 @@ describe('наполнение PRIVATE с lokos.pro', () => {
     }
   });
 
-  it('цена пакета не помечается как «от», а дополнения — да', async () => {
+  it('у пакета есть цена, а «от» — только там, где сумма зависит от часов', async () => {
     const { getPricing } = await import('@/content/queries');
     const entries = await getPricing('private');
 
     for (const entry of entries.filter((item) => item.kind === 'package')) {
-      expect(entry.priceFrom, `${entry.slug}: пакет не должен быть «от»`).not.toBe(true);
+      expect(typeof entry.price, `${entry.slug}: нет цены`).toBe('number');
+      if (entry.priceFrom) {
+        // «от» оправдано только диапазоном длительности. В остальных случаях
+        // это уклончивость: точную цену можно назвать.
+        expect(entry.title.ru, `${entry.slug}: «от» без диапазона часов`).toMatch(/\d\s*[–-]\s*\d/);
+      }
     }
     expect(entries.some((entry) => entry.kind === 'extra')).toBe(true);
   });

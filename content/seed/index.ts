@@ -144,6 +144,33 @@ export const directions: DirectionDoc[] = [
     // Свадьба — первые три часа по базовой ставке, дальше час дешевеет так,
     // что десять часов фото стоят 110 000 вместо 120 000. Доля 19/24 — это
     // ровно та точка: 12 000 × 19/24 = 9 500 за десятый час.
+    // Группы на странице стоимости: девять пакетов подряд читаются как свалка.
+    pricingGroups: [
+      {
+        slug: 'wedding',
+        title: { ru: 'Свадебная фотосъёмка', en: 'Wedding photography' },
+        description: {
+          ru: 'Ставка 12 000 ₽ за час; на длинной свадьбе час дешевеет — точные суммы в калькуляторе выше.',
+          en: 'A rate of 12,000 ₽ per hour; on a long wedding day the hour gets cheaper — exact figures in the calculator above.',
+        },
+      },
+      {
+        slug: 'portrait',
+        title: { ru: 'Портрет и семья', en: 'Portrait & family' },
+        description: {
+          ru: 'Ровная ставка 12 000 ₽ за час съёмки.',
+          en: 'A flat rate of 12,000 ₽ per hour.',
+        },
+      },
+      {
+        slug: 'video',
+        title: { ru: 'Видеосъёмка', en: 'Videography' },
+        description: {
+          ru: 'Ставка 15 000 ₽ за час одного оператора. Каждый следующий оператор — половина этой суммы.',
+          en: 'A rate of 15,000 ₽ per hour for one operator. Each additional operator costs half of that.',
+        },
+      },
+    ],
     calculator: {
       photoHourPrice: 12000,
       videoHourPrice: 15000,
@@ -768,6 +795,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.wedding-3h',
     slug: 'wedding-3h',
     direction: 'private',
+    groupSlug: 'wedding',
     kind: 'package',
     order: 1,
     active: true,
@@ -776,7 +804,7 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Роспись и короткая прогулка. Отдаются все кадры, а не выборка.',
       en: 'Registry and a short walk. You get every frame, not a selection.',
     },
-    price: 24000,
+    price: 36000,
     currency: 'RUB',
     includes: [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
@@ -790,6 +818,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.wedding-8h',
     slug: 'wedding-8h',
     direction: 'private',
+    groupSlug: 'wedding',
     kind: 'package',
     order: 2,
     active: true,
@@ -798,7 +827,7 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Основной формат: сборы, церемония, прогулка и начало банкета.',
       en: 'The main format: getting ready, ceremony, walk and the start of the reception.',
     },
-    price: 80000,
+    price: 90600,
     currency: 'RUB',
     includes: [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
@@ -812,6 +841,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.wedding-12h',
     slug: 'wedding-12h',
     direction: 'private',
+    groupSlug: 'wedding',
     kind: 'package',
     order: 3,
     active: true,
@@ -820,7 +850,10 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'День целиком — от утренних сборов до финала вечера.',
       en: 'The whole day — from the morning preparations to the end of the evening.',
     },
-    price: 100000,
+    // 10 часов — 110 000 ₽, 12 часов — 129 000 ₽. Одной цифрой это не
+    // покрыть, поэтому показываем нижнюю границу и отправляем в калькулятор.
+    price: 110000,
+    priceFrom: true,
     currency: 'RUB',
     includes: [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
@@ -834,18 +867,19 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.portrait-family',
     slug: 'portrait-family',
     direction: 'private',
+    groupSlug: 'portrait',
     kind: 'package',
     order: 4,
     active: true,
     title: { ru: 'Семейный портрет', en: 'Family portrait' },
     description: {
-      ru: 'Час на локации или в студии, до пяти человек в кадре.',
-      en: 'An hour on location or in a studio, up to five people in frame.',
+      ru: 'Два часа на локации или в студии, до пяти человек в кадре.',
+      en: 'Two hours on location or in a studio, up to five people in frame.',
     },
-    price: 10000,
+    price: 24000,
     currency: 'RUB',
     includes: [
-      { ru: '1 час съёмки, до 5 человек', en: '1 hour of shooting, up to 5 people' },
+      { ru: '2 часа съёмки, до 5 человек', en: '2 hours of shooting, up to 5 people' },
       { ru: 'Помощь в подборе одежды', en: 'Help choosing outfits' },
       { ru: '20 фотографий в ретуши — выбираете сами', en: '20 retouched photos — you choose them yourself' },
       { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
@@ -856,6 +890,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.portrait-solo',
     slug: 'portrait-solo',
     direction: 'private',
+    groupSlug: 'portrait',
     kind: 'package',
     order: 5,
     active: true,
@@ -864,7 +899,7 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Съёмка одного человека: спокойный ритм, без списка обязательных поз.',
       en: 'A shoot for one person: a calm pace, no mandatory pose list.',
     },
-    price: 10000,
+    price: 12000,
     currency: 'RUB',
     includes: [
       { ru: '1 час съёмки', en: '1 hour of shooting' },
@@ -878,6 +913,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.portrait-max',
     slug: 'portrait-max',
     direction: 'private',
+    groupSlug: 'portrait',
     kind: 'package',
     order: 6,
     active: true,
@@ -896,11 +932,18 @@ export const pricingEntries: PricingEntry[] = [
       { ru: '40 фотографий в ретуши', en: '40 retouched photos' },
       { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
     ],
+    // Цена выше расчёта не из-за ставки: 24 000 ₽ — сама съёмка, остальное
+    // уходит стилисту, визажисту и студии. Без пояснения это выглядит наценкой.
+    disclaimer: {
+      ru: '24 000 ₽ — два часа съёмки по ставке калькулятора, 26 000 ₽ — стилист, макияж и аренда студии.',
+      en: '24,000 ₽ covers two hours of shooting at the calculator rate; 26,000 ₽ goes to the stylist, make-up and studio rental.',
+    },
   },
   {
     _id: 'pr.video-hourly',
     slug: 'video-hourly',
     direction: 'private',
+    groupSlug: 'video',
     kind: 'package',
     order: 7,
     active: true,
@@ -909,7 +952,7 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Один оператор на короткое событие или роспись.',
       en: 'One operator for a short event or a registry ceremony.',
     },
-    price: 35000,
+    price: 45000,
     currency: 'RUB',
     includes: [
       { ru: 'До 3 часов съёмки, 1 оператор', en: 'Up to 3 hours, 1 operator' },
@@ -923,6 +966,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.video-wedding-day',
     slug: 'video-wedding-day',
     direction: 'private',
+    groupSlug: 'video',
     kind: 'package',
     order: 8,
     active: true,
@@ -931,7 +975,9 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Два оператора, полный фильм и короткие версии для соцсетей.',
       en: 'Two operators, a full film and short versions for social media.',
     },
-    price: 100000,
+    // 137 500 ₽ — 10 часов основного оператора со свадебным снижением ставки,
+    // 68 800 ₽ — второй оператор по половине этой суммы.
+    price: 206300,
     currency: 'RUB',
     includes: [
       { ru: 'До 10 часов съёмки, 2 оператора', en: 'Up to 10 hours, 2 operators' },
@@ -946,6 +992,7 @@ export const pricingEntries: PricingEntry[] = [
     _id: 'pr.video-max',
     slug: 'video-max',
     direction: 'private',
+    groupSlug: 'video',
     kind: 'package',
     order: 9,
     active: true,
@@ -954,7 +1001,9 @@ export const pricingEntries: PricingEntry[] = [
       ru: 'Три оператора, кран и монтаж SDE — фильм показывают уже на банкете.',
       en: 'Three operators, a crane and a same-day edit — the film screens at the reception.',
     },
-    price: 180000,
+    // 161 300 ₽ — 12 часов основного оператора, 161 300 ₽ — два оператора по
+    // половине ставки, 40 000 ₽ — кран и монтаж в день свадьбы.
+    price: 362600,
     currency: 'RUB',
     includes: [
       { ru: 'До 12 часов съёмки, 3 оператора', en: 'Up to 12 hours, 3 operators' },
@@ -974,9 +1023,9 @@ export const pricingEntries: PricingEntry[] = [
   { _id: 'pr.business-custom', slug: 'business-custom', direction: 'business', kind: 'package', order: 5, active: true, isDemo: true, title: { ru: 'Рекламные и сложные проекты', en: 'Advertising and complex projects' }, description: { ru: 'Индивидуальная смета: препродакшн, команда, локации, постпродакшн.', en: 'Individual estimate: pre-production, crew, locations, post-production.' }, includes: [], disclaimer: { ru: 'Только индивидуальный расчёт.', en: 'Individual estimate only.' } },
 
   // Дополнительные услуги — с lokos.pro. Показываются списком, а не карточками.
-  { _id: 'pr.extra-hour', slug: 'extra-hour', direction: 'private', kind: 'extra', order: 20, active: true, title: { ru: 'Дополнительный час съёмки', en: 'Additional hour' }, description: { ru: '', en: '' }, price: 8000, currency: 'RUB', includes: [] },
-  { _id: 'pr.extra-second-photographer', slug: 'second-photographer', direction: 'private', kind: 'extra', order: 21, active: true, title: { ru: 'Второй фотограф', en: 'Second photographer' }, description: { ru: '', en: '' }, price: 30000, currency: 'RUB', priceFrom: true, includes: [], disclaimer: { ru: 'от 30 000 до 80 000 ₽', en: 'from 30,000 to 80,000 ₽' } },
-  { _id: 'pr.extra-photobook', slug: 'photobook', direction: 'private', kind: 'extra', order: 22, active: true, title: { ru: 'Фотокнига', en: 'Photo book' }, description: { ru: '', en: '' }, price: 10000, currency: 'RUB', priceFrom: true, includes: [], disclaimer: { ru: 'от 10 000 до 100 000 ₽ — зависит от формата и объёма', en: 'from 10,000 to 100,000 ₽ depending on format and size' } },
+  { _id: 'pr.extra-hour', slug: 'extra-hour', direction: 'private', kind: 'extra', order: 20, active: true, title: { ru: 'Дополнительный час съёмки', en: 'Additional hour' }, description: { ru: '', en: '' }, price: 12000, currency: 'RUB', includes: [], disclaimer: { ru: 'Фото — 12 000 ₽, видео — 15 000 ₽. На свадьбе с четвёртого часа дешевле: к десятому час стоит 9 500 ₽.', en: 'Photo — 12,000 ₽, video — 15,000 ₽. At a wedding the rate drops from the fourth hour: by the tenth an hour costs 9,500 ₽.' } },
+  { _id: 'pr.extra-second-photographer', slug: 'second-photographer', direction: 'private', kind: 'extra', order: 21, active: true, title: { ru: 'Второй фотограф или оператор', en: 'Second photographer or operator' }, description: { ru: '', en: '' }, includes: [], disclaimer: { ru: '50% от стоимости съёмки основного специалиста — столько же стоит каждый следующий.', en: '50% of the lead specialist’s fee — each additional one costs the same.' } },
+  { _id: 'pr.extra-photobook', slug: 'photobook', direction: 'private', kind: 'extra', order: 22, active: true, title: { ru: 'Фотокнига', en: 'Photo book' }, description: { ru: '', en: '' }, price: 10000, currency: 'RUB', priceFrom: true, includes: [], disclaimer: { ru: 'До 100 000 ₽ — зависит от формата и объёма.', en: 'Up to 100,000 ₽ depending on format and size.' } },
   { _id: 'pr.extra-reels', slug: 'reels-maker', direction: 'private', kind: 'extra', order: 23, active: true, title: { ru: 'Reels-мейкер на съёмке', en: 'Reels maker on set' }, description: { ru: '', en: '' }, price: 15000, currency: 'RUB', priceFrom: true, includes: [] },
   { _id: 'pr.extra-rush', slug: 'rush', direction: 'private', kind: 'extra', order: 24, active: true, title: { ru: 'Срочная обработка', en: 'Expedited processing' }, description: { ru: '', en: '' }, includes: [], disclaimer: { ru: '30% от стоимости пакета', en: '30% of the package price' } },
   { _id: 'pr.extra-raw', slug: 'raw', direction: 'private', kind: 'extra', order: 25, active: true, title: { ru: 'Исходники RAW', en: 'RAW files' }, description: { ru: '', en: '' }, price: 3000, currency: 'RUB', includes: [] },

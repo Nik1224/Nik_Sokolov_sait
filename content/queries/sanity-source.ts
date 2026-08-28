@@ -62,7 +62,7 @@ const GLOBAL_SETTINGS = groq`*[_type == "globalSettings"][0]{
 }`;
 
 const DIRECTIONS = groq`*[_type == "direction"]{
-  _id, key, title, lead, gatewayDescription, highlights, navOrder, order, isDemo,
+  _id, key, title, lead, gatewayDescription, highlights, navOrder, order, isDemo, pricingGroups,
   hero ${MEDIA}, gatewayMedia ${MEDIA}, seo ${SEO}
 }`;
 
@@ -105,7 +105,7 @@ const ARTICLES = groq`*[_type == "article"]{
 }`;
 
 const PRICING = groq`*[_type == "pricingEntry"]{
-  _id, "slug": slug.current, direction, kind, title, description, price, currency, priceFrom,
+  _id, "slug": slug.current, direction, kind, groupSlug, title, description, price, currency, priceFrom,
   unit, includes, disclaimer, ctaLabel, order, active, isDemo
 }`;
 

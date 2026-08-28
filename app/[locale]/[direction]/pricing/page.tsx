@@ -7,7 +7,8 @@
 
 import type { Metadata } from 'next';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
-import { PricingBlock, PricingExtras } from '@/components/content/PricingBlock';
+import { PricingExtras } from '@/components/content/PricingBlock';
+import { PricingPackages } from '@/components/content/PricingPackages';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
 import { getDirection, getGlobalSettings, getPricing } from '@/content/queries';
@@ -46,6 +47,10 @@ export default async function Page({ params }: Props) {
     getGlobalSettings(),
   ]);
 
+  // Пакеты и дополнения показываются по-разному: карточками и строкой.
+  const packages = entries.filter((entry) => entry.kind !== 'extra');
+  const extras = entries.filter((entry) => entry.kind === 'extra');
+
   return (
     <div className="container-content py-16 lg:py-24">
       <Breadcrumbs
@@ -75,28 +80,32 @@ export default async function Page({ params }: Props) {
       ) : null}
 
       <div className="mt-14">
-        {entries.length === 0 ? (
+        {packages.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
           <>
-            <PricingBlock
-              entries={entries}
-              locale={locale}
-              dict={dict}
-              contacts={settings.contacts}
-            />
-
-            {entries.some((entry) => entry.kind === 'extra') ? (
-              <div className="mt-16 max-w-2xl">
-                <h2 className="label m-0 text-accent">{dict.pricing.extras}</h2>
-                <div className="mt-6">
-                  <PricingExtras entries={entries} locale={locale} dict={dict} />
-                </div>
-                <p className="mt-8 text-sm text-bone-faint">{dict.pricing.combinedDiscount}</p>
-              </div>
-            ) : null}
+            <h2 className="label m-0 text-accent">{dict.pricing.packages}</h2>
+            <div className="mt-8">
+              <PricingPackages
+                groups={doc?.pricingGroups ?? []}
+                entries={packages}
+                locale={locale}
+                dict={dict}
+                contacts={settings.contacts}
+              />
+            </div>
           </>
         )}
+
+        {extras.length > 0 ? (
+          <div className="mt-16 max-w-2xl">
+            <h2 className="label m-0 text-accent">{dict.pricing.extras}</h2>
+            <div className="mt-6">
+              <PricingExtras entries={extras} locale={locale} dict={dict} />
+            </div>
+            <p className="mt-8 text-sm text-bone-faint">{dict.pricing.combinedDiscount}</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

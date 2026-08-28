@@ -183,10 +183,26 @@ export type Article = BaseDoc & {
   publishedAt: string;
 };
 
+/**
+ * Группа пакетов на странице стоимости (ТЗ §5.8).
+ *
+ * Девять пакетов подряд читаются как свалка: человек ищет свадьбу, а листает
+ * портреты и видео. Группы раскрываются на месте, без перехода на другую
+ * страницу — выбор остаётся перед глазами.
+ */
+export type PricingGroup = {
+  slug: string;
+  title: LocaleString;
+  /** Короткое пояснение под заголовком группы. */
+  description?: LocaleString;
+};
+
 export type PricingEntry = {
   _id: string;
   slug: string;
   direction: Direction;
+  /** К какой группе относится пакет. Пусто — покажется общим списком. */
+  groupSlug?: string;
   /** Пакет показывается карточкой, дополнение — строкой в общем списке. */
   kind: 'package' | 'extra';
   title: LocaleString;
@@ -297,6 +313,8 @@ export type DirectionDoc = {
   highlights: { title: LocaleString; body?: LocaleString }[];
   /** Калькулятор стоимости. Есть не у всех направлений. */
   calculator?: CalculatorConfig;
+  /** Группы пакетов на странице стоимости. Пусто — пакеты идут одним списком. */
+  pricingGroups?: PricingGroup[];
   /** Порядок и состав пунктов меню; подписи берутся из словаря интерфейса. */
   navOrder?: string[];
   seo?: SeoFields;

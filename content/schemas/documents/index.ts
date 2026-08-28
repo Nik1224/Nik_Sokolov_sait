@@ -149,6 +149,23 @@ export const direction = defineType({
       ],
     }),
     defineField({
+      name: 'pricingGroups',
+      title: 'Группы пакетов на странице стоимости',
+      description: 'Раскрывающиеся разделы: «Свадебная фотосъёмка», «Портрет и семья» и так далее. Порядок здесь = порядок на странице.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'slug', title: 'Ключ', type: 'string' },
+            { name: 'title', title: 'Название', type: 'localeString' },
+            { name: 'description', title: 'Пояснение', type: 'localeString' },
+          ],
+          preview: { select: { title: 'title.ru', subtitle: 'slug' } },
+        },
+      ],
+    }),
+    defineField({
       name: 'navOrder',
       title: 'Порядок разделов в меню',
       description: 'Ключи разделов. Пусто — порядок по умолчанию.',
@@ -427,6 +444,12 @@ export const pricingEntry = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({ name: 'description', title: 'Описание', type: 'localeText', validation: requiredRu }),
+    defineField({
+      name: 'groupSlug',
+      title: 'Группа',
+      description: 'Ключ группы из документа направления. Пусто — пакет попадёт в общий список.',
+      type: 'string',
+    }),
     defineField({
       name: 'kind',
       title: 'Тип',

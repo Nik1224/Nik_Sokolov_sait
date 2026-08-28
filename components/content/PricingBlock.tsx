@@ -95,13 +95,19 @@ export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contacts'>
     <ul className="m-0 list-none p-0">
       {extras.map((entry) => {
         const note = localizedString(entry.disclaimer, locale);
+        // Примечание бывает длиннее строки. В капсе рядом с ценой такое не
+        // читается, поэтому оно уходит вниз обычным текстом.
+        const price = typeof entry.price === 'number' ? formatPrice(entry, locale, dict) : null;
+
         return (
-          <li
-            key={entry._id}
-            className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-line py-4"
-          >
-            <span className="text-bone">{localizedString(entry.title, locale)}</span>
-            <span className="label text-accent">{note || formatPrice(entry, locale, dict)}</span>
+          <li key={entry._id} className="border-t border-line py-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <span className="text-bone">{localizedString(entry.title, locale)}</span>
+              <span className="label shrink-0 text-accent">
+                {price ?? (note ? null : dict.pricing.onRequest)}
+              </span>
+            </div>
+            {note ? <p className="m-0 mt-2 max-w-2xl text-sm text-bone-faint">{note}</p> : null}
           </li>
         );
       })}
