@@ -113,40 +113,41 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
         ) : null}
 
         {/* Подложка под текстом.
-            Не заливка, а стекло: видео за ней видно и оно продолжает двигаться,
-            но размывается и осветляется, поэтому тёмный текст светлой темы на
-            нём читается. Плотность нарастает сверху вниз — у вершины купола
-            почти ничего, у самого низа сплошной цвет страницы, чтобы стык со
-            следующей секцией не читался. */}
+            Купол обхватывает только текст. Заливка почти прозрачная и
+            набирает плотность лишь у самого низа, где встречается со
+            следующей секцией.
+
+            Читаемость держит не заливка, а стекло: размытие поднимает тени и
+            светлоту, поэтому тёмный текст остаётся виден даже на чёрном
+            кадре — а кадр при этом просвечивает и продолжает двигаться. */}
         <div aria-hidden="true" className="absolute inset-0 hidden overflow-hidden lg:block">
           <div
-            className="absolute bottom-0 left-[-4%] h-[56%] w-[78%]"
+            className="absolute bottom-0 left-[-7%] h-[47%] w-[66%]"
             style={{
-              borderRadius: '50% 50% 0 0 / 100% 100% 0 0',
-              // contrast поднимает тени, brightness — общую светлоту: без них
-              // чёрные участки кадра остаются чёрными, сколько ни размывай.
-              // Радиус размытия подобран по замеру кадров: каждый лишний
-              // пиксель радиуса — работа для видеокарты на каждом кадре видео.
-              backdropFilter: 'blur(12px) contrast(0.36) brightness(1.4)',
-              WebkitBackdropFilter: 'blur(12px) contrast(0.36) brightness(1.4)',
+              borderRadius: '20% 20% 0 0 / 38% 38% 0 0',
+              // Одного размытия мало: чёрное остаётся чёрным, сколько ни
+              // размывай. contrast поднимает тени, brightness — светлоту.
+              // Радиус подобран по замеру кадров: размытие поверх играющего
+              // видео пересчитывается каждый кадр.
+              backdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
+              WebkitBackdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
               background: [
                 'linear-gradient(to bottom,',
-                ' color-mix(in srgb, var(--color-ink) 12%, transparent) 0%,',
-                ' color-mix(in srgb, var(--color-ink) 40%, transparent) 26%,',
-                ' color-mix(in srgb, var(--color-ink) 78%, transparent) 48%,',
-                ' color-mix(in srgb, var(--color-ink) 94%, transparent) 70%,',
+                ' transparent 0%,',
+                ' color-mix(in srgb, var(--color-ink) 8%, transparent) 46%,',
+                ' color-mix(in srgb, var(--color-ink) 24%, transparent) 70%,',
+                ' color-mix(in srgb, var(--color-ink) 66%, transparent) 88%,',
                 ' var(--color-ink) 100%)',
               ].join(''),
-              // Мягкий вход сверху, чтобы кромка стекла не читалась линией.
-              maskImage: 'linear-gradient(to bottom, transparent 0%, black 11%, black 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 11%, black 100%)',
+              maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)',
             }}
           />
-          {/* Полоса у самого низа сшивает обложку со следующим блоком. */}
+          {/* Узкая полоса у самого низа сшивает обложку со следующим блоком. */}
           <div
-            className="absolute inset-x-0 bottom-0 h-[12%]"
+            className="absolute inset-x-0 bottom-0 h-[9%]"
             style={{
-              background: 'linear-gradient(to top, var(--color-ink) 40%, transparent 100%)',
+              background: 'linear-gradient(to top, var(--color-ink) 55%, transparent 100%)',
             }}
           />
         </div>
