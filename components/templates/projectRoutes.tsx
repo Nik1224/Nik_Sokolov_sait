@@ -89,16 +89,19 @@ export async function ProjectListingRoute({
   const publishesGalleries = categories.some((item) => (item.gallery?.length ?? 0) > 0);
 
   /*
-   * «Смотреть все» показывается, только когда наполнена не одна категория.
-   * Пока снята одна свадьба, эта ссылка ведёт ровно туда же, куда «Свадьбы», —
-   * выбор без разницы.
+   * «Смотреть все» есть у списка работ и нет у галереи. Список работ так и
+   * листают — подряд; а вперемешку свадьбы, портреты и семейные кадры не
+   * складываются ни во что: человек выбирает, что ему снимать, а не смотрит
+   * ленту. Вернуться ко всем кадрам можно пунктом «Портфолио» в меню.
+   *
+   * У списка работ ссылка тоже появляется, только когда наполнена не одна
+   * категория: иначе она ведёт ровно туда же, куда единственная категория.
    */
-  const everything = await getProjects({ direction });
-  const filled = categories.filter((item) =>
-    publishesGalleries
-      ? (item.gallery?.length ?? 0) > 0
-      : everything.some((project) => project.categorySlugs.includes(item.slug)),
-  );
+  const everything = publishesGalleries ? [] : await getProjects({ direction });
+  const filledCategories = categories.filter((item) =>
+    everything.some((project) => project.categorySlugs.includes(item.slug)),
+  ).length;
+  const showAll = !publishesGalleries && filledCategories > 1;
 
   // Полные серии показываем только там, где они есть: пустой переход хуже,
   // чем его отсутствие.
@@ -126,7 +129,7 @@ export async function ProjectListingRoute({
       categories={categories}
       activeCategory={activeCategory}
       gallery={gallery}
-      showAll={filled.length > 1}
+      showAll={showAll}
       promo={
         albums.length > 0
           ? {

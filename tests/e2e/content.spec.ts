@@ -821,3 +821,17 @@ test('большая галерея открывается порциями, а 
   const counter = page.getByRole('dialog').locator('p').first();
   await expect(counter).toHaveText(new RegExp(`из \\d{3}`));
 });
+
+test('в галерее нет «Смотреть все», в списке работ есть', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+  const filter = page.getByRole('navigation', { name: 'Фильтр' });
+  // Свадьбы, портреты и семейные кадры вперемешку не складываются ни во что.
+  await expect(filter.getByRole('link', { name: 'Смотреть все' })).toHaveCount(0);
+  await expect(filter.getByRole('link', { name: 'Свадьбы' })).toBeVisible();
+
+  // Список работ так и листают — подряд.
+  await page.goto('/ru/business/cases');
+  await expect(
+    page.getByRole('navigation', { name: 'Фильтр' }).getByRole('link', { name: 'Смотреть все' }),
+  ).toBeVisible();
+});
