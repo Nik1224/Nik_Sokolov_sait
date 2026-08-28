@@ -54,7 +54,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
   const text = (
     <>
       {eyebrow ? <p className="label m-0 text-accent">{eyebrow}</p> : null}
-      <h1 className="text-h1 mt-5 max-w-2xl text-balance">{title}</h1>
+      <h1 className="text-h1 mt-4 max-w-2xl text-balance">{title}</h1>
       {lead ? <p className="mt-5 max-w-xl text-lead text-bone-dim">{lead}</p> : null}
 
       {cta || secondaryCta ? (
@@ -106,19 +106,32 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           />
         ) : null}
 
-        {/* Подложка под текстом. Кадр здесь тёмный и пёстрый, а тема светлая:
-            без плотной подложки тёмный текст на нём не читается. Справа она
-            сходит на нет, чтобы обложка осталась видна. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-y-0 left-0 hidden w-[68%] lg:block"
-          style={{
-            background:
-              'linear-gradient(to right, var(--color-ink) 0%, var(--color-ink) 38%, color-mix(in srgb, var(--color-ink) 82%, transparent) 62%, transparent 100%)',
-          }}
-        />
+        {/* Подложка под текстом.
+            Прямоугольник во всю высоту закрывал половину кадра, а мягкий
+            градиент не дотягивался до заголовка: половина его протяжённости
+            уходит на растушёвку. Поэтому здесь форма — широкий пологий купол,
+            поднимающийся из нижнего края. Он плотный ровно там, где лежит
+            текст, а размытие даёт мягкую границу без ощущения наклейки.
+            Цвет тот же, что у секции ниже, — стыка не видно. */}
+        <div aria-hidden="true" className="absolute inset-0 hidden overflow-hidden lg:block">
+          <div
+            className="absolute bottom-0 left-[-22%] h-[70%] w-[112%]"
+            style={{
+              backgroundColor: 'var(--color-ink)',
+              borderRadius: '50% 50% 0 0 / 100% 100% 0 0',
+              filter: 'blur(26px)',
+            }}
+          />
+          {/* Полоса у самого низа сшивает обложку со следующим блоком. */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-[18%]"
+            style={{
+              background: 'linear-gradient(to top, var(--color-ink) 40%, transparent 100%)',
+            }}
+          />
+        </div>
 
-        <div className="container-content absolute inset-0 hidden flex-col justify-center lg:flex">
+        <div className="container-content absolute inset-x-0 bottom-0 hidden pb-14 lg:block">
           <div className="max-w-xl">{text}</div>
         </div>
       </div>

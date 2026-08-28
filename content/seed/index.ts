@@ -109,14 +109,30 @@ export const directions: DirectionDoc[] = [
     key: 'private',
     order: 1,
     isDemo: true,
-    title: { ru: 'Частные съёмки', en: 'Private shoots' },
+    // Заголовок обложки говорит о клиенте, а не о фотографе: стаж и состав
+    // команды человеку на первом экране не нужны. Для поиска и вкладки
+    // остаётся понятное «Частные съёмки» — оно в seo.title ниже.
+    title: {
+      ru: 'Останется день, каким он был',
+      en: 'The day stays as it was',
+    },
     lead: {
-      ru: 'Свадьбы, портрет, семья и частные события. Снимаю с четырнадцати лет, работаю с командой и отдаю первые кадры уже на следующий день.',
-      en: 'Weddings, portraits, family and private events. I have been shooting since I was fourteen, I work with a team, and the first frames arrive the next day.',
+      ru: 'Свадьбы, портрет и семья. Позировать не нужно — подскажу и не буду мешать. Первые кадры придут уже на следующий день.',
+      en: 'Weddings, portraits and family. You do not need to know how to pose — I will guide you and stay out of the way. The first frames arrive the very next day.',
+    },
+    seo: {
+      title: {
+        ru: 'Частные съёмки — свадьбы, портрет, семья',
+        en: 'Private shoots — weddings, portraits, family',
+      },
+      description: {
+        ru: 'Свадебная, портретная и семейная съёмка. Первые кадры на следующий день, все фотографии с цветокоррекцией и ретушью.',
+        en: 'Wedding, portrait and family photography. First frames the next day, every photo colour-corrected and retouched.',
+      },
     },
     gatewayDescription: {
-      ru: 'Личные съёмки: свадьбы, портрет, семья, love story.',
-      en: 'Personal shoots: weddings, portraits, family, love stories.',
+      ru: 'Свадьбы, портрет, семья. Съёмка, на которой не нужно позировать.',
+      en: 'Weddings, portraits, family. A shoot with no posing required.',
     },
     highlights: [
       { title: { ru: 'Анонс в течение суток', en: 'Preview within 24 hours' }, body: { ru: 'До 50 кадров приходят на следующий день после съёмки.', en: 'Up to 50 frames arrive the day after the shoot.' } },

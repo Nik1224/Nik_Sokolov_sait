@@ -302,8 +302,11 @@ test('текст карточки доступен без наведения', a
   const card = page.getByRole('main').getByRole('link', { name: /Private/ });
 
   // Ни описание, ни ссылка не зависят от наведения (§5.1, §11).
-  await expect(card).toContainText('Личные съёмки');
+  // Проверяем наличие описания, а не конкретную фразу: текст — дело
+  // редактора, и правка формулировки не должна ронять тест.
   await expect(card).toHaveAttribute('href', '/ru/private');
+  const description = (await card.innerText()).replace(/^01\s*Private\s*/i, '').replace('→', '');
+  expect(description.trim().length).toBeGreaterThan(20);
 });
 
 test('видео карточки стартует при прокрутке к ней и встаёт на паузу за экраном', async ({
