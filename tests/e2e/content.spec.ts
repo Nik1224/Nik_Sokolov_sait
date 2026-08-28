@@ -102,9 +102,9 @@ test('портфолио — галерея, кадр открывается н�
 
   // Счётчик показывает место в наборе и меняется при листании.
   const counter = dialog.locator('p').first();
-  const before = await counter.innerText();
+  const before = await counter.textContent();
   await page.keyboard.press('ArrowRight');
-  await expect(counter).not.toHaveText(before);
+  await expect(counter).not.toHaveText(before ?? '');
 
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
@@ -503,4 +503,77 @@ test('на главной PRIVATE портфолио представлено к
     'href',
     /portfolio\?category=wedding/,
   );
+});
+
+/**
+ * Жесты в полноэкранном просмотре. Playwright не умеет тянуть палец по экрану,
+ * поэтому события касания отправляются вручную — так же, как их шлёт браузер.
+ */
+async function swipe(page: import('@playwright/test').Page, dx: number, dy: number) {
+  await page.evaluate(
+    async ([dx, dy]) => {
+      const area = document.querySelector('dialog[open] .lightbox-frame')?.parentElement;
+      if (!area) throw new Error('просмотр не открыт');
+      const box = area.getBoundingClientRect();
+      const x0 = box.left + box.width / 2;
+      const y0 = box.top + box.height / 2;
+
+      const send = (type: string, x: number, y: number) => {
+        const touch = new Touch({ identifier: 1, target: area, clientX: x, clientY: y });
+        const ended = type === 'touchend';
+        area.dispatchEvent(
+          new TouchEvent(type, {
+            bubbles: true,
+            cancelable: true,
+            touches: ended ? [] : [touch],
+            targetTouches: ended ? [] : [touch],
+            changedTouches: [touch],
+          }),
+        );
+      };
+
+      send('touchstart', x0, y0);
+      for (let i = 1; i <= 6; i++) {
+        send('touchmove', x0 + (dx * i) / 6, y0 + (dy * i) / 6);
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+      send('touchend', x0 + dx, y0 + dy);
+    },
+    [dx, dy],
+  );
+}
+
+test('на телефоне свайп вниз закрывает полноэкранный просмотр', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'жест есть только на сенсорном экране');
+
+  await page.goto('/ru/private/portfolio');
+  const dialog = page.getByRole('dialog');
+
+  await page.locator('main figure button').nth(3).click();
+  await expect(dialog).toBeVisible();
+
+  // Короткое движение — случайное: просмотр остаётся открытым.
+  await swipe(page, 0, 50);
+  await expect(dialog).toBeVisible();
+
+  await swipe(page, 0, 160);
+  await expect(dialog).toBeHidden();
+});
+
+test('на телефоне свайп в сторону листает кадры, а не закрывает', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'жест есть только на сенсорном экране');
+
+  await page.goto('/ru/private/portfolio');
+  await page.locator('main figure button').nth(3).click();
+
+  const dialog = page.getByRole('dialog');
+  const counter = dialog.locator('p').first();
+  const before = await counter.textContent();
+
+  await swipe(page, -140, 0);
+  await expect(dialog).toBeVisible();
+  await expect(counter).not.toHaveText(before ?? '');
+
+  await swipe(page, 140, 0);
+  await expect(counter).toHaveText(before ?? '');
 });

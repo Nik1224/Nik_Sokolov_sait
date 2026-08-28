@@ -329,3 +329,24 @@
     stroke-width: 1.5;
   }
 }
+
+@layer components {
+  /* Кадр в полноэкранном просмотре: тянется за пальцем, отпущенный —
+     возвращается на место. Пока палец ведёт, переход выключен, иначе кадр
+     догонял бы движение с задержкой. */
+  .lightbox-frame {
+    display: flex;
+    max-height: 100%;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox-frame.is-settling {
+      transition:
+        transform var(--duration-fast) var(--ease-out-soft),
+        opacity var(--duration-fast) var(--ease-out-soft);
+    }
+  }
+}

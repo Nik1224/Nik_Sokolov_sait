@@ -21,6 +21,10 @@ import type { Locale } from '@/lib/site';
 import { Picture } from './Picture';
 import { VideoFacade } from './VideoFacade';
 
+/** Насколько нужно смахнуть, чтобы жест сработал, а не был случайным. */
+const SWIPE_DISTANCE = 48;
+const CLOSE_DISTANCE = 96;
+
 type Props = {
   items: MediaAsset[];
   locale: Locale;
@@ -31,23 +35,32 @@ type Props = {
 export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  /** Начало касания: по горизонтальному смахиванию листаем кадры. */
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  /**
+   * Текущий жест. Ось определяется по первому заметному движению и дальше не
+   * меняется: иначе диагональное смахивание одновременно листало бы кадры и
+   * закрывало просмотр.
+   */
+  const gesture = useRef<{ x: number; y: number; axis: 'none' | 'x' | 'y' } | null>(null);
+  /** Смещение кадра за пальцем при закрывающем жесте вниз. */
+  const [dragY, setDragY] = useState(0);
 
   const images = items.filter((item): item is Extract<MediaAsset, { type: 'image' }> => item.type === 'image');
 
   const open = useCallback((index: number) => {
     setOpenIndex(index);
+    setDragY(0);
     dialogRef.current?.showModal();
   }, []);
 
   const close = useCallback(() => {
     dialogRef.current?.close();
     setOpenIndex(null);
+    setDragY(0);
   }, []);
 
   const step = useCallback(
     (delta: number) => {
+      setDragY(0);
       setOpenIndex((current) => {
         if (current === null) return current;
         return (current + delta + images.length) % images.length;
@@ -174,29 +187,59 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
             </div>
 
             <div
-              className="relative flex min-h-0 flex-1 items-center justify-center p-4"
+              // touch-action: none — жесты обрабатываем сами, иначе браузер
+              // перехватит их прокруткой и «потянуть, чтобы обновить».
+              className="relative flex min-h-0 flex-1 touch-none items-center justify-center p-4"
               onTouchStart={(event) => {
                 const touch = event.touches[0];
-                touchStart.current = { x: touch.clientX, y: touch.clientY };
+                gesture.current = { x: touch.clientX, y: touch.clientY, axis: 'none' };
+              }}
+              onTouchMove={(event) => {
+                const from = gesture.current;
+                if (!from) return;
+                const touch = event.touches[0];
+                const dx = touch.clientX - from.x;
+                const dy = touch.clientY - from.y;
+
+                if (from.axis === 'none' && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
+                  from.axis = Math.abs(dy) > Math.abs(dx) ? 'y' : 'x';
+                }
+                // Кадр идёт за пальцем: жест видно, и понятно, что он делает.
+                if (from.axis === 'y') setDragY(Math.max(dy, -40));
               }}
               onTouchEnd={(event) => {
-                const from = touchStart.current;
-                touchStart.current = null;
-                if (!from || images.length < 2) return;
-                const touch = event.changedTouches[0];
-                const dx = touch.clientX - from.x;
-                // Вертикальное движение — это прокрутка, а не листание.
-                if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(touch.clientY - from.y)) return;
-                step(dx < 0 ? 1 : -1);
+                const from = gesture.current;
+                gesture.current = null;
+                if (!from) return;
+
+                if (from.axis === 'y') {
+                  if (dragY > CLOSE_DISTANCE) close();
+                  else setDragY(0);
+                  return;
+                }
+
+                if (images.length < 2) return;
+                const dx = event.changedTouches[0].clientX - from.x;
+                if (Math.abs(dx) > SWIPE_DISTANCE) step(dx < 0 ? 1 : -1);
               }}
             >
-              <Picture
-                image={active.image}
-                alt={localizedString(active.alt, locale)}
-                sizes="100vw"
-                priority
-                className="max-h-full w-auto max-w-full object-contain"
-              />
+              <div
+                className={dragY === 0 ? 'lightbox-frame is-settling' : 'lightbox-frame'}
+                style={{
+                  transform: `translateY(${dragY}px)`,
+                  // Чем дальше кадр от центра, тем прозрачнее: жест сообщает,
+                  // что просмотр вот-вот закроется.
+                  opacity: 1 - Math.min(Math.abs(dragY) / 520, 0.55),
+                }}
+              >
+                <Picture
+                  image={active.image}
+                  alt={localizedString(active.alt, locale)}
+                  sizes="100vw"
+                  priority
+                  className="max-h-full w-auto max-w-full object-contain"
+                />
+              </div>
 
               {images.length > 1 ? (
                 <>
