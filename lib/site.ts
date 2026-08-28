@@ -16,6 +16,7 @@ export type Direction = (typeof DIRECTIONS)[number];
 /** Разделы веток. Порядок задаёт порядок пунктов в основном меню. */
 export const SECTIONS = [
   'portfolio',
+  'albums',
   'services',
   'cases',
   'showreel',
@@ -34,7 +35,7 @@ export type Section = (typeof SECTIONS)[number];
  * попал по неверному адресу, и подменять его намерение мы не должны.
  */
 export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
-  private: ['portfolio', 'pricing', 'blog', 'about', 'contact'],
+  private: ['portfolio', 'albums', 'pricing', 'blog', 'about', 'contact'],
   business: ['services', 'cases', 'pricing', 'blog', 'about', 'contact'],
   production: ['showreel', 'work', 'experience', 'blog', 'about', 'contact'],
 };

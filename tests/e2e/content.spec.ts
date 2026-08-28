@@ -660,7 +660,14 @@ test('клик мимо кадра закрывает просмотр, по к�
   await page.locator('main figure button').nth(8).click();
   await expect(dialog).toBeVisible();
 
-  const box = (await page.locator('dialog[open] .lightbox-slide img').boundingBox())!;
+  // Меряем только загруженный кадр: у недогруженного другие границы, и клик
+  // «по центру» попадал мимо него.
+  const image = page.locator('dialog[open] .lightbox-slide img');
+  await image.evaluate(
+    (element: HTMLImageElement) =>
+      element.complete || new Promise((resolve) => element.addEventListener('load', resolve)),
+  );
+  const box = (await image.boundingBox())!;
 
   // Сам кадр закрывать не должен: по нему кликают, чтобы рассмотреть.
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
@@ -688,7 +695,53 @@ test('на широком экране клик сбоку от кадра за�
   await page.locator('main figure button').nth(8).click();
   await expect(dialog).toBeVisible();
 
-  const box = (await page.locator('dialog[open] .lightbox-slide img').boundingBox())!;
+  const image = page.locator('dialog[open] .lightbox-slide img');
+  await image.evaluate(
+    (element: HTMLImageElement) =>
+      element.complete || new Promise((resolve) => element.addEventListener('load', resolve)),
+  );
+  const box = (await image.boundingBox())!;
   await page.mouse.click(box.x / 2, box.y + box.height / 2);
   await expect(dialog).toBeHidden();
+});
+
+test('с портфолио есть заметный переход к полным свадьбам', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+
+  // Переход стоит до сетки: за полной съёмкой не нужно листать сотню кадров.
+  const promo = page.getByRole('link', { name: /Открыть альбомы/ });
+  await expect(promo).toBeVisible();
+  const promoBox = (await promo.boundingBox())!;
+  const firstFrame = (await page.locator('main figure button').first().boundingBox())!;
+  expect(promoBox.y).toBeLessThan(firstFrame.y);
+
+  await promo.click();
+  await expect(page).toHaveURL(/\/ru\/private\/albums$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Полные свадьбы');
+});
+
+test('альбом ведёт на внешнюю галерею и говорит об этом', async ({ page }) => {
+  await page.goto('/ru/private/albums');
+
+  const album = page.getByRole('link', { name: /Марк и Екатерина/ });
+  await expect(album).toHaveAttribute('href', /^https:\/\/lokos\.pro\/disk\//);
+  // Уход на сторонний сервис не должен быть сюрпризом — ни глазами, ни на слух.
+  await expect(album).toHaveAttribute('target', '_blank');
+  await expect(album).toHaveAttribute('rel', /noopener/);
+  await expect(album).toHaveAttribute('aria-label', /новой вкладке/);
+});
+
+test('раздел полных свадеб есть в меню private и только там', async ({ page }, testInfo) => {
+  await page.goto('/ru/private/portfolio');
+
+  // На узком экране меню спрятано за кнопкой — сначала открываем его.
+  if (testInfo.project.name === 'mobile') {
+    await page.getByRole('button', { name: 'Открыть меню' }).click();
+  }
+  const nav = page.locator('header').getByRole('link', { name: 'Полные свадьбы' });
+  await expect(nav.first()).toBeVisible();
+
+  // У BUSINESS и PRODUCTION такого раздела нет — и адрес тоже не должен открываться.
+  const response = await page.goto('/ru/business/albums');
+  expect(response?.status()).toBe(404);
 });

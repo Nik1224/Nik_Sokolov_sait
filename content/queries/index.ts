@@ -10,6 +10,7 @@
 import { cache } from 'react';
 import type { Direction } from '@/lib/site';
 import type {
+  Album,
   Article,
   ArticleType,
   Category,
@@ -62,6 +63,12 @@ export const getCategories = cache(async (direction?: Direction): Promise<Catego
 
 export const getCategory = cache(async (slug: string): Promise<Category | null> => {
   return (await getCategories()).find((item) => item.slug === slug) ?? null;
+});
+
+/** Полные серии съёмок ветки: свежие сверху. */
+export const getAlbums = cache(async (direction: Direction): Promise<Album[]> => {
+  const items = (await (await getSource()).albums()).filter((item) => item.direction === direction);
+  return byOrder(items).sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 });
 
 export const getArticleTypes = cache(async (): Promise<ArticleType[]> => {

@@ -7,6 +7,7 @@
 
 import { groq } from 'next-sanity';
 import type {
+  Album,
   Article,
   ArticleType,
   Category,
@@ -68,6 +69,11 @@ const DIRECTIONS = groq`*[_type == "direction"]{
 
 const CATEGORIES = groq`*[_type == "category"]{
   _id, "slug": slug.current, title, directions, order, isDemo
+}`;
+
+const ALBUMS = groq`*[_type == "album"]{
+  _id, "slug": slug.current, direction, title, date, location, url, order, isDemo,
+  cover ${MEDIA}
 }`;
 
 const ARTICLE_TYPES = groq`*[_type == "articleType"]{
@@ -164,6 +170,14 @@ export const sanitySource: ContentSource = {
 
   async categories() {
     return fetchQuery<Category[]>(CATEGORIES);
+  },
+
+  async albums() {
+    const raw = await fetchQuery<Raw[]>(ALBUMS);
+    return raw.map((item) => ({
+      ...(item as unknown as Album),
+      cover: mapMedia(item.cover as never) ?? undefined,
+    }));
   },
 
   async articleTypes() {

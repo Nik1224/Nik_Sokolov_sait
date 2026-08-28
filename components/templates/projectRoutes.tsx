@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 import { ProjectDetail } from '@/components/templates/ProjectDetail';
 import { ProjectListing } from '@/components/templates/ProjectListing';
 import {
+  getAlbums,
   getArticlesForProject,
   getCategories,
   getDirection,
@@ -25,7 +26,7 @@ import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
 import { href } from '@/lib/routing';
 import { buildMetadata, seoText } from '@/lib/seo';
-import { DIRECTIONS, LOCALES, type Direction, type Section } from '@/lib/site';
+import { DIRECTIONS, LOCALES, isSectionAvailable, type Direction, type Section } from '@/lib/site';
 
 export type WorkSection = 'cases' | 'work' | 'portfolio';
 
@@ -87,6 +88,10 @@ export async function ProjectListingRoute({
    */
   const publishesGalleries = categories.some((item) => (item.gallery?.length ?? 0) > 0);
 
+  // Полные серии показываем только там, где они есть: пустой переход хуже,
+  // чем его отсутствие.
+  const albums = isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
+
   return (
     <ProjectListing
       locale={locale}
@@ -99,6 +104,17 @@ export async function ProjectListingRoute({
       categories={categories}
       activeCategory={activeCategory}
       gallery={gallery}
+      promo={
+        albums.length > 0
+          ? {
+              label: dict.albums.promoLabel,
+              title: dict.albums.promoTitle,
+              body: dict.albums.promoBody,
+              action: dict.albums.promoAction,
+              href: href({ locale, direction, section: 'albums' }),
+            }
+          : undefined
+      }
     />
   );
 }

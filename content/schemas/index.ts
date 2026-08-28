@@ -14,6 +14,7 @@ import {
 import {
   article,
   articleType,
+  album,
   category,
   direction,
   globalSettings,
@@ -43,6 +44,7 @@ export const schemaTypes = [
   // документы
   globalSettings,
   direction,
+  album,
   category,
   articleType,
   workFormat,

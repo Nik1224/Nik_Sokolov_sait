@@ -31,6 +31,11 @@ type Props = {
    * галереей: человек пришёл смотреть работы, а не читать карточки проектов.
    */
   gallery?: MediaAsset[];
+  /**
+   * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
+   * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
+   */
+  promo?: { label: string; title: string; body: string; action: string; href: string };
 };
 
 export function ProjectListing({
@@ -44,6 +49,7 @@ export function ProjectListing({
   categories,
   activeCategory,
   gallery = [],
+  promo,
 }: Props) {
   const listingHref = href({ locale, direction, section });
 
@@ -59,6 +65,24 @@ export function ProjectListing({
 
       <h1 className="text-h1 m-0 max-w-3xl text-balance">{title}</h1>
       {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
+
+      {promo ? (
+        <Link
+          href={promo.href}
+          className="group mt-12 flex flex-col gap-6 border border-line p-7 transition-colors hover:border-line-strong hover:bg-ink-raised md:flex-row md:items-end md:justify-between md:gap-10 lg:p-9"
+        >
+          <span className="max-w-xl">
+            <span className="label block text-accent">{promo.label}</span>
+            <span className="text-h3 mt-3 block text-bone transition-colors group-hover:text-accent">
+              {promo.title}
+            </span>
+            <span className="mt-3 block text-bone-dim">{promo.body}</span>
+          </span>
+          <span className="label shrink-0 text-bone transition-colors group-hover:text-accent">
+            {promo.action} →
+          </span>
+        </Link>
+      ) : null}
 
       {categories.length > 0 ? (
         <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">

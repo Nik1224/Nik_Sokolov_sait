@@ -179,6 +179,42 @@ export const direction = defineType({
   preview: { select: { title: 'title.ru', subtitle: 'key' } },
 });
 
+export const album = defineType({
+  name: 'album',
+  title: 'Полная серия съёмки',
+  description: 'Один день целиком. Сама галерея живёт на внешнем сервисе выдачи — здесь только карточка и ссылка.',
+  type: 'document',
+  fields: [
+    defineField({ name: 'title', title: 'Кого снимали', type: 'localeString', validation: requiredRu }),
+    slugField,
+    defineField({
+      name: 'direction',
+      title: 'Направление',
+      type: 'string',
+      options: { list: DIRECTION_OPTIONS },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'url',
+      title: 'Адрес онлайн-галереи',
+      description: 'Открывается в новой вкладке.',
+      type: 'url',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({ name: 'date', title: 'Дата съёмки', type: 'date' }),
+    defineField({ name: 'location', title: 'Место', type: 'localeString' }),
+    defineField({
+      name: 'cover',
+      title: 'Обложка',
+      description: 'Кадр именно с этой съёмки. Без обложки карточка останется текстовой.',
+      type: 'mediaAsset',
+    }),
+    defineField({ name: 'order', title: 'Порядок', type: 'number' }),
+    demoField,
+  ],
+  preview: { select: { title: 'title.ru', subtitle: 'url', media: 'cover.image' } },
+});
+
 export const category = defineType({
   name: 'category',
   title: 'Категория съёмки',

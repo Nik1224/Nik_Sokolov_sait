@@ -96,6 +96,20 @@ export type Dictionary = {
     /** Как перечислить форматы в предложении: «фото и видео». */
     formatsJoiner: string;
   };
+  albums: {
+    /** Лид страницы полных серий. */
+    lead: string;
+    /** Заметный переход с портфолио. */
+    promoLabel: string;
+    promoTitle: string;
+    promoBody: string;
+    promoAction: string;
+    /** Подпись у карточки альбома: галерея открывается на стороннем сервисе. */
+    openGallery: string;
+    externalHint: string;
+    emptyTitle: string;
+    emptyBody: string;
+  };
   pricing: {
     from: string;
     /** Заголовок раскрывающегося списка пакетов. */
@@ -143,6 +157,7 @@ const ru: Dictionary = {
   brand: { name: 'Nikita Sokolov', descriptor: 'Photo / Video / Visual Production' },
   nav: {
     portfolio: 'Портфолио',
+    albums: 'Полные свадьбы',
     services: 'Услуги',
     cases: 'Кейсы',
     showreel: 'Шоурил',
@@ -233,6 +248,17 @@ const ru: Dictionary = {
     cta: 'Обсудить съёмку',
     formatsJoiner: ' и ',
   },
+  albums: {
+    lead: 'В портфолио — лучшие кадры с разных свадеб. Здесь каждый альбом — один день целиком, от утренних сборов до последнего танца.',
+    promoLabel: 'Полные серии',
+    promoTitle: 'Посмотреть свадьбу целиком',
+    promoBody: 'Ниже — избранные кадры с разных свадеб. Если хотите увидеть, как выглядит весь день, откройте альбом целиком.',
+    promoAction: 'Открыть альбомы',
+    openGallery: 'Смотреть галерею',
+    externalHint: 'откроется в новой вкладке',
+    emptyTitle: 'Альбомы скоро появятся',
+    emptyBody: 'Полные серии готовятся к публикации. Напишите — пришлю ссылку на подходящую съёмку.',
+  },
   pricing: {
     from: 'от',
     packages: 'Пакетные предложения',
@@ -272,6 +298,7 @@ const en: Dictionary = {
   brand: { name: 'Nikita Sokolov', descriptor: 'Photo / Video / Visual Production' },
   nav: {
     portfolio: 'Portfolio',
+    albums: 'Full weddings',
     services: 'Services',
     cases: 'Cases',
     showreel: 'Showreel',
@@ -361,6 +388,17 @@ const en: Dictionary = {
     perHourNow: 'Last hour',
     cta: 'Discuss the shoot',
     formatsJoiner: ' and ',
+  },
+  albums: {
+    lead: 'The portfolio holds the best frames from many weddings. Each album here is one whole day, from the morning preparations to the last dance.',
+    promoLabel: 'Full series',
+    promoTitle: 'See a whole wedding',
+    promoBody: 'Below are selected frames from many weddings. To see what a full day looks like, open a complete album.',
+    promoAction: 'Open the albums',
+    openGallery: 'View the gallery',
+    externalHint: 'opens in a new tab',
+    emptyTitle: 'Albums are on the way',
+    emptyBody: 'Full series are being prepared. Get in touch and I will send a link to a fitting shoot.',
   },
   pricing: {
     from: 'from',

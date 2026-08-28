@@ -17,6 +17,9 @@ export const fixtureSource: ContentSource = {
   async categories() {
     return seed.categories;
   },
+  async albums() {
+    return seed.albums;
+  },
   async articleTypes() {
     return seed.articleTypes;
   },

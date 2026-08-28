@@ -7,6 +7,7 @@
  */
 
 import type {
+  Album,
   Article,
   ArticleType,
   Category,
@@ -331,6 +332,22 @@ export const categories: Category[] = [
   { _id: 'cat.interview', slug: 'interview', title: { ru: 'Интервью и подкасты', en: 'Interviews and podcasts' }, directions: ['business'], order: 7, isDemo: true },
   { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, directions: ['business', 'production'], order: 8, isDemo: true },
   { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 9, isDemo: true },
+];
+
+/**
+ * Полные серии свадеб. Адреса ведут на онлайн-галереи владельца — те же, что
+ * он отдаёт клиентам. Имена взяты из адреса галереи и ждут подтверждения;
+ * обложек пока нет: приписывать кадр конкретной паре без подтверждения нельзя.
+ */
+export const albums: Album[] = [
+  {
+    _id: 'alb.mark-ekaterina',
+    slug: 'mark-ekaterina',
+    direction: 'private',
+    title: { ru: 'Марк и Екатерина', en: 'Mark & Ekaterina' },
+    url: 'https://lokos.pro/disk/mark-ekaterina-f956bd',
+    order: 1,
+  },
 ];
 
 export const articleTypes: ArticleType[] = [

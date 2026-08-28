@@ -11,6 +11,7 @@
 
 import { cache } from 'react';
 import type {
+  Album,
   Article,
   ArticleType,
   Category,
@@ -30,6 +31,7 @@ export type ContentSource = {
   globalSettings(): Promise<GlobalSettings>;
   directions(): Promise<DirectionDoc[]>;
   categories(): Promise<Category[]>;
+  albums(): Promise<Album[]>;
   articleTypes(): Promise<ArticleType[]>;
   workFormats(): Promise<WorkFormat[]>;
   services(): Promise<Service[]>;
