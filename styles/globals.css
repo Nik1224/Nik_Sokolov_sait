@@ -280,3 +280,52 @@
     transform: translateY(-0.5rem);
   }
 }
+
+@layer components {
+  /*
+   * Полноэкранный просмотр всегда на нейтральном тёмном фоне, даже в светлой
+   * теме PRIVATE: бежевая подложка меняет восприятие цвета на фотографии.
+   * Переопределяем токены локально — вложенная разметка работает без правок.
+   */
+  .lightbox {
+    --color-ink: #0b0b0c;
+    --color-bone: #f2efe9;
+    --color-bone-dim: #bdb8b0;
+    --color-bone-faint: #948f86;
+    --color-line: rgba(242, 239, 233, 0.16);
+    --color-line-strong: rgba(242, 239, 233, 0.36);
+
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    color-scheme: dark;
+  }
+
+  /* Стрелки полноэкранного просмотра. Лежат поверх кадра, поэтому нужен свой
+     контраст: полупрозрачная подложка работает и на светлом, и на тёмном. */
+  .lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    height: 3rem;
+    width: 3rem;
+    translate: 0 -50%;
+    place-items: center;
+    border: 1px solid var(--color-line);
+    background-color: color-mix(in srgb, var(--color-ink) 72%, transparent);
+    color: var(--color-bone);
+    backdrop-filter: blur(6px);
+    transition: background-color var(--duration-fast) var(--ease-out-soft);
+  }
+
+  .lightbox-arrow:hover {
+    background-color: var(--color-ink);
+  }
+
+  .lightbox-arrow svg {
+    height: 1.25rem;
+    width: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+}

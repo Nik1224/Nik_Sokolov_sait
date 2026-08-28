@@ -33,6 +33,12 @@ export type ImageRef = {
   /** Размеры обязательны: без них появляется CLS (§10, §17). */
   width: number;
   height: number;
+  /**
+   * Заранее пережатые варианты для srcset. Sanity CDN режет картинки на лету,
+   * а локальным файлам нужен готовый список — иначе телефон грузит кадр,
+   * рассчитанный на полный экран.
+   */
+  sources?: { width: number; src: string }[];
   /** Крошечная превью-заглушка, чтобы не мигало пустым местом. */
   lqip?: string;
   focalPoint?: FocalPoint;
@@ -91,6 +97,12 @@ export type Category = {
   slug: string;
   title: LocaleString;
   directions: Direction[];
+  /**
+   * Портфолио категории: кадры, ролики и вертикальные видео. Живёт у категории,
+   * а не у отдельной работы: человек приходит смотреть «свадьбы», а не
+   * конкретную свадьбу.
+   */
+  gallery?: MediaAsset[];
   order?: number;
   isDemo?: boolean;
 };

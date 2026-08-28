@@ -75,6 +75,18 @@ export async function ProjectListingRoute({
   const activeCategory = categories.some((item) => item.slug === rawCategory) ? rawCategory : undefined;
   const projects = await getProjects({ direction, categorySlug: activeCategory });
 
+  // Без фильтра показываем портфолио всех категорий ветки подряд.
+  const gallery = categories
+    .filter((item) => !activeCategory || item.slug === activeCategory)
+    .flatMap((item) => item.gallery ?? []);
+
+  /*
+   * Ветка, которая публикует галереи, говорит кадрами, а не карточками работ.
+   * Показать рядом с настоящей съёмкой карточку-заготовку хуже, чем честно
+   * сказать, что в этой категории пока пусто.
+   */
+  const publishesGalleries = categories.some((item) => (item.gallery?.length ?? 0) > 0);
+
   return (
     <ProjectListing
       locale={locale}
@@ -83,9 +95,10 @@ export async function ProjectListingRoute({
       dict={dict}
       title={dict.nav[section]}
       lead={localizedString(doc?.lead, locale)}
-      projects={projects}
+      projects={publishesGalleries ? [] : projects}
       categories={categories}
       activeCategory={activeCategory}
+      gallery={gallery}
     />
   );
 }

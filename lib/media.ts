@@ -16,19 +16,36 @@ function isSanityAsset(src: string): boolean {
 
 /**
  * URL нужной ширины. Sanity CDN сам отдаёт AVIF/WebP по Accept-заголовку
- * (`auto=format`); локальные плейсхолдеры возвращаются как есть.
+ * (`auto=format`), у локальных файлов варианты пережаты заранее и перечислены
+ * в `sources`. Всё остальное отдаётся как есть.
  */
 export function imageSrc(image: ImageRef, width?: number): string {
-  if (!isSanityAsset(image.src)) return image.src;
-  const params = new URLSearchParams({ auto: 'format', fit: 'max', q: '78' });
-  if (width) params.set('w', String(width));
-  return `${image.src}?${params.toString()}`;
+  if (isSanityAsset(image.src)) {
+    const params = new URLSearchParams({ auto: 'format', fit: 'max', q: '78' });
+    if (width) params.set('w', String(width));
+    return `${image.src}?${params.toString()}`;
+  }
+
+  if (image.sources?.length && width) {
+    // Берём ближайший вариант не меньше запрошенного: кадр, растянутый из
+    // меньшего файла, на ретине выглядит мылом.
+    const sorted = [...image.sources].sort((a, b) => a.width - b.width);
+    return (sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1]).src;
+  }
+
+  return image.src;
 }
 
 export function imageSrcSet(image: ImageRef): string | undefined {
-  if (!isSanityAsset(image.src)) return undefined;
-  return IMAGE_WIDTHS.filter((width) => width <= (image.width || Infinity) * 2)
-    .map((width) => `${imageSrc(image, width)} ${width}w`)
+  if (isSanityAsset(image.src)) {
+    return IMAGE_WIDTHS.filter((width) => width <= (image.width || Infinity) * 2)
+      .map((width) => `${imageSrc(image, width)} ${width}w`)
+      .join(', ');
+  }
+
+  if (!image.sources?.length) return undefined;
+  return image.sources
+    .map((item) => `${item.src} ${item.width}w`)
     .join(', ');
 }
 

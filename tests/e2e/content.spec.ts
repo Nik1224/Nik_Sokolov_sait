@@ -72,16 +72,67 @@ test('английская страница без перевода показы
 });
 
 test('фильтр листинга работает и отражается в адресе', async ({ page }) => {
-  await page.goto('/ru/private/portfolio');
+  await page.goto('/ru/business/cases');
   const before = await page.getByRole('article').count();
 
   // Ссылка ищется в панели фильтров: название категории встречается и в карточках.
-  await page.getByRole('navigation', { name: 'Фильтр' }).getByRole('link', { name: 'Свадьбы' }).click();
-  await expect(page).toHaveURL(/category=wedding/);
+  await page
+    .getByRole('navigation', { name: 'Фильтр' })
+    .getByRole('link', { name: 'Конференции и события' })
+    .click();
+  await expect(page).toHaveURL(/category=conference/);
 
   const after = await page.getByRole('article').count();
   expect(after).toBeLessThan(before);
   expect(after).toBeGreaterThan(0);
+});
+
+test('портфолио — галерея, кадр открывается на полный экран', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+
+  const frames = page.locator('main figure button');
+  // Портфолио — это кадры, а не карточки проектов.
+  expect(await frames.count()).toBeGreaterThan(20);
+  await expect(page.getByRole('article')).toHaveCount(0);
+
+  await frames.nth(1).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('img')).toBeVisible();
+
+  // Счётчик показывает место в наборе и меняется при листании.
+  const counter = dialog.locator('p').first();
+  const before = await counter.innerText();
+  await page.keyboard.press('ArrowRight');
+  await expect(counter).not.toHaveText(before);
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+});
+
+test('фильтр портфолио сужает галерею, а не ломает её', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+  const all = await page.locator('main figure button').count();
+
+  await page
+    .getByRole('navigation', { name: 'Фильтр' })
+    .getByRole('link', { name: 'Свадьбы' })
+    .click();
+  await expect(page).toHaveURL(/category=wedding/);
+  expect(await page.locator('main figure button').count()).toBe(all);
+
+  // У категории без снятых кадров галереи нет — и пустой сетки тоже.
+  await page.goto('/ru/private/portfolio?category=portrait');
+  expect(await page.locator('main figure button').count()).toBe(0);
+});
+
+test('кадры портфолио не грузятся в полном размере на телефоне', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+
+  // Без srcset телефон тянул бы восемнадцатисотпиксельные кадры пачками.
+  const srcset = await page.locator('main figure img').first().getAttribute('srcset');
+  expect(srcset).toContain('600w');
+  expect(srcset).toContain('1800w');
 });
 
 test('все изображения имеют размеры и alt-атрибут', async ({ page }) => {

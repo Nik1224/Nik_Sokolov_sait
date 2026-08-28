@@ -6,6 +6,11 @@
  * Лайтбокс — нативный <dialog>: он сам удерживает фокус внутри, закрывается
  * по Escape и делает фон недоступным для ассистивных технологий. Никакой
  * собственной ловушки фокуса писать не нужно.
+ *
+ * Две раскладки. `feature` — несколько кадров на странице работы, широкие во
+ * всю ширину. `masonry` — портфолио на десятки кадров: колонки, в которых
+ * вертикальные и горизонтальные снимки лежат в своих пропорциях и не
+ * обрезаются.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -20,11 +25,14 @@ type Props = {
   items: MediaAsset[];
   locale: Locale;
   dict: Dictionary;
+  layout?: 'feature' | 'masonry';
 };
 
-export function MediaGallery({ items, locale, dict }: Props) {
+export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  /** Начало касания: по горизонтальному смахиванию листаем кадры. */
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const images = items.filter((item): item is Extract<MediaAsset, { type: 'image' }> => item.type === 'image');
 
@@ -64,36 +72,72 @@ export function MediaGallery({ items, locale, dict }: Props) {
 
   return (
     <>
-      <ul className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6">
-        {items.map((item) => {
+      <ul
+        className={
+          layout === 'masonry'
+            ? 'm-0 list-none p-0 [column-gap:1rem] columns-2 lg:[column-gap:1.5rem] lg:columns-3'
+            : 'grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6'
+        }
+      >
+        {items.map((item, position) => {
           const alt = localizedString(item.alt, locale);
           const caption = localizedString(item.caption, locale);
 
           if (item.type === 'video') {
             return (
-              <li key={item._key} className="sm:col-span-2">
-                <VideoFacade media={item} locale={locale} dict={dict} sizes="(min-width: 640px) 100vw, 100vw" />
+              <li
+                key={item._key}
+                className={layout === 'masonry' ? 'mb-4 break-inside-avoid lg:mb-6' : 'sm:col-span-2'}
+              >
+                <VideoFacade
+                  media={item}
+                  locale={locale}
+                  dict={dict}
+                  sizes={
+                    layout === 'masonry'
+                      ? '(min-width: 1024px) 33vw, 50vw'
+                      : '(min-width: 640px) 100vw, 100vw'
+                  }
+                />
               </li>
             );
           }
 
           const imageIndex = images.indexOf(item);
           const isWide = item.image.width >= item.image.height;
+          const ratio = item.image.width / item.image.height;
 
           return (
-            <li key={item._key} className={isWide ? 'sm:col-span-2' : ''}>
+            <li
+              key={item._key}
+              className={
+                layout === 'masonry'
+                  ? 'mb-4 break-inside-avoid lg:mb-6'
+                  : isWide
+                    ? 'sm:col-span-2'
+                    : ''
+              }
+            >
               <figure className="m-0">
                 <button
                   type="button"
                   onClick={() => open(imageIndex)}
                   className="group block w-full cursor-zoom-in overflow-hidden bg-ink-raised"
-                  style={{ aspectRatio: String(item.image.width / item.image.height) }}
+                  style={{ aspectRatio: String(ratio) }}
                 >
                   <span className="sr-only">{dict.media.openGallery}</span>
                   <Picture
                     image={item.image}
                     alt={alt}
-                    sizes={isWide ? '(min-width: 1024px) 78rem, 100vw' : '(min-width: 640px) 39rem, 100vw'}
+                    // Первые кадры видны сразу — их незачем откладывать.
+                    priority={layout === 'masonry' && position < 4}
+                    sizes={
+                      layout === 'masonry'
+                        ? '(min-width: 1024px) 33vw, 50vw'
+                        : isWide
+                          ? '(min-width: 1024px) 78rem, 100vw'
+                          : '(min-width: 640px) 39rem, 100vw'
+                    }
                     className="h-full w-full object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.02]"
                   />
                 </button>
@@ -112,7 +156,7 @@ export function MediaGallery({ items, locale, dict }: Props) {
         onClick={(event) => {
           if (event.target === dialogRef.current) close();
         }}
-        className="m-0 h-full max-h-none w-full max-w-none bg-ink/97 p-0 backdrop:bg-ink/90"
+        className="lightbox m-0 h-full max-h-none w-full max-w-none p-0 backdrop:bg-black/90"
       >
         {active ? (
           <div className="flex h-full flex-col">
@@ -129,7 +173,23 @@ export function MediaGallery({ items, locale, dict }: Props) {
               </button>
             </div>
 
-            <div className="flex min-h-0 flex-1 items-center justify-center p-4">
+            <div
+              className="relative flex min-h-0 flex-1 items-center justify-center p-4"
+              onTouchStart={(event) => {
+                const touch = event.touches[0];
+                touchStart.current = { x: touch.clientX, y: touch.clientY };
+              }}
+              onTouchEnd={(event) => {
+                const from = touchStart.current;
+                touchStart.current = null;
+                if (!from || images.length < 2) return;
+                const touch = event.changedTouches[0];
+                const dx = touch.clientX - from.x;
+                // Вертикальное движение — это прокрутка, а не листание.
+                if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(touch.clientY - from.y)) return;
+                step(dx < 0 ? 1 : -1);
+              }}
+            >
               <Picture
                 image={active.image}
                 alt={localizedString(active.alt, locale)}
@@ -137,26 +197,32 @@ export function MediaGallery({ items, locale, dict }: Props) {
                 priority
                 className="max-h-full w-auto max-w-full object-contain"
               />
-            </div>
 
-            {images.length > 1 ? (
-              <div className="flex items-center justify-center gap-2 border-t border-line px-4 py-3">
-                <button
-                  type="button"
-                  onClick={() => step(-1)}
-                  className="label border border-line px-4 py-2 text-bone-dim transition-colors hover:border-line-strong hover:text-bone"
-                >
-                  {dict.media.previous}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => step(1)}
-                  className="label border border-line px-4 py-2 text-bone-dim transition-colors hover:border-line-strong hover:text-bone"
-                >
-                  {dict.media.next}
-                </button>
-              </div>
-            ) : null}
+              {images.length > 1 ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => step(-1)}
+                    aria-label={dict.media.previous}
+                    className="lightbox-arrow left-2 sm:left-4"
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                      <path d="M15 5 8 12l7 7" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => step(1)}
+                    aria-label={dict.media.next}
+                    className="lightbox-arrow right-2 sm:right-4"
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                      <path d="m9 5 7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
         ) : null}
       </dialog>

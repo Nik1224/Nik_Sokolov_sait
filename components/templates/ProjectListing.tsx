@@ -9,7 +9,8 @@ import Link from 'next/link';
 import { ProjectCard } from '@/components/content/cards';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
-import type { Category, Project } from '@/content/types';
+import { MediaGallery } from '@/components/media/MediaGallery';
+import type { Category, MediaAsset, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -25,6 +26,11 @@ type Props = {
   projects: Project[];
   categories: Category[];
   activeCategory?: string;
+  /**
+   * Портфолио выбранных категорий. Когда кадры есть, страница становится
+   * галереей: человек пришёл смотреть работы, а не читать карточки проектов.
+   */
+  gallery?: MediaAsset[];
 };
 
 export function ProjectListing({
@@ -37,6 +43,7 @@ export function ProjectListing({
   projects,
   categories,
   activeCategory,
+  gallery = [],
 }: Props) {
   const listingHref = href({ locale, direction, section });
 
@@ -89,7 +96,9 @@ export function ProjectListing({
       ) : null}
 
       <div className="mt-12">
-        {projects.length === 0 ? (
+        {gallery.length > 0 ? (
+          <MediaGallery items={gallery} locale={locale} dict={dict} layout="masonry" />
+        ) : projects.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
           <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">

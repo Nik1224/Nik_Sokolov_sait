@@ -21,6 +21,7 @@ import type {
   Testimonial,
   WorkFormat,
 } from '../types';
+import { weddingGallery } from './wedding-gallery';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
 
 const demo = { isDemo: true, status: 'published' } as const;
@@ -320,7 +321,8 @@ export const directions: DirectionDoc[] = [
 ];
 
 export const categories: Category[] = [
-  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, isDemo: true },
+  // Единственная категория с настоящим портфолио: 74 кадра с реальных съёмок.
+  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery },
   { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, isDemo: true },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, isDemo: true },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, isDemo: true },
