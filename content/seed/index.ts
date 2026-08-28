@@ -112,10 +112,7 @@ export const directions: DirectionDoc[] = [
     // Заголовок обложки говорит о клиенте, а не о фотографе: стаж и состав
     // команды человеку на первом экране не нужны. Для поиска и вкладки
     // остаётся понятное «Частные съёмки» — оно в seo.title ниже.
-    title: {
-      ru: 'Останется день, каким он был',
-      en: 'The day stays as it was',
-    },
+    title: { ru: 'Частные съёмки', en: 'Private shoots' },
     lead: {
       ru: 'Свадьбы, портрет и семья. Позировать не нужно — подскажу и не буду мешать. Первые кадры придут уже на следующий день.',
       en: 'Weddings, portraits and family. You do not need to know how to pose — I will guide you and stay out of the way. The first frames arrive the very next day.',

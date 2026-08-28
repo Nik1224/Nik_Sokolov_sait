@@ -115,28 +115,40 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
         <div className="container-content absolute inset-x-0 bottom-0 hidden pb-10 lg:block">
           <div className="relative w-fit max-w-xl">
             {/* Тонированное стекло.
-                Панель обхватывает ровно текст и уходит за левый и нижний край
-                кадра — там она встречается со следующей секцией, поэтому шва
-                не видно и «полосы» сверху тоже: край остаётся только у
-                скошенного угла, и он читается как форма, а не как обрез.
+                Левый край прижат к краю экрана вычислением, а не догадкой:
+                отступ container-content зависит от ширины окна, и заданный
+                на глаз сдвиг оставлял полосу видео сбоку на широких экранах.
 
-                Тонировка идёт градиентом: сверху почти нет, к низу набирает
-                плотность. Читаемость держит стекло — размытие с подъёмом
-                теней: без него чёрные участки кадра остаются чёрными. */}
+                Верхний и правый края растушёваны маской, левый и нижний —
+                нет: там панель уходит за кадр и встречается со следующей
+                секцией, поэтому шва не видно.
+
+                Читаемость держит стекло, а не заливка: размытие вместе с
+                подъёмом теней — без него чёрные участки ролика остаются
+                чёрными. Тонировка идёт градиентом, к низу плотнее. */}
             <div
               aria-hidden="true"
-              className="absolute bottom-[-2.5rem] left-[-7.5rem] right-[-3rem] top-[-2.25rem]"
+              className="absolute bottom-[-2.5rem] right-[-5rem] top-[-3.5rem]"
               style={{
-                borderRadius: '0 8rem 0 0',
+                left: 'calc(-1 * (max((100vw - var(--container-content)) / 2, 0px) + var(--spacing-gutter)))',
                 backdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
                 WebkitBackdropFilter: 'blur(14px) contrast(0.2) brightness(1.62)',
                 background: [
                   'linear-gradient(to bottom,',
                   ' color-mix(in srgb, var(--color-ink) 10%, transparent) 0%,',
-                  ' color-mix(in srgb, var(--color-ink) 26%, transparent) 45%,',
-                  ' color-mix(in srgb, var(--color-ink) 62%, transparent) 80%,',
+                  ' color-mix(in srgb, var(--color-ink) 28%, transparent) 45%,',
+                  ' color-mix(in srgb, var(--color-ink) 64%, transparent) 80%,',
                   ' var(--color-ink) 100%)',
                 ].join(''),
+                // Растушёвка задана в пикселях, а не в процентах: ширина панели
+                // зависит от окна, и процент на широком экране наползал на текст.
+                // Полоса растушёвки совпадает с отступом до текста.
+                maskImage:
+                  'linear-gradient(to top, #000 calc(100% - 3.5rem), transparent 100%), linear-gradient(to right, #000 calc(100% - 5rem), transparent 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskImage:
+                  'linear-gradient(to top, #000 calc(100% - 3.5rem), transparent 100%), linear-gradient(to right, #000 calc(100% - 5rem), transparent 100%)',
+                WebkitMaskComposite: 'source-in',
               }}
             />
             <div className="relative">{text}</div>
