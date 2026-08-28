@@ -88,6 +88,18 @@ export async function ProjectListingRoute({
    */
   const publishesGalleries = categories.some((item) => (item.gallery?.length ?? 0) > 0);
 
+  /*
+   * «Смотреть все» показывается, только когда наполнена не одна категория.
+   * Пока снята одна свадьба, эта ссылка ведёт ровно туда же, куда «Свадьбы», —
+   * выбор без разницы.
+   */
+  const everything = await getProjects({ direction });
+  const filled = categories.filter((item) =>
+    publishesGalleries
+      ? (item.gallery?.length ?? 0) > 0
+      : everything.some((project) => project.categorySlugs.includes(item.slug)),
+  );
+
   // Полные серии показываем только там, где они есть: пустой переход хуже,
   // чем его отсутствие.
   const albums = isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
@@ -104,6 +116,7 @@ export async function ProjectListingRoute({
       categories={categories}
       activeCategory={activeCategory}
       gallery={gallery}
+      showAll={filled.length > 1}
       promo={
         albums.length > 0
           ? {

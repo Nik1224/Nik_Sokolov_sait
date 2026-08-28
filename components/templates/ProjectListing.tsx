@@ -36,6 +36,11 @@ type Props = {
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
    */
   promo?: { label: string; title: string; body: string; action: string; href: string };
+  /**
+   * «Смотреть все» имеет смысл, только когда наполнена не одна категория.
+   * Иначе это второе имя для той же самой подборки.
+   */
+  showAll?: boolean;
 };
 
 export function ProjectListing({
@@ -50,6 +55,7 @@ export function ProjectListing({
   activeCategory,
   gallery = [],
   promo,
+  showAll = true,
 }: Props) {
   const listingHref = href({ locale, direction, section });
 
@@ -87,17 +93,19 @@ export function ProjectListing({
       {categories.length > 0 ? (
         <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">
           <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
-            <li>
-              <Link
-                href={listingHref}
-                aria-current={!activeCategory ? 'true' : undefined}
-                className={`label transition-colors ${
-                  !activeCategory ? 'text-accent' : 'text-bone-faint hover:text-bone'
-                }`}
-              >
-                {dict.common.viewAll}
-              </Link>
-            </li>
+            {showAll ? (
+              <li>
+                <Link
+                  href={listingHref}
+                  aria-current={!activeCategory ? 'true' : undefined}
+                  className={`label transition-colors ${
+                    !activeCategory ? 'text-accent' : 'text-bone-faint hover:text-bone'
+                  }`}
+                >
+                  {dict.common.viewAll}
+                </Link>
+              </li>
+            ) : null}
             {categories.map((category) => {
               const isActive = category.slug === activeCategory;
               return (

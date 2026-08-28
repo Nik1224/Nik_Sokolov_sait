@@ -40,6 +40,17 @@ export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
   production: ['showreel', 'work', 'experience', 'blog', 'about', 'contact'],
 };
 
+/**
+ * Разделы, которые существуют, но в шапке не показываются: на них ведут из
+ * содержимого страницы, а не из меню. Полные свадьбы — продолжение портфолио,
+ * и человек попадает туда оттуда, а не выбирает в общем списке.
+ */
+export const SECTIONS_OUTSIDE_NAV: Record<Direction, readonly Section[]> = {
+  private: ['albums'],
+  business: [],
+  production: [],
+};
+
 /** Разделы, у которых есть страницы отдельных записей `/{section}/{slug}`. */
 export const DETAIL_SECTIONS = ['services', 'cases', 'work', 'blog', 'portfolio'] as const;
 export type DetailSection = (typeof DETAIL_SECTIONS)[number];

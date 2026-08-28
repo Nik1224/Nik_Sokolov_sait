@@ -731,17 +731,20 @@ test('альбом ведёт на внешнюю галерею и говори
   await expect(album).toHaveAttribute('aria-label', /новой вкладке/);
 });
 
-test('раздел полных свадеб есть в меню private и только там', async ({ page }, testInfo) => {
+test('полные свадьбы живут вне меню и только в private', async ({ page }, testInfo) => {
   await page.goto('/ru/private/portfolio');
 
-  // На узком экране меню спрятано за кнопкой — сначала открываем его.
   if (testInfo.project.name === 'mobile') {
     await page.getByRole('button', { name: 'Открыть меню' }).click();
   }
-  const nav = page.locator('header').getByRole('link', { name: 'Полные свадьбы' });
-  await expect(nav.first()).toBeVisible();
+  // В шапке раздела нет: на него ведёт переход с портфолио, а не пункт меню.
+  await expect(page.locator('header').getByRole('link', { name: 'Полные свадьбы' })).toHaveCount(0);
 
-  // У BUSINESS и PRODUCTION такого раздела нет — и адрес тоже не должен открываться.
-  const response = await page.goto('/ru/business/albums');
-  expect(response?.status()).toBe(404);
+  // Сама страница при этом открывается и лежит в карте сайта.
+  expect((await page.goto('/ru/private/albums'))?.status()).toBe(200);
+  const sitemap = await (await page.request.get('/sitemap.xml')).text();
+  expect(sitemap).toContain('/ru/private/albums');
+
+  // У BUSINESS и PRODUCTION такого раздела нет — и адрес тоже не открывается.
+  expect((await page.goto('/ru/business/albums'))?.status()).toBe(404);
 });
