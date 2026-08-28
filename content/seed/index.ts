@@ -132,12 +132,12 @@ export const directions: DirectionDoc[] = [
       en: 'Weddings, portraits, family. A shoot with no posing required.',
     },
     highlights: [
-      { title: { ru: 'Анонс в течение суток', en: 'Preview within 24 hours' }, body: { ru: 'До 50 кадров приходят на следующий день после съёмки.', en: 'Up to 50 frames arrive the day after the shoot.' } },
-      { title: { ru: 'Все кадры, а не выборка', en: 'Every frame, not a selection' }, body: { ru: 'В свадебных пакетах отдаются все фотографии с цветокоррекцией и ретушью.', en: 'Wedding packages deliver every photo, colour-corrected and retouched.' } },
+      { title: { ru: 'Анонс в течение трёх дней', en: 'Preview within three days' }, body: { ru: 'До 50 кадров приходят в первые дни после съёмки.', en: 'Up to 50 frames arrive within the first days after the shoot.' } },
+      { title: { ru: 'Все кадры обработаны', en: 'Every frame is processed' }, body: { ru: 'Цветокоррекция и лёгкая ретушь на каждом снимке.', en: 'Colour correction and light retouching on every photo.' } },
       { title: { ru: 'Помощь в позировании', en: 'Help with posing' }, body: { ru: 'Не нужно уметь позировать: подскажу и покажу на съёмке.', en: 'You do not need to know how to pose — I will guide you on the day.' } },
       { title: { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' }, body: { ru: 'Готовые кадры лежат по ссылке — делиться и скачивать удобно.', en: 'Finished frames live behind a link — easy to share and download.' } },
       { title: { ru: 'Договор', en: 'A written agreement' }, body: { ru: 'Условия, дата и объём фиксируются заранее.', en: 'Terms, date and scope are fixed in advance.' } },
-      { title: { ru: 'Цвет', en: 'Colour' }, body: { ru: 'Чистый и верный цвет — то, на чём построена вся работа.', en: 'Clean, true colour is what the whole craft is built on.' } },
+      { title: { ru: 'Цвет', en: 'Colour' }, body: { ru: 'Чистый и дорогой.', en: 'Clean and expensive-looking.' } },
     ],
     // Обложка направления: коллаж со съёмок, 19 с без звука, 2,4 МБ.
     // Кадр 1,85:1 шире экрана, поэтому показывается целиком по ширине.
