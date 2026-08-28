@@ -189,7 +189,11 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
         ref={dialogRef}
         onClose={() => setOpenIndex(null)}
         onClick={(event) => {
-          if (event.target === dialogRef.current) close();
+          // Клик по любому свободному месту закрывает просмотр. Исключение —
+          // сам кадр и кнопки: иначе просмотр захлопывался бы при листании.
+          const target = event.target as HTMLElement | null;
+          if (target?.closest('img, button')) return;
+          close();
         }}
         className="lightbox m-0 h-full max-h-none w-full max-w-none p-0 backdrop:bg-black/90"
       >

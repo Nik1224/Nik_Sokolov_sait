@@ -625,3 +625,70 @@ test('соседние кадры подгружаются заранее', asyn
   // Открытый кадр и оба соседа: без предзагрузки на перелистывании виден провал.
   await expect.poll(() => requested.size, { timeout: 5000 }).toBeGreaterThanOrEqual(3);
 });
+
+test('кадр в полноэкранном просмотре помещается на экран целиком', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+
+  // Второй кадр горизонтальный, девятый вертикальный: обрезаться может любой.
+  for (const index of [1, 8]) {
+    await page.locator('main figure button').nth(index).click();
+
+    const image = page.locator('dialog[open] .lightbox-slide img');
+    await expect(image).toBeVisible();
+    await image.evaluate(
+      (element: HTMLImageElement) =>
+        element.complete || new Promise((resolve) => element.addEventListener('load', resolve)),
+    );
+
+    const box = (await image.boundingBox())!;
+    const view = page.viewportSize()!;
+    // Округление браузера даёт доли пикселя — допуск в единицу.
+    expect(box.y, `кадр ${index + 1} выходит вверх`).toBeGreaterThanOrEqual(-1);
+    expect(box.y + box.height, `кадр ${index + 1} выходит вниз`).toBeLessThanOrEqual(view.height + 1);
+    expect(box.x, `кадр ${index + 1} выходит влево`).toBeGreaterThanOrEqual(-1);
+    expect(box.x + box.width, `кадр ${index + 1} выходит вправо`).toBeLessThanOrEqual(view.width + 1);
+
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
+  }
+});
+
+test('клик мимо кадра закрывает просмотр, по кадру и стрелкам — нет', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+  const dialog = page.getByRole('dialog');
+
+  await page.locator('main figure button').nth(8).click();
+  await expect(dialog).toBeVisible();
+
+  const box = (await page.locator('dialog[open] .lightbox-slide img').boundingBox())!;
+
+  // Сам кадр закрывать не должен: по нему кликают, чтобы рассмотреть.
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expect(dialog).toBeVisible();
+
+  // Стрелка листает и оставляет просмотр открытым.
+  const counter = dialog.locator('p').first();
+  const before = await counter.textContent();
+  await page.locator('.lightbox-arrow').last().click();
+  await expect(dialog).toBeVisible();
+  await expect(counter).not.toHaveText(before ?? '');
+
+  // Пустое место в шапке — тоже поле вне кадра, и оно есть на любом экране.
+  await page.mouse.click((page.viewportSize()!.width * 2) / 5, 20);
+  await expect(dialog).toBeHidden();
+});
+
+test('на широком экране клик сбоку от кадра закрывает просмотр', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'на телефоне кадр занимает почти всю ширину');
+
+  await page.goto('/ru/private/portfolio');
+  const dialog = page.getByRole('dialog');
+
+  // Девятый кадр вертикальный: по бокам от него остаётся широкое поле.
+  await page.locator('main figure button').nth(8).click();
+  await expect(dialog).toBeVisible();
+
+  const box = (await page.locator('dialog[open] .lightbox-slide img').boundingBox())!;
+  await page.mouse.click(box.x / 2, box.y + box.height / 2);
+  await expect(dialog).toBeHidden();
+});

@@ -334,10 +334,18 @@
   /* Кадр в полноэкранном просмотре: тянется за пальцем, отпущенный —
      возвращается на место. Пока палец ведёт, переход выключен, иначе кадр
      догонял бы движение с задержкой. */
-  .lightbox-frame {
+  .lightbox-frame,
+  .lightbox-slide {
+    /*
+     * Высота именно заданная, а не max-height: процент от родителя с
+     * неопределённой высотой не разрешается, и кадр вырастал до натурального
+     * размера, вылезая за экран.
+     */
     display: flex;
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
+    width: 100%;
+    min-height: 0;
+    min-width: 0;
     align-items: center;
     justify-content: center;
   }
@@ -349,11 +357,6 @@
    * transform.
    */
   .lightbox-slide {
-    display: flex;
-    max-height: 100%;
-    max-width: 100%;
-    align-items: center;
-    justify-content: center;
     animation: lightbox-fade var(--duration-base) var(--ease-out-soft);
   }
 
