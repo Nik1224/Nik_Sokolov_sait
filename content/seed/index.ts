@@ -116,8 +116,8 @@ export const directions: DirectionDoc[] = [
     // остаётся понятное «Частные съёмки» — оно в seo.title ниже.
     title: { ru: 'Частные съёмки', en: 'Private shoots' },
     lead: {
-      ru: 'Свадьбы, портрет и семья. Позировать не нужно — подскажу и не буду мешать. Первые кадры придут в течение трёх дней.',
-      en: 'Weddings, portraits and family. You do not need to know how to pose — I will guide you and stay out of the way. The first frames arrive within three days.',
+      ru: 'Свадьбы, портрет и семья. Вам не нужно уметь позировать, в моём объективе вы уже модель. Первые кадры придут в течение трёх дней.',
+      en: 'Weddings, portraits and family. You do not need to know how to pose — through my lens you are already a model. The first frames arrive within three days.',
     },
     seo: {
       title: {
