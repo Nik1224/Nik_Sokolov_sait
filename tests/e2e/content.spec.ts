@@ -390,3 +390,32 @@ test('на телефоне текст обложки идёт под видео
   // Полоса высотой в пятую часть ширины не вместила бы подпись поверх себя.
   expect(heading.y).toBeGreaterThan(cover.y + cover.height - 4);
 });
+
+test('на главной ветки нет двух разделов с одинаковым заголовком', async ({ page }) => {
+  for (const path of ['/ru/private', '/ru/business', '/ru/production']) {
+    await page.goto(path);
+
+    const headings = await page
+      .locator('main section h2')
+      .allInnerTexts()
+      .then((items) => items.map((item) => item.trim()).filter(Boolean));
+
+    // Два блока с одним названием — это либо дубль, либо два разных смысла
+    // под одной вывеской. И то и другое сбивает с толку.
+    expect(new Set(headings).size, `${path}: ${headings.join(' · ')}`).toBe(headings.length);
+  }
+});
+
+test('на главной PRIVATE портфолио представлено категориями', async ({ page }) => {
+  await page.goto('/ru/private');
+
+  const portfolio = page.getByRole('heading', { name: 'Портфолио', exact: true });
+  await expect(portfolio).toHaveCount(1);
+
+  // Категории ведут в портфолио с уже выбранным фильтром.
+  const section = portfolio.locator('xpath=ancestor::section');
+  await expect(section.getByRole('link', { name: 'Свадьбы' })).toHaveAttribute(
+    'href',
+    /portfolio\?category=wedding/,
+  );
+});

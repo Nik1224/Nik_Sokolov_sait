@@ -96,6 +96,13 @@ export default async function DirectionHome({ params }: Props) {
   // Если featured-работ ещё нет, берём последние: пустая главная бесполезна.
   const selected = featured.length > 0 ? featured : await getProjects({ direction, limit: 6 });
 
+  /**
+   * Ветка показывает либо список категорий, либо подборку работ, но не оба:
+   * у PRIVATE они назывались одинаково — «Портфолио» — и вели в одно место.
+   * Категории полезнее: они сразу разводят свадьбу, портрет и семью.
+   */
+  const showsCategories = direction === 'private' && categories.length > 0;
+
   // Секции нумеруются по порядку появления: метка не дублирует заголовок.
   let sectionIndex = 0;
   const step = () => String(++sectionIndex).padStart(2, '0');
@@ -170,7 +177,7 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
-      {direction === 'private' && categories.length > 0 ? (
+      {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
           <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((category) => (
@@ -207,7 +214,7 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
-      {selected.length > 0 ? (
+      {!showsCategories && selected.length > 0 ? (
         <Section
           eyebrow={step()}
           title={dict.nav[section]}
