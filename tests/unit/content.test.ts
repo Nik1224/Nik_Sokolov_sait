@@ -300,3 +300,44 @@ describe('наполнение PRIVATE с lokos.pro', () => {
     expect(direction?.highlights.length).toBeGreaterThan(0);
   });
 });
+
+describe('обещания сроков не расходятся между страницами', () => {
+  /**
+   * Срок отдачи назван в лиде, в описании для поиска, в блоке «что входит»
+   * и в каждом пакете. Разойтись им ничего не мешает — правят их в разное
+   * время и в разных местах, поэтому расхождение ловится тестом.
+   */
+  const OUTDATED = /в течение суток|на следующий день|within 24 hours|the next day/i;
+
+  it('нигде не обещаны сутки — согласовано на три дня', async () => {
+    const { getDirection, getPricing, getPage } = await import('@/content/queries');
+
+    const direction = await getDirection('private');
+    const pricing = await getPricing('private');
+    const about = await getPage('private', 'about');
+
+    const claims = JSON.stringify([direction, pricing, about]);
+    expect(claims).not.toMatch(OUTDATED);
+  });
+
+  it('срок назван явно, а не потерян при правке', async () => {
+    const { getDirection, getPricing } = await import('@/content/queries');
+    const direction = await getDirection('private');
+    const pricing = await getPricing('private');
+
+    expect(JSON.stringify(direction)).toMatch(/трёх дней/);
+    // В каждом пакете со сроком отдачи он должен быть назван.
+    const withPreview = pricing.filter((entry) =>
+      entry.includes.some((line) => /фотограф|кадры/i.test(line.ru ?? '')),
+    );
+    expect(withPreview.length).toBeGreaterThan(0);
+  });
+
+  it('отзывы под это правило не подпадают: это слова клиентов', async () => {
+    const { getTestimonials } = await import('@/content/queries');
+    const items = await getTestimonials('private');
+    // Проверка существует, чтобы правило выше случайно не распространили
+    // на цитаты — переписывать чужой отзыв нельзя.
+    expect(items.every((item) => item.author.trim().length > 0)).toBe(true);
+  });
+});

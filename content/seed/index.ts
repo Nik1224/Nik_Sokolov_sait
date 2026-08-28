@@ -114,8 +114,8 @@ export const directions: DirectionDoc[] = [
     // остаётся понятное «Частные съёмки» — оно в seo.title ниже.
     title: { ru: 'Частные съёмки', en: 'Private shoots' },
     lead: {
-      ru: 'Свадьбы, портрет и семья. Позировать не нужно — подскажу и не буду мешать. Первые кадры придут уже на следующий день.',
-      en: 'Weddings, portraits and family. You do not need to know how to pose — I will guide you and stay out of the way. The first frames arrive the very next day.',
+      ru: 'Свадьбы, портрет и семья. Позировать не нужно — подскажу и не буду мешать. Первые кадры придут в течение трёх дней.',
+      en: 'Weddings, portraits and family. You do not need to know how to pose — I will guide you and stay out of the way. The first frames arrive within three days.',
     },
     seo: {
       title: {
@@ -123,8 +123,8 @@ export const directions: DirectionDoc[] = [
         en: 'Private shoots — weddings, portraits, family',
       },
       description: {
-        ru: 'Свадебная, портретная и семейная съёмка. Первые кадры на следующий день, все фотографии с цветокоррекцией и ретушью.',
-        en: 'Wedding, portrait and family photography. First frames the next day, every photo colour-corrected and retouched.',
+        ru: 'Свадебная, портретная и семейная съёмка. Первые кадры в течение трёх дней, все фотографии с цветокоррекцией и ретушью.',
+        en: 'Wedding, portrait and family photography. First frames within three days, every photo colour-corrected and retouched.',
       },
     },
     gatewayDescription: {
@@ -132,7 +132,7 @@ export const directions: DirectionDoc[] = [
       en: 'Weddings, portraits, family. A shoot with no posing required.',
     },
     highlights: [
-      { title: { ru: 'Анонс в течение трёх дней', en: 'Preview within three days' }, body: { ru: 'До 50 кадров приходят в первые дни после съёмки.', en: 'Up to 50 frames arrive within the first days after the shoot.' } },
+      { title: { ru: 'Анонс в течение трёх дней', en: 'Preview within three days' }, body: { ru: 'До 50 кадров, чтобы не ждать всю обработку.', en: 'Up to 50 frames, so you do not wait for the full edit.' } },
       { title: { ru: 'Все кадры обработаны', en: 'Every frame is processed' }, body: { ru: 'Цветокоррекция и лёгкая ретушь на каждом снимке.', en: 'Colour correction and light retouching on every photo.' } },
       { title: { ru: 'Помощь в позировании', en: 'Help with posing' }, body: { ru: 'Не нужно уметь позировать: подскажу и покажу на съёмке.', en: 'You do not need to know how to pose — I will guide you on the day.' } },
       { title: { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' }, body: { ru: 'Готовые кадры лежат по ссылке — делиться и скачивать удобно.', en: 'Finished frames live behind a link — easy to share and download.' } },
@@ -702,7 +702,7 @@ export const pricingEntries: PricingEntry[] = [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
       { ru: 'До 3 часов съёмки', en: 'Up to 3 hours of shooting' },
       { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 150–300 кадров', en: 'All photos colour-corrected and retouched — roughly 150–300 frames' },
-      { ru: 'Первые 10 фотографий в течение суток', en: 'First 10 photos within 24 hours' },
+      { ru: 'Первые 10 фотографий в течение трёх дней', en: 'First 10 photos within three days' },
       { ru: 'Готовый материал от 7 до 25 дней', en: 'Full delivery in 7 to 25 days' },
     ],
   },
@@ -724,7 +724,7 @@ export const pricingEntries: PricingEntry[] = [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
       { ru: 'До 8 часов съёмки', en: 'Up to 8 hours of shooting' },
       { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 450–500 кадров', en: 'All photos colour-corrected and retouched — roughly 450–500 frames' },
-      { ru: 'До 50 фотографий в течение суток', en: 'Up to 50 photos within 24 hours' },
+      { ru: 'До 50 фотографий в течение трёх дней', en: 'Up to 50 photos within three days' },
       { ru: 'Готовый материал от 7 до 14 дней', en: 'Full delivery in 7 to 14 days' },
     ],
   },
@@ -746,7 +746,7 @@ export const pricingEntries: PricingEntry[] = [
       { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
       { ru: '10–12 часов съёмки', en: '10–12 hours of shooting' },
       { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 500–800 кадров', en: 'All photos colour-corrected and retouched — roughly 500–800 frames' },
-      { ru: 'Первые 100 фотографий в течение суток', en: 'First 100 photos within 24 hours' },
+      { ru: 'Первые 100 фотографий в течение трёх дней', en: 'First 100 photos within three days' },
       { ru: 'Готовый материал от 7 до 14 дней', en: 'Full delivery in 7 to 14 days' },
     ],
   },
@@ -769,7 +769,7 @@ export const pricingEntries: PricingEntry[] = [
       { ru: 'Помощь в подборе одежды', en: 'Help choosing outfits' },
       { ru: '20 фотографий в ретуши — выбираете сами', en: '20 retouched photos — you choose them yourself' },
       { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
-      { ru: 'Первые кадры в течение суток, готовый материал за 7 дней', en: 'First frames within 24 hours, full delivery in 7 days' },
+      { ru: 'Первые кадры в течение трёх дней, готовый материал за 7 дней', en: 'First frames within three days, full delivery in 7 days' },
     ],
   },
   {
@@ -791,7 +791,7 @@ export const pricingEntries: PricingEntry[] = [
       { ru: 'Помощь в подборе одежды', en: 'Help choosing outfits' },
       { ru: '15 фотографий в ретуши — выбираете сами', en: '15 retouched photos — you choose them yourself' },
       { ru: 'Личная онлайн-галерея', en: 'Personal online gallery' },
-      { ru: 'Первые кадры в течение суток, готовый материал за 7 дней', en: 'First frames within 24 hours, full delivery in 7 days' },
+      { ru: 'Первые кадры в течение трёх дней, готовый материал за 7 дней', en: 'First frames within three days, full delivery in 7 days' },
     ],
   },
   {
