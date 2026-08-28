@@ -560,6 +560,22 @@ test('на телефоне свайп вниз закрывает полноэ�
   await expect(dialog).toBeHidden();
 });
 
+test('на телефоне свайп вверх тоже закрывает просмотр', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'жест есть только на сенсорном экране');
+
+  await page.goto('/ru/private/portfolio');
+  const dialog = page.getByRole('dialog');
+
+  await page.locator('main figure button').nth(3).click();
+  await expect(dialog).toBeVisible();
+
+  await swipe(page, 0, -50);
+  await expect(dialog).toBeVisible();
+
+  await swipe(page, 0, -160);
+  await expect(dialog).toBeHidden();
+});
+
 test('на телефоне свайп в сторону листает кадры, а не закрывает', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'жест есть только на сенсорном экране');
 
@@ -576,4 +592,36 @@ test('на телефоне свайп в сторону листает кадр
 
   await swipe(page, 140, 0);
   await expect(counter).toHaveText(before ?? '');
+});
+
+test('смена кадра показывает, в какую сторону листают', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+  await page.locator('main figure button').nth(2).click();
+
+  const slide = page.locator('dialog[open] .lightbox-slide');
+  // При открытии — только проявление: кадр ниоткуда не приезжает.
+  await expect(slide).toHaveClass(/is-in/);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(slide).toHaveClass(/is-next/);
+
+  await page.keyboard.press('ArrowLeft');
+  await expect(slide).toHaveClass(/is-prev/);
+});
+
+test('соседние кадры подгружаются заранее', async ({ page }) => {
+  await page.goto('/ru/private/portfolio');
+
+  // Считаем сами кадры, а не файлы: ширину выбирает браузер под свой экран.
+  const requested = new Set<string>();
+  page.on('request', (request) => {
+    const file = /\/portfolio\/wedding\/([^/]+)-\d+\.jpg/.exec(request.url());
+    if (file) requested.add(file[1]);
+  });
+
+  await page.locator('main figure button').nth(10).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  // Открытый кадр и оба соседа: без предзагрузки на перелистывании виден провал.
+  await expect.poll(() => requested.size, { timeout: 5000 }).toBeGreaterThanOrEqual(3);
 });

@@ -18,6 +18,7 @@ import type { MediaAsset } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
+import { imageSrc, imageSrcSet } from '@/lib/media';
 import { Picture } from './Picture';
 import { VideoFacade } from './VideoFacade';
 
@@ -41,14 +42,17 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
    * закрывало просмотр.
    */
   const gesture = useRef<{ x: number; y: number; axis: 'none' | 'x' | 'y' } | null>(null);
-  /** Смещение кадра за пальцем при закрывающем жесте вниз. */
+  /** Смещение кадра за пальцем при закрывающем жесте. */
   const [dragY, setDragY] = useState(0);
+  /** Откуда приезжает новый кадр: подсказывает, в какую сторону листают. */
+  const [slide, setSlide] = useState<'in' | 'next' | 'prev'>('in');
 
   const images = items.filter((item): item is Extract<MediaAsset, { type: 'image' }> => item.type === 'image');
 
   const open = useCallback((index: number) => {
     setOpenIndex(index);
     setDragY(0);
+    setSlide('in');
     dialogRef.current?.showModal();
   }, []);
 
@@ -61,6 +65,7 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
   const step = useCallback(
     (delta: number) => {
       setDragY(0);
+      setSlide(delta > 0 ? 'next' : 'prev');
       setOpenIndex((current) => {
         if (current === null) return current;
         return (current + delta + images.length) % images.length;
@@ -78,6 +83,23 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [openIndex, step]);
+
+  useEffect(() => {
+    if (openIndex === null || images.length < 2) return;
+    /*
+     * Соседние кадры подгружаются заранее: без этого на перелистывании виден
+     * провал в пустоту, пока грузится следующий файл. srcset и sizes те же,
+     * что у видимого кадра, поэтому браузер выбирает и кэширует ровно тот
+     * вариант, который потом покажет.
+     */
+    for (const delta of [1, -1]) {
+      const neighbour = images[(openIndex + delta + images.length) % images.length];
+      const preload = new window.Image();
+      preload.sizes = '100vw';
+      preload.srcset = imageSrcSet(neighbour.image) ?? '';
+      preload.src = imageSrc(neighbour.image, 1800);
+    }
+  }, [openIndex, images]);
 
   if (items.length === 0) return null;
 
@@ -205,7 +227,7 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
                   from.axis = Math.abs(dy) > Math.abs(dx) ? 'y' : 'x';
                 }
                 // Кадр идёт за пальцем: жест видно, и понятно, что он делает.
-                if (from.axis === 'y') setDragY(Math.max(dy, -40));
+                if (from.axis === 'y') setDragY(dy);
               }}
               onTouchEnd={(event) => {
                 const from = gesture.current;
@@ -213,7 +235,8 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
                 if (!from) return;
 
                 if (from.axis === 'y') {
-                  if (dragY > CLOSE_DISTANCE) close();
+                  // Закрывает движение в любую сторону: вверх ждут не реже.
+                  if (Math.abs(dragY) > CLOSE_DISTANCE) close();
                   else setDragY(0);
                   return;
                 }
@@ -232,13 +255,15 @@ export function MediaGallery({ items, locale, dict, layout = 'feature' }: Props)
                   opacity: 1 - Math.min(Math.abs(dragY) / 520, 0.55),
                 }}
               >
-                <Picture
-                  image={active.image}
-                  alt={localizedString(active.alt, locale)}
-                  sizes="100vw"
-                  priority
-                  className="max-h-full w-auto max-w-full object-contain"
-                />
+                <div key={openIndex} className={`lightbox-slide is-${slide}`}>
+                  <Picture
+                    image={active.image}
+                    alt={localizedString(active.alt, locale)}
+                    sizes="100vw"
+                    priority
+                    className="max-h-full w-auto max-w-full object-contain"
+                  />
+                </div>
               </div>
 
               {images.length > 1 ? (

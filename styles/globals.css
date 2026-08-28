@@ -342,11 +342,58 @@
     justify-content: center;
   }
 
+  /*
+   * Смена кадра. Новый приезжает с той стороны, куда листают, — движение
+   * подтверждает направление, а не просто украшает. Слой отдельный от
+   * .lightbox-frame: там живёт жест, и два преобразования спорили бы за
+   * transform.
+   */
+  .lightbox-slide {
+    display: flex;
+    max-height: 100%;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    animation: lightbox-fade var(--duration-base) var(--ease-out-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox-slide.is-next {
+      animation: lightbox-slide-next var(--duration-base) var(--ease-out-soft);
+    }
+
+    .lightbox-slide.is-prev {
+      animation: lightbox-slide-prev var(--duration-base) var(--ease-out-soft);
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .lightbox-frame.is-settling {
       transition:
         transform var(--duration-fast) var(--ease-out-soft),
         opacity var(--duration-fast) var(--ease-out-soft);
     }
+  }
+}
+
+/* При выключенной анимации остаётся только проявление: смены кадра без
+   всякого отклика не видно вовсе. */
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-slide-next {
+  from {
+    opacity: 0;
+    transform: translateX(3rem);
+  }
+}
+
+@keyframes lightbox-slide-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
   }
 }
