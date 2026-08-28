@@ -336,17 +336,35 @@ export const categories: Category[] = [
 
 /**
  * Полные серии свадеб. Адреса ведут на онлайн-галереи владельца — те же, что
- * он отдаёт клиентам. Имена взяты из адреса галереи и ждут подтверждения;
- * обложек пока нет: приписывать кадр конкретной паре без подтверждения нельзя.
+ * он отдаёт клиентам.
+ *
+ * Обложка — та же, что выбрана обложкой самой галереи: приписывать кадр
+ * конкретной паре по своему усмотрению нельзя, а этот выбор сделал владелец.
  */
 export const albums: Album[] = [
   {
     _id: 'alb.mark-ekaterina',
     slug: 'mark-ekaterina',
     direction: 'private',
+    // Имена подтверждены заголовком самой галереи: «Марк & Екатерина».
     title: { ru: 'Марк и Екатерина', en: 'Mark & Ekaterina' },
     url: 'https://lokos.pro/disk/mark-ekaterina-f956bd',
     order: 1,
+    cover: {
+      _key: 'alb.mark-ekaterina.cover',
+      type: 'image',
+      rights: 'owned',
+      alt: { ru: '', en: '' },
+      image: {
+        src: '/media/albums/mark-ekaterina-1200.jpg',
+        width: 1200,
+        height: 630,
+        sources: [
+          { width: 600, src: '/media/albums/mark-ekaterina-600.jpg' },
+          { width: 1200, src: '/media/albums/mark-ekaterina-1200.jpg' },
+        ],
+      },
+    },
   },
 ];
 

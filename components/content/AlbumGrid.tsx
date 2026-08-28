@@ -52,12 +52,14 @@ export function AlbumGrid({ albums, locale, dict }: Props) {
                 />
               ) : null}
 
-              <div className="flex min-h-44 flex-1 flex-col p-6 lg:p-8">
+              {/* Запас высоты нужен только текстовой карточке: с обложкой
+                  она и так не выглядит обрубком. */}
+              <div className={`flex flex-1 flex-col p-6 lg:p-8 ${cover ? '' : 'min-h-44'}`}>
                 {meta ? <p className="label m-0 text-bone-faint">{meta}</p> : null}
                 <p className="text-h3 m-0 mt-3 text-bone transition-colors group-hover:text-accent">
                   {title}
                 </p>
-                <p aria-hidden="true" className="label mt-auto pt-8 text-bone-dim">
+                <p aria-hidden="true" className={`label mt-auto text-bone-dim ${cover ? 'pt-6' : 'pt-8'}`}>
                   {dict.albums.openGallery} ↗
                 </p>
               </div>

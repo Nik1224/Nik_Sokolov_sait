@@ -748,3 +748,14 @@ test('полные свадьбы живут вне меню и только в 
   // У BUSINESS и PRODUCTION такого раздела нет — и адрес тоже не открывается.
   expect((await page.goto('/ru/business/albums'))?.status()).toBe(404);
 });
+
+test('у альбома есть обложка, и она не грузится в полном размере на телефоне', async ({ page }) => {
+  await page.goto('/ru/private/albums');
+
+  const cover = page.locator('main ul li img').first();
+  await expect(cover).toBeVisible();
+  // Обложка декоративна: имя пары уже есть в названии ссылки, дублировать незачем.
+  await expect(cover).toHaveAttribute('alt', '');
+  await expect(cover).toHaveAttribute('srcset', /600w/);
+  await expect(cover).toHaveAttribute('srcset', /1200w/);
+});
