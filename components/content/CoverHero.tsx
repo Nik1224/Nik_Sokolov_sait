@@ -51,18 +51,24 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
   const ratio = media.poster.width / media.poster.height;
   const alt = localizedString(media.alt, locale);
 
+  /**
+   * На обложке текст мельче, чем на обычном hero: он должен уместиться в
+   * плотную часть подложки. Крупный заголовок вылезал за неё и оказывался
+   * прямо на кадре — а в кадре есть чёрные полосы между клипами, на которых
+   * тёмный текст исчезает совсем.
+   */
   const text = (
     <>
       {eyebrow ? <p className="label m-0 text-accent">{eyebrow}</p> : null}
-      <h1 className="text-h1 mt-4 max-w-2xl text-balance">{title}</h1>
-      {lead ? <p className="mt-5 max-w-xl text-lead text-bone-dim">{lead}</p> : null}
+      <h1 className="text-h3 mt-3 max-w-lg text-balance lg:text-h2">{title}</h1>
+      {lead ? <p className="mt-3 max-w-md text-bone-dim lg:text-base">{lead}</p> : null}
 
       {cta || secondaryCta ? (
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           {cta ? (
             <Link
               href={cta.href}
-              className="label bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent"
+              className="label bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent"
             >
               {cta.label}
             </Link>
@@ -70,7 +76,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           {secondaryCta ? (
             <Link
               href={secondaryCta.href}
-              className="label border border-line-strong px-7 py-4 text-bone transition-colors hover:border-bone"
+              className="label border border-line-strong px-6 py-3.5 text-bone transition-colors hover:border-bone"
             >
               {secondaryCta.label}
             </Link>
@@ -107,31 +113,45 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
         ) : null}
 
         {/* Подложка под текстом.
-            Прямоугольник во всю высоту закрывал половину кадра, а мягкий
-            градиент не дотягивался до заголовка: половина его протяжённости
-            уходит на растушёвку. Поэтому здесь форма — широкий пологий купол,
-            поднимающийся из нижнего края. Он плотный ровно там, где лежит
-            текст, а размытие даёт мягкую границу без ощущения наклейки.
-            Цвет тот же, что у секции ниже, — стыка не видно. */}
+            Не заливка, а стекло: видео за ней видно и оно продолжает двигаться,
+            но размывается и осветляется, поэтому тёмный текст светлой темы на
+            нём читается. Плотность нарастает сверху вниз — у вершины купола
+            почти ничего, у самого низа сплошной цвет страницы, чтобы стык со
+            следующей секцией не читался. */}
         <div aria-hidden="true" className="absolute inset-0 hidden overflow-hidden lg:block">
           <div
-            className="absolute bottom-0 left-[-22%] h-[70%] w-[112%]"
+            className="absolute bottom-0 left-[-4%] h-[56%] w-[78%]"
             style={{
-              backgroundColor: 'var(--color-ink)',
               borderRadius: '50% 50% 0 0 / 100% 100% 0 0',
-              filter: 'blur(26px)',
+              // contrast поднимает тени, brightness — общую светлоту: без них
+              // чёрные участки кадра остаются чёрными, сколько ни размывай.
+              // Радиус размытия подобран по замеру кадров: каждый лишний
+              // пиксель радиуса — работа для видеокарты на каждом кадре видео.
+              backdropFilter: 'blur(12px) contrast(0.36) brightness(1.4)',
+              WebkitBackdropFilter: 'blur(12px) contrast(0.36) brightness(1.4)',
+              background: [
+                'linear-gradient(to bottom,',
+                ' color-mix(in srgb, var(--color-ink) 12%, transparent) 0%,',
+                ' color-mix(in srgb, var(--color-ink) 40%, transparent) 26%,',
+                ' color-mix(in srgb, var(--color-ink) 78%, transparent) 48%,',
+                ' color-mix(in srgb, var(--color-ink) 94%, transparent) 70%,',
+                ' var(--color-ink) 100%)',
+              ].join(''),
+              // Мягкий вход сверху, чтобы кромка стекла не читалась линией.
+              maskImage: 'linear-gradient(to bottom, transparent 0%, black 11%, black 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 11%, black 100%)',
             }}
           />
           {/* Полоса у самого низа сшивает обложку со следующим блоком. */}
           <div
-            className="absolute inset-x-0 bottom-0 h-[18%]"
+            className="absolute inset-x-0 bottom-0 h-[12%]"
             style={{
               background: 'linear-gradient(to top, var(--color-ink) 40%, transparent 100%)',
             }}
           />
         </div>
 
-        <div className="container-content absolute inset-x-0 bottom-0 hidden pb-14 lg:block">
+        <div className="container-content absolute inset-x-0 bottom-0 hidden pb-10 lg:block">
           <div className="max-w-xl">{text}</div>
         </div>
       </div>
