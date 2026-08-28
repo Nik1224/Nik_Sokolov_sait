@@ -170,7 +170,7 @@ export const directions: DirectionDoc[] = [
         },
         {
           slug: 'portrait',
-          title: { ru: 'Частная', en: 'Private' },
+          title: { ru: 'Портрет', en: 'Portrait' },
           minHours: 1,
           maxHours: 5,
           defaultHours: 1,
@@ -199,6 +199,20 @@ export const directions: DirectionDoc[] = [
           maxHours: 5,
           defaultHours: 2,
           taper: false,
+        },
+        {
+          // Снижение ставки пока не применяется: владелец описал его только
+          // для свадеб. Для длинных праздников вопрос открыт.
+          slug: 'events',
+          title: { ru: 'События', en: 'Events' },
+          minHours: 2,
+          maxHours: 8,
+          defaultHours: 3,
+          taper: false,
+          hint: {
+            ru: 'Дни рождения, юбилеи, выпускные и линейки — репортаж без постановки.',
+            en: 'Birthdays, anniversaries, graduations and school ceremonies — reportage, nothing staged.',
+          },
         },
       ],
     },

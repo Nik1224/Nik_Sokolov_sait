@@ -45,7 +45,7 @@ test('фото и видео вместе дают скидку 10%', async ({ p
 test('обычная съёмка считается по ровной ставке', async ({ page }) => {
   const { slider, panel } = await openCalculator(page);
 
-  await page.getByText('Частная', { exact: true }).click();
+  await page.getByText('Портрет', { exact: true }).click();
   await slider.fill('3');
 
   // 3 × 12 000 без снижения: оно только для свадеб.
@@ -88,7 +88,7 @@ test('подсказка объясняет выбор часов', async ({ pag
 test('калькулятор доступен с клавиатуры', async ({ page }) => {
   const { slider } = await openCalculator(page);
 
-  await page.getByText('Частная', { exact: true }).click();
+  await page.getByText('Портрет', { exact: true }).click();
   // Смена типа подтягивает часы к максимуму — с него вправо двигаться некуда.
   await slider.fill('2');
   await slider.focus();
@@ -97,4 +97,24 @@ test('калькулятор доступен с клавиатуры', async ({
   await expect(slider).toHaveValue('3');
   await page.keyboard.press('ArrowLeft');
   await expect(slider).toHaveValue('2');
+});
+
+test('события считаются по ровной ставке и начинаются с двух часов', async ({ page }) => {
+  const { slider, panel } = await openCalculator(page);
+
+  await page.getByText('События', { exact: true }).click();
+
+  // Час на день рождения смысла не имеет — ползунок ниже двух не опускается.
+  await expect(slider).toHaveAttribute('min', '2');
+
+  await slider.fill('4');
+  // 4 × 12 000: снижение ставки описано только для свадеб.
+  await expect(panel).toContainText('48 000');
+  await expect(panel).not.toContainText('Последний час');
+});
+
+test('подсказка у событий перечисляет, что сюда входит', async ({ page }) => {
+  await page.goto('/ru/private/pricing');
+  await page.getByText('События', { exact: true }).click();
+  await expect(page.getByText(/Дни рождения, юбилеи/)).toBeVisible();
 });
