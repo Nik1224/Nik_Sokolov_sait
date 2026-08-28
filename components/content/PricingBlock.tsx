@@ -17,6 +17,8 @@ type Props = {
   locale: Locale;
   dict: Dictionary;
   contacts: ContactChannel[];
+  /** Внутри группы пакет стоит на уровень ниже её заголовка. */
+  headingLevel?: 'h3' | 'h4';
 };
 
 function formatPrice(entry: PricingEntry, locale: Locale, dict: Dictionary): string {
@@ -33,7 +35,13 @@ function formatPrice(entry: PricingEntry, locale: Locale, dict: Dictionary): str
   return `${prefix}${formatted}${unit ? ` / ${unit}` : ''}`;
 }
 
-export function PricingBlock({ entries, locale, dict, contacts }: Props) {
+export function PricingBlock({
+  entries,
+  locale,
+  dict,
+  contacts,
+  headingLevel: Heading = 'h3',
+}: Props) {
   const packages = entries.filter((entry) => entry.kind !== 'extra');
   if (packages.length === 0) return null;
 
@@ -45,7 +53,7 @@ export function PricingBlock({ entries, locale, dict, contacts }: Props) {
 
         return (
           <li key={entry._id} className="flex flex-col bg-ink p-6 lg:p-8">
-            <h3 className="text-h3 m-0 text-bone">{localizedString(entry.title, locale)}</h3>
+            <Heading className="text-h3 m-0 text-bone">{localizedString(entry.title, locale)}</Heading>
             <p className="label mt-4 text-accent">{formatPrice(entry, locale, dict)}</p>
             <p className="mt-4 text-bone-dim">{localizedString(entry.description, locale)}</p>
 
@@ -87,7 +95,7 @@ export function PricingBlock({ entries, locale, dict, contacts }: Props) {
  * Дополнения к пакетам: доплаты и опции. Карточка на каждую строку выглядела
  * бы как отдельная услуга, хотя это надбавка к основному пакету.
  */
-export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contacts'>) {
+export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contacts' | 'headingLevel'>) {
   const extras = entries.filter((entry) => entry.kind === 'extra');
   if (extras.length === 0) return null;
 

@@ -20,6 +20,10 @@ const packages = pricingEntries.filter(
 );
 const bySlug = (slug: string) => packages.find((entry) => entry.slug === slug)!;
 
+/** Скидка за оба формата округляется так же, как в калькуляторе. */
+const withBundleDiscount = (sum: number) =>
+  sum - Math.round((sum * calculator.bundleDiscount) / 100) * 100;
+
 /** Каждый следующий оператор стоит половину основного. */
 const withOperators = (base: number, operators: number) =>
   Math.round((base * (1 + (operators - 1) / 2)) / 100) * 100;
@@ -41,6 +45,37 @@ describe('цены пакетов совпадают с калькуляторо
   it('«Видео, максимальный» — три оператора плюс кран и монтаж в день свадьбы', () => {
     const crew = withOperators(formatCost(VIDEO, 12, taper), 3);
     expect(bySlug('video-max').price).toBe(crew + 40000);
+  });
+
+  it.each([
+    ['wedding-3h-full', ['wedding-3h', 'video-hourly']],
+    ['wedding-day-full', ['wedding-12h', 'video-wedding-day']],
+  ])('%s — сумма двух пакетов минус скидка за оба формата', (slug, parts) => {
+    const sum = parts.reduce((total, part) => total + bySlug(part).price!, 0);
+    expect(bySlug(slug).price).toBe(withBundleDiscount(sum));
+  });
+
+  it('«Фото и видео, максимум» считается по двенадцати часам, а не по десяти', () => {
+    // Фото-пакет помечен «от 110 000» за десять часов; в максимуме часов
+    // двенадцать, поэтому фотографическая половина берётся по ним.
+    const photo = formatCost(PHOTO, 12, taper);
+    expect(bySlug('wedding-max-full').price).toBe(
+      withBundleDiscount(photo + bySlug('video-max').price!),
+    );
+  });
+
+  it('совмещённый пакет всегда дешевле, чем купить обе съёмки отдельно', () => {
+    for (const slug of ['wedding-3h-full', 'wedding-day-full', 'wedding-max-full']) {
+      const entry = bySlug(slug);
+      const stated = /(\d[\d\s]*) ₽ \+ .*?(\d[\d\s]*) ₽ = (\d[\d\s]*) ₽/.exec(
+        entry.disclaimer?.ru ?? '',
+      );
+      // Расклад в примечании обязан сходиться с ценой: клиент по нему считает.
+      expect(stated, `${slug}: в примечании нет расклада`).not.toBeNull();
+      const full = Number(stated![3].replace(/\s/g, ''));
+      expect(entry.price).toBe(withBundleDiscount(full));
+      expect(entry.price!).toBeLessThan(full);
+    }
   });
 
   it('«Максимальный портрет» дороже съёмки ровно на сторонние услуги', () => {

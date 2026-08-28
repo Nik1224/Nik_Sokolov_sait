@@ -38,6 +38,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+/**
+ * Заголовок блока страницы.
+ *
+ * Раньше блоки подписывались той же мелкой строчкой, что и служебные метки, —
+ * «Пакетные предложения» просто не замечали. Номер отделяет блоки друг от
+ * друга, заголовок отвечает за размер.
+ */
+function BlockHeading({ step, title }: { step: string; title: string }) {
+  return (
+    <div className="border-t border-line pt-6">
+      <p className="label m-0 text-accent">{step}</p>
+      <h2 className="text-h2 m-0 mt-4 text-balance">{title}</h2>
+    </div>
+  );
+}
+
 export default async function Page({ params }: Props) {
   const { locale, direction } = await resolveDirectionRoute(params, 'pricing');
   const dict = getDictionary(locale);
@@ -66,9 +82,9 @@ export default async function Page({ params }: Props) {
       </p>
 
       {doc?.calculator ? (
-        <div className="mt-14 border-t border-line pt-10">
-          <h2 className="label m-0 text-accent">{dict.calculator.heading}</h2>
-          <div className="mt-8">
+        <div className="mt-16">
+          <BlockHeading step="01" title={dict.calculator.heading} />
+          <div className="mt-10">
             <PriceCalculator
               config={doc.calculator}
               locale={locale}
@@ -79,13 +95,13 @@ export default async function Page({ params }: Props) {
         </div>
       ) : null}
 
-      <div className="mt-14">
+      <div className="mt-16">
         {packages.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
           <>
-            <h2 className="label m-0 text-accent">{dict.pricing.packages}</h2>
-            <div className="mt-8">
+            <BlockHeading step={doc?.calculator ? '02' : '01'} title={dict.pricing.packages} />
+            <div className="mt-10">
               <PricingPackages
                 groups={doc?.pricingGroups ?? []}
                 entries={packages}
@@ -98,9 +114,9 @@ export default async function Page({ params }: Props) {
         )}
 
         {extras.length > 0 ? (
-          <div className="mt-16 max-w-2xl">
-            <h2 className="label m-0 text-accent">{dict.pricing.extras}</h2>
-            <div className="mt-6">
+          <div className="mt-20 max-w-2xl">
+            <BlockHeading step={doc?.calculator ? '03' : '02'} title={dict.pricing.extras} />
+            <div className="mt-8">
               <PricingExtras entries={extras} locale={locale} dict={dict} />
             </div>
             <p className="mt-8 text-sm text-bone-faint">{dict.pricing.combinedDiscount}</p>

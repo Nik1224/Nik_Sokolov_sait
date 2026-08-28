@@ -124,7 +124,7 @@ test('подсказка у событий перечисляет, что сюд
 test('пакеты разложены по группам и раскрываются на месте', async ({ page }) => {
   await page.goto('/ru/private/pricing');
 
-  const wedding = page.getByRole('button', { name: /Свадебная фотосъёмка/ });
+  const wedding = page.getByRole('button', { name: /^Свадьба/ });
   const portrait = page.getByRole('button', { name: /Портрет и семья/ });
 
   // Свёрнуто по умолчанию: страница остаётся обозримой.
@@ -157,7 +157,7 @@ test('цена пакета совпадает с калькулятором н�
   await expect(panel).toContainText('90 600');
 
   // Ровно та же сумма должна стоять в пакете на восемь часов.
-  await page.getByRole('button', { name: /Свадебная фотосъёмка/ }).click();
+  await page.getByRole('button', { name: /^Свадьба/ }).click();
   const card = page
     .getByRole('heading', { name: 'Свадьба, до 8 часов' })
     .locator('xpath=ancestor::li[1]');

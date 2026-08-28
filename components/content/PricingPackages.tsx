@@ -140,7 +140,13 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
 
             {expanded ? (
               <div id={panelId} className="pricing-panel pb-10">
-                <PricingBlock entries={items} locale={locale} dict={dict} contacts={contacts} />
+                <PricingBlock
+                  entries={items}
+                  locale={locale}
+                  dict={dict}
+                  contacts={contacts}
+                  headingLevel="h4"
+                />
               </div>
             ) : (
               <div id={panelId} hidden />

@@ -148,10 +148,10 @@ export const directions: DirectionDoc[] = [
     pricingGroups: [
       {
         slug: 'wedding',
-        title: { ru: 'Свадебная фотосъёмка', en: 'Wedding photography' },
+        title: { ru: 'Свадьба', en: 'Wedding' },
         description: {
-          ru: 'Ставка 12 000 ₽ за час; на длинной свадьбе час дешевеет — точные суммы в калькуляторе выше.',
-          en: 'A rate of 12,000 ₽ per hour; on a long wedding day the hour gets cheaper — exact figures in the calculator above.',
+          ru: 'Только фото или фото и видео вместе — во втором случае скидка 10% уже в цене.',
+          en: 'Photography alone or photo and video together — in the latter case the 10% discount is already in the price.',
         },
       },
       {
@@ -864,12 +864,102 @@ export const pricingEntries: PricingEntry[] = [
     ],
   },
   {
+    _id: 'pr.wedding-3h-full',
+    slug: 'wedding-3h-full',
+    direction: 'private',
+    groupSlug: 'wedding',
+    kind: 'package',
+    order: 4,
+    active: true,
+    title: { ru: 'Фото и видео, до 3 часов', en: 'Photo and video, up to 3 hours' },
+    description: {
+      ru: 'Роспись и короткая прогулка вдвоём: фотограф и видеооператор.',
+      en: 'Registry and a short walk with two of us: a photographer and a videographer.',
+    },
+    // 36 000 фото + 45 000 видео = 81 000, минус 10% за оба формата.
+    price: 72900,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: 'До 3 часов съёмки: фотограф и видеооператор', en: 'Up to 3 hours: photographer and videographer' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 150–300 кадров', en: 'All photos colour-corrected and retouched — roughly 150–300 frames' },
+      { ru: 'Первые 10 фотографий в течение трёх дней', en: 'First 10 photos within three days' },
+      { ru: 'Ролик 3–10 минут: цветокоррекция и саунд-дизайн', en: 'A 3–10 minute film with colour correction and sound design' },
+      { ru: 'Фото от 7 до 25 дней, видео от 7 до 60 дней', en: 'Photos in 7 to 25 days, video in 7 to 60 days' },
+    ],
+    disclaimer: {
+      ru: 'Фото 36 000 ₽ + видео 45 000 ₽ = 81 000 ₽, скидка за оба формата — 8 100 ₽.',
+      en: 'Photo 36,000 ₽ + video 45,000 ₽ = 81,000 ₽, less 8,100 ₽ for taking both.',
+    },
+  },
+  {
+    _id: 'pr.wedding-day-full',
+    slug: 'wedding-day-full',
+    direction: 'private',
+    groupSlug: 'wedding',
+    kind: 'package',
+    order: 5,
+    active: true,
+    title: { ru: 'Фото и видео, свадебный день', en: 'Photo and video, wedding day' },
+    description: {
+      ru: 'Десять часов: фотограф и два видеооператора, полный фильм и ролики.',
+      en: 'Ten hours: a photographer and two videographers, a full film and short reels.',
+    },
+    // 110 000 фото за 10 часов + 206 300 видео = 316 300, минус 10%.
+    price: 284700,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: 'До 10 часов съёмки: фотограф и 2 видеооператора', en: 'Up to 10 hours: photographer and 2 videographers' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 500–800 кадров', en: 'All photos colour-corrected and retouched — roughly 500–800 frames' },
+      { ru: 'Первые 100 фотографий в течение трёх дней', en: 'First 100 photos within three days' },
+      { ru: 'Фильм от 60 минут, ролик 3–5 минут, вертикальный ролик 1 минута', en: 'A film from 60 minutes, a 3–5 minute reel, a 1-minute vertical reel' },
+      { ru: 'Видеосвет, цветокоррекция, саунд-дизайн', en: 'Video lighting, colour correction, sound design' },
+      { ru: 'Фото от 7 до 14 дней, видео от 7 до 90 дней', en: 'Photos in 7 to 14 days, video in 7 to 90 days' },
+    ],
+    disclaimer: {
+      ru: 'Фото 110 000 ₽ + видео 206 300 ₽ = 316 300 ₽, скидка за оба формата — 31 600 ₽.',
+      en: 'Photo 110,000 ₽ + video 206,300 ₽ = 316,300 ₽, less 31,600 ₽ for taking both.',
+    },
+  },
+  {
+    _id: 'pr.wedding-max-full',
+    slug: 'wedding-max-full',
+    direction: 'private',
+    groupSlug: 'wedding',
+    kind: 'package',
+    order: 6,
+    active: true,
+    title: { ru: 'Фото и видео, максимум', en: 'Photo and video, maximum' },
+    description: {
+      ru: 'Двенадцать часов, три оператора и кран. Фильм показывают уже на банкете.',
+      en: 'Twelve hours, three operators and a crane. The film screens at the reception.',
+    },
+    // 129 000 фото за 12 часов + 362 600 видео = 491 600, минус 10%.
+    price: 442400,
+    currency: 'RUB',
+    includes: [
+      { ru: 'Консультация до съёмки', en: 'Consultation before the shoot' },
+      { ru: 'До 12 часов съёмки: фотограф и 3 видеооператора', en: 'Up to 12 hours: photographer and 3 videographers' },
+      { ru: 'Все фотографии с цветокоррекцией и ретушью — примерно 500–800 кадров', en: 'All photos colour-corrected and retouched — roughly 500–800 frames' },
+      { ru: 'Первые 100 фотографий в течение трёх дней', en: 'First 100 photos within three days' },
+      { ru: 'Фильм любой длительности и монтаж SDE — показ в день свадьбы', en: 'A film of any length and a same-day edit, screened on the wedding day' },
+      { ru: 'Вертикальные ролики для соцсетей', en: 'Vertical reels for social media' },
+      { ru: 'Видеокран, видеосвет, цветокоррекция, саунд-дизайн', en: 'Crane, video lighting, colour correction, sound design' },
+      { ru: 'Фото от 7 до 14 дней, видео от 30 до 120 дней', en: 'Photos in 7 to 14 days, video in 30 to 120 days' },
+    ],
+    disclaimer: {
+      ru: 'Фото 129 000 ₽ + видео 362 600 ₽ = 491 600 ₽, скидка за оба формата — 49 200 ₽.',
+      en: 'Photo 129,000 ₽ + video 362,600 ₽ = 491,600 ₽, less 49,200 ₽ for taking both.',
+    },
+  },
+  {
     _id: 'pr.portrait-family',
     slug: 'portrait-family',
     direction: 'private',
     groupSlug: 'portrait',
     kind: 'package',
-    order: 4,
+    order: 7,
     active: true,
     title: { ru: 'Семейный портрет', en: 'Family portrait' },
     description: {
@@ -892,7 +982,7 @@ export const pricingEntries: PricingEntry[] = [
     direction: 'private',
     groupSlug: 'portrait',
     kind: 'package',
-    order: 5,
+    order: 8,
     active: true,
     title: { ru: 'Индивидуальный портрет', en: 'Individual portrait' },
     description: {
@@ -915,7 +1005,7 @@ export const pricingEntries: PricingEntry[] = [
     direction: 'private',
     groupSlug: 'portrait',
     kind: 'package',
-    order: 6,
+    order: 9,
     active: true,
     title: { ru: 'Максимальный портрет', en: 'Premium portrait' },
     description: {
@@ -945,7 +1035,7 @@ export const pricingEntries: PricingEntry[] = [
     direction: 'private',
     groupSlug: 'video',
     kind: 'package',
-    order: 7,
+    order: 10,
     active: true,
     title: { ru: 'Видео, почасовая съёмка', en: 'Video, hourly' },
     description: {
@@ -968,7 +1058,7 @@ export const pricingEntries: PricingEntry[] = [
     direction: 'private',
     groupSlug: 'video',
     kind: 'package',
-    order: 8,
+    order: 11,
     active: true,
     title: { ru: 'Видео, свадебный день', en: 'Video, wedding day' },
     description: {
@@ -994,7 +1084,7 @@ export const pricingEntries: PricingEntry[] = [
     direction: 'private',
     groupSlug: 'video',
     kind: 'package',
-    order: 9,
+    order: 12,
     active: true,
     title: { ru: 'Видео, максимальный', en: 'Video, maximum' },
     description: {
