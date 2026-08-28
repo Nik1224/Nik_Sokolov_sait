@@ -13,6 +13,7 @@ import type {
   Category,
   DirectionDoc,
   GlobalSettings,
+  LocaleString,
   Page,
   Person,
   PricingEntry,
@@ -335,37 +336,57 @@ export const categories: Category[] = [
 ];
 
 /**
- * Полные серии свадеб. Адреса ведут на онлайн-галереи владельца — те же, что
+ * Полные серии съёмок. Адреса ведут на онлайн-галереи владельца — те же, что
  * он отдаёт клиентам.
  *
- * Обложка — та же, что выбрана обложкой самой галереи: приписывать кадр
- * конкретной паре по своему усмотрению нельзя, а этот выбор сделал владелец.
+ * Названия и обложки взяты из самих галерей: имена — из заголовка, кадр — тот,
+ * что владелец выбрал обложкой. Приписывать чужой паре кадр по своему
+ * усмотрению нельзя, а этот выбор сделал он.
+ *
+ * Даты и места не показываются — владелец попросил обойтись без них.
  */
-export const albums: Album[] = [
-  {
-    _id: 'alb.mark-ekaterina',
-    slug: 'mark-ekaterina',
+function album(slug: string, url: string, title: LocaleString, order: number): Album {
+  return {
+    _id: `alb.${slug}`,
+    slug,
     direction: 'private',
-    // Имена подтверждены заголовком самой галереи: «Марк & Екатерина».
-    title: { ru: 'Марк и Екатерина', en: 'Mark & Ekaterina' },
-    url: 'https://lokos.pro/disk/mark-ekaterina-f956bd',
-    order: 1,
+    title,
+    url,
+    order,
     cover: {
-      _key: 'alb.mark-ekaterina.cover',
+      _key: `alb.${slug}.cover`,
       type: 'image',
       rights: 'owned',
+      // Пустой alt: имя пары уже звучит в названии ссылки, дублировать незачем.
       alt: { ru: '', en: '' },
       image: {
-        src: '/media/albums/mark-ekaterina-1200.jpg',
+        // 1200×630 — формат превью галереи. Свой файл-обложку придётся
+        // описывать отдельно: у него будут другие размеры.
+        src: `/media/albums/${slug}-1200.jpg`,
         width: 1200,
         height: 630,
-        sources: [
-          { width: 600, src: '/media/albums/mark-ekaterina-600.jpg' },
-          { width: 1200, src: '/media/albums/mark-ekaterina-1200.jpg' },
-        ],
+        sources: [600, 1200].map((width) => ({
+          width,
+          src: `/media/albums/${slug}-${width}.jpg`,
+        })),
       },
     },
-  },
+  };
+}
+
+export const albums: Album[] = [
+  album('mark-ekaterina', 'https://lokos.pro/disk/mark-ekaterina-f956bd', { ru: 'Марк и Екатерина', en: 'Mark & Ekaterina' }, 1),
+  album('wedding-zh0w6w', 'https://lokos.pro/disk/wedding-zh0w6w', { ru: 'Свадьба', en: 'Wedding' }, 2),
+  album('nikolay-angelina', 'https://lokos.pro/disk/23-09-2023-nikolay-angelina-c4s1l0', { ru: 'Николай и Ангелина', en: 'Nikolay & Angelina' }, 3),
+  album('vladimir-diana', 'https://lokos.pro/disk/01-09-2023-vladimir-diana-951p0h', { ru: 'Владимир и Диана', en: 'Vladimir & Diana' }, 4),
+  album('roman-veronika', 'https://lokos.pro/disk/24-07-2023-roman-veronika-qpmcqp', { ru: 'Роман и Вероника', en: 'Roman & Veronika' }, 5),
+  album('inal-diana', 'https://lokos.pro/disk/13-07-2023-inal-diana-nesvadba-4m7lz9', { ru: 'Инал и Диана. НЕсвадьба', en: 'Inal & Diana. Not a wedding' }, 6),
+  album('anton-karina', 'https://lokos.pro/disk/24-06-2023-anton-karina-xplmc5', { ru: 'Антон и Карина', en: 'Anton & Karina' }, 7),
+  album('david-aleksandra', 'https://lokos.pro/disk/23-03-2023-david-aleksandra', { ru: 'Давид и Александра', en: 'David & Aleksandra' }, 8),
+  album('valeriy-aleksandra', 'https://lokos.pro/disk/22-11-2022-valeriy-aleksandra', { ru: 'Валерий и Александра', en: 'Valeriy & Aleksandra' }, 9),
+  album('evgeniy-natalya', 'https://lokos.pro/disk/23-09-2022-evgeniy-natalya', { ru: 'Евгений и Наталья', en: 'Evgeniy & Natalya' }, 10),
+  album('pasha-yulya', 'https://lokos.pro/disk/31-05-2022-pasha-yulya', { ru: 'Паша и Юля', en: 'Pasha & Yulya' }, 11),
+  album('aleksey-mariya', 'https://lokos.pro/disk/05-03-2022-aleksey-i-mariya', { ru: 'Алексей и Мария', en: 'Aleksey & Mariya' }, 12),
 ];
 
 export const articleTypes: ArticleType[] = [

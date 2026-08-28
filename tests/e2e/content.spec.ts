@@ -720,6 +720,25 @@ test('с портфолио есть заметный переход к полн
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Полные свадьбы');
 });
 
+test('каждый альбом ведёт на свою галерею и с обложкой', async ({ page }) => {
+  await page.goto('/ru/private/albums');
+
+  const cards = page.locator('main ul li a');
+  expect(await cards.count()).toBeGreaterThan(5);
+
+  const links = await cards.evaluateAll((items) =>
+    items.map((item) => (item as HTMLAnchorElement).href),
+  );
+  // Две карточки на одну галерею — верный признак опечатки в данных.
+  expect(new Set(links).size).toBe(links.length);
+  for (const link of links) expect(link).toMatch(/^https:\/\/lokos\.pro\/disk\//);
+
+  // Обложка есть у каждого альбома. Проверяем разметку, а не загрузку: кадры
+  // ниже экрана грузятся лениво, и это правильно.
+  expect(await page.locator('main ul li img').count()).toBe(links.length);
+  await expect(page.locator('main ul li img').first()).toHaveJSProperty('complete', true);
+});
+
 test('альбом ведёт на внешнюю галерею и говорит об этом', async ({ page }) => {
   await page.goto('/ru/private/albums');
 
