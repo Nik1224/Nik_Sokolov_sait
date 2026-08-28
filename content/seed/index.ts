@@ -141,6 +141,68 @@ export const directions: DirectionDoc[] = [
     ],
     // Обложка направления: коллаж со съёмок, 19 с без звука, 2,4 МБ.
     // Кадр 1,85:1 шире экрана, поэтому показывается целиком по ширине.
+    // Калькулятор: ставки и правила со слов владельца.
+    // Свадьба — первые три часа по базовой ставке, дальше час дешевеет так,
+    // что десять часов фото стоят 110 000 вместо 120 000. Доля 19/24 — это
+    // ровно та точка: 12 000 × 19/24 = 9 500 за десятый час.
+    calculator: {
+      photoHourPrice: 12000,
+      videoHourPrice: 15000,
+      currency: 'RUB',
+      bundleDiscount: 0.1,
+      taper: { fromHour: 3, toHour: 10, floorFactor: 19 / 24 },
+      note: {
+        ru: 'Расчёт предварительный: он показывает порядок суммы. Точная смета — после короткого разговора о задаче.',
+        en: 'This is an estimate — it shows the order of magnitude. The exact quote follows a short conversation about the task.',
+      },
+      types: [
+        {
+          slug: 'wedding',
+          title: { ru: 'Свадебная', en: 'Wedding' },
+          minHours: 3,
+          maxHours: 12,
+          defaultHours: 8,
+          taper: true,
+          hint: {
+            ru: 'С четвёртого часа час стоит дешевле: десять часов фото — 110 000 ₽ вместо 120 000 ₽.',
+            en: 'From the fourth hour the rate drops: ten hours of photography cost 110,000 ₽ instead of 120,000 ₽.',
+          },
+        },
+        {
+          slug: 'portrait',
+          title: { ru: 'Частная', en: 'Private' },
+          minHours: 1,
+          maxHours: 5,
+          defaultHours: 1,
+          taper: false,
+          hint: {
+            ru: 'Часа хватает на один образ и одну локацию — столько же, сколько в портретном пакете.',
+            en: 'An hour covers one look and one location — the same as in the portrait package.',
+          },
+        },
+        {
+          slug: 'family',
+          title: { ru: 'Семейная', en: 'Family' },
+          minHours: 2,
+          maxHours: 5,
+          defaultHours: 2,
+          taper: false,
+          hint: {
+            ru: 'Минимум два часа: за меньшее время не получить качественный результат.',
+            en: 'Two hours minimum: less than that will not give a proper result.',
+          },
+        },
+        {
+          slug: 'love-story',
+          title: { ru: 'Love story', en: 'Love story' },
+          minHours: 1,
+          maxHours: 5,
+          defaultHours: 2,
+          taper: false,
+        },
+      ],
+    },
+
     hero: {
       _key: 'hero-private',
       type: 'video',

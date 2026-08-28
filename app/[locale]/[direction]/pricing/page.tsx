@@ -6,6 +6,7 @@
  */
 
 import type { Metadata } from 'next';
+import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock, PricingExtras } from '@/components/content/PricingBlock';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { locale, direction } = await resolveDirectionRoute(params, 'pricing');
   const dict = getDictionary(locale);
-  const entries = await getPricing(direction);
+  const [entries, doc] = await Promise.all([getPricing(direction), getDirection(direction)]);
 
   return (
     <div className="container-content py-16 lg:py-24">
@@ -54,6 +55,20 @@ export default async function Page({ params }: Props) {
           ? 'Сложные проекты считаются индивидуально: смета зависит от объёма съёмки, состава команды и сроков.'
           : 'Complex projects are quoted individually: the estimate depends on shooting volume, crew and timeline.'}
       </p>
+
+      {doc?.calculator ? (
+        <div className="mt-14 border-t border-line pt-10">
+          <h2 className="label m-0 text-accent">{dict.calculator.heading}</h2>
+          <div className="mt-8">
+            <PriceCalculator
+              config={doc.calculator}
+              locale={locale}
+              dict={dict}
+              contactHref={href({ locale, direction, section: 'contact' })}
+            />
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-14">
         {entries.length === 0 ? (

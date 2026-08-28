@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
+import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
 import { Testimonials } from '@/components/content/Testimonials';
@@ -236,12 +237,23 @@ export default async function DirectionHome({ params }: Props) {
           title={dict.nav.pricing}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section: 'pricing' }) }}
         >
-          <PricingBlock
-            entries={pricing.slice(0, 3)}
-            locale={locale}
-            dict={dict}
-            contactHref={href({ locale, direction, section: 'contact' })}
-          />
+          {/* Калькулятор объясняет, из чего складывается сумма. Пакеты с
+              полным составом лежат на отдельной странице стоимости. */}
+          {doc.calculator ? (
+            <PriceCalculator
+              config={doc.calculator}
+              locale={locale}
+              dict={dict}
+              contactHref={href({ locale, direction, section: 'contact' })}
+            />
+          ) : (
+            <PricingBlock
+              entries={pricing.slice(0, 3)}
+              locale={locale}
+              dict={dict}
+              contactHref={href({ locale, direction, section: 'contact' })}
+            />
+          )}
         </Section>
       ) : null}
 

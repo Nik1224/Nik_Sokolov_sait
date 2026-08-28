@@ -251,6 +251,36 @@ export type GlobalSettings = {
   };
 };
 
+/** Вариант съёмки в калькуляторе (ТЗ §5.8: правила расчёта). */
+export type ShootTypeOption = {
+  slug: string;
+  title: LocaleString;
+  /** Ниже этого времени съёмка не имеет смысла. */
+  minHours: number;
+  maxHours: number;
+  defaultHours: number;
+  /** Подсказка под ползунком: почему столько времени. */
+  hint?: LocaleString;
+  /** Свадебная тарификация: с четвёртого часа ставка снижается. */
+  taper: boolean;
+};
+
+/**
+ * Настройки калькулятора стоимости. Цифры живут в данных, а не в коде:
+ * менять ставку владелец должен без разработчика (§8).
+ */
+export type CalculatorConfig = {
+  photoHourPrice: number;
+  videoHourPrice: number;
+  currency: string;
+  /** Скидка за фото и видео вместе, доля от 0 до 1. */
+  bundleDiscount: number;
+  taper: { fromHour: number; toHour: number; floorFactor: number };
+  types: ShootTypeOption[];
+  /** Оговорка под расчётом: он предварительный. */
+  note?: LocaleString;
+};
+
 export type DirectionDoc = {
   _id: string;
   key: Direction;
@@ -262,6 +292,8 @@ export type DirectionDoc = {
   gatewayMedia?: MediaAsset;
   /** Что входит в работу всегда: короткие пункты для Home (§5.2). */
   highlights: { title: LocaleString; body?: LocaleString }[];
+  /** Калькулятор стоимости. Есть не у всех направлений. */
+  calculator?: CalculatorConfig;
   /** Порядок и состав пунктов меню; подписи берутся из словаря интерфейса. */
   navOrder?: string[];
   seo?: SeoFields;

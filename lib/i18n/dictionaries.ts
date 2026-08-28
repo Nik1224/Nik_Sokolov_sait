@@ -78,6 +78,22 @@ export type Dictionary = {
     next: string;
     imageOf: string;
   };
+  calculator: {
+    heading: string;
+    formats: string;
+    photo: string;
+    video: string;
+    shootType: string;
+    hours: string;
+    /** Формы множественного числа: функцию нельзя передать в клиентский компонент. */
+    hoursUnit: { one: string; few: string; many: string };
+    pickFormat: string;
+    bundleDiscount: string;
+    subtotal: string;
+    total: string;
+    perHourNow: string;
+    cta: string;
+  };
   pricing: {
     from: string;
     onRequest: string;
@@ -194,6 +210,21 @@ const ru: Dictionary = {
     next: 'Следующее',
     imageOf: 'из',
   },
+  calculator: {
+    heading: 'Посчитать стоимость',
+    formats: 'Что снимаем',
+    photo: 'Фото',
+    video: 'Видео',
+    shootType: 'Тип съёмки',
+    hours: 'Часов съёмки',
+    hoursUnit: { one: 'час', few: 'часа', many: 'часов' },
+    pickFormat: 'Выберите фото, видео или оба формата.',
+    bundleDiscount: 'Скидка за фото и видео вместе',
+    subtotal: 'Сумма',
+    total: 'Итого',
+    perHourNow: 'Последний час',
+    cta: 'Обсудить съёмку',
+  },
   pricing: {
     from: 'от',
     onRequest: 'по запросу',
@@ -308,6 +339,21 @@ const en: Dictionary = {
     previous: 'Previous',
     next: 'Next',
     imageOf: 'of',
+  },
+  calculator: {
+    heading: 'Estimate the cost',
+    formats: 'What we shoot',
+    photo: 'Photo',
+    video: 'Video',
+    shootType: 'Type of shoot',
+    hours: 'Hours of shooting',
+    hoursUnit: { one: 'hour', few: 'hours', many: 'hours' },
+    pickFormat: 'Choose photo, video, or both.',
+    bundleDiscount: 'Photo and video together',
+    subtotal: 'Subtotal',
+    total: 'Total',
+    perHourNow: 'Last hour',
+    cta: 'Discuss the shoot',
   },
   pricing: {
     from: 'from',
