@@ -43,13 +43,15 @@ export function PortfolioGallery({ sections, locale, dict }: Props) {
   return (
     <div>
       {available.length > 1 ? (
-        <fieldset className="m-0 mb-8 border-0 p-0">
+        <fieldset className="m-0 mb-10 border-0 p-0 lg:mb-12">
           <legend className="sr-only">{dict.media.sectionLegend}</legend>
-          <div className="flex flex-wrap gap-3">
+          {/* По центру и крупнее фильтра категорий: это главный выбор на
+              странице, а не уточнение к нему. */}
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
             {available.map((key) => (
               <label
                 key={key}
-                className={`label cursor-pointer border px-5 py-3 transition-colors ${
+                className={`label cursor-pointer border px-8 py-4 text-[0.8125rem] transition-colors ${
                   key === current
                     ? 'border-bone bg-bone text-ink'
                     : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
