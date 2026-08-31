@@ -589,6 +589,14 @@ export const weddingVideos: MediaAsset[] = [
     'Свадебный фильм',
     'Wedding film',
   ),
+  film(
+    '4b4b129a',
+    '4b4b129a-eb86-46d8-bc4a-66887adb2847',
+    // Кадр на 108-й секунде: вынос невесты под стеклянным куполом.
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
 ];
 
 export const weddingReels: MediaAsset[] = [
