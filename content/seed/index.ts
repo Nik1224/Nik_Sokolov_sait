@@ -23,7 +23,13 @@ import type {
   Testimonial,
   WorkFormat,
 } from '../types';
-import { familyGallery, portraitGallery, weddingGallery } from './portfolio-galleries';
+import {
+  familyGallery,
+  portraitGallery,
+  weddingGallery,
+  weddingReels,
+  weddingVideos,
+} from './portfolio-galleries';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
 
 const demo = { isDemo: true, status: 'published' } as const;
@@ -325,7 +331,7 @@ export const directions: DirectionDoc[] = [
 export const categories: Category[] = [
   // Категории с настоящим портфолио. fullSeries — там, где бывает полная
   // выдача одной съёмки: на такие категории ведёт переход к альбомам.
-  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, fullSeries: true },
+  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true },
   { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, isDemo: true },

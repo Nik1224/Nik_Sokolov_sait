@@ -534,3 +534,47 @@ export const familyGallery: MediaAsset[] = [
   frame('family', 'fe14f9fe1399', 1800, 1200, 184, 'Семейная съёмка', 'Family photography'),
   frame('family', 'fe76c56fb9bb', 1200, 1800, 185, 'Семейная съёмка', 'Family photography'),
 ];
+
+/**
+ * Ролики с Kinescope. Плеер грузится только по согласию, поэтому у каждого
+ * ролика обязателен постер — он лежит рядом с кадрами портфолио.
+ *
+ * Постеры пока те, что сгенерировал сам Kinescope: выбрать кадр за оператора
+ * нельзя. Свой постер описывается так же, только со своими размерами.
+ */
+function film(
+  id: string,
+  videoId: string,
+  poster: { width: number; height: number },
+  ru: string,
+  en: string,
+): MediaAsset {
+  const base = '/media/portfolio/wedding-video';
+  return {
+    _key: `film-${id}`,
+    type: 'video',
+    provider: 'kinescope',
+    videoId,
+    rights: 'owned',
+    alt: { ru, en },
+    poster: {
+      src: `${base}/${id}-1800.jpg`,
+      width: poster.width,
+      height: poster.height,
+      sources: WIDTHS.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
+    },
+  };
+}
+
+export const weddingVideos: MediaAsset[] = [
+  film(
+    '20be89e0',
+    '20be89e0-e1e2-4d40-a8ff-7648c7bdf7d0',
+    { width: 1800, height: 1012 },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
+];
+
+/** Вертикальные ролики. Ждут ссылок от владельца. */
+export const weddingReels: MediaAsset[] = [];

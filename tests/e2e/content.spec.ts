@@ -872,3 +872,26 @@ test('«Показать ещё» добавляет кадры вниз, не �
   const after = await positions();
   expect(after.slice(0, before.length)).toEqual(before);
 });
+
+test('портфолио свадеб делится на фото и видео', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=wedding');
+
+  const tabs = page.locator('main fieldset label');
+  await expect(tabs).toHaveText([/Фото/i, /Видео/i]);
+
+  // По умолчанию фотографии: за ними приходят чаще.
+  await expect(page.locator('main figure button')).not.toHaveCount(0);
+
+  await page.getByText('Видео', { exact: true }).click();
+  // Ролик не грузит плеер, пока человек не согласится: постер и кнопка.
+  const film = page.locator('main figure').first();
+  await expect(film.locator('img')).toBeVisible();
+  await expect(film.getByRole('button')).toBeVisible();
+});
+
+test('вкладок нет там, где снят только один вид материала', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=portrait');
+  // Переключать нечего — переключателя и не должно быть.
+  await expect(page.locator('main fieldset label')).toHaveCount(0);
+  await expect(page.locator('main figure button')).not.toHaveCount(0);
+});

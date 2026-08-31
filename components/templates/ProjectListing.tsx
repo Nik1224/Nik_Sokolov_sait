@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { ProjectCard } from '@/components/content/cards';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
-import { MediaGallery } from '@/components/media/MediaGallery';
+import { PortfolioGallery, type PortfolioSections } from '@/components/content/PortfolioGallery';
 import type { Category, MediaAsset, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
@@ -30,7 +30,7 @@ type Props = {
    * Портфолио выбранных категорий. Когда кадры есть, страница становится
    * галереей: человек пришёл смотреть работы, а не читать карточки проектов.
    */
-  gallery?: MediaAsset[];
+  gallery?: PortfolioSections;
   /**
    * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
@@ -53,7 +53,7 @@ export function ProjectListing({
   projects,
   categories,
   activeCategory,
-  gallery = [],
+  gallery,
   promo,
   showAll = true,
 }: Props) {
@@ -128,14 +128,8 @@ export function ProjectListing({
       ) : null}
 
       <div className="mt-12">
-        {gallery.length > 0 ? (
-          <MediaGallery
-            items={gallery}
-            locale={locale}
-            dict={dict}
-            layout="masonry"
-            initialCount={36}
-          />
+        {gallery ? (
+          <PortfolioGallery sections={gallery} locale={locale} dict={dict} />
         ) : projects.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (

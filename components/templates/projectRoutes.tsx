@@ -77,16 +77,24 @@ export async function ProjectListingRoute({
   const projects = await getProjects({ direction, categorySlug: activeCategory });
 
   // Без фильтра показываем портфолио всех категорий ветки подряд.
-  const gallery = categories
-    .filter((item) => !activeCategory || item.slug === activeCategory)
-    .flatMap((item) => item.gallery ?? []);
+  const shownCategories = categories.filter(
+    (item) => !activeCategory || item.slug === activeCategory,
+  );
+  const sections = {
+    photos: shownCategories.flatMap((item) => item.gallery ?? []),
+    videos: shownCategories.flatMap((item) => item.videos ?? []),
+    reels: shownCategories.flatMap((item) => item.reels ?? []),
+  };
+  const hasMedia = sections.photos.length + sections.videos.length + sections.reels.length > 0;
 
   /*
    * Ветка, которая публикует галереи, говорит кадрами, а не карточками работ.
    * Показать рядом с настоящей съёмкой карточку-заготовку хуже, чем честно
    * сказать, что в этой категории пока пусто.
    */
-  const publishesGalleries = categories.some((item) => (item.gallery?.length ?? 0) > 0);
+  const publishesGalleries = categories.some(
+    (item) => (item.gallery?.length ?? 0) + (item.videos?.length ?? 0) + (item.reels?.length ?? 0) > 0,
+  );
 
   /*
    * «Смотреть все» есть у списка работ и нет у галереи. Список работ так и
@@ -128,7 +136,7 @@ export async function ProjectListingRoute({
       projects={publishesGalleries ? [] : projects}
       categories={categories}
       activeCategory={activeCategory}
-      gallery={gallery}
+      gallery={hasMedia ? sections : undefined}
       showAll={showAll}
       promo={
         albums.length > 0

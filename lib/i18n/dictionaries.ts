@@ -78,6 +78,12 @@ export type Dictionary = {
     next: string;
     imageOf: string;
     showMore: string;
+    /** Вкладки портфолио. */
+    photos: string;
+    videos: string;
+    reels: string;
+    /** Подпись переключателя вкладок для озвучки. */
+    sectionLegend: string;
   };
   calculator: {
     heading: string;
@@ -233,6 +239,10 @@ const ru: Dictionary = {
     next: 'Следующее',
     imageOf: 'из',
     showMore: 'Показать ещё',
+    photos: 'Фото',
+    videos: 'Видео',
+    reels: 'Reels',
+    sectionLegend: 'Что посмотреть',
   },
   calculator: {
     heading: 'Посчитать стоимость',
@@ -375,6 +385,10 @@ const en: Dictionary = {
     next: 'Next',
     imageOf: 'of',
     showMore: 'Show more',
+    photos: 'Photos',
+    videos: 'Video',
+    reels: 'Reels',
+    sectionLegend: 'What to watch',
   },
   calculator: {
     heading: 'Estimate the cost',
