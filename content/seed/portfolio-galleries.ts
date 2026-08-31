@@ -613,6 +613,30 @@ export const weddingVideos: MediaAsset[] = [
     'Свадебный фильм',
     'Wedding film',
   ),
+  film(
+    '9ccf5225',
+    '9ccf5225-826b-4413-9bbf-19c7bb6c9a5b',
+    // Кадр на 56-й секунде: пара идёт по осенней аллее.
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
+  film(
+    'c277effe',
+    'c277effe-c1c3-4b1d-84fe-5e0784ced1cc',
+    // Кадр на 9-й секунде: пара в тёмных очках у стены из плюща.
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
+  film(
+    '11373097',
+    '11373097-9a4e-4ec5-938d-b954574ed32e',
+    // Кадр на 57-й секунде: поцелуй на катере, цветной дым.
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
 ];
 
 export const weddingReels: MediaAsset[] = [
@@ -620,6 +644,15 @@ export const weddingReels: MediaAsset[] = [
     '99766b86',
     '99766b86-46f1-49b3-bf83-944dd0536483',
     // Кадр на 32-й секунде: пара крупно, тёплый свет.
+    { width: 1012, height: 1800, sizes: [...WIDTHS] },
+    'Вертикальный ролик со свадьбы',
+    'Vertical wedding reel',
+  ),
+  film(
+    '6ef071e1',
+    '6ef071e1-b011-413a-af99-2345995f3bae',
+    // Кадр на 52-й секунде: невеста в тёмных очках на катере. Дым с той же
+    // съёмки уже стоит постером горизонтального ролика — здесь другой момент.
     { width: 1012, height: 1800, sizes: [...WIDTHS] },
     'Вертикальный ролик со свадьбы',
     'Vertical wedding reel',
