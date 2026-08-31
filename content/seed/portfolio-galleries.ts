@@ -545,11 +545,12 @@ export const familyGallery: MediaAsset[] = [
 function film(
   id: string,
   videoId: string,
-  poster: { width: number; height: number },
+  poster: { width: number; height: number; sizes: number[] },
   ru: string,
   en: string,
 ): MediaAsset {
   const base = '/media/portfolio/wedding-video';
+  const largest = poster.sizes[poster.sizes.length - 1];
   return {
     _key: `film-${id}`,
     type: 'video',
@@ -558,23 +559,40 @@ function film(
     rights: 'owned',
     alt: { ru, en },
     poster: {
-      src: `${base}/${id}-1800.jpg`,
+      src: `${base}/${id}-${largest}.jpg`,
       width: poster.width,
       height: poster.height,
-      sources: WIDTHS.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
+      sources: poster.sizes.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
     },
   };
 }
 
 export const weddingVideos: MediaAsset[] = [
+  // Первым идёт ролик с сильным постером: он и открывает вкладку.
+  film(
+    'eddab94d',
+    'eddab94d-839d-4ce4-b371-bf8c2fad99a9',
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
+    'Свадебный фильм',
+    'Wedding film',
+  ),
   film(
     '20be89e0',
     '20be89e0-e1e2-4d40-a8ff-7648c7bdf7d0',
-    { width: 1800, height: 1012 },
+    { width: 1800, height: 1012, sizes: [...WIDTHS] },
     'Свадебный фильм',
     'Wedding film',
   ),
 ];
 
-/** Вертикальные ролики. Ждут ссылок от владельца. */
-export const weddingReels: MediaAsset[] = [];
+export const weddingReels: MediaAsset[] = [
+  film(
+    '99766b86',
+    '99766b86-46f1-49b3-bf83-944dd0536483',
+    // Постер отдан сервисом всего в 607 пикселей шириной. Растягивать его до
+    // наших размеров незачем: это не добавит резкости, только веса.
+    { width: 607, height: 1080, sizes: [600] },
+    'Вертикальный ролик со свадьбы',
+    'Vertical wedding reel',
+  ),
+];

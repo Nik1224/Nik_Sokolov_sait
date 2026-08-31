@@ -873,11 +873,11 @@ test('«Показать ещё» добавляет кадры вниз, не �
   expect(after.slice(0, before.length)).toEqual(before);
 });
 
-test('портфолио свадеб делится на фото и видео', async ({ page }) => {
+test('портфолио свадеб делится на фото, видео и reels', async ({ page }) => {
   await page.goto('/ru/private/portfolio?category=wedding');
 
   const tabs = page.locator('main fieldset label');
-  await expect(tabs).toHaveText([/Фото/i, /Видео/i]);
+  await expect(tabs).toHaveText([/Фото/i, /Видео/i, /Reels/i]);
 
   // По умолчанию фотографии: за ними приходят чаще.
   await expect(page.locator('main figure button')).not.toHaveCount(0);
@@ -894,4 +894,16 @@ test('вкладок нет там, где снят только один вид
   // Переключать нечего — переключателя и не должно быть.
   await expect(page.locator('main fieldset label')).toHaveCount(0);
   await expect(page.locator('main figure button')).not.toHaveCount(0);
+});
+
+test('вертикальный ролик не растянут в горизонтальный @safari', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=wedding');
+  await page.getByText('Reels', { exact: true }).click();
+
+  const poster = page.locator('main figure img').first();
+  await expect(poster).toBeVisible();
+  // Постер вертикальный, и место под него резервируется в тех же пропорциях:
+  // иначе при загрузке страница дёргается.
+  const box = (await poster.boundingBox())!;
+  expect(box.height).toBeGreaterThan(box.width);
 });
