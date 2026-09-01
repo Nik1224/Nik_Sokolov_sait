@@ -792,13 +792,15 @@ test('из полных свадеб можно вернуться в портф
 test('переход к альбомам показывается только там, где полные серии бывают', async ({ page }) => {
   const promo = () => page.getByRole('link', { name: /Открыть альбомы/ });
 
-  for (const category of ['wedding', 'private-event']) {
-    await page.goto(`/ru/private/portfolio?category=${category}`);
-    await expect(promo(), category).toHaveCount(1);
-  }
+  await page.goto('/ru/private/portfolio?category=wedding');
+  await expect(promo()).toHaveCount(1);
 
-  // У портрета и семьи полной выдачи одной съёмки не бывает — предлагать нечего.
-  for (const category of ['portrait', 'family']) {
+  /*
+   * У портрета и семьи полной выдачи одной съёмки не бывает — предлагать
+   * нечего. У love story и частных событий она есть, но лежит тут же во
+   * вкладке: переход увёл бы человека на страницу с одними свадьбами.
+   */
+  for (const category of ['portrait', 'family', 'love-story', 'private-event']) {
     await page.goto(`/ru/private/portfolio?category=${category}`);
     await expect(promo(), category).toHaveCount(0);
   }
@@ -920,9 +922,21 @@ test('love story показывается альбомами, а не отдел
   await expect(album).toHaveAttribute('target', '_blank');
 });
 
+test('частные события показываются альбомами, а не отдельными кадрами', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=private-event');
+
+  await expect(page.locator('main figure')).toHaveCount(0);
+  await expect(page.locator('main fieldset label')).toHaveCount(0);
+
+  const album = page.getByRole('link', { name: /Выпускной вечер/ });
+  await expect(album).toHaveAttribute('href', /^https:\/\/lokos\.pro\/disk\//);
+  await expect(album).toHaveAttribute('target', '_blank');
+});
+
 test('альбом категории не дублируется на странице полных серий', async ({ page }) => {
   await page.goto('/ru/private/albums');
   // Иначе один и тот же альбом попадался бы человеку дважды.
   await expect(page.getByRole('link', { name: /Иван и Александра/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Выпускной вечер/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Марк и Екатерина/ })).toHaveCount(1);
 });

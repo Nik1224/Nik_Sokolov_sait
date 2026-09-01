@@ -334,8 +334,8 @@ export const categories: Category[] = [
   { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true },
   { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery },
-  { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, isDemo: true },
-  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, isDemo: true, fullSeries: true },
+  { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4 },
+  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5 },
   { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, directions: ['business', 'production'], order: 6, isDemo: true },
   { _id: 'cat.interview', slug: 'interview', title: { ru: 'Интервью и подкасты', en: 'Interviews and podcasts' }, directions: ['business'], order: 7, isDemo: true },
   { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, directions: ['business', 'production'], order: 8, isDemo: true },
@@ -425,6 +425,86 @@ export const albums: Album[] = [
     { ru: 'Стас и Елена', en: 'Stas & Elena' },
     3,
     'love-story',
+  ),
+
+  /*
+   * Частные события: юбилеи, дни рождения, выпускные. Показываются альбомами
+   * во вкладке категории — как love story, отдельных кадров там нет.
+   *
+   * Порядок — от свежей съёмки к старой; дата видна только в адресе галереи,
+   * на сайт она не выносится.
+   */
+  album(
+    'vypusknoy-vecher',
+    'https://lokos.pro/disk/01-07-2024-vypusknoy-vecher-3vql59',
+    { ru: 'Выпускной вечер', en: 'Graduation night' },
+    1,
+    'private-event',
+  ),
+  album(
+    'vypusk-2024',
+    'https://lokos.pro/disk/18-06-2024-vypusk-2024-1227hj',
+    { ru: 'Выпуск 2024', en: 'Class of 2024' },
+    2,
+    'private-event',
+  ),
+  album(
+    'mark-5-let',
+    'https://lokos.pro/disk/12-04-2024-mark-5-let-vz17r7',
+    { ru: 'Марк 5 лет', en: 'Mark turns 5' },
+    3,
+    'private-event',
+  ),
+  album(
+    'sofiya-14-let',
+    'https://lokos.pro/disk/02-02-2024-sofiya-14-let-807gq9',
+    { ru: 'София 14 лет', en: 'Sofiya turns 14' },
+    4,
+    'private-event',
+  ),
+  // Имена — из заголовка галереи «Артем и Мия»: в адресе стоит другое,
+  // но адрес владелец не правит, а заголовок правит.
+  album(
+    'artem-miya',
+    'https://lokos.pro/disk/18-11-2023-den-rozhdeniya-artem-i-liya-wxjk1r',
+    { ru: 'День рождения. Артем и Мия', en: 'Artem & Miya\'s birthday' },
+    5,
+    'private-event',
+  ),
+  album(
+    'georgiy-1-god',
+    'https://lokos.pro/disk/19-08-2023-georgiy-1-god-c7wwvd',
+    { ru: 'Георгий 1 год', en: 'Georgiy turns 1' },
+    6,
+    'private-event',
+  ),
+  album(
+    'pavel-35-let',
+    'https://lokos.pro/disk/22-04-2023-pavel-35-let',
+    { ru: 'Павел 35 лет', en: 'Pavel turns 35' },
+    7,
+    'private-event',
+  ),
+  album(
+    'vova-1-sentyabrya',
+    'https://lokos.pro/disk/01-09-2022-vova-1-sentyabrya',
+    { ru: 'Вова 1 сентября', en: 'Vova, first day of school' },
+    8,
+    'private-event',
+  ),
+  album(
+    'vypusknoy-9v',
+    'https://lokos.pro/disk/25-06-2022-vypusknoy-9-v',
+    { ru: 'Выпускной 9 «В»', en: 'Class 9V graduation' },
+    9,
+    'private-event',
+  ),
+  album(
+    'anastasiya-25-let',
+    'https://lokos.pro/disk/18-06-2022-anastasiya-25-let',
+    { ru: 'Анастасия 25 лет', en: 'Anastasiya turns 25' },
+    10,
+    'private-event',
   ),
 ];
 
