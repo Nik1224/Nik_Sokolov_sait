@@ -72,7 +72,7 @@ const CATEGORIES = groq`*[_type == "category"]{
 }`;
 
 const ALBUMS = groq`*[_type == "album"]{
-  _id, "slug": slug.current, direction, title, date, location, url, order, isDemo,
+  _id, "slug": slug.current, direction, categorySlug, title, date, location, url, order, isDemo,
   cover ${MEDIA}
 }`;
 

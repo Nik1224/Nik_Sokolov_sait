@@ -65,11 +65,21 @@ export const getCategory = cache(async (slug: string): Promise<Category | null> 
   return (await getCategories()).find((item) => item.slug === slug) ?? null;
 });
 
-/** Полные серии съёмок ветки: свежие сверху. */
-export const getAlbums = cache(async (direction: Direction): Promise<Album[]> => {
-  const items = (await (await getSource()).albums()).filter((item) => item.direction === direction);
-  return byOrder(items).sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
-});
+/**
+ * Полные серии съёмок ветки: свежие сверху.
+ *
+ * `categorySlug` разводит два места показа. Альбом с категорией живёт во
+ * вкладке этой категории, без категории — на странице полных серий. Иначе один
+ * и тот же альбом попадался бы человеку дважды.
+ */
+export const getAlbums = cache(
+  async (direction: Direction, categorySlug?: string): Promise<Album[]> => {
+    const items = (await (await getSource()).albums()).filter(
+      (item) => item.direction === direction && item.categorySlug === categorySlug,
+    );
+    return byOrder(items).sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+  },
+);
 
 export const getArticleTypes = cache(async (): Promise<ArticleType[]> => {
   return byOrder(await (await getSource()).articleTypes());

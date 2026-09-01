@@ -201,6 +201,12 @@ export const album = defineType({
       type: 'url',
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'categorySlug',
+      title: 'Категория портфолио',
+      description: 'Ключ категории. Заполнено — альбом показывается в её вкладке; пусто — только на странице полных серий.',
+      type: 'string',
+    }),
     defineField({ name: 'date', title: 'Дата съёмки', type: 'date' }),
     defineField({ name: 'location', title: 'Место', type: 'localeString' }),
     defineField({

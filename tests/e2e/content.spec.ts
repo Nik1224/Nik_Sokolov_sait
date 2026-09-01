@@ -907,3 +907,22 @@ test('вертикальный ролик не растянут в горизо�
   const box = (await poster.boundingBox())!;
   expect(box.height).toBeGreaterThan(box.width);
 });
+
+test('love story показывается альбомами, а не отдельными кадрами', async ({ page }) => {
+  await page.goto('/ru/private/portfolio?category=love-story');
+
+  // Ни сетки кадров, ни переключателя вкладок: смотреть нечего по отдельности.
+  await expect(page.locator('main figure')).toHaveCount(0);
+  await expect(page.locator('main fieldset label')).toHaveCount(0);
+
+  const album = page.getByRole('link', { name: /Иван и Александра/ });
+  await expect(album).toHaveAttribute('href', /^https:\/\/lokos\.pro\/disk\//);
+  await expect(album).toHaveAttribute('target', '_blank');
+});
+
+test('альбом категории не дублируется на странице полных серий', async ({ page }) => {
+  await page.goto('/ru/private/albums');
+  // Иначе один и тот же альбом попадался бы человеку дважды.
+  await expect(page.getByRole('link', { name: /Иван и Александра/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Марк и Екатерина/ })).toHaveCount(1);
+});

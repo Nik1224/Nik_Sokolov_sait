@@ -80,6 +80,12 @@ export async function ProjectListingRoute({
   const shownCategories = categories.filter(
     (item) => !activeCategory || item.slug === activeCategory,
   );
+  /*
+   * Альбомы категории. У love story отдельных кадров нет: человек нажимает на
+   * альбом и уходит в галерею целиком, а не листает выборку.
+   */
+  const categoryAlbums = activeCategory ? await getAlbums(direction, activeCategory) : [];
+
   const sections = {
     photos: shownCategories.flatMap((item) => item.gallery ?? []),
     videos: shownCategories.flatMap((item) => item.videos ?? []),
@@ -137,6 +143,7 @@ export async function ProjectListingRoute({
       categories={categories}
       activeCategory={activeCategory}
       gallery={hasMedia ? sections : undefined}
+      categoryAlbums={categoryAlbums}
       showAll={showAll}
       promo={
         albums.length > 0

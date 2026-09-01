@@ -352,11 +352,18 @@ export const categories: Category[] = [
  *
  * Даты и места не показываются — владелец попросил обойтись без них.
  */
-function album(slug: string, url: string, title: LocaleString, order: number): Album {
+function album(
+  slug: string,
+  url: string,
+  title: LocaleString,
+  order: number,
+  categorySlug?: string,
+): Album {
   return {
     _id: `alb.${slug}`,
     slug,
     direction: 'private',
+    categorySlug,
     title,
     url,
     order,
@@ -394,6 +401,15 @@ export const albums: Album[] = [
   album('evgeniy-natalya', 'https://lokos.pro/disk/23-09-2022-evgeniy-natalya', { ru: 'Евгений и Наталья', en: 'Evgeniy & Natalya' }, 10),
   album('pasha-yulya', 'https://lokos.pro/disk/31-05-2022-pasha-yulya', { ru: 'Паша и Юля', en: 'Pasha & Yulya' }, 11),
   album('aleksey-mariya', 'https://lokos.pro/disk/05-03-2022-aleksey-i-mariya', { ru: 'Алексей и Мария', en: 'Aleksey & Mariya' }, 12),
+  // Love story показывается альбомами прямо во вкладке категории: отдельных
+  // кадров там нет, человек сразу уходит в галерею целиком.
+  album(
+    'ivan-aleksandra',
+    'https://lokos.pro/disk/31-07-2024-ivan-aleksandra-t0dn17',
+    { ru: 'Иван и Александра', en: 'Ivan & Aleksandra' },
+    1,
+    'love-story',
+  ),
 ];
 
 export const articleTypes: ArticleType[] = [

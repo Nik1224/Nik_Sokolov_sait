@@ -9,8 +9,9 @@ import Link from 'next/link';
 import { ProjectCard } from '@/components/content/cards';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
+import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery, type PortfolioSections } from '@/components/content/PortfolioGallery';
-import type { Category, MediaAsset, Project } from '@/content/types';
+import type { Album, Category, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -31,6 +32,8 @@ type Props = {
    * галереей: человек пришёл смотреть работы, а не читать карточки проектов.
    */
   gallery?: PortfolioSections;
+  /** Альбомы этой категории: карточка ведёт прямо в онлайн-галерею. */
+  categoryAlbums?: Album[];
   /**
    * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
@@ -54,6 +57,7 @@ export function ProjectListing({
   categories,
   activeCategory,
   gallery,
+  categoryAlbums = [],
   promo,
   showAll = true,
 }: Props) {
@@ -128,9 +132,15 @@ export function ProjectListing({
       ) : null}
 
       <div className="mt-12">
+        {categoryAlbums.length > 0 ? (
+          <div className={gallery ? 'mb-16' : ''}>
+            <AlbumGrid albums={categoryAlbums} locale={locale} dict={dict} />
+          </div>
+        ) : null}
+
         {gallery ? (
           <PortfolioGallery sections={gallery} locale={locale} dict={dict} />
-        ) : projects.length === 0 ? (
+        ) : categoryAlbums.length > 0 ? null : projects.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
           <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
