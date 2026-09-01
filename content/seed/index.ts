@@ -410,6 +410,22 @@ export const albums: Album[] = [
     1,
     'love-story',
   ),
+  // «Love Story» из заголовка галереи в названии карточки не повторяем:
+  // вкладка и так называется так же.
+  album(
+    'kostya-olya',
+    'https://lokos.pro/disk/08-06-2023-kostya-olya-love-story-99gkjv',
+    { ru: 'Костя и Оля', en: 'Kostya & Olya' },
+    2,
+    'love-story',
+  ),
+  album(
+    'stas-elena',
+    'https://lokos.pro/disk/17-07-2022-stas-i-elena',
+    { ru: 'Стас и Елена', en: 'Stas & Elena' },
+    3,
+    'love-story',
+  ),
 ];
 
 export const articleTypes: ArticleType[] = [
