@@ -1334,7 +1334,8 @@ function aboutPage(
   body: { ru: string[]; en: string[] },
 ): Page {
   return {
-    ...demo,
+    // У PRIVATE это настоящий текст о владельце, а не заготовка.
+    ...(direction === 'private' ? { status: 'published' as const } : demo),
     _id: `page.about.${direction}`,
     slug: 'about',
     pageType: 'about',
@@ -1343,9 +1344,30 @@ function aboutPage(
     title: { ru: 'О себе', en: 'About' },
     lead,
     body: bodyRuEn(body.ru, body.en),
-    hero: decorative(`about-${direction}`, 'still', direction === 'private' ? 2 : direction === 'business' ? 4 : 6),
+    /*
+     * У PRIVATE в шапке портрет самого автора: страницу открывают, чтобы
+     * понять, кто приедет на съёмку. У остальных веток — кадр из портфолио.
+     */
+    hero: direction === 'private' ? ownerPortrait : decorative(`about-${direction}`, 'still', direction === 'business' ? 4 : 6),
   };
 }
+
+/** Портрет владельца: 2:3, три размера, EXIF снят при пережатии. */
+const ownerPortrait: MediaAsset = {
+  _key: 'about-nikita',
+  type: 'image',
+  rights: 'owned',
+  alt: { ru: 'Никита Соколов', en: 'Nikita Sokolov' },
+  image: {
+    src: '/media/about/nikita-1800.jpg',
+    width: 1800,
+    height: 2700,
+    sources: [600, 1200, 1800].map((width) => ({
+      width,
+      src: `/media/about/nikita-${width}.jpg`,
+    })),
+  },
+};
 
 export const pages: Page[] = [
   aboutPage(
@@ -1356,14 +1378,18 @@ export const pages: Page[] = [
     },
     {
       ru: [
-        'Занимаюсь фото и видеосъёмкой с четырнадцати лет. С детства держу в руках только профессиональную технику и делаю кадры, которые находят признание на фото- и видеоконкурсах.',
-        'Никогда не останавливаюсь в развитии и постоянно обучаю свою команду — поэтому с каждым годом мы становимся только лучше.',
+        'Фотограф во втором поколении: отец тоже снимает фото и видео, и камера была в доме раньше, чем я научился ею пользоваться. Сам снимаю с четырнадцати лет.',
+        'Учился у тех, у кого стоило: прошёл личное наставничество у Арсения Прусакова, курс Serial Killer 3.0 у Артура Погосяна, учился у Игоря Цаплина. Продолжаю учиться и учу свою команду — иначе в этой профессии быстро останавливаешься.',
+        'Снимаю фото и видео сам, а за спиной — продакшн Lokos.pro. Камерная съёмка остаётся между нами двумя; там, где нужна команда — второй фотограф, видеооператор, свет, — она собирается под задачу. Для вас это в любом случае один договор, один тайминг, один цвет и один срок сдачи.',
         'Частная съёмка начинается с разговора. До камеры мы обсуждаем, что для вас важно и чего не хочется совсем: это экономит время и снимает большую часть напряжения. Дальше остаётся ремесло — свет, ритм и умение не мешать.',
+        'Вам не нужно уметь позировать. Это моя работа — подсказать и показать, а ваша — просто прожить свой день.',
       ],
       en: [
-        'I have been shooting photo and video since I was fourteen. I have held nothing but professional gear since childhood, and my frames have been recognised at photo and video competitions.',
-        'I never stop learning and I keep teaching my team — which is why we only get better each year.',
+        'A second-generation photographer: my father shoots photo and video too, and there was a camera in the house before I knew how to use one. I have been shooting since I was fourteen.',
+        'I studied with people worth studying under: personal mentorship with Arseniy Prusakov, the Serial Killer 3.0 course with Artur Poghosyan, and studies with Igor Tsaplin. I keep learning and keep teaching my team — in this profession you stop moving otherwise.',
+        'I shoot both photo and video myself, with the Lokos.pro production company behind me. An intimate shoot stays between the two of us; where a crew is needed — a second photographer, a video operator, lighting — it is assembled for the job. Either way it is one contract, one schedule, one look and one delivery date for you.',
         'A private shoot starts with a conversation. Before the camera comes out we agree on what matters to you and what you would rather avoid entirely — that saves time and removes most of the tension. After that it is craft: light, rhythm and knowing when to stay out of the way.',
+        'You do not need to know how to pose. That is my job — to guide and to show. Yours is simply to live your day.',
       ],
     },
   ),

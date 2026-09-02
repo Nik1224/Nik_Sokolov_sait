@@ -75,13 +75,22 @@ export default async function Page({ params }: Props) {
       </div>
 
       {heroImage ? (
+        /*
+         * Горизонтальный кадр идёт во всю ширину, вертикальный — колонкой.
+         * Портрет во всю ширину контейнера вырастает почти на три тысячи
+         * пикселей в высоту: читать после него нечего, всё уезжает за экран.
+         */
         <div className="container-content mt-12">
           <Picture
             image={heroImage}
             alt={hero ? localizedString(hero.alt, locale) : ''}
-            sizes="(min-width: 1024px) 78rem, 100vw"
+            sizes={
+              heroImage.height > heroImage.width
+                ? '(min-width: 1024px) 28rem, 100vw'
+                : '(min-width: 1024px) 78rem, 100vw'
+            }
             priority
-            className="w-full"
+            className={heroImage.height > heroImage.width ? 'w-full max-w-md' : 'w-full'}
           />
         </div>
       ) : null}

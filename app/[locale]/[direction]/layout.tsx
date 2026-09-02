@@ -11,7 +11,15 @@ import { GlobalHeader } from '@/components/global/GlobalHeader';
 import { getDirection, getDirections, getGlobalSettings } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { navSections } from '@/lib/nav';
-import { DEFAULT_LOCALE, DIRECTIONS, LOCALES, isDirection, isLocale } from '@/lib/site';
+import { href } from '@/lib/routing';
+import {
+  DEFAULT_LOCALE,
+  DIRECTIONS,
+  LOCALES,
+  isDirection,
+  isLocale,
+  isSectionAvailable,
+} from '@/lib/site';
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) => DIRECTIONS.map((direction) => ({ locale, direction })));
@@ -56,7 +64,16 @@ export default async function DirectionLayout({
       <main id="main" className="flex-1">
         {children}
       </main>
-      <Footer locale={locale} settings={settings} dict={dict} />
+      <Footer
+        locale={locale}
+        settings={settings}
+        dict={dict}
+        partnersHref={
+          isSectionAvailable(direction, 'partners')
+            ? href({ locale, direction, section: 'partners' })
+            : undefined
+        }
+      />
     </div>
   );
 }

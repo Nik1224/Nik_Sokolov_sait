@@ -37,7 +37,7 @@ import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
 import { absoluteUrl, directionHomeHref, href } from '@/lib/routing';
 import { buildMetadata, professionalServiceJsonLd, seoText } from '@/lib/seo';
-import { siteUrl, type Direction } from '@/lib/site';
+import { isSectionAvailable, siteUrl, type Direction } from '@/lib/site';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
 
@@ -272,6 +272,31 @@ export default async function DirectionHome({ params }: Props) {
             />
           )}
         </Section>
+      ) : null}
+
+      {/*
+        Полоса для организаторов. Раздела нет в меню — он не для пары, — но
+        ссылки в подвале мало: организатор туда не долистает. Здесь он попадёт
+        на глаза тому, кто и так изучает страницу целиком, и не помешает
+        клиенту: это одна строка, а не блок.
+      */}
+      {isSectionAvailable(direction, 'partners') ? (
+        <section className="container-content">
+          <Link
+            href={href({ locale, direction, section: 'partners' })}
+            className="group flex flex-col gap-4 border-t border-line py-8 md:flex-row md:items-baseline md:justify-between md:gap-10"
+          >
+            <span className="max-w-xl">
+              <span className="text-h3 block text-bone transition-colors group-hover:text-accent">
+                {dict.partners.teaserTitle}
+              </span>
+              <span className="mt-2 block text-bone-dim">{dict.partners.teaserBody}</span>
+            </span>
+            <span className="label shrink-0 text-bone-faint transition-transform group-hover:translate-x-1">
+              {dict.partners.teaserAction} →
+            </span>
+          </Link>
+        </section>
       ) : null}
 
       {testimonials.length > 0 ? (

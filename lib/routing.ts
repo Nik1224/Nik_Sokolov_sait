@@ -41,6 +41,15 @@ export function directionHomeHref(locale: Locale, direction: Direction): string 
   return href({ locale, direction });
 }
 
+/**
+ * Визитка, которую организатор пересылает паре: короткий адрес без ветки и
+ * раздела. Живёт рядом с ветками, а не внутри — её открывает человек, который
+ * про сайт ещё ничего не знает, и лишние сегменты в такой ссылке только мешают.
+ */
+export function cardHref(locale: Locale): string {
+  return `/${locale}/nikita`;
+}
+
 export type ParsedRoute = {
   locale: Locale;
   direction: Direction | null;

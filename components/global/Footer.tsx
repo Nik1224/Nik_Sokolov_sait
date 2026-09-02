@@ -13,9 +13,14 @@ type Props = {
   dict: Dictionary;
   /** На START ссылка «Все направления» не нужна — пользователь уже здесь. */
   showStartLink?: boolean;
+  /**
+   * Ссылка на страницу для организаторов. В меню её нет: она не для пары.
+   * В подвале — чтобы организатор, попавший на сайт сам, всё-таки её нашёл.
+   */
+  partnersHref?: string;
 };
 
-export function Footer({ locale, settings, dict, showStartLink = true }: Props) {
+export function Footer({ locale, settings, dict, showStartLink = true, partnersHref }: Props) {
   const year = new Date().getFullYear();
 
   return (
@@ -82,6 +87,11 @@ export function Footer({ locale, settings, dict, showStartLink = true }: Props) 
           {showStartLink ? (
             <Link href={startHref(locale)} className="label text-bone-dim transition-colors hover:text-bone">
               {dict.common.allDirections}
+            </Link>
+          ) : null}
+          {partnersHref ? (
+            <Link href={partnersHref} className="label text-bone-dim transition-colors hover:text-bone">
+              {dict.nav.partners}
             </Link>
           ) : null}
           {settings.legalLinks.map((link) => (

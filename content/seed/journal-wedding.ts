@@ -702,4 +702,53 @@ export const weddingArticles: Article[] = [
     ),
     projectSlugs: [],
   },
+
+  {
+    ...published,
+    _id: 'art.wedding-planner',
+    slug: 'fotograf-i-organizator',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'process',
+    order: 15,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Фотограф и организатор: кто за что отвечает в день свадьбы',
+      en: 'Photographer and planner: who is responsible for what on the day',
+    },
+    excerpt: {
+      ru: 'Двое людей весь день ведут одну и ту же свадьбу с разных сторон. Где их задачи совпадают, где расходятся и из-за чего обычно возникает трение.',
+      en: 'Two people run the same wedding from different sides all day. Where their jobs overlap, where they diverge, and where the friction usually comes from.',
+    },
+    body: bodyRuEn(
+      [
+        'На свадьбе есть два человека, которые весь день держат её целиком в голове: организатор и фотограф. Остальные подрядчики приходят на свой отрезок и уходят. Эти двое проходят день от начала до конца — и делают это с разных сторон.',
+        'Организатор отвечает за то, чтобы всё случилось: вовремя, в нужном порядке, без провалов. Фотограф отвечает за то, чтобы это осталось. Задачи разные, но опираются на одно и то же — на расписание.',
+        'Поэтому первое, о чём мы договариваемся, — тайминг. Мне он нужен не для порядка, а чтобы понимать, где быть за пять минут до того, как что-то произойдёт. Свадьбы, где фотограф узнаёт о выносе торта одновременно с гостями, снимаются заметно хуже — не потому, что фотограф плохой, а потому, что он в этот момент в другом конце зала.',
+        'Второе — пустая площадка. Мне нужно десять-пятнадцать минут до того, как войдут гости: арка, зал, накрытые столы, детали. Организатору это нужно даже больше, чем мне: это единственные кадры, где видно его работу такой, какой она задумывалась. Через полчаса зал занят людьми, и снять его уже нельзя.',
+        'Где обычно возникает трение. Фотограф уводит пару на съёмку, а у организатора в это время по программе выход артистов. Или наоборот: программа идёт плотно, а закат — вот он, единственный за день, и через двадцать минут его не будет. Оба правы, и оба тянут в свою сторону.',
+        'Решается это одним разговором до свадьбы. Двадцать минут на закате закладываются в расписание заранее, а не выпрашиваются в моменте. Съёмка пары ставится туда, где в программе пауза. Если о таких вещах договориться заранее, в день свадьбы спорить будет не о чем.',
+        'Что ещё стоит знать паре. Хороший организатор экономит фотографу примерно час работы за день — тем, что подрядчики приезжают вовремя, гости знают, куда идти, а зал готов к обещанному времени. Этот час уходит не в отчёт, а в кадры.',
+        'И то, что редко проговаривают. Организатору тоже нужны фотографии — его портфолио состоит из них, и без снимков площадки его работы попросту не существует. Нормальная практика: фотограф отдаёт отдельную папку с декором и площадкой, организатор публикует её с указанием авторства. Если это обсудить до свадьбы, а не через месяц после, обе стороны экономят себе нервы.',
+      ],
+      [
+        'At a wedding there are two people who hold the whole day in their heads: the planner and the photographer. Every other supplier arrives for their slot and leaves. These two go from the beginning to the end — and they do it from different sides.',
+        'The planner is responsible for things happening: on time, in the right order, without gaps. The photographer is responsible for them remaining. Different jobs, resting on the same thing — the schedule.',
+        'So the first thing we agree on is the timing. I need it not for tidiness but to know where to be five minutes before something happens. Weddings where the photographer learns about the cake at the same moment as the guests photograph noticeably worse — not because the photographer is bad, but because at that moment they are at the other end of the room.',
+        'The second is the empty venue. I need ten or fifteen minutes before the guests come in: the arch, the hall, the laid tables, the details. The planner needs this even more than I do: those are the only frames showing their work as it was designed. Half an hour later the room is full of people and it can no longer be photographed.',
+        'Where friction usually appears. The photographer takes the couple away for their shoot while the planner has performers due on stage. Or the reverse: the programme is running tight and sunset is right there, the only one of the day, gone in twenty minutes. Both are right, and both pull their own way.',
+        'One conversation before the wedding settles it. Twenty minutes at sunset go into the schedule in advance rather than being negotiated in the moment. The couple shoot is placed where the programme has a gap. Agree these things beforehand and there is nothing to argue about on the day.',
+        'Something else worth knowing. A good planner saves the photographer roughly an hour of work across a day — by suppliers arriving on time, guests knowing where to go, and the room being ready when it was promised. That hour does not go into a report; it goes into frames.',
+        'And the part rarely said out loud. The planner needs photographs too — their portfolio is made of them, and without frames of the venue their work simply does not exist. The normal practice is straightforward: the photographer hands over a separate folder of the decor and the venue, and the planner publishes it with a credit. Agreeing that before the wedding rather than a month after saves both sides a lot of nerves.',
+      ],
+    ),
+    cover: cover(
+      '3872070d435f',
+      'Пара и гости на свадебной площадке',
+      'A couple and guests at a wedding venue',
+      { width: 1200, height: 1800 },
+    ),
+    projectSlugs: [],
+  },
 ];

@@ -26,6 +26,7 @@ export const SECTIONS = [
   'blog',
   'about',
   'contact',
+  'partners',
 ] as const;
 export type Section = (typeof SECTIONS)[number];
 
@@ -35,7 +36,7 @@ export type Section = (typeof SECTIONS)[number];
  * попал по неверному адресу, и подменять его намерение мы не должны.
  */
 export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
-  private: ['portfolio', 'albums', 'pricing', 'blog', 'about', 'contact'],
+  private: ['portfolio', 'albums', 'pricing', 'blog', 'about', 'contact', 'partners'],
   business: ['services', 'cases', 'pricing', 'blog', 'about', 'contact'],
   production: ['showreel', 'work', 'experience', 'blog', 'about', 'contact'],
 };
@@ -44,9 +45,13 @@ export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
  * Разделы, которые существуют, но в шапке не показываются: на них ведут из
  * содержимого страницы, а не из меню. Полные свадьбы — продолжение портфолио,
  * и человек попадает туда оттуда, а не выбирает в общем списке.
+ *
+ * Страница для организаторов — не для пары. Ей место по прямой ссылке из
+ * письма и неприметной строкой в подвале, а не в клиентском меню, где она
+ * только сбивает с толку.
  */
 export const SECTIONS_OUTSIDE_NAV: Record<Direction, readonly Section[]> = {
-  private: ['albums'],
+  private: ['albums', 'partners'],
   business: [],
   production: [],
 };

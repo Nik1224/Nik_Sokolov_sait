@@ -1277,3 +1277,64 @@ test('цена и вопросы размечены для поисковика'
   // В ответе должна стоять цифра, а не отсылка «смотрите на сайте».
   expect(faq.mainEntity[0].acceptedAnswer.text.replace(/[\u00a0\u202f]/g, ' ')).toContain('12 000');
 });
+
+test('страница для организаторов есть, но не в клиентском меню', async ({ page }) => {
+  await page.goto('/ru/private/partners');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Организаторам');
+
+  /*
+   * Главное обещание — срок, и он должен быть виден сразу, а не в глубине
+   * страницы: организатор приходит сюда именно за ним.
+   */
+  await expect(page.getByText(/через три дня после свадьбы/)).toBeVisible();
+
+  // В шапке её нет: страница не для пары. В подвале — есть, чтобы её нашли.
+  await expect(
+    page.getByRole('navigation', { name: 'Основная навигация' }).getByText('Организаторам'),
+  ).toHaveCount(0);
+  await expect(page.locator('footer').getByRole('link', { name: 'Организаторам' })).toHaveCount(1);
+
+  // У других веток такого раздела не существует — это 404, а не редирект.
+  expect((await page.goto('/ru/business/partners'))?.status()).toBe(404);
+});
+
+test('визитка открывается без меню и подвала и закрыта от поиска', async ({ page }) => {
+  await page.goto('/ru/nikita');
+
+  /*
+   * Страницу открывает человек, который про сайт ничего не знает: меню из
+   * шести разделов уводит его листать вместо того, чтобы прочитать одну
+   * страницу до конца.
+   */
+  await expect(page.locator('header')).toHaveCount(0);
+  await expect(page.locator('footer')).toHaveCount(0);
+
+  // Тему задаёт макет ветки, а сюда он не достаёт — проверяем, что не забыли.
+  await expect(page.locator('[data-theme="private"]')).toHaveCount(1);
+
+  // Портрет, кадры и способ связаться — ради них страницу и присылают.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Никита Соколов');
+  await expect(page.locator('main img[src*="/media/about/nikita"]')).toHaveCount(1);
+  /*
+   * Только свадьбы: страницу пересылают паре, выбирающей свадебного
+   * фотографа, и портрет с семейной съёмкой размывают ответ.
+   */
+  expect(await page.locator('main img[src*="/media/portfolio/wedding"]').count()).toBeGreaterThan(5);
+  await expect(page.locator('main img[src*="/media/portfolio/portrait/"]')).toHaveCount(0);
+  await expect(page.locator('main img[src*="/media/portfolio/family/"]')).toHaveCount(0);
+  // Полные серии — то, по чему видно ровность, а не отдельные удачные кадры.
+  expect(await page.locator('main a[href*="lokos.pro/disk"]').count()).toBeGreaterThan(5);
+  await expect(page.getByRole('button', { name: /Связаться/ })).toHaveCount(1);
+
+  /*
+   * Из поиска закрыта: страница дублирует сайт и без навигации проигрывает
+   * ему, зато конкурировала бы за те же запросы.
+   */
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  const sitemap = await (await page.request.get('/sitemap.xml')).text();
+  expect(sitemap).not.toContain('/nikita');
+
+  // Ссылку вставляют в переписку — превью должно быть с портретом.
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /nikita-\d+\.jpg/);
+});
