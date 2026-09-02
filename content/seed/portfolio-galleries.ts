@@ -551,6 +551,14 @@ function film(
 ): MediaAsset {
   const base = '/media/portfolio/wedding-video';
   const largest = poster.sizes[poster.sizes.length - 1];
+  /*
+   * В имени файла стоит длинная сторона, а srcset требует ширину. У
+   * горизонтального ролика это одно и то же, у вертикального — нет: файл
+   * `-1800` шириной 1012, и если объявить его как 1800w, браузер сочтёт
+   * постер вдвое крупнее, чем он есть, и возьмёт файл мельче нужного.
+   */
+  const longest = Math.max(poster.width, poster.height);
+  const widthOf = (size: number) => Math.round((size * poster.width) / longest);
   return {
     _key: `film-${id}`,
     type: 'video',
@@ -562,7 +570,10 @@ function film(
       src: `${base}/${id}-${largest}.jpg`,
       width: poster.width,
       height: poster.height,
-      sources: poster.sizes.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
+      sources: poster.sizes.map((size) => ({
+        width: widthOf(size),
+        src: `${base}/${id}-${size}.jpg`,
+      })),
     },
   };
 }
@@ -640,6 +651,30 @@ export const weddingVideos: MediaAsset[] = [
 ];
 
 export const weddingReels: MediaAsset[] = [
+  film(
+    'a802d6cb',
+    'a802d6cb-6cf3-40aa-8678-94998bb11746',
+    // Кадр на 11,5 секунде: пара у кремового кабриолета, оба смотрят в камеру.
+    /*
+     * Кадр 11:20, а не 9:16 — ролик снят уже, чем остальные, и рамка плеера
+     * берётся из этих чисел. Выше 1200 постера нет: у сервиса ролик есть
+     * только до 704×1280, и растягивать его до 1800 значит отдавать больше
+     * байтов без единой лишней детали.
+     */
+    { width: 660, height: 1200, sizes: [600, 1200] },
+    'Вертикальный ролик со свадьбы',
+    'Vertical wedding reel',
+  ),
+  film(
+    '3a315d96',
+    '3a315d96-d883-4ae8-b1c2-10b6c67ea9e3',
+    // Кадр на 9,5 секунде: невеста в платье-русалке под люстрой, в проёме
+    // дверей. Крупные планы из этого же ролика в постер не годятся: на
+    // превью они читаются как бьюти-съёмка, а не как свадьба.
+    { width: 1013, height: 1800, sizes: [...WIDTHS] },
+    'Вертикальный ролик со свадьбы',
+    'Vertical wedding reel',
+  ),
   film(
     '99766b86',
     '99766b86-46f1-49b3-bf83-944dd0536483',

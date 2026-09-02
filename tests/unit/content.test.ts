@@ -5,7 +5,10 @@
  * CMS, поэтому проверяют реальный путь данных, а не заглушки.
  */
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { weddingReels, weddingVideos } from '@/content/seed/portfolio-galleries';
 import {
   getArticle,
   getArticles,
@@ -343,5 +346,57 @@ describe('обещания сроков не расходятся между с�
     // Проверка существует, чтобы правило выше случайно не распространили
     // на цитаты — переписывать чужой отзыв нельзя.
     expect(items.every((item) => item.author.trim().length > 0)).toBe(true);
+  });
+});
+
+describe('постеры роликов: srcset обещает то, что лежит в файле', () => {
+  /**
+   * В имени файла постера стоит длинная сторона, а srcset требует ширину. У
+   * горизонтального ролика это одно и то же число, у вертикального — нет.
+   * Если перепутать, браузер сочтёт постер вдвое шире, чем он есть, и возьмёт
+   * файл мельче нужного: превью размоется, и заметить это по коду нельзя.
+   */
+  function jpegSize(file: string): { width: number; height: number } {
+    const buf = readFileSync(file);
+    let at = 2;
+    while (at < buf.length) {
+      if (buf[at] !== 0xff) throw new Error(`${file}: не JPEG`);
+      const marker = buf[at + 1];
+      // SOF0…SOF15, кроме DHT (c4), JPGA (c8) и DAC (cc) — у них другое тело.
+      if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+        return { height: buf.readUInt16BE(at + 5), width: buf.readUInt16BE(at + 7) };
+      }
+      at += 2 + buf.readUInt16BE(at + 2);
+    }
+    throw new Error(`${file}: не найден размер`);
+  }
+
+  it.each([
+    ['горизонтальные', weddingVideos],
+    ['вертикальные', weddingReels],
+  ])('%s: каждый размер объявлен своей настоящей шириной', (_name, items) => {
+    expect(items.length).toBeGreaterThan(0);
+    for (const item of items) {
+      if (item.type !== 'video') throw new Error(`${item._key}: не ролик`);
+      const poster = item.poster!;
+      expect(poster.sources?.length, `${item._key}: нет размеров`).toBeTruthy();
+      for (const source of poster.sources!) {
+        const real = jpegSize(join(process.cwd(), 'public', source.src));
+        /*
+         * Пиксель расхождения — это округление: файл пережат от исходных
+         * пропорций ролика, а число в srcset считается от уже округлённого
+         * постера. Ловим не его, а промах в разы, из-за которого браузер
+         * берёт не тот файл.
+         */
+        expect(
+          Math.abs(source.width - real.width),
+          `${source.src}: в srcset ${source.width}w, в файле ${real.width}px`,
+        ).toBeLessThanOrEqual(1);
+      }
+      // Крупнейший файл — тот, чьи размеры уходят в width/height картинки.
+      const largest = jpegSize(join(process.cwd(), 'public', poster.src));
+      expect(poster.width, `${item._key}: width постера`).toBe(largest.width);
+      expect(poster.height, `${item._key}: height постера`).toBe(largest.height);
+    }
   });
 });
