@@ -14,11 +14,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ContactButton } from '@/components/contact/ContactButton';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery } from '@/components/content/PortfolioGallery';
 import { Picture } from '@/components/media/Picture';
-import { getAlbums, getCategories, getDirection, getGlobalSettings } from '@/content/queries';
+import { getAlbums, getCategories, getDirection } from '@/content/queries';
 import type { ImageRef } from '@/content/types';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
@@ -69,11 +68,10 @@ export default async function Page({ params }: Props) {
 
   const dict = getDictionary(locale);
   const t = dict.card;
-  const [settings, doc, categories, albums] = await Promise.all([
-    getGlobalSettings(),
-    getDirection("private"),
-    getCategories("private"),
-    getAlbums("private"),
+  const [doc, categories, albums] = await Promise.all([
+    getDirection('private'),
+    getCategories('private'),
+    getAlbums('private'),
   ]);
 
   /*
@@ -181,13 +179,6 @@ export default async function Page({ params }: Props) {
         <section className="mt-20 max-w-2xl border-t border-line pt-6">
           <h2 className="text-h2 m-0 text-balance">{t.contactTitle}</h2>
           <p className="mt-6 text-bone-dim">{t.contactBody}</p>
-          <div className="mt-8">
-            <ContactButton
-              dict={dict}
-              contacts={settings.contacts}
-              variant="solid"
-            />
-          </div>
           {/*
           Единственный переход со страницы. Ведёт на сайт целиком — тому, кому
           мало одной страницы, есть куда пойти, а остальных ничто не уводит.

@@ -233,7 +233,7 @@ test('контакты видны в футере и кликабельны', as
 test('на странице контактов есть прямые контакты и география', async ({ page }) => {
   await page.goto('/ru/private/contact');
 
-  await expect(page.getByText('Москва / Санкт-Петербург').first()).toBeVisible();
+  await expect(page.getByText('Москва / Весь мир').first()).toBeVisible();
 
   // Каналы доступны и без окна: номер и ник можно просто скопировать.
   const direct = page.getByRole('link', { name: '+7 989 527 70 70' });
@@ -1325,7 +1325,13 @@ test('визитка открывается без меню и подвала и
   await expect(page.locator('main img[src*="/media/portfolio/family/"]')).toHaveCount(0);
   // Полные серии — то, по чему видно ровность, а не отдельные удачные кадры.
   expect(await page.locator('main a[href*="lokos.pro/disk"]').count()).toBeGreaterThan(5);
-  await expect(page.getByRole('button', { name: /Связаться/ })).toHaveCount(1);
+  /*
+   * Кнопки «Связаться» здесь нет намеренно: ссылку прислал организатор, и
+   * решение должно вернуться к нему, а не пойти в обход. Мы к тому же не
+   * знаем, выбрала ли уже пара фотографа.
+   */
+  await expect(page.getByRole('button', { name: /Связаться/ })).toHaveCount(0);
+  await expect(page.getByText(/скажите об этом вашему организатору/i)).toBeVisible();
 
   /*
    * Из поиска закрыта: страница дублирует сайт и без навигации проигрывает

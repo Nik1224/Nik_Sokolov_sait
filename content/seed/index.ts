@@ -40,7 +40,7 @@ const demo = { isDemo: true, status: 'published' } as const;
 export const globalSettings: GlobalSettings = {
   siteName: 'Nikita Sokolov',
   descriptor: { ru: 'Photo / Video / Visual Production', en: 'Photo / Video / Visual Production' },
-  location: { ru: 'Москва / Санкт-Петербург', en: 'Moscow / St. Petersburg' },
+  location: { ru: 'Москва / Весь мир', en: 'Moscow / Worldwide' },
 
   // Настоящий шоурил, подтверждён владельцем. Постер лежит локально: если
   // тянуть его с CDN Kinescope, браузер посетителя свяжется со сторонним

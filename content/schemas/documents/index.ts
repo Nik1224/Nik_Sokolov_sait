@@ -76,7 +76,7 @@ export const globalSettings = defineType({
     defineField({
       name: 'location',
       title: 'География',
-      description: 'Например: Москва / Санкт-Петербург.',
+      description: 'Например: Москва / Весь мир.',
       type: 'localeString',
     }),
     defineField({ name: 'contacts', title: 'Контакты', type: 'array', of: [{ type: 'contactChannel' }] }),

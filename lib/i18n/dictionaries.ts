@@ -443,7 +443,7 @@ const ru: Dictionary = {
   card: {
     title: 'Никита Соколов',
     metaTitle: 'Никита Соколов — свадебный и семейный фотограф',
-    lead: 'Свадебный фотограф и видеограф, Москва и Санкт-Петербург. Эту страницу вам прислали, чтобы вы могли познакомиться со мной до разговора.',
+    lead: 'Свадебный фотограф и видеограф. База — Москва, снимаю по всему миру. Эту страницу вам прислали, чтобы вы могли познакомиться со мной до разговора.',
     portraitAlt: 'Никита Соколов',
     about: [
       'Фотограф во втором поколении: отец тоже снимает фото и видео, и камера была в доме раньше, чем я научился ею пользоваться. Сам снимаю с четырнадцати лет.',
@@ -458,7 +458,8 @@ const ru: Dictionary = {
     albumsBody:
       'Отдельные кадры показывают уровень, целая свадьба — ровность: как снято утро, как справился с тёмным залом, не развалился ли цвет к вечеру. Здесь съёмки от начала до конца, без выборки.',
     contactTitle: 'Если откликнулось',
-    contactBody: 'Напишите в удобный мессенджер — отвечу лично. Сначала обсудим дату, формат и что для вас важно, а смету соберу после разговора.',
+    contactBody:
+      'Скажите об этом вашему организатору — он всё устроит: сверит дату, соберёт смету и назначит разговор. Никуда писать и ничего решать прямо сейчас не нужно.',
     siteLink: 'Посмотреть сайт целиком',
   },
   content: {
@@ -691,7 +692,7 @@ const en: Dictionary = {
   card: {
     title: 'Nikita Sokolov',
     metaTitle: 'Nikita Sokolov — wedding and family photographer',
-    lead: 'Wedding photographer and videographer, Moscow and St. Petersburg. This page was sent to you so you can get to know me before we talk.',
+    lead: 'Wedding photographer and videographer. Based in Moscow, shooting worldwide. This page was sent to you so you can get to know me before we talk.',
     portraitAlt: 'Nikita Sokolov',
     about: [
       'A second-generation photographer: my father shoots photo and video too, and there was a camera in the house before I knew how to use one. I have been shooting since I was fourteen.',
@@ -706,7 +707,8 @@ const en: Dictionary = {
     albumsBody:
       'Single frames show the level; a whole wedding shows consistency — how the morning was handled, how a dark hall was managed, whether the colour holds together by the evening. These are shoots from start to finish, with nothing left out.',
     contactTitle: 'If this resonates',
-    contactBody: 'Write to whichever messenger suits you and I will answer personally. First we agree the date, the format and what matters to you; the quote comes after that conversation.',
+    contactBody:
+      'Tell your planner — they will take it from there: check the date, put together a quote and set up a conversation. There is nothing to write or decide right now.',
     siteLink: 'See the whole site',
   },
   content: {

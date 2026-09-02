@@ -114,7 +114,11 @@ export function professionalServiceJsonLd(input: {
   name: string;
   description: string;
   url: string;
-  /** Города, где ведётся съёмка. */
+  /**
+   * География. Базовый город идёт как `City` — это то, что помогает в местной
+   * выдаче. Всё остальное — `Place`: «весь мир» городом не является, и
+   * объявлять его им значит врать разметкой.
+   */
   areas?: string[];
   telephone?: string;
   /** Профили, по которым ассистент связывает сайт с внешними источниками. */
@@ -134,7 +138,14 @@ export function professionalServiceJsonLd(input: {
     url,
     ...(image ? { image } : {}),
     ...(telephone ? { telephone } : {}),
-    ...(areas?.length ? { areaServed: areas.map((n) => ({ '@type': 'City', name: n })) } : {}),
+    ...(areas?.length
+      ? {
+          areaServed: areas.map((name, index) => ({
+            '@type': index === 0 ? 'City' : 'Place',
+            name,
+          })),
+        }
+      : {}),
     ...(sameAs?.length ? { sameAs } : {}),
     ...(founder ? { founder: { '@type': 'Person', name: founder, jobTitle: 'Photographer' } } : {}),
     ...(priceFrom

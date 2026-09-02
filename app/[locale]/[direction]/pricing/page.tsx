@@ -161,7 +161,7 @@ export default async function Page({ params }: Props) {
                   },
                   {
                     question: 'В каких городах вы снимаете?',
-                    answer: 'Москва и Санкт-Петербург, выезд в другие города обсуждается отдельно.',
+                    answer: 'База — Москва, снимаю по всему миру. Выезд и связанные с ним расходы обсуждаются отдельно.',
                   },
                 ]
               : [
@@ -183,7 +183,7 @@ export default async function Page({ params }: Props) {
                   },
                   {
                     question: 'Which cities do you work in?',
-                    answer: 'Moscow and St. Petersburg; travel to other cities is discussed separately.',
+                    answer: 'Based in Moscow, shooting worldwide. Travel and the costs that come with it are agreed separately.',
                   },
                 ],
           )}
