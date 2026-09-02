@@ -130,8 +130,8 @@ export default async function Page({ params }: Props) {
       <h1 className="text-h1 m-0 max-w-3xl text-balance">{dict.nav.pricing}</h1>
       <p className="mt-6 max-w-2xl text-lead text-bone-dim">
         {locale === 'ru'
-          ? 'Сложные проекты считаются индивидуально: смета зависит от объёма съёмки, состава команды и сроков.'
-          : 'Complex projects are quoted individually: the estimate depends on shooting volume, crew and timeline.'}
+          ? 'Все проекты считаются индивидуально: смета зависит от объёма съёмки, состава команды и сроков.'
+          : 'Every project is quoted individually: the estimate depends on shooting volume, crew and timeline.'}
       </p>
 
       {doc?.calculator ? (
