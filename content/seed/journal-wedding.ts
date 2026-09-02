@@ -649,4 +649,53 @@ export const weddingArticles: Article[] = [
     cover: cover('1205ef22e0bf', 'Пара на съёмке', 'A couple during a shoot', { width: 1200, height: 1800 }),
     projectSlugs: [],
   },
+
+  {
+    ...published,
+    _id: 'art.wedding-phones',
+    slug: 'gosti-s-telefonami-na-tseremonii',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 14,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Гости с телефонами на церемонии: что с этим делать',
+      en: 'Guests with phones at the ceremony: what to do about it',
+    },
+    excerpt: {
+      ru: 'Десять поднятых рук в проходе — и кадр выхода невесты испорчен. Как попросить убрать телефоны, чтобы никого не обидеть.',
+      en: 'Ten raised arms in the aisle and the shot of the bride’s entrance is gone. How to ask people to put phones away without offending anyone.',
+    },
+    body: bodyRuEn(
+      [
+        'Момент, когда невеста идёт к арке, снимается один раз. И именно в этот момент половина гостей встаёт с мест и поднимает телефоны. С их стороны это любовь и желание сохранить момент. Со стороны кадра — это стена из рук, чехлов и светящихся экранов между камерой и вами.',
+        'Проблема не в том, что телефоны портят красоту. Проблема в геометрии: чтобы снять проход, фотограф стоит в конце прохода, а гости в первых рядах наклоняются в этот же проход. Отойти некуда — по бокам стулья. В результате на кадре выхода вместо лиц гостей видны затылки и вытянутые руки.',
+        'Второе, что мешает, — свет. Экраны и вспышки телефонов дают холодные пятна в тёплом кадре, а на съёмке в помещении чужая вспышка может сбить экспозицию именно в секунду, когда происходит главное.',
+        'Решение простое и работает почти всегда: попросить. Не запретить, а объяснить — за минуту до начала, голосом ведущего или церемониймейстера. Формулировка, которая не обижает: «Друзья, уберите, пожалуйста, телефоны на время церемонии — просто побудьте здесь с нами. Все фотографии будут, и мы ими обязательно поделимся».',
+        'Ключ в последней фразе. Люди достают телефоны не назло, а потому что боятся, что у них не останется ничего на память. Обещание прислать готовые кадры снимает эту тревогу лучше любого запрета.',
+        'Что ещё помогает. Табличка у входа в зону церемонии с той же просьбой — её читают, пока рассаживаются. Просьба, повторённая в приглашении, — тогда это не сюрприз. И договорённость с ведущим, что после церемонии будет отдельная минута, когда снимать можно всем: люди гораздо спокойнее убирают телефоны, когда знают, что момент им дадут.',
+        'Отдельно про фразу «unplugged wedding». Так этот формат называют в англоязычных статьях, и иногда его переносят в приглашения дословно. Не стоит: половина гостей не поймёт, о чём речь, а вторая решит, что от них чего-то требуют. По-русски работает обычная человеческая просьба.',
+        'И честная оговорка. Совсем без телефонов не бывает, и это нормально. Задача не в том, чтобы их не было вовсе, а в том, чтобы на десять минут церемонии проход остался свободным. Дальше, на поздравлениях и банкете, пусть снимают сколько угодно — там это уже никому не мешает.',
+      ],
+      [
+        'The moment the bride walks towards the arch happens once. And that is exactly when half the guests stand up and raise their phones. From their side it is love and a wish to keep the moment. From the frame’s side it is a wall of arms, cases and glowing screens between the camera and you.',
+        'The problem is not that phones spoil the beauty. It is geometry: to shoot the walk, the photographer stands at the end of the aisle, and the guests in the front rows lean into that same aisle. There is nowhere to step aside — there are chairs on both sides. So instead of faces, the entrance frame shows the backs of heads and outstretched arms.',
+        'The second issue is light. Phone screens and flashes throw cold patches into a warm frame, and indoors somebody else’s flash can knock out the exposure in the exact second the important thing happens.',
+        'The fix is simple and almost always works: ask. Not forbid — explain, a minute before the start, through whoever is conducting the ceremony. A wording that offends nobody: "Everyone, please put your phones away for the ceremony — just be here with us. There will be photographs, and we will share them."',
+        'The key is that last sentence. People reach for phones not out of spite but because they are afraid of being left with nothing. A promise to send the finished frames removes that worry better than any prohibition.',
+        'What else helps. A small sign at the entrance to the ceremony area with the same request — people read it while being seated. The same request repeated in the invitation, so it is not a surprise on the day. And an agreement with whoever is hosting that there will be a dedicated minute after the ceremony when everyone may photograph: people put phones away far more willingly when they know the moment will be given to them.',
+        'A note on the phrase "unplugged wedding". That is what English-language articles call this, and it sometimes gets copied into invitations word for word. Do not: half the guests will not know what it means and the other half will feel something is being demanded of them. In Russian, an ordinary human request works.',
+        'And an honest caveat. There is no such thing as no phones at all, and that is fine. The aim is not to eliminate them but to keep the aisle clear for the ten minutes of the ceremony. Afterwards, during the congratulations and dinner, let people shoot as much as they like — by then it bothers nobody.',
+      ],
+    ),
+    cover: cover(
+      '25267d78fc9c',
+      'Церемония у арки на берегу',
+      'A ceremony at the arch by the water',
+      { width: 1200, height: 1800 },
+    ),
+    projectSlugs: [],
+  },
 ];

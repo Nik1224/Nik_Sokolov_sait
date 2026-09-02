@@ -1223,3 +1223,57 @@ test('на сенсорном экране кадр стоит в плитке �
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await expect(video).toHaveJSProperty('paused', true);
 });
+
+test('сайт открыт краулерам ассистентов и отдаёт им карту в llms.txt', async ({ page }) => {
+  /*
+   * Ассистент почти никогда не читает сайт в момент вопроса: он отвечает из
+   * поисковой выдачи и из страниц, которые оттуда открывает. Поэтому проверяем
+   * две вещи — что его краулер пущен и что факты лежат там, где их можно взять
+   * одной строкой.
+   */
+  const robots = await (await page.request.get('/robots.txt')).text();
+  for (const agent of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'YandexBot', 'Bingbot']) {
+    expect(robots, agent).toContain(agent);
+  }
+  // Studio закрыт от всех, включая их.
+  expect(robots).toContain('Disallow: /studio');
+
+  const llms = await page.request.get('/llms.txt');
+  expect(llms.headers()['content-type']).toContain('text/plain');
+  /*
+   * Пробелы приводим к обычным: `toLocaleString` разделяет разряды
+   * неразрывным пробелом, и сравнение с обычным молча не сходится.
+   */
+  const text = (await llms.text()).replace(/[\u00a0\u202f]/g, ' ');
+  // Ставка берётся из калькулятора, а не вписана руками.
+  expect(text).toContain('12 000 ₽');
+  expect(text).toContain('Москва');
+  expect(text).toMatch(/Сколько часов нужен фотограф/);
+});
+
+test('цена и вопросы размечены для поисковика', async ({ page }) => {
+  const ld = async (type: string, path: string) => {
+    await page.goto(path);
+    return page.evaluate(
+      (t) =>
+        [...document.querySelectorAll('script[type="application/ld+json"]')]
+          .map((el) => JSON.parse(el.textContent!))
+          .find((d) => d['@type'] === t),
+      type,
+    );
+  };
+
+  const service = await ld('ProfessionalService', '/ru/private');
+  expect(service.telephone, 'телефон').toBeTruthy();
+  expect(service.areaServed.map((a: { name: string }) => a.name)).toContain('Москва');
+  expect(service.sameAs.length, 'профили для связки с внешними источниками').toBeGreaterThan(0);
+  // Ставка в разметке обязана совпадать с той, что названа на странице.
+  expect(service.makesOffer.priceSpecification.price).toBe(12000);
+
+  const faq = await ld('FAQPage', '/ru/private/pricing');
+  const questions = faq.mainEntity.map((q: { name: string }) => q.name);
+  expect(questions).toContain('Сколько стоит свадебный фотограф в Москве?');
+  expect(questions.length).toBeGreaterThanOrEqual(5);
+  // В ответе должна стоять цифра, а не отсылка «смотрите на сайте».
+  expect(faq.mainEntity[0].acceptedAnswer.text.replace(/[\u00a0\u202f]/g, ' ')).toContain('12 000');
+});

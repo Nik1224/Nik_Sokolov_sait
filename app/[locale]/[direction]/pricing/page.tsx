@@ -13,14 +13,14 @@ import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingExtras } from '@/components/content/PricingBlock';
 import { PricingPackages } from '@/components/content/PricingPackages';
 import { EmptyState } from '@/components/content/Section';
-import { Breadcrumbs } from '@/components/global/misc';
+import { Breadcrumbs, JsonLd } from '@/components/global/misc';
 import { getDirection, getGlobalSettings, getPricing } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
 import { href } from '@/lib/routing';
 import { moneyFormat } from '@/lib/pricing/money';
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata, faqJsonLd } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
 
@@ -130,6 +130,65 @@ export default async function Page({ params }: Props) {
           ? 'Все проекты считаются индивидуально: смета зависит от объёма съёмки, состава команды и сроков.'
           : 'Every project is quoted individually: the estimate depends on shooting volume, crew and timeline.'}
       </p>
+
+      {/*
+        Вопрос-ответ для поисковой выдачи. Показывать его на странице незачем —
+        ответы и так лежат в ставках, пакетах и калькуляторе ниже. Здесь он
+        нужен затем, чтобы поисковик и ассистент могли процитировать цифру, а
+        не пересказывать своими словами. Формулировки — те, которыми
+        спрашивают вслух.
+      */}
+      {doc?.calculator ? (
+        <JsonLd
+          data={faqJsonLd(
+            locale === 'ru'
+              ? [
+                  {
+                    question: 'Сколько стоит свадебный фотограф в Москве?',
+                    answer: `Час фотосъёмки — ${doc.calculator.photoHourPrice.toLocaleString('ru-RU')} ₽, час видео — ${doc.calculator.videoHourPrice.toLocaleString('ru-RU')} ₽. На свадьбе первые три часа идут по базовой ставке, дальше час дешевеет: десять часов фотосъёмки стоят 110 000 ₽. За фото и видео вместе действует скидка 10%.`,
+                  },
+                  {
+                    question: 'Сколько часов нужен фотограф на свадьбу?',
+                    answer: 'Чаще всего восемь часов: в них помещается конец сборов, первая встреча, съёмка пары, церемония, поздравления и начало банкета. Шести хватает только для небольшой свадьбы на одной площадке, десять берут, когда свадьба за городом или гостей много.',
+                  },
+                  {
+                    question: 'Когда будут готовы фотографии?',
+                    answer: 'Анонс до 50 обработанных кадров приходит в течение трёх дней после съёмки. Полная серия — позже, все фотографии с цветокоррекцией и лёгкой ретушью, в личной онлайн-галерее по ссылке.',
+                  },
+                  {
+                    question: 'Что входит в стоимость съёмки?',
+                    answer: 'Съёмочный день, обработка всех отобранных кадров, анонс в течение трёх дней, личная онлайн-галерея и договор. Отдельно за обработку платить не нужно.',
+                  },
+                  {
+                    question: 'В каких городах вы снимаете?',
+                    answer: 'Москва и Санкт-Петербург, выезд в другие города обсуждается отдельно.',
+                  },
+                ]
+              : [
+                  {
+                    question: 'How much does a wedding photographer cost in Moscow?',
+                    answer: `An hour of photography is ${doc.calculator.photoHourPrice.toLocaleString('en-GB')} RUB and an hour of video is ${doc.calculator.videoHourPrice.toLocaleString('en-GB')} RUB. At a wedding the first three hours go at the base rate and the hourly rate falls after that: ten hours of photography cost 110,000 RUB. Booking photo and video together takes 10% off.`,
+                  },
+                  {
+                    question: 'How many hours of wedding photography do I need?',
+                    answer: 'Eight hours most often: that covers the end of the morning, the first look, the couple shoot, the ceremony, the congratulations and the start of dinner. Six is enough only for a small wedding on one site; ten is taken when the wedding is out of town or there are many guests.',
+                  },
+                  {
+                    question: 'When will the photographs be ready?',
+                    answer: 'A preview of up to 50 finished frames arrives within three days of the shoot. The full series follows, every photograph colour corrected and lightly retouched, in a personal online gallery behind a link.',
+                  },
+                  {
+                    question: 'What is included in the price?',
+                    answer: 'The shooting day, processing of every frame kept, a preview within three days, a personal online gallery and a written agreement. Editing is not charged separately.',
+                  },
+                  {
+                    question: 'Which cities do you work in?',
+                    answer: 'Moscow and St. Petersburg; travel to other cities is discussed separately.',
+                  },
+                ],
+          )}
+        />
+      ) : null}
 
       {doc?.calculator ? (
         <HourRates config={doc.calculator} locale={locale} dict={dict} />

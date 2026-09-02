@@ -116,12 +116,27 @@ export default async function DirectionHome({ params }: Props) {
 
   return (
     <>
+      {/*
+        Карточка услуги. Телефон, города и профили берутся из настроек сайта,
+        ставка — из калькулятора: дублировать их в коде нельзя, иначе разметка
+        начнёт обещать не то, что написано на страницах.
+      */}
       <JsonLd
-        data={professionalServiceJsonLd(
-          `${settings.siteName} — ${dict.directions[direction]}`,
-          localizedString(doc.lead, locale),
-          absoluteUrl(directionHomeHref(locale, direction), siteUrl()),
-        )}
+        data={professionalServiceJsonLd({
+          name: `${settings.siteName} — ${dict.directions[direction]}`,
+          description: localizedString(doc.lead, locale),
+          url: absoluteUrl(directionHomeHref(locale, direction), siteUrl()),
+          areas: localizedString(settings.location, locale)
+            .split('/')
+            .map((part) => part.trim())
+            .filter(Boolean),
+          telephone: settings.contacts.find((item) => item.kind === 'phone')?.value,
+          sameAs: settings.socials?.map((item) => item.href),
+          founder: 'Никита Соколов',
+          priceFrom: doc.calculator
+            ? { value: doc.calculator.photoHourPrice, currency: doc.calculator.currency }
+            : undefined,
+        })}
       />
 
       {/* Видеообложка показывается целиком, поэтому у неё своя раскладка. */}

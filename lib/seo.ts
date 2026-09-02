@@ -99,13 +99,75 @@ export function personJsonLd(name: string, description: string, url: string): Js
   };
 }
 
-export function professionalServiceJsonLd(name: string, description: string, url: string): JsonLd {
+/**
+ * Карточка услуги для поисковиков и ассистентов.
+ *
+ * Ассистент почти никогда не читает сайт в момент вопроса: он отвечает из
+ * поисковой выдачи и из страниц, которые оттуда открывает. Поэтому важны не
+ * красивые формулировки, а поля, из которых собирается ответ: где работаем,
+ * по какому телефону, почём час, где ещё нас найти.
+ *
+ * Пустые поля не подставляются: карточка с `telephone: undefined` хуже, чем
+ * карточка без телефона.
+ */
+export function professionalServiceJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  /** Города, где ведётся съёмка. */
+  areas?: string[];
+  telephone?: string;
+  /** Профили, по которым ассистент связывает сайт с внешними источниками. */
+  sameAs?: string[];
+  image?: string;
+  /** Нижняя граница часа — из настроек калькулятора, а не из кода. */
+  priceFrom?: { value: number; currency: string };
+  founder?: string;
+}): JsonLd {
+  const { name, description, url, areas, telephone, sameAs, image, priceFrom, founder } = input;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     name,
     description,
     url,
+    ...(image ? { image } : {}),
+    ...(telephone ? { telephone } : {}),
+    ...(areas?.length ? { areaServed: areas.map((n) => ({ '@type': 'City', name: n })) } : {}),
+    ...(sameAs?.length ? { sameAs } : {}),
+    ...(founder ? { founder: { '@type': 'Person', name: founder, jobTitle: 'Photographer' } } : {}),
+    ...(priceFrom
+      ? {
+          makesOffer: {
+            '@type': 'Offer',
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              price: priceFrom.value,
+              priceCurrency: priceFrom.currency,
+              unitCode: 'HUR',
+            },
+          },
+        }
+      : {}),
+  };
+}
+
+/**
+ * Вопрос-ответ для поисковой выдачи.
+ *
+ * Формулировки берутся теми словами, которыми вопрос задают вслух, — иначе
+ * разметка не совпадёт с запросом и смысла в ней не будет.
+ */
+export function faqJsonLd(items: { question: string; answer: string }[]): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
   };
 }
 

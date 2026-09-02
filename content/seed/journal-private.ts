@@ -31,6 +31,29 @@ function cover(folder: string, id: string, ru: string, en: string): MediaAsset {
   };
 }
 
+/**
+ * Обложка из обложки альбома. Формат превью галереи — 1200×630, поэтому
+ * размеры и набор ширин здесь свои, а не портфолийные.
+ */
+function albumCover(slug: string, ru: string, en: string): MediaAsset {
+  const base = '/media/albums';
+  return {
+    _key: `art-cover-${slug}`,
+    type: 'image',
+    rights: 'owned',
+    alt: { ru, en },
+    image: {
+      src: `${base}/${slug}-1200.jpg`,
+      width: 1200,
+      height: 630,
+      sources: [600, 1200].map((size) => ({
+        width: size,
+        src: `${base}/${slug}-${size}.jpg`,
+      })),
+    },
+  };
+}
+
 const published = { status: 'published' } as const;
 const base = {
   ...published,
@@ -144,7 +167,7 @@ export const privateArticles: Article[] = [
         'And the point of all of it. The posed frame where everyone looks at the camera and smiles usually happens too — grandmothers need it, and I will take it. But the one you come back to in ten years is the other one, where the child is hanging upside down off their father.',
       ],
     ),
-    cover: cover('family', '2e2b30c8d16a', 'Семья с ребёнком на съёмке', 'A family with a small child during a shoot'),
+    cover: cover('family', '05c9ce2c3872', 'Семья с ребёнком на съёмке', 'A family with a small child during a shoot'),
   },
 
   {
@@ -179,7 +202,7 @@ export const privateArticles: Article[] = [
         'And on the place. For this kind of shoot a studio is almost always easier than outdoors: no weather, somewhere to sit, somewhere to wait. If you want to be outside, choose a spot you can drive close to — elderly relatives and pushchairs do not enjoy long walks.',
       ],
     ),
-    cover: cover('family', '51b1703890fb', 'Три поколения семьи в студии', 'Three generations of a family in a studio'),
+    cover: cover('family', '2e2b30c8d16a', 'Три поколения семьи в студии', 'Three generations of a family in a studio'),
   },
 
   {
@@ -214,6 +237,6 @@ export const privateArticles: Article[] = [
         'And on how long to shoot. It usually makes no sense to cover a party from end to end: the first three or four hours give you everything that matters — guests arriving, the laid room, the toasts, the cake, the first dancing. After that it repeats. The exception is when something separate, like fireworks, is planned for the close.',
       ],
     ),
-    cover: cover('family', '05c9ce2c3872', 'Семейный праздник', 'A family celebration'),
+    cover: albumCover('pavel-35-let', 'Юбилей: съёмка на празднике', 'An anniversary celebration'),
   },
 ];
