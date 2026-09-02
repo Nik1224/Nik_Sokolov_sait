@@ -1106,3 +1106,34 @@ test('последний час считается по всем выбранн�
   expect(both).toBeGreaterThan(photo);
   expect(both).toBeGreaterThan(video);
 });
+
+test('на странице стоимости сначала ставки, калькулятор в конце', async ({ page }) => {
+  await page.goto('/ru/private/pricing');
+
+  const top = async (locator: ReturnType<typeof page.getByText>) =>
+    (await locator.first().boundingBox())!.y;
+
+  const rates = await top(page.getByText('Час работы', { exact: true }));
+  const packages = await top(page.getByRole('heading', { name: 'Пакетные предложения' }));
+  const calculator = await top(page.getByRole('heading', { name: 'Посчитать стоимость' }));
+
+  /*
+   * Человек приходит сюда за ставкой. Раньше первым стоял калькулятор, и
+   * чтобы её узнать, приходилось выводить цифру из суммы, двигая ползунок.
+   */
+  expect(rates).toBeLessThan(packages);
+  expect(packages).toBeLessThan(calculator);
+
+  // Ставки названы прямо и совпадают с теми, по которым считает калькулятор.
+  const rate = (role: string) =>
+    page.locator('dt', { hasText: new RegExp(`^${role}$`) }).locator('xpath=following-sibling::dd[1]');
+  await expect(rate('Фотограф')).toHaveText(/12\s?000/);
+  await expect(rate('Видеограф')).toHaveText(/15\s?000/);
+
+  // Это самая крупная строка на странице — крупнее её заголовка.
+  const size = async (locator: ReturnType<typeof page.getByText>) =>
+    Number((await locator.first().evaluate((el) => getComputedStyle(el).fontSize)).replace('px', ''));
+  expect(await size(rate('Фотограф'))).toBeGreaterThan(
+    await size(page.getByRole('heading', { level: 1 })),
+  );
+});

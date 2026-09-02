@@ -6,6 +6,9 @@
  */
 
 import type { Metadata } from 'next';
+import type { CalculatorConfig } from '@/content/types';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
+import type { Locale } from '@/lib/site';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingExtras } from '@/components/content/PricingBlock';
 import { PricingPackages } from '@/components/content/PricingPackages';
@@ -54,6 +57,56 @@ function BlockHeading({ step, title }: { step: string; title: string }) {
   );
 }
 
+/**
+ * Ставки в начале страницы.
+ *
+ * Человек приходит сюда за одной цифрой — сколько стоит час. Раньше первым
+ * стоял калькулятор: чтобы узнать ставку, её приходилось выводить из суммы,
+ * подбирая ползунком часы. Теперь ставка названа прямо, а калькулятор стоит
+ * в конце — он отвечает на следующий вопрос, не на первый.
+ *
+ * Цифры берутся из настроек калькулятора, а не пишутся руками: иначе однажды
+ * они разойдутся с расчётом, и на странице будут две разные цены.
+ */
+function HourRates({
+  config,
+  locale,
+  dict,
+}: {
+  config: CalculatorConfig;
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const money = new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    style: 'currency',
+    currency: config.currency,
+    maximumFractionDigits: 0,
+  });
+
+  const rows = [
+    { role: dict.pricing.photographerHour, price: config.photoHourPrice },
+    { role: dict.pricing.videographerHour, price: config.videoHourPrice },
+  ];
+
+  return (
+    <section className="mt-14 border-t border-line pt-6">
+      <p className="label m-0 text-accent">{dict.pricing.rates}</p>
+      <dl className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
+        {rows.map((row) => (
+          <div key={row.role} className="bg-ink py-6 pr-6 sm:px-6 sm:first:pl-0">
+            <dt className="text-h3 m-0 text-bone-dim">{row.role}</dt>
+            {/* Ставка — самое крупное, что есть на странице: за ней и пришли. */}
+            <dd className="text-display m-0 mt-2 whitespace-nowrap text-bone">
+              {money.format(row.price)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-8 max-w-2xl text-bone-faint">{dict.pricing.ratesNote}</p>
+    </section>
+  );
+}
+
 export default async function Page({ params }: Props) {
   const { locale, direction } = await resolveDirectionRoute(params, 'pricing');
   const dict = getDictionary(locale);
@@ -82,17 +135,7 @@ export default async function Page({ params }: Props) {
       </p>
 
       {doc?.calculator ? (
-        <div className="mt-16">
-          <BlockHeading step="01" title={dict.calculator.heading} />
-          <div className="mt-10">
-            <PriceCalculator
-              config={doc.calculator}
-              locale={locale}
-              dict={dict}
-              contacts={settings.contacts}
-            />
-          </div>
-        </div>
+        <HourRates config={doc.calculator} locale={locale} dict={dict} />
       ) : null}
 
       <div className="mt-16">
@@ -100,7 +143,7 @@ export default async function Page({ params }: Props) {
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
           <>
-            <BlockHeading step={doc?.calculator ? '02' : '01'} title={dict.pricing.packages} />
+            <BlockHeading step="01" title={dict.pricing.packages} />
             <div className="mt-10">
               <PricingPackages
                 groups={doc?.pricingGroups ?? []}
@@ -115,7 +158,7 @@ export default async function Page({ params }: Props) {
 
         {extras.length > 0 ? (
           <div className="mt-20 max-w-2xl">
-            <BlockHeading step={doc?.calculator ? '03' : '02'} title={dict.pricing.extras} />
+            <BlockHeading step="02" title={dict.pricing.extras} />
             <div className="mt-8">
               <PricingExtras entries={extras} locale={locale} dict={dict} />
             </div>
@@ -123,6 +166,22 @@ export default async function Page({ params }: Props) {
           </div>
         ) : null}
       </div>
+
+      {/* Калькулятор — последним: он для того, кто уже посмотрел ставку и
+          пакеты и хочет посчитать свой случай. */}
+      {doc?.calculator ? (
+        <div className="mt-20">
+          <BlockHeading step={extras.length > 0 ? '03' : '02'} title={dict.calculator.heading} />
+          <div className="mt-10">
+            <PriceCalculator
+              config={doc.calculator}
+              locale={locale}
+              dict={dict}
+              contacts={settings.contacts}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

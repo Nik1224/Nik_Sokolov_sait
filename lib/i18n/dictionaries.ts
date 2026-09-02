@@ -129,6 +129,11 @@ export type Dictionary = {
     individualEstimate: string;
     extras: string;
     combinedDiscount: string;
+    /** Ставки в начале страницы: с них человек и начинает считать. */
+    rates: string;
+    photographerHour: string;
+    videographerHour: string;
+    ratesNote: string;
   };
   contact: {
     /** Заголовок блока связи и подпись кнопки. */
@@ -282,6 +287,10 @@ const ru: Dictionary = {
     individualEstimate: 'Индивидуальная смета',
     extras: 'Дополнительно',
     combinedDiscount: 'При заказе фото и видео вместе — скидка 10% на общий чек.',
+    rates: 'Час работы',
+    photographerHour: 'Фотограф',
+    videographerHour: 'Видеограф',
+    ratesNote: 'На свадебной съёмке с четвёртого часа ставка снижается.',
   },
   contact: {
     heading: 'Связаться',
@@ -429,6 +438,10 @@ const en: Dictionary = {
     individualEstimate: 'Individual estimate',
     extras: 'Extras',
     combinedDiscount: 'Book photo and video together and the total is 10% lower.',
+    rates: 'Hourly rate',
+    photographerHour: 'Photographer',
+    videographerHour: 'Videographer',
+    ratesNote: 'On a wedding shoot the rate drops from the fourth hour.',
   },
   contact: {
     heading: 'Get in touch',
