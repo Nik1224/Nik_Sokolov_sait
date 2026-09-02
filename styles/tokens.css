@@ -50,7 +50,7 @@
 
   /* --- Ритм и форма ----------------------------------------------------- */
   --spacing-gutter: 1.5rem;
-  --spacing-section: clamp(4rem, 9vw, 8.5rem);
+  --spacing-section: clamp(3rem, 6.1vw, 5.75rem);
   --radius-card: 2px;
   --radius-control: 999px;
 

@@ -1155,3 +1155,71 @@ test('цены везде с символом рубля, а не с кодом 
     expect(text, `${locale}: код валюты вместо символа`).not.toContain('RUB');
   }
 });
+
+test('верхний ряд плиток раскрывается вверх, нижний — вниз', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
+
+  await page.goto('/ru/private');
+  const main = page.getByRole('main');
+  const tile = (name: RegExp) => main.getByRole('link', { name });
+  const panel = (name: RegExp) => tile(name).locator('video').locator('xpath=..');
+  /*
+   * Считаем от документа, а не от окна: hover() сам прокручивает страницу к
+   * элементу, и в оконных координатах сдвинется даже то, что стоит на месте.
+   */
+  const below = async () => {
+    const box = (await page.getByRole('heading', { name: 'Что входит всегда' }).boundingBox())!;
+    return Math.round(box.y + (await page.evaluate(() => window.scrollY)));
+  };
+
+  const anchor = await below();
+
+  /*
+   * Верхний ряд уходит вверх, в воздух над сеткой. Вниз ему нельзя: он накрыл
+   * бы соседний ряд плиток. Поток при этом не двигается — заголовок ниже
+   * стоит там же.
+   */
+  const top = tile(/^Свадьбы/);
+  await top.hover();
+  await expect.poll(async () => (await panel(/^Свадьбы/).boundingBox())!.height).toBeGreaterThan(400);
+  expect(
+    (await panel(/^Свадьбы/).boundingBox())!.y,
+    'слой должен уйти выше плитки',
+  ).toBeLessThan((await top.boundingBox())!.y);
+  expect(await below(), 'верхний ряд не должен двигать страницу').toBe(anchor);
+
+  // Нижний ряд уходит вниз и по-настоящему отодвигает следующий блок.
+  const bottom = tile(/^Love story/);
+  await bottom.hover();
+  await expect.poll(async () => (await panel(/^Love story/).boundingBox())!.height).toBeGreaterThan(400);
+  expect(
+    (await panel(/^Love story/).boundingBox())!.y,
+    'слой должен начинаться от плитки',
+  ).toBeCloseTo((await bottom.boundingBox())!.y, 0);
+  expect(await below(), 'нижний ряд должен отодвинуть следующий блок').toBeGreaterThan(anchor + 400);
+});
+
+test('на сенсорном экране кадр стоит в плитке и играет по видимости', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'проверка сенсорной подачи');
+
+  await page.goto('/ru/private');
+  const tile = page.getByRole('main').getByRole('link', { name: /^Свадьбы/ });
+  await tile.scrollIntoViewIfNeeded();
+
+  const video = tile.locator('video');
+  // Наведения здесь не бывает, поэтому кадр стоит сам и сам же играет.
+  await expect(video).toHaveAttribute('src', /category-wedding-loop\.mp4$/);
+  await expect(video).toHaveJSProperty('paused', false);
+
+  // Кадр занимает правую часть плитки, название — левую, они не наезжают.
+  const box = (await tile.boundingBox())!;
+  const frame = (await video.boundingBox())!;
+  expect(frame.height).toBeGreaterThan(frame.width);
+  expect(frame.x).toBeGreaterThan(box.x + box.width / 2);
+
+  // Ушедшая с экрана плитка не тратит батарею впустую.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(video).toHaveJSProperty('paused', true);
+});
