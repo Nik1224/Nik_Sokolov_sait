@@ -8,7 +8,12 @@ type Props = {
   eyebrow?: string;
   title?: string;
   lead?: string;
-  action?: { label: string; href: string };
+  /**
+   * Переход из заголовка секции. По умолчанию это неприметная ссылка сбоку;
+   * `solid` превращает её в кнопку — для перехода, который человек должен
+   * увидеть, а не выискивать.
+   */
+  action?: { label: string; href: string; variant?: 'quiet' | 'solid' };
   children: ReactNode;
   className?: string;
   /** Заголовок секции по умолчанию h2: единственный h1 на странице — заголовок страницы (§12). */
@@ -37,9 +42,14 @@ export function Section({
           {action ? (
             <Link
               href={action.href}
-              className="label shrink-0 text-bone-dim transition-colors hover:text-bone"
+              className={
+                action.variant === 'solid'
+                  ? 'label inline-block shrink-0 bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent'
+                  : 'label shrink-0 text-bone-dim transition-colors hover:text-bone'
+              }
             >
-              {action.label} →
+              {action.label}
+              {action.variant === 'solid' ? null : ' →'}
             </Link>
           ) : null}
         </div>

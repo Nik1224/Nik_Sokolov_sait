@@ -122,3 +122,53 @@ describe('края', () => {
     }
   });
 });
+
+describe('последний час считается по всем выбранным форматам', () => {
+  const quote = (formats: ('photo' | 'video')[], hours = 8) =>
+    buildQuote({
+      formats,
+      hours,
+      photoHourPrice: PHOTO,
+      videoHourPrice: VIDEO,
+      taper: WEDDING,
+      bundleDiscount: 0.1,
+    });
+
+  it('одно фото — фотоставка восьмого часа', () => {
+    expect(quote(['photo']).lastHourRate).toBe(Math.round(hourRate(PHOTO, 8, WEDDING)));
+  });
+
+  it('одно видео — видеоставка, а не фото', () => {
+    expect(quote(['video']).lastHourRate).toBe(Math.round(hourRate(VIDEO, 8, WEDDING)));
+  });
+
+  /*
+   * Главное, ради чего это заведено: раньше при обоих форматах бралась одна
+   * фотоставка, и цифра под итогом была почти вдвое ниже настоящей.
+   */
+  it('фото и видео — обе ставки сразу, со скидкой за пару', () => {
+    const both = quote(['photo', 'video']).lastHourRate!;
+    const apart = hourRate(PHOTO, 8, WEDDING) + hourRate(VIDEO, 8, WEDDING);
+
+    expect(both).toBe(Math.round(apart * 0.9));
+    expect(both).toBeGreaterThan(quote(['photo']).lastHourRate!);
+    expect(both).toBeGreaterThan(quote(['video']).lastHourRate!);
+  });
+
+  /*
+   * Цифра обещает, во сколько обойдётся следующий час, — значит она обязана
+   * сойтись с тем, на сколько от него вырастет итог.
+   */
+  it('совпадает с приростом итога от ещё одного часа', () => {
+    for (const formats of [['photo'], ['video'], ['photo', 'video']] as const) {
+      for (const hours of [5, 8, 9]) {
+        const grew = quote([...formats], hours).total - quote([...formats], hours - 1).total;
+        expect(Math.abs(grew - quote([...formats], hours).lastHourRate!), formats.join('+')).toBeLessThan(200);
+      }
+    }
+  });
+
+  it('без выбранных форматов цифры нет', () => {
+    expect(quote([]).lastHourRate).toBeNull();
+  });
+});

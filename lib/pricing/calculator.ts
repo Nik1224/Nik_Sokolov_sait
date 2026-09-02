@@ -34,7 +34,12 @@ export type Quote = {
   subtotal: number;
   discount: number;
   total: number;
-  /** Во сколько обходится последний час — показывает, что ставка снижается. */
+  /**
+   * Во сколько обходится последний час — показывает, что ставка снижается.
+   *
+   * Считается по всем выбранным форматам сразу и с той же скидкой, что и
+   * итог: это ровно та сумма, на которую вырастет счёт от ещё одного часа.
+   */
   lastHourRate: number | null;
 };
 
@@ -80,13 +85,28 @@ export function buildQuote(input: QuoteInput): Quote {
   // Скидка только за оба формата сразу: это её единственное основание.
   const discount = lines.length > 1 ? Math.round((subtotal * bundleDiscount) / 100) * 100 : 0;
 
-  const base = formats.includes('photo') ? photoHourPrice : videoHourPrice;
+  /*
+   * Последний час — по всем выбранным форматам, а не по одному фото. Раньше
+   * бралась только фотоставка, и при «фото и видео» цифра под итогом была
+   * ниже настоящей почти вдвое, а при одном видео — вообще не про эту съёмку.
+   *
+   * Скидка применяется та же, что и к итогу: раз оба формата дешевле вместе,
+   * то и час их вместе стоит меньше.
+   */
+  const marginal = lines.reduce(
+    (sum, line) =>
+      sum + hourRate(line.format === 'photo' ? photoHourPrice : videoHourPrice, hours, taper),
+    0,
+  );
 
   return {
     lines,
     subtotal,
     discount,
     total: subtotal - discount,
-    lastHourRate: hours > 0 ? Math.round(hourRate(base, hours, taper)) : null,
+    lastHourRate:
+      lines.length > 0 && hours > 0
+        ? Math.round(marginal * (lines.length > 1 ? 1 - bundleDiscount : 1))
+        : null,
   };
 }

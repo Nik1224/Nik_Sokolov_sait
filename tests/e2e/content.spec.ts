@@ -1049,3 +1049,60 @@ test('при отключённом движении петли категори
   await expect(tile).toHaveAttribute('href', /\?category=wedding$/);
   await expect(tile.getByText('Свадьбы')).toBeVisible();
 });
+
+test('к пакетам ведёт кнопка, а не строчка сбоку', async ({ page }) => {
+  await page.goto('/ru/private');
+
+  const pricing = page
+    .locator('section')
+    .filter({ has: page.getByRole('heading', { name: 'Стоимость' }) })
+    .first();
+
+  const button = pricing.getByRole('link', { name: 'Пакетные предложения' });
+  await expect(button).toHaveAttribute('href', '/ru/private/pricing');
+  // Прежней неприметной строчки здесь больше нет.
+  await expect(pricing.getByRole('link', { name: 'Смотреть все' })).toHaveCount(0);
+
+  /*
+   * Это кнопка, а не текст: у неё своя заливка и высота под палец. Меряем
+   * заливку, а не класс — класс можно переименовать, не тронув вид.
+   */
+  const box = (await button.boundingBox())!;
+  expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(box.width).toBeGreaterThan(150);
+  await expect(button).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+});
+
+test('последний час считается по всем выбранным форматам', async ({ page }) => {
+  await page.goto('/ru/private');
+
+  const pricing = page
+    .locator('section')
+    .filter({ has: page.getByRole('heading', { name: 'Стоимость' }) })
+    .first();
+  const rate = async () => {
+    const text = await pricing.innerText();
+    const found = text.match(/ПОСЛЕДНИЙ ЧАС\s*—\s*([\d\s  ]+)₽/i)?.[1];
+    return found ? Number(found.replace(/\D/g, '')) : null;
+  };
+  const toggle = (name: string) =>
+    pricing.getByRole('checkbox', { name, exact: true }).click({ force: true });
+
+  // По умолчанию выбрано фото.
+  const photo = (await rate())!;
+  expect(photo).toBeGreaterThan(0);
+
+  await toggle('Видео');
+  const both = (await rate())!;
+
+  await toggle('Фото');
+  const video = (await rate())!;
+
+  /*
+   * Раньше здесь всегда стояла фотоставка: при «фото и видео» цифра была
+   * почти вдвое ниже настоящей. Час двух форматов дороже часа любого из них.
+   */
+  expect(video).not.toBe(photo);
+  expect(both).toBeGreaterThan(photo);
+  expect(both).toBeGreaterThan(video);
+});

@@ -228,7 +228,16 @@ export default async function DirectionHome({ params }: Props) {
         <Section
           eyebrow={step()}
           title={dict.nav.pricing}
-          action={{ label: dict.common.viewAll, href: href({ locale, direction, section: 'pricing' }) }}
+          /*
+           * Не «смотреть все», а кнопка: калькулятор называет порядок суммы,
+           * а собранные пакеты с полным составом лежат на странице стоимости,
+           * и туда человек должен попадать заметным переходом.
+           */
+          action={{
+            label: dict.common.packages,
+            href: href({ locale, direction, section: 'pricing' }),
+            variant: 'solid',
+          }}
         >
           {/* Калькулятор объясняет, из чего складывается сумма. Пакеты с
               полным составом лежат на отдельной странице стоимости. */}
