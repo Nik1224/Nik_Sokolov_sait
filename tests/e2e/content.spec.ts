@@ -940,3 +940,93 @@ test('альбом категории не дублируется на стра�
   await expect(page.getByRole('link', { name: /Выпускной вечер/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Марк и Екатерина/ })).toHaveCount(1);
 });
+
+test('плитка категории показывает петлю при наведении и гасит её при уходе', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
+
+  await page.goto('/ru/private');
+  const tile = page.getByRole('main').getByRole('link', { name: /^Свадьбы/ });
+  const video = tile.locator('video');
+  const grid = tile.locator('xpath=ancestor::ul[1]');
+
+  /** Отступ названия от верха сетки: он не должен меняться от наведения. */
+  const titleOffset = async (name: string) => {
+    const text = (await page.getByRole('main').getByText(name, { exact: true }).first().boundingBox())!;
+    const box = (await grid.boundingBox())!;
+    return Math.round(text.y - box.y);
+  };
+
+  const before = (await tile.boundingBox())!;
+  const offsets: Record<string, number> = {};
+  for (const name of ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события']) {
+    offsets[name] = await titleOffset(name);
+  }
+
+  /*
+   * До наведения адрес не подставлен: пять роликов не должны ехать за
+   * человеком по сети, пока он на них не посмотрел.
+   */
+  await expect(video).toHaveAttribute('poster', /category-wedding-poster/);
+  await expect(video).not.toHaveAttribute('src', /./);
+
+  await tile.hover();
+  await expect(video).toHaveAttribute('src', /category-wedding-loop\.mp4$/);
+  await expect(video).toHaveJSProperty('paused', false);
+  // Кадр действительно идёт, а не просто «не на паузе».
+  await expect
+    .poll(async () => video.evaluate((el: HTMLVideoElement) => el.currentTime))
+    .toBeGreaterThan(0);
+
+  // Название читается поверх кадра — ради него всё и затемняется.
+  await expect(tile.getByText('Свадьбы')).toBeVisible();
+
+  /*
+   * Плитка раскрылась под кадр: её пропорции повторяют пропорции ролика,
+   * значит object-cover ничего не срезал и кадр виден целиком.
+   */
+  const source = await video.evaluate((el: HTMLVideoElement) => el.videoWidth / el.videoHeight);
+  // Раскрытие анимировано, поэтому ждём, пока пропорции встанут, а не меряем
+  // первый попавшийся кадр анимации.
+  await expect
+    .poll(async () => {
+      const box = (await tile.boundingBox())!;
+      return box.width / box.height;
+    })
+    .toBeCloseTo(source, 1);
+
+  expect((await tile.boundingBox())!.height).toBeGreaterThan(before.height * 3);
+
+  /*
+   * И при этом ни одно название не сдвинулось: плитка растёт вниз, а строка
+   * остаётся там, где человек её прочитал. Считаем от сетки — страница ниже
+   * действительно уезжает, а вот текст внутри сетки стоять обязан.
+   */
+  for (const name of ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события']) {
+    expect(await titleOffset(name), name).toBeCloseTo(offsets[name], 0);
+  }
+
+  // Уводим мышь: ролик встаёт и отматывается назад, иначе в следующий раз
+  // он продолжится с середины.
+  await page.getByRole('heading', { level: 1 }).hover();
+  await expect(video).toHaveJSProperty('paused', true);
+  await expect(video).toHaveJSProperty('currentTime', 0);
+});
+
+test('при отключённом движении петли категорий не грузятся вовсе', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru/private');
+
+  const tile = page.getByRole('main').getByRole('link', { name: /^Свадьбы/ });
+  await tile.hover();
+
+  // Ни ролика, ни запроса за ним. Плитка остаётся обычной ссылкой.
+  await expect(tile.locator('video')).toHaveCount(0);
+  await expect(tile).toHaveAttribute('href', /\?category=wedding$/);
+  await expect(tile.getByText('Свадьбы')).toBeVisible();
+});

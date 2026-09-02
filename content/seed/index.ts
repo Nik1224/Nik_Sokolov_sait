@@ -14,6 +14,7 @@ import type {
   DirectionDoc,
   GlobalSettings,
   LocaleString,
+  MediaAsset,
   Page,
   Person,
   PricingEntry,
@@ -328,14 +329,33 @@ export const directions: DirectionDoc[] = [
   },
 ];
 
+/**
+ * Петля для наведения на плитку категории. Вертикальная, без звука, ~640 px
+ * по ширине: на плитке видно горизонтальную полосу из середины кадра.
+ *
+ * Подключается только при первом наведении (`preload="none"`), поэтому пять
+ * роликов не весят ничего до тех пор, пока человек не поведёт мышью.
+ */
+function preview(slug: string, ru: string, en: string, height: number): MediaAsset {
+  return {
+    _key: `cat-preview-${slug}`,
+    type: 'video',
+    provider: 'file',
+    poster: { src: `/media/category-${slug}-poster.jpg`, width: 720, height },
+    loopSrc: `/media/category-${slug}-loop.mp4`,
+    alt: { ru, en },
+    rights: 'owned',
+  };
+}
+
 export const categories: Category[] = [
   // Категории с настоящим портфолио. fullSeries — там, где бывает полная
   // выдача одной съёмки: на такие категории ведёт переход к альбомам.
-  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true },
-  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery },
-  { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery },
-  { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4 },
-  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5 },
+  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true, preview: preview('wedding', 'Кадр со свадебной съёмки', 'Frame from a wedding shoot', 1310) },
+  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery, preview: preview('portrait', 'Кадр с портретной съёмки', 'Frame from a portrait shoot', 1280) },
+  { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery, preview: preview('family', 'Кадр с семейной съёмки', 'Frame from a family shoot', 1280) },
+  { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, preview: preview('love-story', 'Кадр со съёмки love story', 'Frame from a love story shoot', 1280) },
+  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, preview: preview('private-event', 'Кадр со съёмки частного события', 'Frame from a private event shoot', 1280) },
   { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, directions: ['business', 'production'], order: 6, isDemo: true },
   { _id: 'cat.interview', slug: 'interview', title: { ru: 'Интервью и подкасты', en: 'Interviews and podcasts' }, directions: ['business'], order: 7, isDemo: true },
   { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, directions: ['business', 'production'], order: 8, isDemo: true },

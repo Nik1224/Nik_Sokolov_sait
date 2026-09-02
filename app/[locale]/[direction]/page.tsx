@@ -9,6 +9,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { CategoryTiles } from '@/components/content/CategoryTiles';
 import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
 import { ContactButton } from '@/components/contact/ContactButton';
@@ -180,23 +181,7 @@ export default async function DirectionHome({ params }: Props) {
 
       {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
-          <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((category) => (
-              <li key={category._id} className="bg-ink">
-                <Link
-                  href={`${href({ locale, direction, section: 'portfolio' })}?category=${category.slug}`}
-                  className="group flex items-center justify-between p-6 lg:p-8"
-                >
-                  <span className="text-h3 text-bone transition-colors group-hover:text-accent">
-                    {localizedString(category.title, locale)}
-                  </span>
-                  <span aria-hidden="true" className="label text-bone-faint transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <CategoryTiles categories={categories} locale={locale} direction={direction} />
         </Section>
       ) : null}
 
