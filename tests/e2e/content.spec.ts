@@ -951,18 +951,28 @@ test('плитка категории показывает петлю при н�
   const video = tile.locator('video');
   const grid = tile.locator('xpath=ancestor::ul[1]');
 
-  /** Отступ названия от верха сетки: он не должен меняться от наведения. */
-  const titleOffset = async (name: string) => {
-    const text = (await page.getByRole('main').getByText(name, { exact: true }).first().boundingBox())!;
-    const box = (await grid.boundingBox())!;
-    return Math.round(text.y - box.y);
+  /*
+   * Отступы названий всех плиток от верха сетки. Берём их у самих плиток, а не
+   * поиском по странице: те же слова встречаются в лиде и в заголовках статей,
+   * и по ним проверка молча мерила бы чужой текст.
+   */
+  const names = ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события'];
+  const titleOffsets = async () => {
+    const top = (await grid.boundingBox())!.y;
+    const out: Record<string, number> = {};
+    for (const name of names) {
+      const title = grid
+        .getByRole('link', { name: new RegExp(`^${name}`) })
+        .getByText(name, { exact: true });
+      out[name] = Math.round((await title.boundingBox())!.y - top);
+    }
+    return out;
   };
 
   const before = (await tile.boundingBox())!;
-  const offsets: Record<string, number> = {};
-  for (const name of ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события']) {
-    offsets[name] = await titleOffset(name);
-  }
+  const gridHeight = (await grid.boundingBox())!.height;
+  const offsets = await titleOffsets();
+  expect(Object.keys(offsets)).toHaveLength(5);
 
   /*
    * До наведения адрес не подставлен: пять роликов не должны ехать за
@@ -987,25 +997,34 @@ test('плитка категории показывает петлю при н�
    * значит object-cover ничего не срезал и кадр виден целиком.
    */
   const source = await video.evaluate((el: HTMLVideoElement) => el.videoWidth / el.videoHeight);
-  // Раскрытие анимировано, поэтому ждём, пока пропорции встанут, а не меряем
-  // первый попавшийся кадр анимации.
+  /*
+   * Раскрывается слой с кадром, а не сама плитка, поэтому меряем его. Ждём,
+   * пока пропорции встанут: анимация длится доли секунды, и первый попавшийся
+   * кадр анимации ещё ничего не значит.
+   */
+  const panel = video.locator('xpath=..');
   await expect
     .poll(async () => {
-      const box = (await tile.boundingBox())!;
+      const box = (await panel.boundingBox())!;
       return box.width / box.height;
     })
     .toBeCloseTo(source, 1);
 
-  expect((await tile.boundingBox())!.height).toBeGreaterThan(before.height * 3);
+  expect((await panel.boundingBox())!.height).toBeGreaterThan(before.height * 3);
 
   /*
    * И при этом ни одно название не сдвинулось: плитка растёт вниз, а строка
    * остаётся там, где человек её прочитал. Считаем от сетки — страница ниже
    * действительно уезжает, а вот текст внутри сетки стоять обязан.
    */
-  for (const name of ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события']) {
-    expect(await titleOffset(name), name).toBeCloseTo(offsets[name], 0);
-  }
+  expect(await titleOffsets()).toEqual(offsets);
+
+  /*
+   * И сама сетка не выросла: кадр раскрывается слоем поверх страницы. Иначе
+   * строка сетки тянула бы за собой всё, что ниже, — нижний ряд плиток уезжал
+   * вниз на шестьсот с лишним пикселей.
+   */
+  expect((await grid.boundingBox())!.height).toBeCloseTo(gridHeight, 0);
 
   // Уводим мышь: ролик встаёт и отматывается назад, иначе в следующий раз
   // он продолжится с середины.

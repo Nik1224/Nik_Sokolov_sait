@@ -169,37 +169,36 @@ function Tile({
       onBlur={deactivate}
       ref={linkRef}
       /*
-       * Плитка раскрывается вниз, чтобы вертикальный кадр было видно целиком,
-       * а не полосой из его середины. Растёт вся строка сетки — соседние
-       * плитки тянутся вместе с ней. Иначе рядом с раскрытой появились бы
-       * пустые места цвета разделителя.
+       * Сама плитка в потоке не меняется никогда — раскрывается только слой с
+       * кадром, поверх страницы. Пробовали растить плитку: тогда растёт строка
+       * сетки, а с ней уезжает вниз всё, что ниже, — нижний ряд плиток на
+       * шестьсот с лишним пикселей. Ради превью двигать полстраницы нельзя.
        */
-      style={
-        active
-          ? { height: expanded ?? undefined }
-          : { minHeight: collapsed ?? undefined }
-      }
+      style={{ minHeight: collapsed ?? undefined }}
       /*
-       * Название прижато к верхнему краю (`items-start`), и раскрытие его не
-       * трогает: плитка растёт вниз, а строка остаётся ровно там, где человек
-       * её прочитал. В сложенном виде это ничего не меняет — содержимое и так
-       * занимало всю высоту между отступами.
+       * Название прижато к верхнему краю и стоит выше слоя с кадром: раскрытие
+       * его не трогает. В сложенном виде `items-start` ничего не меняет —
+       * содержимое и так занимало всю высоту между отступами.
        *
-       * Не раскрытая плитка тянется на всю высоту своей ячейки (`h-full`):
-       * строка сетки высокая, пока раскрыта соседняя, и нажимать на соседей
-       * можно по всей их площади, а не только по верхней полосе.
+       * Плитка тянется на всю высоту своей ячейки (`h-full`), чтобы нажимать
+       * на неё можно было по всей площади.
        */
-      className="group relative flex h-full items-start justify-between overflow-hidden p-6 transition-[height] duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] lg:p-8"
+      className={`group relative flex h-full items-start justify-between p-6 lg:p-8 ${
+        active ? 'z-10' : ''
+      }`}
     >
       {shows && loop ? (
-        <>
-          {/*
-           * Раскрытая плитка повторяет пропорции ролика, поэтому object-cover
-           * ничего не срезает. Пока она складывается обратно, кадр на те же
-           * доли секунды обрезается сверху и снизу — это и есть анимация.
-           * Постер стоит здесь же: пока грузится первый кадр, плитка не мигает
-           * пустотой.
-           */}
+        /*
+         * Слой с кадром. Растёт вниз за пределы плитки и накрывает то, что под
+         * ней, — поэтому у раскрытой плитки поднят z-index. Пропорции слоя
+         * повторяют пропорции ролика, поэтому object-cover ничего не срезает.
+         */
+        <span
+          style={{ height: (active ? expanded : collapsed) ?? undefined }}
+          className="absolute inset-x-0 top-0 block overflow-hidden bg-ink transition-[height] duration-[var(--duration-slow)] ease-[var(--ease-out-soft)]"
+        >
+          {/* Постер стоит здесь же: пока грузится первый кадр, плитка не
+              мигает пустотой. */}
           <video
             ref={videoRef}
             src={source ?? undefined}
@@ -222,7 +221,7 @@ function Tile({
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink from-16% via-ink/35 via-38% to-ink/5 opacity-0 transition-opacity duration-[var(--duration-slow)] group-hover:opacity-100 group-focus-visible:opacity-100"
           />
-        </>
+        </span>
       ) : null}
 
       <span className="text-h3 relative text-bone transition-colors group-hover:text-accent">
