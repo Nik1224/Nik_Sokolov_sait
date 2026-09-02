@@ -32,6 +32,8 @@ import {
   weddingVideos,
 } from './portfolio-galleries';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
+import { privateArticles } from './journal-private';
+import { weddingArticles } from './journal-wedding';
 
 const demo = { isDemo: true, status: 'published' } as const;
 
@@ -531,9 +533,9 @@ export const albums: Album[] = [
 export const articleTypes: ArticleType[] = [
   { _id: 'at.backstage', slug: 'backstage', title: { ru: 'Backstage', en: 'Backstage' }, order: 1, isDemo: true },
   { _id: 'at.project-story', slug: 'project-story', title: { ru: 'История проекта', en: 'Project story' }, order: 2, isDemo: true },
-  { _id: 'at.process', slug: 'process', title: { ru: 'Процесс', en: 'Process' }, order: 3, isDemo: true },
-  { _id: 'at.location', slug: 'location', title: { ru: 'Локация', en: 'Location' }, order: 4, isDemo: true },
-  { _id: 'at.preparation', slug: 'preparation', title: { ru: 'Подготовка', en: 'Preparation' }, order: 5, isDemo: true },
+  { _id: 'at.process', slug: 'process', title: { ru: 'Процесс', en: 'Process' }, order: 3 },
+  { _id: 'at.location', slug: 'location', title: { ru: 'Локация', en: 'Location' }, order: 4 },
+  { _id: 'at.preparation', slug: 'preparation', title: { ru: 'Подготовка', en: 'Preparation' }, order: 5 },
   { _id: 'at.production-note', slug: 'production-note', title: { ru: 'Production note', en: 'Production note' }, order: 6, isDemo: true },
   { _id: 'at.personal', slug: 'personal', title: { ru: 'Личная заметка', en: 'Personal note' }, order: 7, isDemo: true },
 ];
@@ -862,6 +864,10 @@ export const projects: Project[] = [
 ];
 
 export const articles: Article[] = [
+  // Настоящие статьи о свадьбах. Стоят первыми: demo-заготовки ниже уйдут,
+  // как только под остальные ветки появится свой материал.
+  ...weddingArticles,
+  ...privateArticles,
   {
     ...demo,
     _id: 'art.conference-backstage',

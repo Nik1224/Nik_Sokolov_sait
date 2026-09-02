@@ -1,0 +1,652 @@
+/**
+ * Свадебные статьи журнала.
+ *
+ * Написаны от лица фотографа: что происходит в свадебный день с точки зрения
+ * того, кто его снимает, и что от расписания и площадки нужно съёмке. Поводом
+ * послужили материалы владельца по подготовке к свадьбе, но это не пересказ:
+ * факты там общеотраслевые, а угол зрения здесь свой.
+ *
+ * Устаревшее выправлено: ссылки на тренды позапрошлых сезонов убраны, площадки
+ * для вдохновения названы те, что работают в России сегодня.
+ *
+ * Обложки — настоящие кадры из портфолио свадеб, те же файлы, что и в галерее.
+ */
+
+import type { Article, MediaAsset } from '../types';
+import { bodyRuEn } from './helpers';
+
+const WIDTHS = [600, 1200, 1800] as const;
+
+/**
+ * Обложка из портфолио свадеб. По умолчанию горизонтальный кадр 1800×1200;
+ * для вертикального размеры передаются явно — в карточке журнала он всё равно
+ * обрежется под 16:9, а на самой странице покажется целиком.
+ */
+function cover(
+  id: string,
+  ru: string,
+  en: string,
+  size: { width: number; height: number } = { width: 1800, height: 1200 },
+): MediaAsset {
+  const base = '/media/portfolio/wedding';
+  return {
+    _key: `art-cover-${id}`,
+    type: 'image',
+    rights: 'owned',
+    alt: { ru, en },
+    image: {
+      src: `${base}/${id}-1800.jpg`,
+      ...size,
+      sources: WIDTHS.map((s) => ({ width: s, src: `${base}/${id}-${s}.jpg` })),
+    },
+  };
+}
+
+const published = { status: 'published' } as const;
+
+export const weddingArticles: Article[] = [
+  {
+    ...published,
+    _id: 'art.wedding-timing',
+    slug: 'taiming-svadebnogo-dnya',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 1,
+    publishedAt: '2026-08-14',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Тайминг свадебного дня: что видно со стороны фотографа',
+      en: 'Wedding day timing, seen from behind the camera',
+    },
+    excerpt: {
+      ru: 'Расписание решает, какие кадры вообще окажутся возможны. Разбираю день по частям и говорю, сколько времени на самом деле нужно съёмке.',
+      en: 'The schedule decides which frames are even possible. A walk through the day, with the time a shoot actually needs.',
+    },
+    body: bodyRuEn(
+      [
+        'Свадебный день почти никогда не рушится из-за плохой погоды или опоздавшего подрядчика. Он рушится из-за арифметики: на бумаге всё помещается, а в реальности сборы затянулись на сорок минут, дорога заняла вдвое больше, и к закату вы едете в машине вместо того, чтобы стоять в самом красивом свете за весь день.',
+        'Поэтому расписание я прошу показать до свадьбы, а не в день съёмки. Почти всегда в нём находится один-два места, где время заложено не туда.',
+        'Первое решение — разводить ли роспись и празднование по разным дням. Если ЗАГС стоит в то же утро, подъём смещается к пяти-шести часам, а день превращается в череду переездов. Свадьба в один день оправдана, когда всё происходит на одной площадке. Как только появляется второй адрес, каждый переезд — это риск, который тянет за собой всё расписание.',
+        'Стоит понимать, что официальная роспись и церемония — разные вещи. В ЗАГСе подписывают документы, и это процедура. Церемония с вашей музыкой, клятвами и человеком, который вас поженит, может пройти где угодно и когда угодно, и снимается она совсем иначе: там есть воздух, свет и время.',
+        'Дальше — по частям. На сборы уходит около двух с половиной часов вместе с макияжем и причёской; съёмке из них нужен последний час — детали, платье, готовый образ и момент, когда его надевают. Букет должен приехать раньше фотографа: снимать его отдельно посреди дня уже некогда. Маникюр делается накануне.',
+        'На съёмку пары полутора-двух часов достаточно. Больше — не лучше: на третьем часу люди устают, и это видно в кадре. Если хочется снять места в разных концах города, честнее вынести съёмку в отдельный день, чем резать её кусками между переездами.',
+        'Перед приездом гостей мне нужно десять-пятнадцать минут на пустую площадку: арка, зал, накрытые столы, детали декора. Через полчаса это уже невозможно — всё занято людьми, и снять убранство таким, каким его задумывали, не получится.',
+        'Церемония вместе с рассадкой и поздравлениями занимает около часа. Дальше банкет, и вот там стоит держать в голове одно: за двадцать минут до заката имеет смысл оставить гостей и выйти на улицу. Это самый мягкий свет за весь день, и кадры оттуда почти всегда оказываются любимыми. Двадцати минут хватает.',
+        'И последнее. Расписание удобнее собирать с конца: от времени церемонии назад к сбору гостей, съёмке, сборам. Тогда сразу видно, во сколько на самом деле придётся встать. А сюрпризы, выступления гостей и момент с тортом лучше назвать съёмочной команде заранее — то, о чём никто не предупредил, снимается хуже.',
+      ],
+      [
+        'A wedding day rarely falls apart because of bad weather or a late supplier. It falls apart on arithmetic: on paper everything fits, and in reality hair and make-up run forty minutes over, the drive takes twice as long, and by sunset you are in a car instead of standing in the best light of the day.',
+        'So I ask to see the schedule before the wedding, not on the morning of it. There is almost always a place or two where the time has been put in the wrong spot.',
+        'The first decision is whether the registry office and the celebration share a day. Put the paperwork in the same morning and the alarm moves to five or six, and the day becomes a chain of transfers. One day works when everything happens at one venue. The moment a second address appears, every drive becomes a risk that drags the whole schedule with it.',
+        'It helps to separate two different things. The registry office is where documents are signed — an administrative errand. A ceremony with your music, your vows and someone close to you conducting it can happen anywhere, at any hour, and it photographs completely differently: there is room, light and time in it.',
+        'Then the parts. Getting ready takes around two and a half hours including hair and make-up; the shoot needs the last hour of that — details, the dress, the finished look, and the moment it goes on. The flowers should arrive before the photographer: there is no spare hour later in the day to shoot them properly. Nails are done the day before.',
+        'An hour and a half to two hours is enough for the couple. More is not better: by the third hour people are tired, and tiredness shows. If you want locations on opposite sides of the city, it is more honest to move the shoot to its own day than to cut it into pieces between drives.',
+        'Before the guests arrive I need ten or fifteen minutes with an empty room: the arch, the hall, the laid tables, the details. Half an hour later this is gone — everything is occupied, and the decor can no longer be photographed the way it was designed.',
+        'The ceremony, with seating and congratulations, takes about an hour. Then the dinner, and there is one thing worth holding on to: twenty minutes before sunset, leave the guests and step outside. It is the softest light of the day, and those frames are almost always the ones people keep. Twenty minutes is enough.',
+        'One last thing. A schedule is easier to build backwards: from the ceremony to the guests arriving, to the couple shoot, to the morning. That way you see straight away what time you will really have to get up. And surprises, guest performances and the cake are better named to the crew in advance — what nobody warned about is always photographed worse.',
+      ],
+    ),
+    cover: cover(
+      '0b5fcd8a6f02',
+      'Пара в движении проходит через холл площадки',
+      'A couple crossing a venue lobby, caught in motion',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-morning',
+    slug: 'sbory-i-pervaya-vstrecha',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 2,
+    publishedAt: '2026-07-22',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Сборы и первая встреча: где провести утро, чтобы оно снялось',
+      en: 'The morning and the first look: where to spend it so it photographs',
+    },
+    excerpt: {
+      ru: 'Утро задаёт тон всей серии. Что важно в комнате, сколько людей туда звать и какие бывают сценарии первой встречи.',
+      en: 'The morning sets the tone of the whole series. What matters in the room, how many people to invite, and the ways a first look can happen.',
+    },
+    body: bodyRuEn(
+      [
+        'Утро — самая тихая часть дня и почти всегда самая нежная в готовой серии. Дальше начнётся расписание, гости и суета, а здесь ещё можно снимать медленно.',
+        'Из всего, что влияет на эти кадры, важнее всего одно: окно. Не бренд отеля и не декор в номере — количество дневного света. Комната с большими окнами и светлыми стенами даёт мягкий свет, в котором кожа выглядит живой. Тёмный номер с тяжёлыми шторами приходится вытягивать приборами, и это всегда видно.',
+        'Второе — пространство, и здесь у меня есть конкретная цифра. Номер от 45 квадратных метров, а лучше больше. В комнате будете вы, подруги, мама, стилист, визажист, фотограф и, если он есть, видеограф — уже семь-восемь человек, плюс чемоданы стилиста, платье, кольца, обувь, цветы. В сорока метрах это помещается. В двадцати пяти снимать приходится из угла, потому что отойти некуда, и все кадры выходят с одной точки.',
+        'Если удастся взять номер с двумя комнатами — это лучшее, что может случиться с утром. Тогда в одной идут макияж и причёска со всем сопутствующим беспорядком, а вторая остаётся чистой: там висит платье, лежат детали, там же снимается готовый образ и момент, когда платье надевают. Не нужно ничего разбирать и прятать перед каждым кадром.',
+        'Теперь про место. Я советую одно из двух: хороший отель или загородный клуб, где и сборы, и торжество проходят на одной территории. Причина простая — так из дня уходят переезды, а вместе с ними главный источник опозданий и нервов. Вы просыпаетесь там же, где вечером будет церемония, никто никуда не едет, и время, которое ушло бы на дорогу, остаётся съёмке.',
+        'Отдельный сценарий — утро вдвоём. Если не хочется расставаться, можно снять совместный завтрак, а потом разойтись по разным комнатам одеваться. Или собираться вместе: он застёгивает платье, она завязывает бабочку. Традиция, по которой жених не видит платье до церемонии, — не закон, а выбор.',
+        'Про число гостей в комнате скажу прямо: чем их меньше, тем лучше кадры. Каждый лишний человек — это ещё один взгляд в камеру, ещё одна реплика и ещё одна причина отвлечься. Три близких подруги дадут больше живого, чем восемь.',
+        'Две мелочи, которые решают каждый раз. На съёмку деталей — кольца, туфли, приглашения, парфюм — нужно полчаса, и лучше отдать их в начале, пока никто никуда не спешит. И платью нужна нормальная вешалка: обычная пластиковая из химчистки портит кадр, который иначе получился бы сам собой.',
+        'Первая встреча — это отдельная сцена, и её стоит придумать заранее. Классика: он ждёт внизу, она спускается. На улице работает вариант, когда она подходит со спины и закрывает ему глаза — оборот и первая секунда стоят того. Есть версия с закрытыми глазами у обоих, когда их подводят друг к другу за руку. И есть самый традиционный путь — увидеть друг друга только на церемонии; тогда вся эта эмоция достаётся кадрам у арки.',
+        'Ни один из вариантов не лучше другого. Важно только выбрать его до дня свадьбы, а не в тот момент, когда все уже стоят и ждут, что кто-нибудь решит.',
+      ],
+      [
+        'The morning is the quietest part of the day and almost always the most tender part of the finished series. The schedule, the guests and the rush all come later; here there is still room to work slowly.',
+        'Of everything that shapes these frames, one thing matters most: the window. Not the hotel brand, not the decor — the amount of daylight. A room with big windows and pale walls gives soft light that keeps skin alive. A dark room with heavy curtains has to be lit, and that always shows.',
+        'The second thing is space, and here I have an actual number: at least 45 square metres, preferably more. The room will hold you, your friends, your mother, a stylist, a make-up artist, a photographer and possibly a videographer — seven or eight people already, plus the stylist’s cases, the dress, the rings, the shoes, the flowers. Forty-five metres absorbs that. Twenty-five means shooting from a corner because there is nowhere to step back, and every frame comes from the same spot.',
+        'A suite with two rooms is the best thing that can happen to a morning. Hair and make-up happen in one, along with all the mess that comes with them, and the second stays clean: the dress hangs there, the details are laid out there, and that is where the finished look and the moment of putting the dress on are photographed. Nothing has to be cleared away before every frame.',
+        'As for where: I recommend one of two things — a good hotel, or a country club where the morning and the celebration share one site. The reason is simple. That removes the transfers from the day, and with them the main source of delays and nerves. You wake up where the ceremony will be, nobody drives anywhere, and the time that would have gone to the road stays with the shoot.',
+        'There is also the morning spent together. If you would rather not separate, you can shoot breakfast as a couple and then go to different rooms to dress. Or get ready side by side: he fastens the dress, she ties the bow tie. The tradition of not seeing the dress before the ceremony is a choice, not a rule.',
+        'On the number of people in the room I will be blunt: the fewer, the better the pictures. Every extra person is another glance at the camera, another remark, another reason to look away. Three close friends give you more life than eight.',
+        'Two small things decide the hour every time. The details — rings, shoes, invitations, perfume — need half an hour, and they are best done first, while nobody is in a hurry. And the dress needs a proper hanger: a plastic one from the dry cleaner ruins a frame that would otherwise have happened by itself.',
+        'The first look is a scene of its own, and it is worth deciding in advance. The classic: he waits below, she comes down. Outdoors, it works to walk up behind him and cover his eyes — the turn and the first second are worth it. There is a version with both pairs of eyes closed, the two of them led together by the hand. And there is the most traditional route, seeing each other only at the ceremony; then all of that emotion lands in the frames by the arch.',
+        'None of these is better than the others. What matters is choosing before the day, rather than in the moment when everyone is standing around waiting for somebody to decide.',
+      ],
+    ),
+    cover: cover(
+      '5e13330e927b',
+      'Невеста у панорамного окна в утреннем свете',
+      'A bride by a tall window in morning light',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-posing',
+    slug: 'kak-derzhatsya-pered-kameroy',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'process',
+    order: 3,
+    publishedAt: '2026-06-18',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Как держаться перед камерой, если никогда этого не делали',
+      en: 'How to be in front of a camera when you never have been',
+    },
+    excerpt: {
+      ru: 'Для большинства пар свадьба — первая съёмка в жизни. Несколько вещей, которые правда помогают, и одна, которая мешает больше всего.',
+      en: 'For most couples the wedding is their first shoot ever. A few things that genuinely help, and the one that gets in the way most.',
+    },
+    body: bodyRuEn(
+      [
+        'Почти все пары говорят одно и то же: «мы не умеем фотографироваться». Это нормально и это не проблема — позировать действительно негде научиться, если вы не работаете с камерой. Но несколько простых вещей снимают большую часть зажатости.',
+        'Начну с того, что мешает сильнее всего: попытка себя контролировать. Когда человек следит за подбородком, руками и тем, как он выглядит со стороны, это видно в каждом кадре — тело становится деревянным, а улыбка дежурной. Парадокс в том, что чем меньше вы стараетесь выглядеть хорошо, тем лучше выходите.',
+        'Дальше — механика, которая работает почти всем. Осанка: спина прямая, плечи развёрнуты и опущены. Не задранные к ушам — именно опущенные, с вытянутой шеей. Разница между хорошей осанкой и напряжённой спиной заметна сразу.',
+        'Руки выдают напряжение раньше лица. Если пальцы сжались — сожмите кулак сильно и резко разожмите, мышцы отпустит. Руки не стоит прижимать к телу: держите букет, поправьте волосы, троньте воротник, возьмите друг друга за руку. Занятым рукам не нужно решать, куда деваться.',
+        'Лицо расслабляется от звука. Если губы напряглись, скажите «тпру» — это звучит глупо, работает безотказно и почти всегда заканчивается настоящим смехом, который я и снимаю.',
+        'Смотреть в камеру нужно меньше, чем кажется. Самые тёплые кадры получаются, когда вы смотрите друг на друга или в одну сторону. Голова, повёрнутая чуть вбок и под углом к камере, почти всегда выигрывает у прямого взгляда в объектив.',
+        'Двигайтесь медленно. Медленное движение даёт мне несколько кадров с разных точек, а вам — не переделывать одно и то же по три раза. И не задерживайте дыхание: это первое, что делает человек перед щелчком, и это же первое, что видно на фотографии.',
+        'Не торопитесь целоваться. Секунда до поцелуя почти всегда красивее самого поцелуя. И необязательно в губы: в макушку, в лоб, в плечо, в уголок губ — эти кадры люди потом пересматривают чаще.',
+        'И самое главное, что я могу посоветовать: не изображайте не себя. Если вы шумные и смешливые — не надо задумчивых взглядов вдаль, потому что так модно. Если вы сдержанные — не надо прыгать и танцевать, потому что «все так делают». Через десять лет вы будете смотреть этот альбом, чтобы вспомнить, какими вы были на самом деле, а не какая стилистика была в моде в этом сезоне.',
+        'Практическое: если хотите, чтобы в серии обязательно был какой-то кадр или деталь — гравировка на кольцах, надпись на подошве, письма друг другу, — скажите заранее. Такие вещи невозможно заметить, если о них не знать, и именно они чаще всего пропадают.',
+      ],
+      [
+        'Almost every couple says the same thing: we do not know how to be photographed. That is normal, and it is not a problem — there is nowhere to learn posing unless you work with a camera. But a few simple things take most of the stiffness away.',
+        'Start with what gets in the way most: trying to control yourself. When someone is watching their chin, their hands and how they look from outside, it shows in every frame — the body goes wooden and the smile goes polite. The paradox is that the less you try to look good, the better you come out.',
+        'Then the mechanics, which work for nearly everyone. Posture: back straight, shoulders open and down. Not lifted towards the ears — down, with the neck long. The difference between good posture and a tense back reads immediately.',
+        'Hands give away tension before the face does. If your fingers tighten, clench a fist hard and release it sharply; the muscles let go. Do not press your arms to your body: hold the bouquet, touch your hair, adjust a collar, take each other by the hand. Busy hands do not have to decide where to go.',
+        'The face relaxes on a sound. If your lips tense, say a soft "brr" through them — it sounds silly, it works every time, and it usually ends in real laughter, which is what I am there to photograph.',
+        'Look at the camera less than you think you should. The warmest frames happen when you look at each other, or both in the same direction. A head turned slightly away and at an angle to the lens almost always beats a straight look into it.',
+        'Move slowly. Slow movement gives me several frames from different points and saves you doing the same thing three times over. And do not hold your breath: it is the first thing people do before a click, and the first thing visible in the photograph.',
+        'Do not rush the kiss. The second before it is almost always better than the kiss itself. And it does not have to be on the lips — the top of the head, the forehead, a shoulder, the corner of the mouth; those are the frames people come back to.',
+        'The most useful advice I have: do not perform someone you are not. If you are loud and quick to laugh, you do not need pensive stares into the distance because they are fashionable. If you are quiet, you do not need to jump and dance because everyone does. In ten years you will open this album to remember who you actually were, not which style was in season.',
+        'One practical note: if there is a frame or a detail you definitely want — the engraving inside the rings, writing on the soles, letters you wrote each other — say so in advance. Those things are impossible to notice without being told, and they are exactly what tends to go missing.',
+      ],
+    ),
+    cover: cover(
+      'ad1372e6a3bd',
+      'Пара в объятии, чёрно-белый кадр крупным планом',
+      'A couple embracing, close black-and-white frame',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-concept',
+    slug: 'kontseptsiya-svadby',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 4,
+    publishedAt: '2026-05-27',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Концепция свадьбы: как она выглядит на фотографиях через десять лет',
+      en: 'A wedding concept, and how it looks in photographs ten years on',
+    },
+    excerpt: {
+      ru: 'Концепция — это не декор и не палитра. Что на самом деле собирает день воедино и почему за трендами не стоит идти буквально.',
+      en: 'A concept is not the decor and not the palette. What actually holds a day together, and why trends are worth reading but not copying.',
+    },
+    body: bodyRuEn(
+      [
+        'Концепцию часто путают с декором. На деле декор — только её видимая часть. Концепция определяет площадку, формат церемонии, музыку, меню, зонирование вечера, ваши образы и то, каких подрядчиков вы вообще зовёте. Когда всё это собрано вокруг одной мысли, день выглядит целым — и это видно на фотографиях сразу, даже если не знать замысла.',
+        'Пример работает лучше объяснения. Допустим, за основу взято ваше первое совместное путешествие. Целостная концепция — это не Эйфелева башня фоном за аркой. Это плейлист, угощение, торт, тон приглашений и ваши образы, собранные так, чтобы не спорить друг с другом.',
+        'Строить концепцию можно вокруг трёх разных вещей, и они дают очень разную свободу. Вокруг темы — самый жёсткий вариант: тема диктует палитру, декор и образы, и отступать от неё нельзя, иначе всё рассыпается. Вокруг палитры и стиля — мягче: направление задано, деталей никто не диктует. Вокруг формата — «классическая свадьба в усадьбе», «вечеринка в лофте» — самый свободный: тон задан, рамок почти нет.',
+        'Чтобы понять, что вам подходит, полезно ответить на несколько вопросов до всяких досок с картинками. Что вас объединяет? Чем вы занимаетесь и что любите делать вместе? Какие поездки помните лучше всего? Какую атмосферу хотите — тихую и близкую или громкую и на всю ночь? Ответы на них и есть материал для концепции.',
+        'Дальше формулировка. Сравните: «хотим красивую свадьбу» и «хотим свадьбу за городом на тридцать человек, выездную церемонию, живую музыку, формат вечеринки для своих, бело-зелёную гамму». Со вторым запросом можно идти к площадке, декоратору и фотографу и разговаривать предметно.',
+        'Про тренды. Обзоры выходят каждый сезон, и читать их полезно — они показывают, что вообще бывает. Но копировать сезонную моду буквально значит получить свадьбу, похожую на десяток чужих. Если вы в жизни сдержанные, а в этом году в моде что-то шумное — это не ваша свадьба. И наоборот.',
+        'Собирать референсы сегодня удобнее всего в Pinterest: он работает без ограничений и хорошо ищет по картинке. Полезно смотреть съёмки целиком, а не отдельные кадры: у одной свадьбы можно понять логику, у случайной подборки — только настроение.',
+        'И сразу оговорка про доску с картинками, потому что на ней ломается больше всего ожиданий. Красивая фотография декора — это не фотография декора. Это кадр, снятый в конкретном зале, при конкретном свете, часто на пустой площадке до гостей, а потом обработанный под общую подачу автора. Та же арка в другом зале, при другом свете и в кадре с людьми будет выглядеть иначе — не хуже, но иначе.',
+        'Пользоваться референсами всё равно нужно, просто читать их стоит правильно: не «сделайте нам вот это», а «нам нравится вот это настроение, вот эта плотность цветов, вот такой свет». Декоратору и фотографу такая формулировка говорит гораздо больше, чем ссылка на картинку, и не обещает вам того, что физически не повторяется.',
+        'Одно замечание из практики: чем сложнее концепция, тем больше бюджет. Не потому, что сложное дороже само по себе, а потому, что несведённые детали заметны. Простая идея, доведённая до конца, выглядит дороже сложной, сделанной наполовину.',
+        'И то, ради чего это всё. Через десять лет вы откроете альбом не для того, чтобы вспомнить, какие цвета были в моде. Вы откроете его, чтобы увидеть себя настоящими. Концепция нужна ровно затем, чтобы день не мешал этому, а помогал.',
+      ],
+      [
+        'A concept is often confused with the decor. In practice the decor is only its visible part. The concept decides the venue, the shape of the ceremony, the music, the menu, how the evening is zoned, what you both wear and which suppliers you invite at all. When those are gathered around one idea, the day looks whole — and that shows in the photographs immediately, even to someone who does not know the plan.',
+        'An example explains it better than a definition. Say the starting point is your first trip together. A whole concept is not the Eiffel Tower behind the arch. It is the playlist, the food, the cake, the tone of the invitations and your outfits, put together so they do not argue with each other.',
+        'A concept can be built around three different things, and they give very different freedom. Around a theme is the strictest: the theme dictates palette, decor and outfits, and you cannot step away from it without the whole thing coming apart. Around a palette and a style is gentler: the direction is set, the details are not. Around a format — a classic wedding at a manor, a party in a loft — is the freest: the tone is set and almost nothing is prescribed.',
+        'To work out which suits you, it helps to answer a few questions before any mood boards. What do the two of you share? What do you do, and what do you like doing together? Which trips do you remember best? What atmosphere do you want — quiet and close, or loud and all night? Those answers are the raw material.',
+        'Then the wording. Compare "we want a beautiful wedding" with "we want thirty guests out of town, an outdoor ceremony, live music, a party rather than a formal dinner, in white and green". With the second one you can walk into a venue, a decorator or a photographer and have a real conversation.',
+        'On trends. Round-ups appear every season and they are worth reading — they show you what exists. But copying a season literally gets you a wedding that looks like a dozen other people’s. If you are quiet by nature and this year is loud, it is not your wedding. And the other way around.',
+        'For gathering references, Pinterest is the most practical tool today: it works without restrictions and searches well by image. It is worth looking at whole weddings rather than single frames — one wedding shows you its logic, a random grid shows you only a mood.',
+        'One caveat about mood boards, because that is where most expectations break. A beautiful photograph of decor is not a photograph of decor. It is a frame made in one particular room, in one particular light, usually on an empty site before the guests, and then graded to match its author’s style. The same arch in a different room, in different light, with people in the shot, will look different — not worse, but different.',
+        'References are still worth using; they just need to be read correctly. Not "make us this", but "we like this mood, this density of flowers, this kind of light". That phrasing tells a decorator and a photographer far more than a link to a picture, and it does not promise you something that cannot physically be repeated.',
+        'One note from practice: the more complex the concept, the larger the budget. Not because complexity costs more in itself, but because unresolved details are visible. A simple idea carried through looks more expensive than a complex one done halfway.',
+        'And the point of all of it. In ten years you will not open the album to remember which colours were in season. You will open it to see who you were. A concept exists so that the day helps that rather than getting in its way.',
+      ],
+    ),
+    cover: cover(
+      'b3d2a2f4ff67',
+      'Невеста в фате у декоративного панно',
+      'A bride in a veil beside a decorative panel',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-autumn',
+    slug: 'osennyaya-svadba',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 5,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Осенняя свадьба: почему всё расписание держится на закате',
+      en: 'An autumn wedding: why the whole schedule hangs on sunset',
+    },
+    excerpt: {
+      ru: 'С сентября по октябрь закат в Москве уезжает почти на два с половиной часа. Это меняет не только съёмку на закате — это меняет весь день.',
+      en: 'Between September and October, sunset in Moscow moves nearly two and a half hours earlier. That changes more than the sunset shoot — it changes the whole day.',
+    },
+    body: bodyRuEn(
+      [
+        'Осень — лучшее время для свадебной съёмки. Свет мягкий, солнце не бьёт сверху, цвет тёплый сам по себе, без всякой обработки. Но у осени есть одна особенность, которую почти никто не закладывает в расписание, и из-за неё день собирается неправильно.',
+        'Дело в закате. В Москве первого сентября солнце садится около 19:20, тридцатого сентября — уже около 18:05, а к концу октября — примерно в 16:50. За два месяца световой день уезжает почти на два с половиной часа.',
+        'Что это значит на практике. Летняя схема «церемония в четыре, съёмка на закате около девяти» в октябре не работает: в четыре часа у вас останется меньше часа нормального света. Поэтому осенью расписание собирается не от удобного времени, а от заката — и уже назад: съёмка пары, сбор гостей, церемония, сборы.',
+        'Из этого следует простая вещь: осенью церемонию имеет смысл ставить раньше, чем летом. Не потому, что так принято, а потому, что иначе половина дня, который вы планировали снять на улице, окажется в темноте.',
+        'Второе — план на дождь, и он должен быть местом, а не идеей. «Спрячемся куда-нибудь» не работает: когда начинается дождь, искать это «куда-нибудь» уже поздно. Нужен конкретный зал, веранда или крытая галерея, где съёмка выглядит нормально и куда пускают. Осенью такой план нужен всегда, даже если прогноз обещает солнце.',
+        'Третье — тепло. Осенью на улице холодно дольше, чем кажется в помещении, а съёмка на воздухе занимает час-полтора. Пальто, накидка или шаль, подобранные к образу, спасают и человека, и кадры: замёрзший человек стоит зажато, и это видно на фотографии сразу. Куртка с чужого плеча решает проблему тепла и портит серию.',
+        'Четвёртое — земля. Красивое поле в октябре часто оказывается мокрым полем. Если съёмка на природе, нужна запасная обувь, в которой можно спокойно стоять и ходить. На каблуках, проваливающихся в грунт, человек следит за равновесием, а не за тем, что происходит рядом.',
+        'И последнее. Осенью значительная часть вечера снимается внутри, поэтому свет на площадке перестаёт быть мелочью. Тёплые лампы, свечи, гирлянды дают живой кадр; голый потолочный свет — плоский и холодный. Этот вопрос стоит задать площадке заранее, вместе с вопросом, можно ли часть верхнего света выключить.',
+        'Всё это звучит как список ограничений, но на деле осень честнее лета. Летом красивый свет приходится ждать до девяти вечера, когда все уже устали. Осенью он приходит в разгар дня, когда у вас ещё есть силы.',
+      ],
+      [
+        'Autumn is the best season for a wedding shoot. The light is soft, the sun never sits straight overhead, and the colour is warm on its own, without any grading. But autumn has one property almost nobody builds into the schedule, and because of it the day gets assembled wrong.',
+        'It comes down to sunset. In Moscow the sun sets around 19:20 on the first of September, around 18:05 by the thirtieth, and by the end of October at roughly 16:50. Over two months, daylight moves nearly two and a half hours earlier.',
+        'What that means in practice: the summer pattern of a four o’clock ceremony and a sunset shoot around nine simply does not work in October. At four you have less than an hour of usable light left. So an autumn schedule is built from sunset backwards — the couple shoot, the guests arriving, the ceremony, the morning.',
+        'Which leads to something simple: in autumn the ceremony is worth setting earlier than in summer. Not out of convention, but because otherwise half of the day you planned to shoot outdoors happens in the dark.',
+        'Second: a rain plan, and it has to be a place rather than an idea. "We will find somewhere" does not work — once it starts raining, it is too late to look. You need a specific hall, veranda or covered walkway that photographs well and that you are allowed into. In autumn this plan is always needed, even when the forecast promises sun.',
+        'Third: warmth. Outdoors in autumn it is colder for longer than it feels from inside, and a couple shoot takes an hour or more. A coat, cape or shawl chosen to suit the look saves both the person and the pictures: someone who is cold stands stiffly, and that reads immediately. A borrowed jacket solves the cold and ruins the series.',
+        'Fourth: the ground. A beautiful field in October is often a wet field. For an outdoor shoot you need spare shoes you can actually stand and walk in. In heels sinking into soft ground, a person is managing their balance instead of what is happening beside them.',
+        'And last: a large part of an autumn evening is shot indoors, so the venue’s lighting stops being a detail. Warm lamps, candles and string lights give a living frame; bare ceiling light is flat and cold. Ask the venue about this in advance, along with whether some of the overhead lighting can be switched off.',
+        'All of this reads like a list of constraints, but autumn is in fact more honest than summer. In summer the good light makes you wait until nine in the evening, when everyone is already tired. In autumn it arrives in the middle of the day, while you still have energy.',
+      ],
+    ),
+    cover: cover(
+      '0f6466a2f101',
+      'Фата в движении в вечернем свете',
+      'A veil in motion in evening light',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-hours',
+    slug: 'skolko-chasov-nuzhen-fotograf',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 6,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Сколько часов нужен фотограф на свадьбу',
+      en: 'How many hours of wedding photography do you need',
+    },
+    excerpt: {
+      ru: 'Шесть, восемь, десять или двенадцать. Что помещается в каждый вариант и почему шести часов чаще всего мало.',
+      en: 'Six, eight, ten or twelve hours. What fits into each, and why six is usually not enough.',
+    },
+    body: bodyRuEn(
+      [
+        'Это первый вопрос, который задают почти все, и на него нет одного ответа: всё зависит от того, что именно вы хотите увидеть в готовой серии. Но разложить по часам можно вполне конкретно.',
+        'Шесть часов. Хватает, если снимать только главное: конец сборов, первую встречу, церемонию, поздравления и начало банкета. Утро при этом почти не попадает в кадр, а вечер обрывается на первом тосте. Вариант рабочий для маленькой свадьбы на одной площадке, где всё идёт плотно.',
+        'Восемь часов. Самый частый выбор, и обычно самый разумный. Сюда помещается последний час сборов с деталями и платьем, встреча, съёмка пары, церемония, поздравления, накрытый зал до гостей, банкет и первый танец. Это уже целая история дня, а не выборка из него.',
+        'Десять часов. Добавляют воздух. Можно спокойно снять утро с самого начала, не торопиться на съёмке пары, выйти на закат и остаться до торта и финала вечера. Если свадьба за городом или гостей много, десять часов почти всегда оправданы.',
+        'Двенадцать часов. Нужны, когда день длинный по-настоящему: сборы с раннего утра, венчание, переезды между площадками, большой банкет и поздний финал. Для обычной городской свадьбы это перебор.',
+        'Теперь про то, что обычно считают неправильно. Час съёмки — это не час фотографирования. В нём есть дорога между точками, ожидание, пока накроют зал, пауза, пока гости рассаживаются. Если по расписанию между церемонией и банкетом полтора часа, эти полтора часа тоже оплачиваются — фотограф в это время на площадке.',
+        'Второе. Сокращать имеет смысл с конца, а не с начала. Финал вечера — фейерверк, бенгальские огни, танцы — почти у всех выглядит одинаково. Утро и первая встреча не повторяются никогда. Если бюджет не резиновый, лучше взять полный день с начала и уйти до фейерверка, чем приехать к церемонии.',
+        'Третье, про деньги. У меня час свадебной съёмки не стоит одинаково: первые три часа идут по базовой ставке, дальше час дешевеет. Десять часов фотосъёмки выходят в 110 000 рублей вместо 120 000, которые получились бы при простом умножении. Это сделано ровно затем, чтобы длинный день не наказывал за длину.',
+        'Посчитать свой вариант можно прямо на сайте — в калькуляторе на странице стоимости. Он показывает порядок суммы для выбранного числа часов и форматов; точная смета всё равно собирается после короткого разговора о задаче.',
+        'И про бронь. Даты в сезон — с мая по сентябрь, плюс новогодние — разбирают за полгода-год. Если у вас уже есть дата и площадка, имеет смысл писать сразу, даже если остальное ещё не решено: количество часов можно уточнить потом, а дату — нет.',
+      ],
+      [
+        'This is the first question almost everyone asks, and there is no single answer: it depends on what you want to see in the finished series. But it can be broken down quite precisely.',
+        'Six hours. Enough if you only cover the essentials: the end of getting ready, the first look, the ceremony, the congratulations and the start of dinner. The morning barely appears, and the evening stops at the first toast. It works for a small wedding on one site where everything runs tightly.',
+        'Eight hours. The most common choice, and usually the most sensible one. It holds the last hour of the morning with the details and the dress, the first look, the couple shoot, the ceremony, the congratulations, the room before the guests, dinner and the first dance. That is a whole story rather than a selection from one.',
+        'Ten hours. These add room. You can shoot the morning from the beginning, take your time with the couple, go out for sunset and stay through the cake and the end of the evening. For a wedding out of town, or with many guests, ten hours almost always pay off.',
+        'Twelve hours. Needed when the day is genuinely long: an early start, a church service, transfers between venues, a large dinner and a late finish. For an ordinary city wedding it is more than necessary.',
+        'Now the thing people usually miscount. An hour of coverage is not an hour of taking pictures. It includes the drive between points, the wait while the room is laid, the pause while guests are seated. If the schedule leaves ninety minutes between the ceremony and dinner, those ninety minutes are paid for too — the photographer is on site.',
+        'Second: cut from the end, not from the beginning. The close of the evening — fireworks, sparklers, dancing — looks much the same at almost every wedding. The morning and the first look never repeat. If the budget is finite, it is better to take the full day from the start and leave before the fireworks than to arrive for the ceremony.',
+        'Third, on money. An hour of wedding coverage does not cost the same throughout: the first three hours go at the base rate, and after that the hourly rate falls. Ten hours of photography come to 110,000 roubles rather than the 120,000 that simple multiplication would give. That exists precisely so a long day is not punished for its length.',
+        'You can price your own case on the site — the calculator on the pricing page. It shows the order of the sum for the hours and formats you choose; the exact quote is still put together after a short conversation about the day.',
+        'And on booking. In-season dates — May to September, plus the New Year period — go six months to a year ahead. If you already have a date and a venue, it is worth writing straight away, even if nothing else is decided: the number of hours can be adjusted later, the date cannot.',
+      ],
+    ),
+    cover: cover(
+      '3d8994e89cbb',
+      'Гости обнимают невесту на празднике',
+      'Guests embracing the bride during the celebration',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-price',
+    slug: 'skolko-stoit-svadebnyy-fotograf',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 7,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Сколько стоит свадебный фотограф в Москве и из чего складывается цена',
+      en: 'What a wedding photographer costs in Moscow, and what makes up the price',
+    },
+    excerpt: {
+      ru: 'Разброс на рынке — от четырёх до пятнадцати тысяч за час. Объясняю, чем эти часы отличаются и за что вы платите, кроме съёмочного дня.',
+      en: 'The market runs from four to fifteen thousand roubles an hour. What separates those hours, and what you pay for besides the day itself.',
+    },
+    body: bodyRuEn(
+      [
+        'Если открыть каталоги свадебных фотографов по Москве, разброс ставок получается примерно от четырёх тысяч рублей за час до пятнадцати. Разница почти четырёхкратная, и понять по объявлению, за что именно она, невозможно. Попробую объяснить изнутри.',
+        'Первое, что стоит принять: съёмочный день — меньшая часть работы. За восемь часов на площадке получается несколько тысяч кадров. Дальше идёт отбор, цветокоррекция каждого отобранного и лёгкая ретушь — это от нескольких дней до пары недель за монитором. Час на площадке оплачивает и этот час тоже.',
+        'Второе — то, что не видно вообще. Дублирующая техника, чтобы отказ камеры в середине церемонии не стал вашей проблемой. Резервные копии материала на разных носителях сразу в день съёмки. Договор, где записаны дата, объём и сроки. Страховка от того, что что-то пойдёт не так.',
+        'Третье — опыт, и это единственное, за что действительно стоит переплачивать. Свадьба не повторяется и не переснимается. Человек, снявший сотню свадеб, знает, где встать на церемонии, чтобы не оказаться спиной к свету, и что делать, когда выездную регистрацию за десять минут переносят под крышу. Это не покупается техникой.',
+        'Теперь про мои цифры, чтобы не было загадок. Час фотосъёмки — 12 000 рублей, час видео — 15 000. На свадьбе первые три часа идут по базовой ставке, дальше час дешевеет: десять часов фото выходят в 110 000 вместо 120 000. Если берёте фото и видео вместе, действует скидка 10%.',
+        'В эту сумму входит всё, что нужно, чтобы получить готовую серию: анонс до пятидесяти кадров в течение трёх дней, полная обработка каждого снимка, личная онлайн-галерея по ссылке и договор. Отдельно за обработку, за «исходники» или за право показать фото друзьям платить не нужно.',
+        'Про дешёвый вариант скажу честно и без снисходительности. Начинающий фотограф за три тысячи в час — это нормальный выбор, если вы понимаете, на что идёте: скорее всего, серия будет неровной, часть ключевых моментов не снимется, а обработку придётся ждать долго. Иногда это осознанное решение, и в нём нет ничего плохого. Плохо, когда за низкую цену ждут результата, который она не покрывает.',
+        'И последнее, про то, как сравнивать. Сравнивать надо не ставку, а итоговую сумму за ваш день и то, что в неё входит. У одного в час дешевле, но минимум десять часов и обработка за отдельные деньги. У другого дороже за час, но день выходит короче и всё включено. Считайте целиком.',
+        'Порядок суммы для вашего случая можно прикинуть в калькуляторе на странице стоимости — там же лежат собранные пакеты. Точная смета всё равно получается после короткого разговора: она зависит от формата, числа часов и того, нужна ли съёмка на второй день.',
+      ],
+      [
+        'Open any Moscow directory of wedding photographers and the rates run from roughly four thousand roubles an hour to fifteen. That is close to a fourfold spread, and no listing explains what it is for. Here is the view from inside.',
+        'The first thing to accept: the day itself is the smaller part of the work. Eight hours on site produce a few thousand frames. Then comes the selection, colour correction of every frame kept, and light retouching — several days to a couple of weeks at a monitor. The hourly rate pays for those hours too.',
+        'Second, the part nobody sees. Backup bodies, so a camera failing mid-ceremony does not become your problem. Copies of the material on separate media the same day. A written agreement fixing the date, scope and deadlines. Cover for the day something goes wrong.',
+        'Third: experience, and it is the one thing genuinely worth paying more for. A wedding does not repeat and cannot be reshot. Someone who has photographed a hundred of them knows where to stand at the ceremony so as not to end up with their back to the light, and what to do when an outdoor ceremony moves indoors with ten minutes’ notice. Equipment does not buy that.',
+        'Now my own numbers, so there is no mystery. An hour of photography is 12,000 roubles, an hour of video is 15,000. At a wedding the first three hours go at the base rate and the hourly rate falls after that: ten hours of photography come to 110,000 rather than 120,000. Booking photo and video together takes 10% off.',
+        'That covers everything needed to end up with a finished series: a preview of up to fifty frames within three days, full processing of every photograph, a personal online gallery behind a link, and a written agreement. There is no separate charge for editing, for "the raw files", or for the right to show the pictures to your friends.',
+        'On the cheap option, honestly and without condescension. A beginner at three thousand an hour is a reasonable choice if you know what you are choosing: the series will probably be uneven, some key moments will be missed, and the edit will take a long time. Sometimes that is a deliberate decision and there is nothing wrong with it. What goes wrong is expecting a result the price does not cover.',
+        'And finally, how to compare. Compare the total for your day and what is inside it, not the hourly figure. One photographer is cheaper per hour but has a ten-hour minimum and charges separately for editing. Another costs more per hour but the day is shorter and everything is included. Count the whole thing.',
+        'You can get the order of the sum for your own case from the calculator on the pricing page, where the packages are listed too. The exact quote still comes out of a short conversation: it depends on the format, the number of hours, and whether a second day is needed.',
+      ],
+    ),
+    cover: cover(
+      '043ab851db24',
+      'Семья на свадебной съёмке',
+      'A family during a wedding shoot',
+      { width: 1200, height: 1800 },
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-delivery',
+    slug: 'kogda-budut-fotografii',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'process',
+    order: 8,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Когда будут фотографии и почему обработка занимает время',
+      en: 'When the photographs arrive, and why editing takes time',
+    },
+    excerpt: {
+      ru: 'На рынке ждут от двух недель до полутора месяцев. Рассказываю, что происходит с кадрами всё это время и как устроено у меня.',
+      en: 'The market waits anywhere from two weeks to a month and a half. What happens to the frames in that time, and how it works here.',
+    },
+    body: bodyRuEn(
+      [
+        'Вопрос «когда будут фотографии» стоит задать до свадьбы, а не после. Сроки у всех разные: две недели, месяц, а в разгар сезона — и полтора. Разница большая, и узнавать о ней постфактум неприятно.',
+        'Сначала о том, почему вообще нужно ждать. За свадебный день набирается несколько тысяч кадров. Первый этап — отбор: убрать закрытые глаза, промахи фокуса, дубли одного момента. Из трёх тысяч остаётся несколько сотен. Это не механическая работа, её нельзя ускорить.',
+        'Дальше цвет. Каждый отобранный кадр приводится к единому виду: снятое у окна утро, зал с тёплыми лампами и улица на закате изначально выглядят как три разные съёмки. Задача — чтобы серия смотрелась целой. Потом лёгкая ретушь там, где она нужна.',
+        'Отдельно про сезон. Летом свадьбы идут одна за другой, и обработка выстраивается в очередь. Поэтому сроки в июле и в ноябре честно отличаются, и фотограф, который обещает одинаково быстро в любой месяц, скорее всего просто не подумал.',
+        'Как устроено у меня. В течение трёх дней после свадьбы приходит анонс — до пятидесяти обработанных кадров. Этого хватает, чтобы поделиться с близкими и не сидеть в ожидании, пока готовится всё остальное. Полная серия приходит позже, все кадры с цветокоррекцией и лёгкой ретушью, и лежит в личной онлайн-галерее по ссылке: скачивать и показывать удобно, ничего не пропадает.',
+        'Про количество кадров. Точное число заранее не называет никто вменяемый, и это правильно: оно зависит от длины дня, числа гостей и того, сколько всего вообще происходило. Ориентир простой — несколько сотен обработанных фотографий за полный съёмочный день. Если кто-то обещает точную цифру до съёмки, он либо будет её натягивать, либо резать.',
+        'Что стоит зафиксировать в договоре: срок анонса, срок полной серии, способ передачи и то, сколько галерея будет доступна. Последнее забывают чаще всего, а потом оказывается, что ссылка перестала открываться через полгода.',
+        'И одна просьба от фотографа. Не просите исходники. Необработанный файл — это не «то же самое, только без фильтра», это полуфабрикат: плоский по цвету, часто темнее, чем должен быть. Отдавать его — примерно как отдать тесто вместо хлеба. Всё, что стоит показывать, вы получите обработанным.',
+      ],
+      [
+        'The question of when the photographs arrive is worth asking before the wedding, not after. Turnaround varies: two weeks, a month, and in peak season a month and a half. That is a wide spread, and finding out afterwards is unpleasant.',
+        'First, why there is a wait at all. A wedding day produces a few thousand frames. The first stage is selection: removing closed eyes, missed focus, duplicates of the same moment. Three thousand frames become a few hundred. It is not mechanical work and it cannot be rushed.',
+        'Then colour. Every frame kept is brought to a single look: a morning by a window, a room with warm lamps and a street at sunset start out looking like three different shoots. The point is for the series to read as one. Then light retouching where it is needed.',
+        'A word about the season. In summer weddings run back to back and editing forms a queue. Turnaround in July and in November honestly differs, and a photographer who promises the same speed in any month has probably not thought about it.',
+        'How it works here. Within three days of the wedding a preview arrives — up to fifty finished frames. That is enough to share with the people close to you instead of waiting while the rest is prepared. The full series follows, every frame colour corrected and lightly retouched, and lives in a personal online gallery behind a link: easy to download and to show, and nothing gets lost.',
+        'On the number of photographs. Nobody sensible names an exact figure in advance, and rightly so: it depends on the length of the day, the number of guests and how much actually happened. The rough guide is a few hundred finished photographs for a full day. If someone promises an exact number before the shoot, they will either pad it or cut to it.',
+        'What is worth fixing in the agreement: the preview deadline, the full-series deadline, how the files are delivered, and how long the gallery stays available. The last one is forgotten most often, and then the link stops opening six months later.',
+        'And one request from the photographer. Please do not ask for the raw files. An unprocessed file is not "the same thing without a filter" — it is an unfinished product: flat in colour and often darker than it should be. Handing it over is roughly like handing over dough instead of bread. Everything worth showing, you will get finished.',
+      ],
+    ),
+    cover: cover(
+      'cc9a35e985c8',
+      'Жених у окна в тёмной комнате',
+      'A groom by a window in a dark room',
+    ),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-choose',
+    slug: 'kak-vybrat-svadebnogo-fotografa',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 9,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: {
+      ru: 'Как выбрать свадебного фотографа',
+      en: 'How to choose a wedding photographer',
+    },
+    excerpt: {
+      ru: 'На что смотреть в портфолио, какие пять вопросов задать до договора и по каким признакам понять, что человек не подходит.',
+      en: 'What to look for in a portfolio, five questions to ask before signing, and the signs that someone is not right for you.',
+    },
+    body: bodyRuEn(
+      [
+        'Свадебного фотографа выбирают один раз и без права на второй дубль. Поэтому смотреть стоит не на количество подписчиков и не на красоту сайта, а на несколько вполне конкретных вещей.',
+        'Первое и главное — просите съёмку целиком, а не подборку. В портфолио у всех лучшие кадры за несколько лет, и по ним нельзя понять ровность. Одна свадьба от сборов до финала показывает то, что действительно важно: как снято утро, справился ли человек с тёмным залом, есть ли живые лица гостей или только постановочная пара, не развалился ли цвет к вечеру.',
+        'Второе — совпадение по манере. Репортаж, где никто не смотрит в камеру, и постановочная съёмка с выстроенными кадрами — разные жанры. Оба хорошие. Но если вам нравится первое, а человек умеет второе, вы получите аккуратные фотографии и ощущение, что день прошёл мимо. Посмотрите три-четыре полные съёмки и поймите, чего в них больше.',
+        'Третье — разговор. Списаться и поговорить голосом или встретиться стоит до договора. Свадебный фотограф проводит рядом с вами весь день, в самые нервные его часы. Если общаться некомфортно уже сейчас, в день свадьбы легче не станет.',
+        'Пять вопросов, которые стоит задать всем без исключения: что происходит, если вы заболеете или не сможете приехать; есть ли дублирующая техника; когда будет анонс и когда полная серия; сколько галерея будет доступна по ссылке; что входит в стоимость, а что оплачивается отдельно.',
+        'Признаки, на которых стоит насторожиться. Нет договора или «договор не нужен, мы же люди». Отказ показать съёмку целиком. Обещание точного числа кадров до съёмки. Портфолио, где кадры явно с разных камер и разных рук. Резко низкая цена без объяснения, за счёт чего она получилась.',
+        'И то, чего делать не надо: выбирать по цене. Разброс на рынке Москвы примерно от четырёх до пятнадцати тысяч за час, и внутри этого разброса цена почти ничего не говорит о совпадении с вами. Сначала найдите двух-трёх человек, чьи полные съёмки вам нравятся, и только потом сравнивайте условия.',
+      ],
+      [
+        'A wedding photographer is chosen once, with no second take. So the things to look at are not follower counts or a handsome website, but a few concrete points.',
+        'First and most important: ask to see a whole wedding, not a selection. Everyone’s portfolio holds their best frames from several years, and best frames tell you nothing about consistency. One wedding from morning to finish shows what matters: how the morning was handled, whether the photographer coped with a dark hall, whether the guests look alive or only the couple was posed, whether the colour holds together by the evening.',
+        'Second: a match in manner. Reportage, where nobody looks at the camera, and staged work with constructed frames are different genres. Both are good. But if you want the first and the photographer does the second, you will get tidy pictures and a feeling that the day passed you by. Look at three or four complete weddings and see which one dominates.',
+        'Third: the conversation. Talk, by voice or in person, before signing anything. A wedding photographer spends the whole day beside you, through its most nervous hours. If it is uncomfortable now, it will not get easier on the day.',
+        'Five questions worth asking everyone: what happens if you fall ill or cannot come; is there backup equipment; when does the preview arrive and when does the full series; how long does the gallery stay online; what is included in the price and what is charged separately.',
+        'Warning signs. No contract, or "we do not need a contract, we are decent people". Refusing to show a complete wedding. Promising an exact number of frames before the shoot. A portfolio that clearly comes from several different cameras and hands. A sharply low price with no explanation of how it is achieved.',
+        'And what not to do: choose on price. The Moscow market runs from roughly four to fifteen thousand roubles an hour, and within that range the figure says almost nothing about whether someone suits you. Find two or three people whose complete weddings you like, and compare terms after that.',
+      ],
+    ),
+    cover: cover('0cd7cd9a515c', 'Пара под фатой против света', 'A couple beneath a veil against the light', { width: 1200, height: 1800 }),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-rain',
+    slug: 'dozhd-na-svadbe',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 10,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: { ru: 'Дождь на свадьбе: что делать и как это выглядит на фотографиях', en: 'Rain on the day: what to do, and how it looks in the photographs' },
+    excerpt: {
+      ru: 'Дождь портит не съёмку, а расписание. Что подготовить заранее и почему такие свадьбы часто снимаются лучше солнечных.',
+      en: 'Rain ruins the schedule, not the shoot. What to prepare in advance, and why rainy weddings often photograph better than sunny ones.',
+    },
+    body: bodyRuEn(
+      [
+        'Начну с того, что успокаивает: для фотографии дождь — не катастрофа. Пасмурное небо работает как огромный рассеиватель, свет становится мягким и ровным, нет жёстких теней и прищуренных глаз. Многие любимые кадры сняты именно в такую погоду.',
+        'Проблема не в свете, а в логистике. Дождь ломает расписание: церемонию переносят под крышу, съёмку на улице сокращают, гости толпятся в дверях. Поэтому готовиться нужно не к дождю как таковому, а к смене плана.',
+        'Главное, что стоит сделать заранее, — выбрать конкретное запасное место. Не «спрячемся куда-нибудь», а зал, веранда, крытая галерея или холл, которые вы видели и в которые вас пустят. У этого места нужно проверить одно: есть ли там дневной свет. Подвал без окон спасёт от воды, но съёмка в нём будет выглядеть соответствующе.',
+        'Второе — прозрачные зонты. Обычный чёрный зонт закрывает лица тенью и съедает весь свет. Прозрачный работает наоборот: лица видно, свет проходит, а сам зонт становится частью кадра. Пара штук стоит недорого и решает почти всё.',
+        'Третье — обувь и подол. Мокрая трава и грязь портят платье за пять минут. Запасная устойчивая обувь и человек, который придержит подол на переходах, — обычно этого достаточно.',
+        'Четвёртое — предупредить площадку. Перенос церемонии под крышу занимает время: нужно переставить стулья, перенести арку, перевести звук. Если про запасной вариант там знают заранее, это полчаса. Если нет — полтора, и они вычитаются из вашего дня.',
+        'И совет, который звучит странно, но работает: если дождь тёплый и несильный, выйдите под него на десять минут. Кадры под дождём с прозрачным зонтом почти всегда получаются самыми живыми за весь день — просто потому, что в этот момент никто уже не пытается выглядеть идеально.',
+      ],
+      [
+        'Let me start with the reassuring part: for photography, rain is not a disaster. An overcast sky works as an enormous diffuser — the light goes soft and even, with no hard shadows and no squinting. A lot of favourite frames are made in exactly this weather.',
+        'The problem is not the light but the logistics. Rain breaks the schedule: the ceremony moves indoors, the outdoor shoot is cut short, guests crowd in doorways. So what you prepare for is not rain itself but a change of plan.',
+        'The main thing to arrange in advance is a specific fallback space. Not "we will find somewhere", but a hall, veranda, covered walkway or lobby you have seen and are allowed to use. Check one thing about it: does it have daylight? A windowless basement will keep you dry, and the pictures will look like a windowless basement.',
+        'Second: clear umbrellas. A standard black umbrella puts faces in shadow and eats the light. A clear one does the opposite — faces stay visible, light passes through, and the umbrella becomes part of the frame. A couple of them cost little and solve most of it.',
+        'Third: shoes and hem. Wet grass and mud ruin a dress in five minutes. Spare stable shoes and someone to hold the hem during transfers are usually enough.',
+        'Fourth: warn the venue. Moving a ceremony indoors takes time — chairs, the arch, the sound all have to be relocated. If they know the fallback in advance, that is half an hour. If not, it is ninety minutes, and they come out of your day.',
+        'And one piece of advice that sounds odd but works: if the rain is warm and light, go out into it for ten minutes. Frames in the rain under a clear umbrella are almost always the liveliest of the whole day, simply because at that moment nobody is still trying to look perfect.',
+      ],
+    ),
+    cover: cover('0b71f19bd5ef', 'Свадебные детали в тёмном зале', 'Wedding details in a dark hall', { width: 1200, height: 1800 }),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-second',
+    slug: 'nuzhen-li-vtoroy-fotograf',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 11,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: { ru: 'Нужен ли на свадьбе второй фотограф', en: 'Do you need a second photographer' },
+    excerpt: {
+      ru: 'Иногда действительно нужен, чаще — нет. Три случая, когда один человек физически не успевает, и один, когда второй только мешает.',
+      en: 'Sometimes yes, more often no. Three cases where one person cannot physically cover the day, and one where a second only gets in the way.',
+    },
+    body: bodyRuEn(
+      [
+        'Второго фотографа предлагают почти все, и почти всегда как опцию «чтобы точно ничего не упустить». Звучит убедительно, стоит заметных денег, а нужен далеко не каждой свадьбе. Разберу, когда он правда решает.',
+        'Случай первый: раздельные сборы в разных местах. Если невеста собирается в отеле, а жених в это же время в другом районе, один человек снимет только одни сборы. Вторые придётся либо пропустить, либо перенести по времени. Второй фотограф здесь — единственное честное решение.',
+        'Случай второй: много гостей. От сотни человек и выше один фотограф на церемонии вынужден выбирать: снимать пару у арки или реакции в зале. И то, и другое одновременно физически невозможно. На больших свадьбах второй закрывает именно реакции, и это заметная часть готовой серии.',
+        'Случай третий: две площадки и плотное расписание. Пока один снимает финал церемонии, второй уже на банкетной площадке снимает накрытый зал до гостей. Иначе кто-то из двух моментов теряется.',
+        'Когда второй не нужен. Свадьба до пятидесяти-семидесяти человек на одной площадке с общими сборами закрывается одним фотографом полностью. Здесь второй человек чаще мешает: он попадает в кадры первому, ходит по той же дуге и добавляет в серию другую руку и другой взгляд, из-за чего готовые фотографии перестают быть однородными.',
+        'Про однородность стоит сказать отдельно, потому что об этом не думают заранее. Два фотографа — это два стиля кадрирования и две манеры видеть. Если они не работают вместе постоянно, в альбоме будет видно, где снимал один, а где другой. Это не смертельно, но серия перестаёт читаться как одна история.',
+        'Практический вывод простой. Считайте не «на всякий случай», а по фактам: сколько адресов, сколько гостей, есть ли раздельные сборы. Если хотя бы два ответа из трёх — «много», второй фотограф оправдан. Если нет, те же деньги лучше вложить в лишние два часа съёмки одним человеком.',
+      ],
+      [
+        'A second photographer is offered by almost everyone, almost always as the "so nothing gets missed" option. It sounds convincing, it costs real money, and plenty of weddings do not need it. Here is when it genuinely helps.',
+        'Case one: separate mornings in different places. If the bride is at a hotel and the groom is across town at the same hour, one person can only shoot one of them. The other is either skipped or moved in time. A second photographer is the only honest answer here.',
+        'Case two: a lot of guests. Above a hundred people, one photographer at the ceremony has to choose between the couple at the arch and the reactions in the room. Both at once is physically impossible. At large weddings the second person covers exactly those reactions, and they make up a noticeable part of the finished series.',
+        'Case three: two venues and a tight schedule. While one shoots the end of the ceremony, the other is already at the dinner venue photographing the laid room before the guests arrive. Otherwise one of the two is lost.',
+        'When it is not needed. A wedding of fifty to seventy people on one site with a shared morning is fully covered by one photographer. Here a second person more often gets in the way: they appear in the first one’s frames, work the same arc, and add another hand and another eye to the series, so the finished pictures stop being uniform.',
+        'That uniformity deserves its own note, because people do not think about it in advance. Two photographers means two ways of framing and two ways of seeing. Unless they work together constantly, the album will show where one shot and where the other did. It is not fatal, but the series stops reading as a single story.',
+        'The practical conclusion is simple. Do not count "just in case", count the facts: how many addresses, how many guests, whether the mornings are separate. If at least two of the three answers are "a lot", a second photographer is justified. If not, the same money is better spent on two extra hours with one.',
+      ],
+    ),
+    cover: cover('0d4ee9379232', 'Жених перед выходом', 'A groom before the ceremony', { width: 1200, height: 1800 }),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-winter',
+    slug: 'zimnyaya-svadba',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'preparation',
+    order: 12,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: { ru: 'Зимняя свадьба: как снимать, когда светло четыре часа', en: 'A winter wedding: shooting when there are four hours of daylight' },
+    excerpt: {
+      ru: 'В декабре в Москве темнеет в четыре. Как из-за этого меняется расписание, что надеть на улицу и почему зимой снимают меньше, но не хуже.',
+      en: 'In December it is dark in Moscow by four. How that reshapes the day, what to wear outdoors, and why winter means less shooting but not worse.',
+    },
+    body: bodyRuEn(
+      [
+        'Зимой главное ограничение — свет, и оно жёстче осеннего. В декабре в Москве солнце садится около четырёх часов дня, а нормальный съёмочный свет заканчивается ещё раньше. От рассвета до сумерек остаётся примерно четыре-пять часов, и всё, что вы хотите снять на улице, должно поместиться в них.',
+        'Отсюда первое решение: церемонию ставить в первой половине дня. Не в три, не в четыре, а в полдень или в час. Тогда после неё останется время на съёмку в свету, а банкет спокойно уйдёт в вечер, где искусственный свет уже не помеха, а часть картинки.',
+        'Второе — уличная съёмка становится короткой и точечной. Час на морозе никто не выдержит, да и не нужно. Двадцать-тридцать минут в одном месте дают больше, чем размазанные полтора часа с перебежками: люди ещё не замёрзли, лица живые, а на снегу свет отражается снизу и работает как отражатель.',
+        'Третье и самое важное — верхняя одежда. Её нужно выбирать заранее и под образ, а не хватать первое попавшееся у выхода. Пальто, шуба, накидка, плед — всё это отлично выглядит в кадре. Пуховик с чужого плеча не выглядит никак. Замёрзший человек, кроме того, стоит зажато, и это видно на фотографии раньше, чем краснеет нос.',
+        'Четвёртое — техника не любит перепады. Камера, занесённая с мороза в тёплый зал, запотевает и минут двадцать снимать не может. Поэтому съёмку планируют так, чтобы не бегать туда-сюда: сначала всё уличное, потом всё внутреннее.',
+        'Пятое — что зима даёт взамен. Снег как фон работает лучше любого декора: он убирает лишнее, выравнивает свет и делает кадр графичным. Ранние сумерки — это гирлянды, свечи и окна, которые летом просто не успевают включить. И площадки зимой свободнее и дешевле, а это иногда решает больше, чем погода.',
+      ],
+      [
+        'In winter the limit is light, and it is harsher than in autumn. In December the sun sets in Moscow around four in the afternoon, and usable light ends earlier still. From dawn to dusk you have roughly four or five hours, and everything you want outdoors has to fit inside them.',
+        'Hence the first decision: put the ceremony in the first half of the day. Not at three or four, but at midday or one. That leaves time to shoot in daylight afterwards, and the dinner moves comfortably into the evening, where artificial light stops being an obstacle and becomes part of the picture.',
+        'Second: the outdoor shoot becomes short and targeted. Nobody lasts an hour in the cold, and nobody needs to. Twenty or thirty minutes in one place give you more than ninety minutes spread across dashes between locations: people are not yet frozen, faces are alive, and snow bounces light from below like a reflector.',
+        'Third, and most important: outerwear. Choose it in advance and to suit the look, rather than grabbing whatever is by the door. A coat, a fur, a cape, a blanket all photograph well. A borrowed puffer photographs as nothing. And a cold person stands stiffly, which shows in the picture before their nose turns red.',
+        'Fourth: equipment dislikes swings in temperature. A camera carried from the cold into a warm hall fogs up and cannot shoot for twenty minutes. So the day is planned to avoid going back and forth: everything outdoors first, everything indoors after.',
+        'Fifth, what winter gives back. Snow works better as a background than any decor: it removes clutter, evens out the light and makes frames graphic. Early dusk means string lights, candles and windows that in summer never get switched on in time. And venues in winter are freer and cheaper, which sometimes matters more than the weather.',
+      ],
+    ),
+    cover: cover('0cdf50b6db7f', 'Невеста в меховой накидке', 'A bride in a fur wrap', { width: 1200, height: 1800 }),
+    projectSlugs: [],
+  },
+
+  {
+    ...published,
+    _id: 'art.wedding-lovestory',
+    slug: 'zachem-nuzhna-love-story',
+    directions: ['private'],
+    primaryDirection: 'private',
+    typeSlug: 'process',
+    order: 13,
+    publishedAt: '2026-09-03',
+    author: 'Никита Соколов',
+    title: { ru: 'Зачем нужна love story до свадьбы', en: 'Why a love story shoot before the wedding is worth it' },
+    excerpt: {
+      ru: 'Не ради красивых фотографий — точнее, не только. Главная польза в том, что в день свадьбы вы уже знаете, как это работает.',
+      en: 'Not for the pictures — or rather, not only. The real value is that by the wedding day you already know how this works.',
+    },
+    body: bodyRuEn(
+      [
+        'Love story часто воспринимают как приятное дополнение: съёмка для приглашений, для экрана на банкете, просто чтобы были фотографии до свадьбы. Всё так, но главная её польза в другом, и она практическая.',
+        'Свадьба почти для всех — первая в жизни съёмка. И первые полчаса на ней уходят на то, чтобы человек перестал держать лицо. Это нормально, так у всех. Проблема в том, что эти полчаса приходятся ровно на самое ценное время дня — на утро и первую встречу, которые не повторяются.',
+        'Love story снимает эту проблему заранее. За час-полтора в спокойной обстановке вы проходите весь путь: неловкость, первые кадры, привыкание, момент, когда перестаёте следить за собой. В день свадьбы всё это уже позади, и работа начинается сразу.',
+        'Второе — вы узнаёте фотографа до того, как доверили ему целый день. Как он говорит, что подсказывает, насколько с ним спокойно. Если что-то не совпало, лучше выяснить это за три месяца, чем в утро свадьбы.',
+        'Третье — практическая проверка себя. Вы увидите, как выглядите на фотографиях, что вам идёт, какая сторона лица нравится больше, как сидит одежда в движении. К свадьбе эти вопросы будут уже решены.',
+        'Как её проводить, чтобы был толк. Снимать в том, в чём вам удобно, а не в вечерних образах: смысл в естественности, а не в репетиции свадьбы. Выбирать место, которое что-то значит для вас двоих, — там проще быть собой. И не растягивать: полутора часов достаточно, дальше начинается усталость.',
+        'Когда снимать. Оптимально за два-четыре месяца до свадьбы. Успеваете получить готовые кадры и использовать их в приглашениях или на экране, а сама съёмка ещё свежа в памяти к свадебному дню.',
+      ],
+      [
+        'A love story shoot is often treated as a pleasant extra: pictures for the invitations, for the screen at dinner, simply to have photographs before the wedding. All true, but its main value is elsewhere, and it is practical.',
+        'For almost everyone, the wedding is their first shoot. The first half hour of it goes on letting go of the held expression. That is normal and universal. The problem is that this half hour lands on the most valuable part of the day — the morning and the first look, which do not repeat.',
+        'A love story shoot removes that in advance. In an hour and a half, in calm surroundings, you go through the whole arc: awkwardness, the first frames, getting used to it, the point where you stop watching yourself. By the wedding all of it is behind you and the work starts immediately.',
+        'Second, you get to know the photographer before entrusting them with a whole day. How they speak, what they suggest, whether it feels easy. If something does not fit, it is far better to discover it three months out than on the wedding morning.',
+        'Third, a practical rehearsal of yourselves. You will see how you look in photographs, what suits you, which side of your face you prefer, how clothes behave in movement. By the wedding, those questions are already answered.',
+        'How to do it so it works. Wear what you are comfortable in rather than evening looks: the point is being natural, not rehearsing the wedding. Choose a place that means something to the two of you — it is easier to be yourself there. And do not stretch it: ninety minutes is enough before tiredness sets in.',
+        'When to shoot. Two to four months before the wedding is the sweet spot. You have time to get the finished frames and use them for invitations or the screen, and the experience is still fresh by the wedding day.',
+      ],
+    ),
+    cover: cover('1205ef22e0bf', 'Пара на съёмке', 'A couple during a shoot', { width: 1200, height: 1800 }),
+    projectSlugs: [],
+  },
+];
