@@ -1137,3 +1137,21 @@ test('на странице стоимости сначала ставки, ка
     await size(page.getByRole('heading', { level: 1 })),
   );
 });
+
+test('цены везде с символом рубля, а не с кодом RUB', async ({ page }) => {
+  /*
+   * Английская локаль по умолчанию выводит для рубля код: «RUB 12,000».
+   * Символ понятен без перевода, а место для него каждый язык выбирает сам —
+   * по-русски после числа, по-английски перед ним, как с $ и £.
+   */
+  for (const [locale, sample] of [
+    ['ru', /12\s?000\s?₽/],
+    ['en', /₽12,000/],
+  ] as const) {
+    await page.goto(`/${locale}/private/pricing`);
+    const text = await page.getByRole('main').innerText();
+
+    expect(text, locale).toMatch(sample);
+    expect(text, `${locale}: код валюты вместо символа`).not.toContain('RUB');
+  }
+});

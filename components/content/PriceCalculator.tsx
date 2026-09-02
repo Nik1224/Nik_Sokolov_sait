@@ -18,6 +18,7 @@ import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { MessageDraft } from '@/lib/contact/message';
 import { buildQuote, type ShootFormat } from '@/lib/pricing/calculator';
+import { moneyFormat } from '@/lib/pricing/money';
 import type { Locale } from '@/lib/site';
 
 type Props = {
@@ -62,15 +63,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
     };
   }, [locale, dict]);
 
-  const money = useMemo(
-    () =>
-      new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
-        style: 'currency',
-        currency: config.currency,
-        maximumFractionDigits: 0,
-      }),
-    [locale, config.currency],
-  );
+  const money = useMemo(() => moneyFormat(locale, config.currency), [locale, config.currency]);
 
   function toggleFormat(format: ShootFormat) {
     setFormats((current) =>

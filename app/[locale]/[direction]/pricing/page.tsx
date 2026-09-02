@@ -19,6 +19,7 @@ import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
 import { href } from '@/lib/routing';
+import { moneyFormat } from '@/lib/pricing/money';
 import { buildMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
@@ -77,11 +78,7 @@ function HourRates({
   locale: Locale;
   dict: Dictionary;
 }) {
-  const money = new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
-    style: 'currency',
-    currency: config.currency,
-    maximumFractionDigits: 0,
-  });
+  const money = moneyFormat(locale, config.currency);
 
   const rows = [
     { role: dict.pricing.photographerHour, price: config.photoHourPrice },

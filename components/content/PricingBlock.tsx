@@ -8,6 +8,7 @@
 import { ContactButton } from '@/components/contact/ContactButton';
 import type { ContactChannel, PricingEntry } from '@/content/types';
 import { quotedSubject } from '@/lib/contact/message';
+import { moneyFormat } from '@/lib/pricing/money';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
@@ -23,11 +24,7 @@ type Props = {
 
 function formatPrice(entry: PricingEntry, locale: Locale, dict: Dictionary): string {
   if (typeof entry.price !== 'number') return dict.pricing.onRequest;
-  const formatted = new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
-    style: entry.currency ? 'currency' : 'decimal',
-    currency: entry.currency,
-    maximumFractionDigits: 0,
-  }).format(entry.price);
+  const formatted = moneyFormat(locale, entry.currency).format(entry.price);
   const unit = localizedString(entry.unit, locale);
   // «от» только там, где это действительно нижняя граница: у пакета с
   // фиксированной ценой такая приписка вводит в заблуждение.

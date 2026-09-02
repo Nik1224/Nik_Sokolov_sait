@@ -19,6 +19,7 @@ import { useMemo, useState } from 'react';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import type { ContactChannel, PricingEntry, PricingGroup } from '@/content/types';
 import type { ShootFormat } from '@/lib/pricing/calculator';
+import { moneyFormat } from '@/lib/pricing/money';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
@@ -41,15 +42,7 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
   /** Выбранный формат внутри каждой группы. */
   const [format, setFormat] = useState<Record<string, PackageFormat>>({});
 
-  const money = useMemo(
-    () =>
-      new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
-        style: 'currency',
-        currency: 'RUB',
-        maximumFractionDigits: 0,
-      }),
-    [locale],
-  );
+  const money = useMemo(() => moneyFormat(locale, 'RUB'), [locale]);
 
   /** Склонение по правилам языка, а не по самодельным условиям. */
   const packagesLabel = useMemo(() => {
