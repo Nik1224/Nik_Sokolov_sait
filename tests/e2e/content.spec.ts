@@ -1399,19 +1399,32 @@ test('в портфолио бэкстейдж свой у каждой кате
 test('кнопка «Пакетные предложения» не читается как выбранный переключатель', async ({
   page,
 }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile', 'проблема только на узком экране');
-
   await page.goto('/ru/private');
   const button = page.getByRole('link', { name: /Пакетные предложения/ });
   const box = (await button.boundingBox())!;
   const width = page.viewportSize()!.width;
 
   /*
-   * На узком экране заголовок секции выстраивается колонкой. Растянутая во всю
-   * ширину кнопка с тёмной заливкой становится неотличима от выбранного
-   * переключателя калькулятора, который стоит сразу под ней.
+   * На узком экране заголовок секции выстраивается колонкой, и растянутая во
+   * всю ширину кнопка ещё сильнее похожа на строку-состояние. На широком она
+   * и так по содержимому, поэтому проверка здесь только для узкого.
    */
-  expect(box.width, 'кнопка не должна занимать всю ширину').toBeLessThan(width * 0.85);
+  if (testInfo.project.name === 'mobile') {
+    expect(box.width, 'кнопка не должна занимать всю ширину').toBeLessThan(width * 0.85);
+  }
   // Стрелка отличает переход от состояния.
   await expect(button).toHaveText(/→/);
+
+  /*
+   * Главное — цвет. Тёмная заливка на этой странице занята: ею помечены
+   * выбранные переключатели калькулятора. Кнопка того же цвета читается как
+   * ещё один выбранный пункт, и никакая форма этого не исправляет.
+   */
+  const fill = await button.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const selected = await page
+    .locator('label')
+    .filter({ hasText: /^ФОТО$/i })
+    .first()
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(fill, 'заливка кнопки не должна совпадать с выбранным переключателем').not.toBe(selected);
 });
