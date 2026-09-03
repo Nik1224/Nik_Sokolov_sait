@@ -155,13 +155,27 @@ export default async function Page({ params }: Props) {
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.cardTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.cardBody}</p>
         <p className="mt-6">
+          {/*
+            Новая вкладка: организатор открывает визитку, чтобы посмотреть и
+            скопировать ссылку, — и не должен ради этого терять страницу, на
+            которой был.
+          */}
           <Link
             href={cardHref(locale)}
+            target="_blank"
+            rel="noopener"
             className="label inline-block border border-line px-6 py-4 text-bone transition-colors hover:border-line-strong hover:text-accent"
           >
-            {t.cardAction} →
+            {t.cardAction} ↗
           </Link>
         </p>
+
+        {/*
+          Деньги и документы. Сказать про них нужно — организатор всё равно
+          спросит, — но выносить в заголовок незачем: страница не об этом.
+        */}
+        <p className="mt-10 text-sm text-bone-faint">{t.termsFee}</p>
+        <p className="mt-3 max-w-2xl text-sm text-bone-faint">{t.termsInvoice}</p>
       </section>
 
       <section className="mt-20 max-w-2xl border-t border-line pt-6">

@@ -11,7 +11,8 @@ import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery, type PortfolioSections } from '@/components/content/PortfolioGallery';
-import type { Album, Category, Project } from '@/content/types';
+import { MediaGallery } from '@/components/media/MediaGallery';
+import type { Album, Category, MediaAsset, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -34,6 +35,11 @@ type Props = {
   gallery?: PortfolioSections;
   /** Альбомы этой категории: карточка ведёт прямо в онлайн-галерею. */
   categoryAlbums?: Album[];
+  /**
+   * Бэкстейдж выбранной категории. Идёт в самом низу: человек пришёл смотреть
+   * кадры, и процесс — то, чем он интересуется уже после результата.
+   */
+  backstage?: MediaAsset[];
   /**
    * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
@@ -58,6 +64,7 @@ export function ProjectListing({
   activeCategory,
   gallery,
   categoryAlbums = [],
+  backstage = [],
   promo,
   showAll = true,
 }: Props) {
@@ -131,7 +138,9 @@ export function ProjectListing({
         </nav>
       ) : null}
 
-      <div className="mt-12">
+      {/* Признак для тестов: «кадры галереи» — это то, что внутри, а не любой
+          figure на странице; ниже есть ещё бэкстейдж. */}
+      <div data-gallery className="mt-12">
         {categoryAlbums.length > 0 ? (
           <div className={gallery ? 'mb-16' : ''}>
             <AlbumGrid albums={categoryAlbums} locale={locale} dict={dict} />
@@ -160,6 +169,16 @@ export function ProjectListing({
           </ul>
         )}
       </div>
+
+      {backstage.length > 0 ? (
+        <section className="mt-20 border-t border-line pt-6">
+          <h2 className="text-h2 m-0 text-balance">{dict.card.backstageTitle}</h2>
+          <p className="mt-4 max-w-2xl text-bone-dim">{dict.card.backstageBody}</p>
+          <div className="mt-10">
+            <MediaGallery items={backstage} locale={locale} dict={dict} layout="masonry" />
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

@@ -19,6 +19,7 @@ import { Section } from '@/components/content/Section';
 import { Testimonials } from '@/components/content/Testimonials';
 import { ArticleCard, ProjectCard, ServiceCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
+import { MediaGallery } from '@/components/media/MediaGallery';
 import { VideoFacade } from '@/components/media/VideoFacade';
 import {
   getArticleTypes,
@@ -103,6 +104,13 @@ export default async function DirectionHome({ params }: Props) {
    * у PRIVATE они назывались одинаково — «Портфолио» — и вели в одно место.
    * Категории полезнее: они сразу разводят свадьбу, портрет и семью.
    */
+  /*
+   * По одному ролику с категории: показать все — значит утопить каждый,
+   * человек посмотрит первый и уйдёт. Берём первый в списке — он там и стоит
+   * как выбранный. Все вместе показываются только на визитке: её открывает
+   * пара, которая уже решает, и ей нужно насмотреться.
+   */
+  const backstage = categories.flatMap((category) => (category.backstage ?? []).slice(0, 1));
   const showsCategories = direction === 'private' && categories.length > 0;
 
   // Секции нумеруются по порядку появления: метка не дублирует заголовок.
@@ -271,6 +279,17 @@ export default async function DirectionHome({ params }: Props) {
               contacts={settings.contacts}
             />
           )}
+        </Section>
+      ) : null}
+
+      {/*
+        Бэкстейдж. В портфолио лежит результат, здесь — процесс: он отвечает на
+        другой вопрос, каково будет рядом с этим фотографом весь съёмочный день.
+        Пока кадров нет, блока тоже нет: пустой раздел хуже отсутствующего.
+      */}
+      {backstage.length > 0 ? (
+        <Section eyebrow={step()} title={dict.card.backstageTitle} lead={dict.card.backstageBody}>
+          <MediaGallery items={backstage} locale={locale} dict={dict} layout="masonry" />
         </Section>
       ) : null}
 

@@ -86,6 +86,15 @@ export async function ProjectListingRoute({
    */
   const categoryAlbums = activeCategory ? await getAlbums(direction, activeCategory) : [];
 
+  /*
+   * Бэкстейдж показываем только при выбранной категории: без фильтра страница
+   * и так собирает кадры всех категорий подряд, и добавлять туда ещё и процесс
+   * значит превратить её в свалку.
+   */
+  const backstage = activeCategory
+    ? (categories.find((item) => item.slug === activeCategory)?.backstage ?? [])
+    : [];
+
   const sections = {
     photos: shownCategories.flatMap((item) => item.gallery ?? []),
     videos: shownCategories.flatMap((item) => item.videos ?? []),
@@ -144,6 +153,7 @@ export async function ProjectListingRoute({
       activeCategory={activeCategory}
       gallery={hasMedia ? sections : undefined}
       categoryAlbums={categoryAlbums}
+      backstage={backstage}
       showAll={showAll}
       promo={
         albums.length > 0

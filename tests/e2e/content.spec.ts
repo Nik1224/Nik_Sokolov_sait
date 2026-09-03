@@ -111,19 +111,25 @@ test('портфолио — галерея, кадр открывается н�
 });
 
 test('фильтр портфолио сужает галерею, а не ломает её', async ({ page }) => {
+  /*
+   * Считаем кадры именно галереи, а не любой figure на странице: ниже
+   * категории лежит ещё блок бэкстейджа, и он в этот счёт не входит.
+   */
+  const frames = () => page.locator('[data-gallery] figure button');
+
   await page.goto('/ru/private/portfolio');
-  const all = await page.locator('main figure button').count();
+  const all = await frames().count();
 
   await page
     .getByRole('navigation', { name: 'Фильтр' })
     .getByRole('link', { name: 'Свадьбы' })
     .click();
   await expect(page).toHaveURL(/category=wedding/);
-  expect(await page.locator('main figure button').count()).toBe(all);
+  expect(await frames().count()).toBe(all);
 
   // У категории без снятых кадров галереи нет — и пустой сетки тоже.
   await page.goto('/ru/private/portfolio?category=love-story');
-  expect(await page.locator('main figure button').count()).toBe(0);
+  expect(await frames().count()).toBe(0);
 });
 
 test('кадры портфолио не грузятся в полном размере на телефоне', async ({ page }) => {
@@ -1343,4 +1349,45 @@ test('визитка открывается без меню и подвала и
 
   // Ссылку вставляют в переписку — превью должно быть с портретом.
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /nikita-\d+\.jpg/);
+});
+
+test('бэкстейджа на Home по одному с категории, на визитке — все', async ({ page }) => {
+  const clips = async (path: string) => {
+    await page.goto(path);
+    const main = await page.getByRole('main').innerHTML();
+    const start = main.indexOf('Как проходит съёмка');
+    const block = start >= 0 ? main.slice(start) : '';
+    return new Set([...block.matchAll(/backstage\/(bs-[a-f0-9]+)-/g)].map((m) => m[1]));
+  };
+
+  /*
+   * На Home с каждой категории берётся один ролик: выложить все — значит
+   * утопить каждый, человек посмотрит первый и уйдёт.
+   */
+  expect((await clips('/ru/private')).size).toBe(1);
+
+  /*
+   * На визитке наоборот: её открывает пара, которая уже решает, и ей нужно
+   * насмотреться. Ссылку присылает организатор, второго захода не будет.
+   */
+  expect((await clips('/ru/nikita')).size).toBeGreaterThan(1);
+});
+
+test('в портфолио бэкстейдж свой у каждой категории и только при фильтре', async ({ page }) => {
+  const hasBlock = async (path: string) => {
+    await page.goto(path);
+    return (await page.getByRole('main').innerHTML()).includes('Как проходит съёмка');
+  };
+
+  // У свадеб бэкстейдж есть — значит блок внизу страницы категории.
+  expect(await hasBlock('/ru/private/portfolio?category=wedding')).toBe(true);
+
+  // У остальных его пока нет: пустой раздел хуже отсутствующего.
+  expect(await hasBlock('/ru/private/portfolio?category=portrait')).toBe(false);
+
+  /*
+   * Без фильтра страница и так собирает кадры всех категорий подряд;
+   * добавлять туда ещё и процесс — превращать её в свалку.
+   */
+  expect(await hasBlock('/ru/private/portfolio')).toBe(false);
 });

@@ -12,16 +12,16 @@
  */
 
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery } from '@/components/content/PortfolioGallery';
+import { MediaGallery } from '@/components/media/MediaGallery';
 import { Picture } from '@/components/media/Picture';
 import { getAlbums, getCategories, getDirection } from '@/content/queries';
 import type { ImageRef } from '@/content/types';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
-import { cardHref, directionHomeHref } from '@/lib/routing';
+import { cardHref } from '@/lib/routing';
 import { buildMetadata } from '@/lib/seo';
 import { LOCALES, type Locale } from '@/lib/site';
 
@@ -88,6 +88,7 @@ export default async function Page({ params }: Props) {
     videos: wedding?.videos ?? [],
     reels: wedding?.reels ?? [],
   };
+  const backstage = wedding?.backstage ?? [];
   const hasMedia =
     sections.photos.length + sections.videos.length + sections.reels.length > 0;
 
@@ -160,6 +161,22 @@ export default async function Page({ params }: Props) {
         ) : null}
 
         {/*
+          Бэкстейдж. В портфолио — результат, здесь — процесс: пара выбирает не
+          только кадры, но и человека, с которым проведёт весь день.
+        */}
+        {backstage.length > 0 ? (
+          <section className="mt-20">
+            <h2 className="text-h2 m-0 border-t border-line pt-6 text-balance">
+              {t.backstageTitle}
+            </h2>
+            <p className="mt-4 max-w-2xl text-bone-dim">{t.backstageBody}</p>
+            <div className="mt-10">
+              <MediaGallery items={backstage} locale={locale} dict={dict} layout="masonry" />
+            </div>
+          </section>
+        ) : null}
+
+        {/*
           Полные серии. Отдельные кадры показывают уровень, целая свадьба —
           ровность: как снято утро, как справился с тёмным залом, не развалился
           ли цвет к вечеру. Пара, выбирающая фотографа, спрашивает именно это.
@@ -179,16 +196,6 @@ export default async function Page({ params }: Props) {
         <section className="mt-20 max-w-2xl border-t border-line pt-6">
           <h2 className="text-h2 m-0 text-balance">{t.contactTitle}</h2>
           <p className="mt-6 text-bone-dim">{t.contactBody}</p>
-          {/*
-          Единственный переход со страницы. Ведёт на сайт целиком — тому, кому
-          мало одной страницы, есть куда пойти, а остальных ничто не уводит.
-        */}
-          <Link
-            href={directionHomeHref(locale, "private")}
-            className="label mt-10 inline-block text-bone-dim transition-colors hover:text-bone"
-          >
-            {t.siteLink} →
-          </Link>
         </section>
       </main>
     </div>

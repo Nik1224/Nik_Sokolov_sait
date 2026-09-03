@@ -153,6 +153,9 @@ export type Dictionary = {
     cardTitle: string;
     cardBody: string;
     cardAction: string;
+    /** Деньги и документы: сказать нужно, выпячивать — нет. */
+    termsFee: string;
+    termsInvoice: string;
   };
   pricing: {
     from: string;
@@ -208,6 +211,8 @@ export type Dictionary = {
     framesBody: string;
     albumsTitle: string;
     albumsBody: string;
+    backstageTitle: string;
+    backstageBody: string;
     contactTitle: string;
     contactBody: string;
     siteLink: string;
@@ -404,6 +409,9 @@ const ru: Dictionary = {
     cardBody:
       'Если пара спросит, кого вы советуете, — отправьте эту ссылку. Одна страница без меню и лишних переходов: кто я, что входит в съёмку и кадры. Ничего продающего, чтобы человек мог спокойно посмотреть и решить сам.',
     cardAction: 'Открыть страницу',
+    termsFee: 'Организаторское вознаграждение — 10% от суммы съёмки.',
+    termsInvoice:
+      'Нужен расчёт по счёту — не вопрос: есть ИП и электронный документооборот. Договор, счёт и закрывающие без лишней бумажной возни.',
     portraitBody:
       'Меня зовут Никита Соколов. Камерную свадьбу закрою один, на крупный проект соберу команду: у меня продакшн, и масштаб подбирается под задачу, а не наоборот. Договариваетесь вы в любом случае со мной, и отвечаю за результат тоже я.',
   },
@@ -454,12 +462,15 @@ const ru: Dictionary = {
     includedTitle: 'Что входит в съёмку',
     framesTitle: 'Свадьбы',
     framesBody: 'Кадры, фильмы и вертикальные ролики. Нажмите, чтобы открыть целиком.',
+    backstageTitle: 'Как проходит съёмка',
+    backstageBody:
+      'Кадры с площадки: как это выглядит со стороны. Полезно посмотреть заранее — сразу понятно, много ли фотограф командует и как ведёт себя рядом весь день.',
     albumsTitle: 'Свадьбы целиком',
     albumsBody:
       'Отдельные кадры показывают уровень, целая свадьба — ровность: как снято утро, как справился с тёмным залом, не развалился ли цвет к вечеру. Здесь съёмки от начала до конца, без выборки.',
     contactTitle: 'Если откликнулось',
     contactBody:
-      'Скажите об этом вашему организатору — он всё устроит: сверит дату, соберёт смету и назначит разговор. Никуда писать и ничего решать прямо сейчас не нужно.',
+      'Скажите об этом вашему организатору — он всё устроит: сверит дату, соберёт смету и назначит разговор.',
     siteLink: 'Посмотреть сайт целиком',
   },
   content: {
@@ -653,6 +664,9 @@ const en: Dictionary = {
     cardBody:
       'When a couple asks who you recommend, send them this link. One page with no menu and nowhere to wander off to: who I am, what the shoot includes, and the frames. Nothing salesy, so they can look and decide for themselves.',
     cardAction: 'Open the page',
+    termsFee: 'The planner’s fee is 10% of the shoot.',
+    termsInvoice:
+      'Payment by invoice is no problem: sole proprietorship and electronic document exchange. Contract, invoice and closing documents without the paperwork.',
     portraitBody:
       'My name is Nikita Sokolov. A small wedding I cover alone; for a large project I bring a crew — I run a production company, and the scale is matched to the job rather than the other way round. Either way you deal with me, and I am the one answerable for the result.',
   },
@@ -703,12 +717,15 @@ const en: Dictionary = {
     includedTitle: 'What the shoot includes',
     framesTitle: 'Weddings',
     framesBody: 'Frames, films and vertical clips. Tap to open in full.',
+    backstageTitle: 'How a shoot goes',
+    backstageBody:
+      'Frames from the day itself: what it looks like from the outside. Worth a look in advance — it shows straight away how much the photographer directs and what they are like to have around all day.',
     albumsTitle: 'Whole weddings',
     albumsBody:
       'Single frames show the level; a whole wedding shows consistency — how the morning was handled, how a dark hall was managed, whether the colour holds together by the evening. These are shoots from start to finish, with nothing left out.',
     contactTitle: 'If this resonates',
     contactBody:
-      'Tell your planner — they will take it from there: check the date, put together a quote and set up a conversation. There is nothing to write or decide right now.',
+      'Tell your planner — they will take it from there: check the date, put together a quote and set up a conversation.',
     siteLink: 'See the whole site',
   },
   content: {
