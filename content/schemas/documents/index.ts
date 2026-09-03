@@ -349,6 +349,14 @@ export const project = defineType({
       type: 'localeBlocks',
     }),
     defineField({
+      name: 'figures',
+      title: 'Цифры',
+      description: 'Две-четыре подтверждённые цифры под обложкой. Пусто — блока не будет.',
+      type: 'array',
+      of: [{ type: 'projectFigure' }],
+      validation: (rule) => rule.max(4),
+    }),
+    defineField({
       name: 'cover',
       title: 'Обложка',
       type: 'mediaAsset',

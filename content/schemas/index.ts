@@ -8,6 +8,7 @@ import {
   linkItem,
   seoFields,
   socialLink,
+  projectFigure,
 } from './objects/shared';
 import {
   article,
@@ -36,6 +37,7 @@ export const schemaTypes = [
   contactChannel,
   linkItem,
   socialLink,
+  projectFigure,
   // документы
   globalSettings,
   direction,

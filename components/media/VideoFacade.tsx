@@ -13,7 +13,7 @@ import type { MediaAsset } from '@/content/types';
 import { track } from '@/lib/analytics';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
-import { embedUrl, formatDuration } from '@/lib/media';
+import { embedUrl } from '@/lib/media';
 import type { Locale } from '@/lib/site';
 import { Picture } from './Picture';
 
@@ -32,7 +32,6 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
   const caption = localizedString(media.caption, locale);
   const isThirdParty = media.provider !== 'file';
   const src = media.videoId ? embedUrl(media.provider, media.videoId) : null;
-  const duration = formatDuration(media.durationSeconds);
   const playable = Boolean(src) || Boolean(media.url);
 
   function start() {
@@ -73,7 +72,13 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
               priority={priority}
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-ink/35" aria-hidden="true" />
+            {/*
+             * Вуаль поверх постера — едва заметная. Плотная заливка делала
+             * светлый кадр выцветшим; контраст кнопки держит она сама: тёмный
+             * диск со светлым треугольником читается и на белом слайде, и на
+             * тёмной площадке.
+             */}
+            <div className="absolute inset-0 bg-ink/10" aria-hidden="true" />
 
             <button
               type="button"
@@ -89,32 +94,42 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
               </span>
               <span
                 aria-hidden="true"
-                className="flex h-16 w-16 items-center justify-center rounded-full border border-bone/50 bg-ink/40 backdrop-blur transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:scale-110 group-focus-visible:scale-110"
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-bone/25 bg-ink/70 backdrop-blur-sm transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:scale-110 group-focus-visible:scale-110"
               >
-                <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-bone">
+                <svg viewBox="0 0 24 24" className="ml-0.5 h-5 w-5 fill-bone">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </span>
-              {duration ? (
-                <span aria-hidden="true" className="label absolute bottom-4 right-4 text-bone/80">
-                  {duration}
-                </span>
-              ) : null}
             </button>
-
-            {/* Предупреждение видно ДО клика: это и есть осознанное согласие (§7).
-                Отдельный экран подтверждения только добавлял бы второй клик. */}
-            {isThirdParty ? (
-              <p className="pointer-events-none absolute inset-x-0 bottom-0 m-0 bg-gradient-to-t from-ink/85 to-transparent px-4 pb-4 pt-10 text-center text-xs text-bone-dim">
-                {dict.media.videoConsent}
-              </p>
-            ) : null}
           </>
         )}
       </div>
 
-      {caption ? (
-        <figcaption className="mt-3 text-sm text-bone-faint">{caption}</figcaption>
+      {/*
+       * Подпись и служебные строки живут под кадром, а не поверх него.
+       *
+       * Раньше предупреждение о стороннем плеере лежало полосой по низу постера:
+       * на светлом слайде серый текст по градиенту не читался вовсе, а сам кадр
+       * оказывался наполовину закрыт служебной фразой. Кадр теперь чистый —
+       * на нём только кнопка.
+       *
+       * Хайрлайн сверху связывает строки с кадром: это подпись к нему, а не
+       * следующий блок страницы.
+       */}
+      {caption || isThirdParty ? (
+        <figcaption className="mt-4 border-t border-line pt-3">
+          {/*
+           * Ни хронометража, ни имени сервиса. Это техника, а не содержание:
+           * человек смотрит работу, а не выбирает файл по длительности.
+           * Остаётся только предупреждение — оно обязано быть видно до нажатия.
+           */}
+          {caption ? <span className="block text-sm text-bone-dim">{caption}</span> : null}
+          {/* Предупреждение видно ДО клика: это и есть осознанное согласие (§7).
+              Отдельный экран подтверждения только добавлял бы второй клик. */}
+          {isThirdParty ? (
+            <span className="mt-2 block text-xs text-bone-faint">{dict.media.videoConsent}</span>
+          ) : null}
+        </figcaption>
       ) : null}
     </figure>
   );

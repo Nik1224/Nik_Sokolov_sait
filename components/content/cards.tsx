@@ -87,7 +87,12 @@ export function ProjectCard({
           className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
         />
         <div className="mt-5">
-          <Meta items={[String(project.year), ...categoryTitles]} />
+          {/*
+           * Год в карточке не показываем. Съёмка двухлетней давности выглядит
+           * устаревшей, хотя работа от этого не меняется; поле в данных
+           * осталось — по нему сортируются работы.
+           */}
+          <Meta items={categoryTitles} />
           <h3 className="text-h3 mt-2 text-balance text-bone transition-colors group-hover:text-accent">
             {title}
           </h3>

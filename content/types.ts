@@ -201,6 +201,15 @@ export type Person = {
 
 export type Credit = { person: Person; role?: LocaleString };
 
+/**
+ * Цифра кейса: крупное число и подпись под ним.
+ *
+ * Кейс читают по диагонали, и объём работы должен считываться раньше текста:
+ * «18 роликов, 14,5 часа» человек видит за секунду, а три абзаца — нет.
+ * Публикуются только подтверждённые числа (§5.5), как и всё в `result`.
+ */
+export type ProjectFigure = { value: LocaleString; label: LocaleString };
+
 export type Project = BaseDoc & {
   title: LocaleString;
   /** Одна работа может принадлежать нескольким веткам. */
@@ -215,6 +224,8 @@ export type Project = BaseDoc & {
   solution?: LocaleBlocks;
   /** Метрики показываем только при наличии подтверждения (§5.5). */
   result?: LocaleBlocks;
+  /** Две-четыре цифры под обложкой. Пусто — блока нет. */
+  figures?: ProjectFigure[];
   cover: MediaAsset;
   media: MediaAsset[];
   formatSlugs: string[];

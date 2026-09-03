@@ -7,10 +7,12 @@
  * по Escape и делает фон недоступным для ассистивных технологий. Никакой
  * собственной ловушки фокуса писать не нужно.
  *
- * Две раскладки. `feature` — несколько кадров на странице работы, широкие во
- * всю ширину. `masonry` — портфолио на десятки кадров: колонки, в которых
- * вертикальные и горизонтальные снимки лежат в своих пропорциях и не
- * обрезаются.
+ * Две раскладки. `feature` — кадры на странице работы: широкие ложатся полосой
+ * во всю ширину, вертикальные встают сеткой — по три на компьютере, по две на
+ * телефоне. Одна колонка на телефоне давала кадр в полный экран: чтобы дойти до
+ * следующего, приходилось прокручивать страницу целиком. `masonry` — портфолио на
+ * десятки кадров: колонки, в которых вертикальные и горизонтальные снимки лежат
+ * в своих пропорциях и не обрезаются.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -30,7 +32,7 @@ type Props = {
   items: MediaAsset[];
   locale: Locale;
   dict: Dictionary;
-  layout?: 'feature' | 'masonry';
+  layout?: 'feature' | 'masonry' | 'rail';
   /**
    * Сколько кадров показать сразу. Остальные открываются кнопкой: две сотни
    * снимков разом — это бесконечная страница, по которой нечем ориентироваться.
@@ -135,7 +137,13 @@ export function MediaGallery({
       {batches.map((batch, batchIndex) => (
       <ul
         key={batchIndex}
-        className={layout === 'masonry' ? 'masonry m-0 list-none p-0' : 'grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:gap-6'}
+        className={
+          layout === 'masonry'
+            ? 'masonry m-0 list-none p-0'
+            : layout === 'rail'
+              ? 'm-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-4 lg:grid-cols-3'
+              : 'm-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-4 lg:grid-cols-3 lg:gap-6'
+        }
       >
         {batch.map((item, indexInBatch) => {
           const position = batchIndex * batchSize + indexInBatch;
@@ -146,7 +154,11 @@ export function MediaGallery({
             return (
               <li
                 key={item._key}
-                className={layout === 'masonry' ? 'mb-4 break-inside-avoid lg:mb-6' : 'sm:col-span-2'}
+                className={
+                  layout === 'masonry'
+                    ? 'mb-4 break-inside-avoid lg:mb-6'
+                    : 'col-span-2 lg:col-span-3'
+                }
               >
                 <VideoFacade
                   media={item}
@@ -155,7 +167,9 @@ export function MediaGallery({
                   sizes={
                     layout === 'masonry'
                       ? '(min-width: 1024px) 33vw, 50vw'
-                      : '(min-width: 640px) 100vw, 100vw'
+                      : layout === 'rail'
+                        ? '(min-width: 1024px) 45rem, 100vw'
+                        : '100vw'
                   }
                 />
               </li>
@@ -173,11 +187,16 @@ export function MediaGallery({
                 layout === 'masonry'
                   ? 'mb-4 break-inside-avoid lg:mb-6'
                   : isWide
-                    ? 'sm:col-span-2'
+                    ? 'col-span-2 lg:col-span-3'
                     : ''
               }
             >
-              <figure className="m-0">
+              {/*
+               * Горизонтальный кадр в ленте работы ограничен по ширине: во всю
+               * ширину колонки портрет человека превращается в баннер и спорит
+               * с роликом, ради которого страницу открыли.
+               */}
+              <figure className={layout === 'feature' && isWide ? 'mx-auto m-0 max-w-4xl' : 'm-0'}>
                 <button
                   type="button"
                   onClick={() => open(imageIndex)}
@@ -193,9 +212,11 @@ export function MediaGallery({
                     sizes={
                       layout === 'masonry'
                         ? '(min-width: 1024px) 33vw, 50vw'
-                        : isWide
-                          ? '(min-width: 1024px) 78rem, 100vw'
-                          : '(min-width: 640px) 39rem, 100vw'
+                        : layout === 'rail'
+                          ? '(min-width: 1024px) 15rem, 50vw'
+                          : isWide
+                            ? '(min-width: 1024px) 56rem, 100vw'
+                            : '(min-width: 1024px) 25rem, 50vw'
                     }
                     className="h-full w-full object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.02]"
                   />

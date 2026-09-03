@@ -472,3 +472,18 @@
     transform: translateX(-3rem);
   }
 }
+
+/*
+ * Первый абзац раздела кейса — крупнее и светлее остальных.
+ *
+ * Три раздела подряд одинаково серым текстом читаются как стена: глазу не за
+ * что зацепиться, и человек прокручивает мимо. Крупная первая фраза работает
+ * входом в раздел — дальше кегль возвращается к обычному.
+ */
+.case-body > p:first-of-type {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3--line-height);
+  letter-spacing: var(--text-h3--letter-spacing);
+  color: var(--color-bone);
+  margin-top: 0;
+}

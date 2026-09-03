@@ -31,7 +31,6 @@ export type Dictionary = {
     readMore: string;
     viewAll: string;
     packages: string;
-    year: string;
     client: string;
     role: string;
     credits: string;
@@ -259,7 +258,6 @@ const ru: Dictionary = {
     readMore: 'Читать',
     viewAll: 'Смотреть все',
     packages: 'Пакетные предложения',
-    year: 'Год',
     client: 'Клиент',
     role: 'Роль',
     credits: 'Команда',
@@ -519,7 +517,6 @@ const en: Dictionary = {
     readMore: 'Read',
     viewAll: 'View all',
     packages: 'Package offers',
-    year: 'Year',
     client: 'Client',
     role: 'Role',
     credits: 'Credits',

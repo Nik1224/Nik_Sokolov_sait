@@ -55,12 +55,32 @@ export function ProjectDetail({
   const title = localizedString(project.title, locale);
   const cover = project.cover;
   const coverImage = cover.type === 'image' ? cover.image : cover.poster;
+  /** Кадр выше, чем 3:4, полосой не показываем — от него осталась бы середина. */
+  const coverIsTall = coverImage.height / (coverImage.width || 1) > 0.75;
+  /** Больше четырёх цифр — это уже таблица, а её никто не читает. */
+  const figures = (project.figures ?? []).slice(0, 4);
+
+
+
 
   const challenge = resolveLocalized(project.challenge, locale);
   const solution = resolveLocalized(project.solution, locale);
   const result = resolveLocalized(project.result, locale);
   const role = localizedString(project.role, locale);
   const lead = localizedString(project.lead, locale);
+
+  /*
+   * Задача → решение → результат. Пустые разделы отпадают: кейс без метрик
+   * лучше показать без раздела «Результат», чем с пустым заголовком.
+   */
+  const story = (
+    [
+      [dict.common.challenge, challenge.value],
+      [dict.common.solution, solution.value],
+      [dict.common.result, result.value],
+    ] as const
+  ).filter(([, value]) => Boolean(value));
+  const hasStory = story.length > 0;
 
   const showFallbackNotice = pageNeedsFallbackNotice(
     [project.title, project.lead, project.challenge, project.solution],
@@ -92,7 +112,6 @@ export function ProjectDetail({
         {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
 
         <dl className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <Fact label={dict.common.year}>{project.year}</Fact>
           {project.client ? <Fact label={dict.common.client}>{project.client}</Fact> : null}
           {role ? (
             <Fact label={dict.common.role}>
@@ -107,44 +126,104 @@ export function ProjectDetail({
         </dl>
       </div>
 
+      {/*
+       * Обложка — полоса во всю ширину колонки, а не кадр по центру.
+       *
+       * Раньше она тянулась во всю ширину в своих пропорциях, и вертикальный
+       * кадр занимал две с половиной высоты экрана. Ограничение по высоте это
+       * чинило, но горизонтальный кадр повисал по центру с пустыми полями по
+       * бокам — будто заглушка. Полоса фиксированных пропорций держит первый
+       * экран и не спорит с текстом.
+       *
+       * Вертикальная обложка в полосу не режется: от неё осталась бы середина
+       * без головы. Такая остаётся кадром по центру, ограниченным по высоте.
+       */}
       <div className="container-content mt-12 lg:mt-16">
-        <Picture
-          image={coverImage}
-          alt={localizedString(cover.alt, locale)}
-          sizes="(min-width: 1024px) 78rem, 100vw"
-          priority
-          className="w-full"
-        />
+        {coverIsTall ? (
+          <Picture
+            image={coverImage}
+            alt={localizedString(cover.alt, locale)}
+            sizes="(min-width: 1024px) 40rem, 100vw"
+            priority
+            className="mx-auto h-auto max-h-[60svh] w-auto max-w-full"
+          />
+        ) : (
+          <div className="relative overflow-hidden bg-ink-raised" style={{ aspectRatio: '16 / 9' }}>
+            <Picture
+              image={coverImage}
+              alt={localizedString(cover.alt, locale)}
+              sizes="(min-width: 1024px) 78rem, 100vw"
+              priority
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        )}
       </div>
 
-      {challenge.value || solution.value || result.value ? (
-        <Section>
-          <div className="grid gap-12 lg:grid-cols-3 lg:gap-10">
-            {challenge.value ? (
-              <div>
-                <h2 className="label m-0 text-accent">{dict.common.challenge}</h2>
-                <PortableBody value={challenge.value} locale={locale} dict={dict} />
-              </div>
-            ) : null}
-            {solution.value ? (
-              <div>
-                <h2 className="label m-0 text-accent">{dict.common.solution}</h2>
-                <PortableBody value={solution.value} locale={locale} dict={dict} />
-              </div>
-            ) : null}
-            {result.value ? (
-              <div>
-                <h2 className="label m-0 text-accent">{dict.common.result}</h2>
-                <PortableBody value={result.value} locale={locale} dict={dict} />
-              </div>
-            ) : null}
-          </div>
-        </Section>
+      {/*
+       * Задача, решение и результат идут друг за другом, а не тремя колонками.
+       *
+       * Колонки выглядели таблицей: три разной длины столбца с рваным низом,
+       * строка в тридцать знаков и мелкий серый текст. Кейс читают как историю,
+       * поэтому здесь один столбец нормальной длины, а метка стоит на полях
+       * слева — так набирают развороты в журналах.
+       */}
+      {/*
+       * Цифры кейса лентой, а не сеткой карточек.
+       *
+       * Крупное число с подписью под ним — ровно тот блок, который стоит на
+       * каждом втором сайте. Здесь цифры набраны моноширинным в строку, через
+       * точки: так выглядит счётчик на камере и строка тайм-кода в монтажной,
+       * то есть язык самой работы. Заодно это одна строка вместо четырёх
+       * колонок — страница короче на целый экран.
+       */}
+      {figures.length > 0 ? (
+        <div className="container-content mt-12 lg:mt-16">
+          <p className="m-0 flex flex-wrap items-baseline gap-x-4 gap-y-3 border-y border-line py-5 font-mono text-h3 uppercase tracking-[0.06em] text-bone lg:gap-x-7">
+            {figures.map((figure, index) => (
+              <span key={index} className="inline-flex items-baseline gap-2">
+                {index > 0 ? (
+                  <span aria-hidden="true" className="mr-2 text-line-strong lg:mr-5">
+                    ·
+                  </span>
+                ) : null}
+                <span>{localizedString(figure.value, locale)}</span>
+                <span className="text-bone-faint">{localizedString(figure.label, locale)}</span>
+              </span>
+            ))}
+          </p>
+        </div>
       ) : null}
 
-      {project.media.length > 0 ? (
+      {/*
+       * Разворот: слева рассказ, справа кадры.
+       *
+       * Раньше текст и галерея шли друг за другом, и страница вытягивалась на
+       * три экрана подряд — сначала стена слов, потом стена картинок. Здесь
+       * они идут параллельно и заканчиваются примерно вместе.
+       *
+       * Композиция взята у самой работы: в этих роликах слева слайд, справа
+       * человек в кадре. Страница повторяет кадр, который на ней показан, —
+       * поэтому деление именно вертикальное и именно в этих пропорциях.
+       */}
+      {hasStory || project.media.length > 0 ? (
         <Section>
-          <MediaGallery items={project.media} locale={locale} dict={dict} />
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14">
+            {hasStory ? (
+              <div className="space-y-10 lg:space-y-14">
+                {story.map(([label, value]) => (
+                  <div key={label} className="border-t border-line pt-7">
+                    <h2 className="label m-0 mb-5 text-accent">{label}</h2>
+                    <PortableBody value={value!} locale={locale} dict={dict} className="case-body" />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            {project.media.length > 0 ? (
+              <MediaGallery items={project.media} locale={locale} dict={dict} layout="rail" />
+            ) : null}
+          </div>
         </Section>
       ) : null}
 

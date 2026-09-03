@@ -138,13 +138,29 @@ export const businessCases: Project[] = [
         'Portraits of the speakers were shot in the breaks as a bonus — they were not part of the brief.',
       ),
     },
+    /*
+     * Обложка горизонтальная, хотя площадка снята вертикально. Вертикальный
+     * кадр в шапке кейса встаёт колонной во весь экран и отодвигает задачу с
+     * решением ниже сгиба; горизонтальный ложится полосой и оставляет текст
+     * на первом экране. Сама площадка показана ниже, в галерее.
+     */
+    /*
+     * Цифры только подтверждённые: количество роликов и хронометраж — из
+     * задачи заказчика, три дня и две камеры — с самой съёмки.
+     */
+    figures: [
+      { value: { ru: '18', en: '18' }, label: { ru: 'роликов', en: 'videos' } },
+      { value: { ru: '14,5 часа', en: '14.5 hours' }, label: { ru: 'материала', en: 'of material' } },
+      { value: { ru: '3 дня', en: '3 days' }, label: { ru: 'съёмки', en: 'of shooting' } },
+      { value: { ru: '2', en: '2' }, label: { ru: 'камеры', en: 'cameras' } },
+    ],
     cover: shot(
-      '205552b56890',
-      [600, 720],
-      720,
-      1280,
-      'Съёмочная площадка: спикер за белым столом под софтбоксом',
-      'The set: a speaker at a white table under a softbox',
+      '72a858263dfe',
+      [600, 1200],
+      1200,
+      800,
+      'Спикер за столом на съёмочной площадке',
+      'A speaker at the table on set',
     ),
     media: [
       // Результат идёт первым: за ним человек и пришёл, кадры с площадки —
@@ -159,6 +175,14 @@ export const businessCases: Project[] = [
           ru: 'Один из восемнадцати роликов: слайд на экране, спикер в кадре.',
           en: 'One of the eighteen videos: a slide on screen, a speaker on camera.',
         },
+      ),
+      shot(
+        '205552b56890',
+        [600, 720],
+        720,
+        1280,
+        'Съёмочная площадка: спикер за белым столом под софтбоксом',
+        'The set: a speaker at a white table under a softbox',
       ),
       shot(
         'dd6e9b03c67d',
@@ -197,22 +221,6 @@ export const businessCases: Project[] = [
         'Speakers between takes',
       ),
       shot(
-        '72a858263dfe',
-        [600, 1200],
-        1200,
-        800,
-        'Портрет спикера за столом',
-        'Portrait of a speaker at the table',
-      ),
-      shot(
-        'dd7e87bf60ac',
-        [600, 1200],
-        1200,
-        800,
-        'Портрет второго спикера',
-        'Portrait of the second speaker',
-      ),
-      shot(
         'cf5ac70a97c0',
         [600, 853],
         853,
@@ -223,6 +231,16 @@ export const businessCases: Project[] = [
           ru: 'Портреты сняли в перерывах между блоками съёмки.',
           en: 'The portraits were taken during breaks between shooting blocks.',
         },
+      ),
+      // Горизонтальный кадр идёт последним: шесть вертикальных до него
+      // укладываются в два ровных ряда, а он закрывает ленту полосой.
+      shot(
+        'dd7e87bf60ac',
+        [600, 1200],
+        1200,
+        800,
+        'Портрет второго спикера',
+        'Portrait of the second speaker',
       ),
     ],
     formatSlugs: ['photo-video'],

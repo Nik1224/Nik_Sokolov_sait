@@ -93,3 +93,31 @@ export const socialLink = defineType({
     defineField({ name: 'href', title: 'URL', type: 'url', validation: (rule) => rule.required() }),
   ],
 });
+
+/**
+ * Цифра кейса: крупное число и подпись под ним. Значение — строкой, а не
+ * числом: «14,5 часа» и «3 дня» числом не запишешь, а формат в разных языках
+ * разный.
+ */
+export const projectFigure = defineType({
+  name: 'projectFigure',
+  title: 'Цифра',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'value',
+      title: 'Число',
+      description: 'Коротко: «18», «14,5 часа», «3 дня».',
+      type: 'localeString',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'label',
+      title: 'Подпись',
+      description: 'Что это за число: «роликов», «материала», «дня съёмки».',
+      type: 'localeString',
+      validation: (rule) => rule.required(),
+    }),
+  ],
+  preview: { select: { title: 'value.ru', subtitle: 'label.ru' } },
+});

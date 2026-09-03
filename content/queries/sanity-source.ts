@@ -85,7 +85,7 @@ const WORK_FORMATS = groq`*[_type == "workFormat"]{
 
 const PROJECTS = groq`*[_type == "project"]{
   _id, "slug": slug.current, status, title, directions, year, client, role, lead,
-  challenge, solution, result, featured, order, isDemo,
+  challenge, solution, result, figures, featured, order, isDemo,
   "categorySlugs": categories[]->slug.current,
   "formatSlugs": formats[]->slug.current,
   cover ${MEDIA}, media[] ${MEDIA}, seo ${SEO},
