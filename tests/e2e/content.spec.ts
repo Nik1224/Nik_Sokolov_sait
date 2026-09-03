@@ -1162,7 +1162,7 @@ test('цены везде с символом рубля, а не с кодом 
   }
 });
 
-test('верхний ряд плиток раскрывается вверх, нижний — вниз', async ({ page }, testInfo) => {
+test('плитки раскрываются вверх и вниз слоем, не двигая страницу', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
 
   await page.goto('/ru/private');
@@ -1194,7 +1194,11 @@ test('верхний ряд плиток раскрывается вверх, н
   ).toBeLessThan((await top.boundingBox())!.y);
   expect(await below(), 'верхний ряд не должен двигать страницу').toBe(anchor);
 
-  // Нижний ряд уходит вниз и по-настоящему отодвигает следующий блок.
+  /*
+   * Нижний ряд уходит вниз — и тоже слоем поверх страницы. Раньше он рос
+   * по-настоящему и отодвигал следующий блок; от этого отказались: страница
+   * дёргалась на каждое наведение, а взамен сдвиг ничего не давал.
+   */
   const bottom = tile(/^Love story/);
   await bottom.hover();
   await expect.poll(async () => (await panel(/^Love story/).boundingBox())!.height).toBeGreaterThan(400);
@@ -1202,7 +1206,7 @@ test('верхний ряд плиток раскрывается вверх, н
     (await panel(/^Love story/).boundingBox())!.y,
     'слой должен начинаться от плитки',
   ).toBeCloseTo((await bottom.boundingBox())!.y, 0);
-  expect(await below(), 'нижний ряд должен отодвинуть следующий блок').toBeGreaterThan(anchor + 400);
+  expect(await below(), 'нижний ряд тоже не должен двигать страницу').toBe(anchor);
 });
 
 test('на сенсорном экране кадр стоит в плитке и играет по видимости', async ({
