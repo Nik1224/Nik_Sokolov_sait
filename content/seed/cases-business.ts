@@ -104,8 +104,8 @@ export const businessCases: Project[] = [
       en: 'Photographer, assembling and running the crew',
     },
     lead: {
-      ru: 'Восемь часов программы, группа из девяти человек, фотографии у заказчика на следующий день.',
-      en: 'Eight hours of programme, a crew of nine, photographs delivered to the client the next day.',
+      ru: 'Восемь часов программы, группа из девяти человек, больше тысячи готовых фотографий на третий день.',
+      en: 'Eight hours of programme, a crew of nine, over a thousand finished photographs by the third day.',
     },
     /*
      * Цифры из брифа и с площадки: число гостей и часов — от заказчика,
@@ -141,12 +141,14 @@ export const businessCases: Project[] = [
     },
     result: {
       ru: blocks(
-        'Больше тысячи фотографий в цветокоррекции и ретуши — переданы на следующий день. Тогда же ушли четыре вертикальных ролика: юбилей попал в соцсети, пока он ещё новость.',
-        'Итоговое видео — клип и полный фильм о вечере — заказчик получил через две недели.',
+        'Вечер закончился в полночь 23 января. К десяти утра 26-го были готовы все фотографии — больше тысячи, в цветокоррекции и ретуши. Не выборка и не «первые кадры», а весь материал целиком.',
+        'Четыре вертикальных ролика ушли на следующий день после съёмки: юбилей попал в соцсети, пока он ещё новость.',
+        'Клип и полный фильм о вечере заказчик получил через две недели.',
       ),
       en: blocks(
-        'More than a thousand photographs, colour-graded and retouched, were handed over the next day. Four vertical videos went out the same day, so the anniversary reached social media while it was still news.',
-        'The finished video — a short cut and a full film of the evening — was delivered two weeks later.',
+        'The evening ended at midnight on 23 January. By ten in the morning on the 26th every photograph was ready — more than a thousand, colour-graded and retouched. Not a selection, not a set of previews, but the whole shoot.',
+        'The four vertical videos went out the day after the shoot, so the anniversary reached social media while it was still news.',
+        'The short cut and the full film of the evening were delivered two weeks later.',
       ),
     },
     cover: shot(
