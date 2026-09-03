@@ -2,9 +2,10 @@
  * Кейсы ветки BUSINESS — настоящие проекты, не demo.
  *
  * Кадры лежат в `public/media/cases/<slug>` в двух размерах: 600 для телефона
- * и исходная ширина для сетки. Третьего размера (1800) здесь нет намеренно —
- * исходники пришли с телефона, шире 1280 их не существует, и растягивать
- * вверх значит утяжелять файл без прибавки в качестве.
+ * и исходная ширина для сетки. Третьего размера (1800) у фотографий нет
+ * намеренно — исходники пришли с телефона, шире 1280 их не существует, и
+ * растягивать вверх значит утяжелять файл без прибавки в качестве. У постера
+ * ролика все три размера: он снят с видео 1920×1080.
  *
  * Имя клиента и цифры результата — только подтверждённые (ТЗ §1.2, §5.5).
  */
@@ -35,6 +36,45 @@ function shot(
       width,
       height,
       sources: widths.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
+    },
+  };
+}
+
+/**
+ * Готовый ролик с Kinescope.
+ *
+ * Своим файлом такое не отдаётся: исходник — 142 МБ, и в репозитории он дал бы
+ * этот вес каждой сборке навсегда, без перемотки и без подстройки под скорость
+ * сети. То же правило, что у бэкстейджа.
+ *
+ * Постер снят с исходника, а не взят у сервиса: тот подставляет первый кадр,
+ * а там ещё пустой стол. Секунда записана здесь же — чтобы поменять кадр,
+ * ролик разбирать заново не нужно.
+ */
+function clip(
+  id: string,
+  videoId: string,
+  durationSeconds: number,
+  altRu: string,
+  altEn: string,
+  caption?: { ru: string; en: string },
+): MediaAsset {
+  const base = `/media/cases/${CASE}`;
+  const sizes = [600, 1200, 1800];
+  return {
+    _key: id,
+    type: 'video',
+    provider: 'kinescope',
+    videoId,
+    rights: 'owned',
+    durationSeconds,
+    alt: { ru: altRu, en: altEn },
+    caption,
+    poster: {
+      src: `${base}/${id}-1800.jpg`,
+      width: 1800,
+      height: 1012,
+      sources: sizes.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
     },
   };
 }
@@ -107,6 +147,19 @@ export const businessCases: Project[] = [
       'The set: a speaker at a white table under a softbox',
     ),
     media: [
+      // Результат идёт первым: за ним человек и пришёл, кадры с площадки —
+      // объяснение, как он получился. Кадр постера — 60-я секунда.
+      clip(
+        'oxy-active-poster',
+        'rGZYpW7Ecp4tA9VG7CVpkz',
+        90,
+        'Кадр из обучающего ролика: спикер и слайд об окисляющих эмульсиях',
+        'Frame from a training video: a speaker and a slide about oxidising emulsions',
+        {
+          ru: 'Один из восемнадцати роликов: слайд на экране, спикер в кадре.',
+          en: 'One of the eighteen videos: a slide on screen, a speaker on camera.',
+        },
+      ),
       shot(
         'dd6e9b03c67d',
         [600, 720],
