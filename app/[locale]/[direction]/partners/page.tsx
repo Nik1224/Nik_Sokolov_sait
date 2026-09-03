@@ -183,11 +183,17 @@ export default async function Page({ params }: Props) {
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.startTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.startBody}</p>
         <div className="mt-8">
+          {/*
+            Кнопка называется «Проверить дату», и сообщение должно начинаться
+            тем же: организатор не заказывает съёмку, он спрашивает про дату.
+            Общее «Пишу с сайта» заставило бы его переписывать всё заново.
+          */}
           <ContactButton
             dict={dict}
             contacts={settings.contacts}
             variant="solid"
             label={t.startAction}
+            draft={{ intro: dict.contact.plannerDate }}
           />
         </div>
       </section>

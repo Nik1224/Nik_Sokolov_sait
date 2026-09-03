@@ -98,3 +98,31 @@ describe('первое сообщение', () => {
     }
   });
 });
+
+describe('заготовка подстраивается под место, откуда написали', () => {
+  it('организатор проверяет дату, а не заказывает съёмку', () => {
+    const text = contactMessage({ intro: dict.contact.plannerDate }, dict);
+
+    // Начало своё, и общего «Пишу с сайта» в нём нет.
+    expect(text.startsWith('Добрый день! Пишу как свадебный организатор.')).toBe(true);
+    expect(text).not.toContain(dict.contact.greeting);
+    // И заканчивается местом, куда человек впишет дату.
+    expect(text.trimEnd().endsWith(':')).toBe(true);
+  });
+
+  it('своё начало не мешает остальным строкам собраться', () => {
+    const text = contactMessage(
+      { intro: 'Своё начало.', subject: 'свадьба', details: ['8 часов'], estimate: '90 600 ₽' },
+      dict,
+    );
+    const lines = text.split('\n');
+
+    expect(lines[0]).toBe('Своё начало.');
+    expect(text).toContain('свадьба — 8 часов');
+    expect(text).toContain('90 600 ₽');
+  });
+
+  it('без своего начала остаётся общее приветствие', () => {
+    expect(contactMessage({ subject: 'частная съёмка' }, dict)).toContain(dict.contact.greeting);
+  });
+});

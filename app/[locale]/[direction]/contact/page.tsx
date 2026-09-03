@@ -52,7 +52,13 @@ export default async function Page({ params }: Props) {
         <p className="label mt-6 text-bone-faint">{localizedString(settings.location, locale)}</p>
       ) : null}
 
-      <ContactButton dict={dict} contacts={settings.contacts} className="mt-10" />
+      {/* Ветка известна и здесь: адрес страницы контактов у каждой свой. */}
+      <ContactButton
+        dict={dict}
+        contacts={settings.contacts}
+        className="mt-10"
+        draft={{ subject: dict.contact.directionSubject[direction] }}
+      />
 
       {/* Тот же список без окна: кому-то удобнее скопировать номер или ник. */}
       {settings.contacts.length > 0 ? (

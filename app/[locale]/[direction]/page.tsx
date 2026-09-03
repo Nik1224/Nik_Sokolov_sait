@@ -357,7 +357,13 @@ export default async function DirectionHome({ params }: Props) {
         <div className="border-t border-line pt-10">
           <h2 className="text-h2 m-0 max-w-2xl text-balance">{dict.contact.heading}</h2>
           <p className="mt-4 max-w-xl text-bone-dim">{dict.contact.homeLead}</p>
-          <ContactButton dict={dict} contacts={settings.contacts} className="mt-8" />
+          {/* С Home известна ветка — с неё и начинается разговор. */}
+          <ContactButton
+            dict={dict}
+            contacts={settings.contacts}
+            className="mt-8"
+            draft={{ subject: dict.contact.directionSubject[direction] }}
+          />
         </div>
       </Section>
     </>

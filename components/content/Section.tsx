@@ -40,16 +40,23 @@ export function Section({
             {lead ? <p className="mt-4 text-lead text-bone-dim">{lead}</p> : null}
           </div>
           {action ? (
+            /*
+             * `self-start` у кнопки — не украшение. На узком экране заголовок
+             * выстраивается колонкой, и растянутая во всю ширину кнопка с
+             * тёмной заливкой становится неотличима от выбранного переключателя
+             * калькулятора, который стоит сразу под ней: человек читает её как
+             * нажатую. По ширине содержимого и со стрелкой она читается как
+             * переход, а не как состояние.
+             */
             <Link
               href={action.href}
               className={
                 action.variant === 'solid'
-                  ? 'label inline-block shrink-0 bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent'
+                  ? 'label inline-block shrink-0 self-start bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent'
                   : 'label shrink-0 text-bone-dim transition-colors hover:text-bone'
               }
             >
-              {action.label}
-              {action.variant === 'solid' ? null : ' →'}
+              {action.label} →
             </Link>
           ) : null}
         </div>

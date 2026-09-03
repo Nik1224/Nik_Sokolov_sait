@@ -193,6 +193,10 @@ export type Dictionary = {
     directContacts: string;
     /** Заготовка первого сообщения. */
     greeting: string;
+    /** Начало письма организатора: он проверяет дату, а не заказывает съёмку. */
+    plannerDate: string;
+    /** Чем человек интересуется, если он пришёл с Home ветки. */
+    directionSubject: { private: string; business: string; production: string };
     subjectPrefix: string;
     packageWord: string;
     serviceWord: string;
@@ -443,6 +447,13 @@ const ru: Dictionary = {
     call: 'Позвонить',
     directContacts: 'Прямые контакты',
     greeting: 'Добрый день! Пишу с сайта.',
+    plannerDate:
+      'Добрый день! Пишу как свадебный организатор.\nХотелось бы узнать, свободна ли у вас дата:',
+    directionSubject: {
+      private: 'частная съёмка',
+      business: 'съёмка для компании',
+      production: 'production-проект',
+    },
     subjectPrefix: 'Интересует',
     packageWord: 'пакет',
     serviceWord: 'услуга',
@@ -698,6 +709,13 @@ const en: Dictionary = {
     call: 'Call',
     directContacts: 'Direct contacts',
     greeting: 'Hello! I am writing from your website.',
+    plannerDate:
+      'Hello! I am a wedding planner.\nI would like to know whether you are free on:',
+    directionSubject: {
+      private: 'a private shoot',
+      business: 'a shoot for a company',
+      production: 'a production project',
+    },
     subjectPrefix: 'I am interested in',
     packageWord: 'the package',
     serviceWord: 'the service',

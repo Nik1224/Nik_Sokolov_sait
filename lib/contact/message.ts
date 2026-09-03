@@ -12,6 +12,12 @@
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 
 export type MessageDraft = {
+  /**
+   * Своё начало вместо общего приветствия. Нужно там, где вопрос не «интересует
+   * такая-то съёмка», а другой по существу: организатор проверяет дату, а не
+   * заказывает съёмку, и «Интересует…» в его сообщении звучит мимо.
+   */
+  intro?: string;
   /** Что интересует: «свадьба», «пакет „Полный день“», «услуга „Съёмка для бренда“». */
   subject?: string;
   /** Уточнения к теме: форматы, длительность. */
@@ -25,7 +31,7 @@ export type MessageDraft = {
  * вычитывания. Пустые части выпадают — «Интересует» без темы не появится.
  */
 export function contactMessage(draft: MessageDraft, dict: Dictionary): string {
-  const lines = [dict.contact.greeting];
+  const lines = [draft.intro ?? dict.contact.greeting];
 
   if (draft.subject) {
     const details = (draft.details ?? []).filter(Boolean).join(', ');
