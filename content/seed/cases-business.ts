@@ -119,11 +119,11 @@ export const businessCases: Project[] = [
     ],
     challenge: {
       ru: blocks(
-        'Десятилетие компании: больше трёхсот гостей и восемь часов непрерывной программы — фотозона, ужин, сцена с ведущими и артистами, выступление президента корпорации, танцпол. У такого вечера нет второго дубля: что не снято, того не было.',
+        'Десятилетие компании: больше трёхсот гостей и восемь часов непрерывной программы. Фотозона, ужин, сцена — ведущие Антон Лаврентьев и Алина Астровская, артисты, выступление президента корпорации Габриэля Серрано, — и танцпол до ночи. У такого вечера нет второго дубля: что не снято, того не было.',
         'Снимать нужно было одновременно фото и видео и в нескольких точках сразу. Пока на сцене идёт номер, у фотозоны стоит очередь, а в зале происходит то, ради чего люди и приходят на юбилей, — разговоры.',
       ),
       en: blocks(
-        'The company turned ten: more than three hundred guests and eight hours of uninterrupted programme — a photo zone, dinner, a stage with hosts and performers, a speech by the corporation president, a dance floor. An evening like this has no second take: whatever is not filmed did not happen.',
+        'The company turned ten: more than three hundred guests and eight hours of uninterrupted programme. A photo zone, dinner, a stage — hosts Anton Lavrentyev and Alina Astrovskaya, performers, a speech by the corporation president Gabriel Serrano — and a dance floor until the small hours. An evening like this has no second take: whatever is not filmed did not happen.',
         'Photo and video had to run at once, in several places at once. While a number is on stage, there is a queue at the photo zone, and in the room the thing people actually come for is happening — conversation.',
       ),
     },
@@ -177,8 +177,8 @@ export const businessCases: Project[] = [
       clip('sesderma-anniversary', 'reel-2-poster', 'vmwXTC6jWn8NLNGFbZLguY', 34, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
       clip('sesderma-anniversary', 'reel-3-poster', 'ahUBooxgkdJ4ErDvQihLCC', 38, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
       clip('sesderma-anniversary', 'reel-4-poster', '4iDyL7xFCANnaqByzQhxLa', 30, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
-      shot('sesderma-anniversary', 'e4eb297f42ce', [600, 853], 853, 1280, 'Выступление на сцене', 'A speech on stage'),
-      shot('sesderma-anniversary', 'eeb807ffab58', [600, 853], 853, 1280, 'Ведущие вечера', 'The hosts of the evening'),
+      shot('sesderma-anniversary', 'e4eb297f42ce', [600, 853], 853, 1280, 'Выступление президента корпорации Габриэля Серрано', 'A speech by the corporation president Gabriel Serrano'),
+      shot('sesderma-anniversary', 'eeb807ffab58', [600, 853], 853, 1280, 'Ведущие вечера Антон Лаврентьев и Алина Астровская', 'Hosts of the evening Anton Lavrentyev and Alina Astrovskaya'),
       shot('sesderma-anniversary', 'ddb91d924060', [600, 853], 853, 1280, 'Артистка во время номера', 'A performer during a number'),
       shot('sesderma-anniversary', '72d155755700', [600, 1200], 1200, 2133, 'Съёмочная группа целиком', 'The full crew'),
       shot('sesderma-anniversary', '8dcec0ddcc18', [600, 853], 853, 1280, 'Операторы в зале во время программы', 'Camera operators in the room during the programme'),
