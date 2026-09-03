@@ -17,7 +17,7 @@ import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock } from '@/components/content/PricingBlock';
 import { Section } from '@/components/content/Section';
 import { Testimonials } from '@/components/content/Testimonials';
-import { ArticleCard, ProjectCard, ServiceCard } from '@/components/content/cards';
+import { ArticleCard, ProjectCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
 import { VideoFacade } from '@/components/media/VideoFacade';
@@ -29,7 +29,6 @@ import {
   getGlobalSettings,
   getPricing,
   getProjects,
-  getServices,
   getTestimonials,
   getWorkFormats,
 } from '@/content/queries';
@@ -82,11 +81,10 @@ export default async function DirectionHome({ params }: Props) {
 
   const section = workSection(direction);
 
-  const [settings, categories, services, featured, articles, articleTypes, pricing, formats] =
+  const [settings, categories, featured, articles, articleTypes, pricing, formats] =
     await Promise.all([
       getGlobalSettings(),
       getCategories(direction),
-      direction === 'business' ? getServices() : Promise.resolve([]),
       getProjects({ direction, featuredOnly: true, limit: 6 }),
       getArticles({ direction, limit: 3 }),
       getArticleTypes(),
@@ -103,6 +101,9 @@ export default async function DirectionHome({ params }: Props) {
    * Ветка показывает либо список категорий, либо подборку работ, но не оба:
    * у PRIVATE они назывались одинаково — «Портфолио» — и вели в одно место.
    * Категории полезнее: они сразу разводят свадьбу, портрет и семью.
+   *
+   * У BUSINESS то же самое: категории говорят, что именно снимают, — а разбор
+   * задачи текстом лежит в кейсах, и это отдельный пункт меню.
    */
   /*
    * По одному ролику с категории: показать все — значит утопить каждый,
@@ -111,7 +112,15 @@ export default async function DirectionHome({ params }: Props) {
    * пара, которая уже решает, и ей нужно насмотреться.
    */
   const backstage = categories.flatMap((category) => (category.backstage ?? []).slice(0, 1));
-  const showsCategories = direction === 'private' && categories.length > 0;
+  const showsCategories = direction !== 'production' && categories.length > 0;
+
+  /*
+   * Подборка работ. У PRIVATE её заменяют категории — там оба блока назывались
+   * «Портфолио» и вели в одно место. У BUSINESS они называются по-разному и
+   * отвечают на разные вопросы: категории — что снимают, кейсы — как устроена
+   * работа. Компания приходит именно за вторым, поэтому оба блока нужны.
+   */
+  const showsSelected = selected.length > 0 && (!showsCategories || direction === 'business');
 
   // Секции нумеруются по порядку появления: метка не дублирует заголовок.
   let sectionIndex = 0;
@@ -177,31 +186,6 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
-      {/* BUSINESS: услуги. PRIVATE: категории съёмки. */}
-      {direction === 'business' && services.length > 0 ? (
-        <Section
-          eyebrow={step()}
-          title={dict.nav.services}
-          action={{ label: dict.common.viewAll, href: href({ locale, direction, section: 'services' }) }}
-        >
-          <ul className="m-0 grid list-none gap-10 p-0 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => (
-              <li key={service._id}>
-                <ServiceCard
-                  service={service}
-                  locale={locale}
-                  direction={direction}
-                  dict={dict}
-                  formats={formats
-                    .filter((format) => service.formatSlugs.includes(format.slug))
-                    .map((format) => localizedString(format.title, locale))}
-                />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      ) : null}
-
       {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
           <CategoryTiles categories={categories} locale={locale} direction={direction} />
@@ -223,7 +207,7 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
-      {!showsCategories && selected.length > 0 ? (
+      {showsSelected ? (
         <Section
           eyebrow={step()}
           title={dict.nav[section]}

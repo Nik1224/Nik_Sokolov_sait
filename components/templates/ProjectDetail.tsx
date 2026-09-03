@@ -14,7 +14,7 @@ import { Section } from '@/components/content/Section';
 import { Breadcrumbs, FallbackNotice, UnconfirmedTag } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
 import { Picture } from '@/components/media/Picture';
-import type { Article, Category, Project, Service, WorkFormat } from '@/content/types';
+import type { Article, Category, Project, WorkFormat } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString, pageNeedsFallbackNotice, resolveLocalized } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -28,7 +28,6 @@ type Props = {
   project: Project;
   categories: Category[];
   formats: WorkFormat[];
-  services: Service[];
   articles: Article[];
   related: Project[];
 };
@@ -50,7 +49,6 @@ export function ProjectDetail({
   project,
   categories,
   formats,
-  services,
   articles,
   related,
 }: Props) {
@@ -150,7 +148,7 @@ export function ProjectDetail({
         </Section>
       ) : null}
 
-      {project.credits.length > 0 || services.length > 0 || articles.length > 0 ? (
+      {project.credits.length > 0 || articles.length > 0 ? (
         <Section>
           <div className="grid gap-12 lg:grid-cols-2">
             <div className="space-y-12">
@@ -170,23 +168,6 @@ export function ProjectDetail({
                 </div>
               ) : null}
 
-              {services.length > 0 ? (
-                <div className="border-t border-line pt-6">
-                  <p className="label mb-6 text-accent">{dict.common.relatedServices}</p>
-                  <ul className="m-0 list-none space-y-3 p-0">
-                    {services.map((service) => (
-                      <li key={service._id}>
-                        <Link
-                          href={href({ locale, direction, section: 'services', slug: service.slug })}
-                          className="text-bone underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-accent"
-                        >
-                          {localizedString(service.title, locale)}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
             </div>
 
             {/* Обратная сторона связи project ↔ article (§5.7, §17). */}

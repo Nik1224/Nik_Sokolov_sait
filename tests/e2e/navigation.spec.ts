@@ -82,7 +82,7 @@ test('переключение языка сохраняет фильтр в que
 });
 
 test('раздел, которого у ветки нет, отдаёт 404', async ({ page }) => {
-  const response = await page.goto('/ru/private/services');
+  const response = await page.goto('/ru/private/cases');
   expect(response?.status()).toBe(404);
 });
 

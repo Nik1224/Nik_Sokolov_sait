@@ -83,10 +83,16 @@ describe('переключение языка', () => {
 });
 
 describe('доступность разделов по веткам', () => {
-  it('услуги и кейсы есть только в BUSINESS', () => {
-    expect(isSectionAvailable('business', 'services')).toBe(true);
-    expect(isSectionAvailable('private', 'services')).toBe(false);
+  it('кейсы есть только в BUSINESS', () => {
+    expect(isSectionAvailable('business', 'cases')).toBe(true);
+    expect(isSectionAvailable('private', 'cases')).toBe(false);
     expect(isSectionAvailable('production', 'cases')).toBe(false);
+  });
+
+  it('портфолио есть у PRIVATE и BUSINESS, но не у PRODUCTION', () => {
+    expect(isSectionAvailable('private', 'portfolio')).toBe(true);
+    expect(isSectionAvailable('business', 'portfolio')).toBe(true);
+    expect(isSectionAvailable('production', 'portfolio')).toBe(false);
   });
 
   it('шоурил и credits есть только в PRODUCTION', () => {

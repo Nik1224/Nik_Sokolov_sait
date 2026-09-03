@@ -2,7 +2,7 @@
  * Публичный API контента. Страницы и компоненты используют только эти функции.
  *
  * Здесь же живут все связи между сущностями (ТЗ §5.5, §5.7, §15.1):
- * project ↔ article, project ↔ service, related projects. Связь хранится
+ * project ↔ article, related projects. Связь хранится
  * с одной стороны (`article.projectSlugs`), обратная строится запросом —
  * редактор заполняет её один раз и рассинхрона не бывает.
  */
@@ -21,7 +21,6 @@ import type {
   PricingEntry,
   Project,
   Redirect,
-  Service,
   Testimonial,
   WorkFormat,
 } from '../types';
@@ -95,22 +94,11 @@ export async function resolveFormats(slugs: string[]): Promise<WorkFormat[]> {
   return all.filter((format) => slugs.includes(format.slug));
 }
 
-/* --- Услуги -------------------------------------------------------------- */
-
-export const getServices = cache(async (): Promise<Service[]> => {
-  return byOrder(published(await (await getSource()).services()));
-});
-
-export const getService = cache(async (slug: string): Promise<Service | null> => {
-  return (await getServices()).find((item) => item.slug === slug) ?? null;
-});
-
 /* --- Проекты ------------------------------------------------------------- */
 
 type ProjectFilter = {
   direction?: Direction;
   categorySlug?: string;
-  serviceSlug?: string;
   featuredOnly?: boolean;
   limit?: number;
   excludeSlug?: string;
@@ -121,7 +109,6 @@ export const getProjects = cache(async (filter: ProjectFilter = {}): Promise<Pro
 
   if (filter.direction) items = items.filter((p) => p.directions.includes(filter.direction!));
   if (filter.categorySlug) items = items.filter((p) => p.categorySlugs.includes(filter.categorySlug!));
-  if (filter.serviceSlug) items = items.filter((p) => p.serviceSlugs.includes(filter.serviceSlug!));
   if (filter.featuredOnly) items = items.filter((p) => p.featured);
   if (filter.excludeSlug) items = items.filter((p) => p.slug !== filter.excludeSlug);
 
@@ -139,8 +126,8 @@ export const getProject = cache(async (slug: string): Promise<Project | null> =>
 });
 
 /**
- * Похожие проекты: та же ветка, пересечение по категории или услуге,
- * текущий исключён (§7, RelatedContent — «исключает текущую запись и дубли»).
+ * Похожие проекты: та же ветка, пересечение по категории, текущий исключён
+ * (§7, RelatedContent — «исключает текущую запись и дубли»).
  */
 export async function getRelatedProjects(
   project: Project,
@@ -151,8 +138,7 @@ export async function getRelatedProjects(
 
   const scored = pool.map((candidate) => {
     const sharedCategories = candidate.categorySlugs.filter((c) => project.categorySlugs.includes(c)).length;
-    const sharedServices = candidate.serviceSlugs.filter((s) => project.serviceSlugs.includes(s)).length;
-    return { candidate, score: sharedCategories * 2 + sharedServices };
+    return { candidate, score: sharedCategories };
   });
 
   return scored
@@ -211,12 +197,6 @@ export async function getProjectsForArticle(article: Article): Promise<Project[]
   return items.filter((project) => article.projectSlugs.includes(project.slug));
 }
 
-export async function getServicesForProject(project: Project): Promise<Service[]> {
-  if (project.serviceSlugs.length === 0) return [];
-  const items = await getServices();
-  return items.filter((service) => project.serviceSlugs.includes(service.slug));
-}
-
 /* --- Стоимость, страницы, редиректы -------------------------------------- */
 
 export const getPricing = cache(async (direction: Direction): Promise<PricingEntry[]> => {
@@ -252,10 +232,10 @@ export const getRedirects = cache(async (): Promise<Redirect[]> => {
 /** Есть ли в данных demo-записи — используется предупреждающей полосой. */
 export async function hasDemoContent(): Promise<boolean> {
   const source = await getSource();
-  const [projects, articles, services] = await Promise.all([
+  const [projects, articles, categories] = await Promise.all([
     source.projects(),
     source.articles(),
-    source.services(),
+    source.categories(),
   ]);
-  return [...projects, ...articles, ...services].some((item) => item.isDemo);
+  return [...projects, ...articles, ...categories].some((item) => item.isDemo);
 }

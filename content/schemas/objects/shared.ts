@@ -41,43 +41,6 @@ export const credit = defineType({
   ],
 });
 
-export const processStep = defineType({
-  name: 'processStep',
-  title: 'Этап',
-  type: 'object',
-  fields: [
-    defineField({
-      name: 'title',
-      title: 'Название',
-      type: 'localeString',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({ name: 'body', title: 'Пояснение', type: 'localeText' }),
-  ],
-  preview: { select: { title: 'title.ru' } },
-});
-
-export const faqItem = defineType({
-  name: 'faqItem',
-  title: 'Вопрос',
-  type: 'object',
-  fields: [
-    defineField({
-      name: 'question',
-      title: 'Вопрос',
-      type: 'localeString',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'answer',
-      title: 'Ответ',
-      type: 'localeText',
-      validation: (rule) => rule.required(),
-    }),
-  ],
-  preview: { select: { title: 'question.ru' } },
-});
-
 export const contactChannel = defineType({
   name: 'contactChannel',
   title: 'Контакт',

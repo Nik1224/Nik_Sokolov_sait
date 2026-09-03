@@ -38,7 +38,6 @@ export type Dictionary = {
     relatedProjects: string;
     relatedArticles: string;
     relatedCases: string;
-    relatedServices: string;
     backstageNotes: string;
     finalCase: string;
     moreFromDirection: string;
@@ -233,7 +232,6 @@ const ru: Dictionary = {
   nav: {
     portfolio: 'Портфолио',
     albums: 'Полные свадьбы',
-    services: 'Услуги',
     cases: 'Кейсы',
     showreel: 'Шоурил',
     work: 'Работы',
@@ -268,7 +266,6 @@ const ru: Dictionary = {
     relatedProjects: 'Похожие проекты',
     relatedArticles: 'Связанные заметки',
     relatedCases: 'Связанные кейсы',
-    relatedServices: 'Связанные услуги',
     backstageNotes: 'Backstage и заметки',
     finalCase: 'Финальный кейс',
     moreFromDirection: 'Ещё из этого направления',
@@ -495,7 +492,6 @@ const en: Dictionary = {
   nav: {
     portfolio: 'Portfolio',
     albums: 'Full weddings',
-    services: 'Services',
     cases: 'Cases',
     showreel: 'Showreel',
     work: 'Work',
@@ -530,7 +526,6 @@ const en: Dictionary = {
     relatedProjects: 'Related projects',
     relatedArticles: 'Related notes',
     relatedCases: 'Related cases',
-    relatedServices: 'Related services',
     backstageNotes: 'Backstage & notes',
     finalCase: 'Final case',
     moreFromDirection: 'More from this direction',

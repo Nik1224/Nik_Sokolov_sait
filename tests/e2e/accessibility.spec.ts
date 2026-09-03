@@ -6,7 +6,7 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
   ['START', '/ru'],
   ['Home ветки', '/ru/business'],
-  ['Услуга', '/ru/business/services/events-conferences'],
+  ['Портфолио business', '/ru/business/portfolio'],
   ['Кейс', '/ru/business/cases/demo-industry-conference'],
   ['Статья', '/ru/business/blog/demo-conference-backstage'],
   ['Стоимость', '/ru/private/pricing'],

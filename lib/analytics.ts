@@ -13,7 +13,6 @@ export type AnalyticsEvent =
   | 'direction_select'
   | 'direction_switch'
   | 'locale_switch'
-  | 'service_view'
   | 'project_view'
   | 'video_start'
   | 'video_complete'

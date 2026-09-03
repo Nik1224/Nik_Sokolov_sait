@@ -17,7 +17,6 @@ export type Direction = (typeof DIRECTIONS)[number];
 export const SECTIONS = [
   'portfolio',
   'albums',
-  'services',
   'cases',
   'showreel',
   'work',
@@ -37,7 +36,7 @@ export type Section = (typeof SECTIONS)[number];
  */
 export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
   private: ['portfolio', 'albums', 'pricing', 'blog', 'about', 'contact', 'partners'],
-  business: ['services', 'cases', 'pricing', 'blog', 'about', 'contact'],
+  business: ['portfolio', 'cases', 'pricing', 'blog', 'about', 'contact'],
   production: ['showreel', 'work', 'experience', 'blog', 'about', 'contact'],
 };
 
@@ -57,7 +56,7 @@ export const SECTIONS_OUTSIDE_NAV: Record<Direction, readonly Section[]> = {
 };
 
 /** Разделы, у которых есть страницы отдельных записей `/{section}/{slug}`. */
-export const DETAIL_SECTIONS = ['services', 'cases', 'work', 'blog', 'portfolio'] as const;
+export const DETAIL_SECTIONS = ['cases', 'work', 'blog', 'portfolio'] as const;
 export type DetailSection = (typeof DETAIL_SECTIONS)[number];
 
 export function isLocale(value: unknown): value is Locale {

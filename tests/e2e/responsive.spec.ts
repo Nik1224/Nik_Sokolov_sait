@@ -11,7 +11,7 @@ import { expect, test } from '@playwright/test';
 const PATHS = [
   '/ru',
   '/ru/business',
-  '/ru/business/services/events-conferences',
+  '/ru/business/portfolio',
   '/ru/business/cases/demo-industry-conference',
   '/ru/business/blog/demo-conference-backstage',
   '/ru/private/contact',

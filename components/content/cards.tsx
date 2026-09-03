@@ -6,7 +6,7 @@
  */
 
 import Link from 'next/link';
-import type { Article, Category, Project, Service } from '@/content/types';
+import type { Article, Category, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { formatDate, hasTranslation, localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -98,34 +98,6 @@ export function ProjectCard({
           <RuOnlyTag dict={dict} />
         </p>
       ) : null}
-    </article>
-  );
-}
-
-type ServiceCardProps = {
-  service: Service;
-  locale: Locale;
-  direction: Direction;
-  dict: Dictionary;
-  formats: string[];
-};
-
-export function ServiceCard({ service, locale, direction, dict, formats }: ServiceCardProps) {
-  return (
-    <article className="group flex h-full flex-col border-t border-line pt-6">
-      <h3 className="text-h3 m-0">
-        <Link
-          href={href({ locale, direction, section: 'services', slug: service.slug })}
-          className="text-bone transition-colors group-hover:text-accent"
-        >
-          {localizedString(service.title, locale)}
-        </Link>
-      </h3>
-      <p className="mt-3 flex-1 text-bone-dim">{localizedString(service.summary, locale)}</p>
-      {formats.length > 0 ? (
-        <p className="label mt-6 text-bone-faint">{formats.join(' · ')}</p>
-      ) : null}
-      <p className="label mt-4 text-accent">{dict.common.readMore} →</p>
     </article>
   );
 }

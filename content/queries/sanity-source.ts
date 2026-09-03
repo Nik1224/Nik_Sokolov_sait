@@ -18,7 +18,6 @@ import type {
   PricingEntry,
   Project,
   Redirect,
-  Service,
   Testimonial,
   WorkFormat,
 } from '../types';
@@ -68,7 +67,7 @@ const DIRECTIONS = groq`*[_type == "direction"]{
 }`;
 
 const CATEGORIES = groq`*[_type == "category"]{
-  _id, "slug": slug.current, title, directions, fullSeries, order, isDemo
+  _id, "slug": slug.current, title, description, directions, fullSeries, order, isDemo
 }`;
 
 const ALBUMS = groq`*[_type == "album"]{
@@ -84,19 +83,10 @@ const WORK_FORMATS = groq`*[_type == "workFormat"]{
   _id, "slug": slug.current, title, order, isDemo
 }`;
 
-const SERVICES = groq`*[_type == "service"]{
-  _id, "slug": slug.current, status, title, summary, body, deliverables,
-  process, faq, leadTime, order, isDemo,
-  "formatSlugs": formats[]->slug.current,
-  "pricingSlug": pricing->slug.current,
-  hero ${MEDIA}, gallery[] ${MEDIA}, seo ${SEO}
-}`;
-
 const PROJECTS = groq`*[_type == "project"]{
   _id, "slug": slug.current, status, title, directions, year, client, role, lead,
   challenge, solution, result, featured, order, isDemo,
   "categorySlugs": categories[]->slug.current,
-  "serviceSlugs": services[]->slug.current,
   "formatSlugs": formats[]->slug.current,
   cover ${MEDIA}, media[] ${MEDIA}, seo ${SEO},
   credits[]{ role, person->{ _id, displayName, role, url, visibility, isDemo } }
@@ -188,21 +178,6 @@ export const sanitySource: ContentSource = {
     return fetchQuery<WorkFormat[]>(WORK_FORMATS);
   },
 
-  async services() {
-    const raw = await fetchQuery<Raw[]>(SERVICES);
-    return raw.map((item) => ({
-      ...(item as unknown as Service),
-      direction: 'business' as const,
-      deliverables: (item.deliverables as Service['deliverables']) ?? [],
-      process: (item.process as Service['process']) ?? [],
-      faq: (item.faq as Service['faq']) ?? [],
-      formatSlugs: compactSlugs(item.formatSlugs as (string | null)[]),
-      hero: mapMedia(item.hero as never) ?? undefined,
-      gallery: mapMediaList(item.gallery as never),
-      seo: mapSeo(item.seo as Raw),
-    }));
-  },
-
   async projects() {
     const raw = await fetchQuery<Raw[]>(PROJECTS);
     return raw
@@ -219,7 +194,6 @@ export const sanitySource: ContentSource = {
           cover,
           media: mapMediaList(item.media as never),
           categorySlugs: compactSlugs(item.categorySlugs as (string | null)[]),
-          serviceSlugs: compactSlugs(item.serviceSlugs as (string | null)[]),
           formatSlugs: compactSlugs(item.formatSlugs as (string | null)[]),
           credits,
           seo: mapSeo(item.seo as Raw),

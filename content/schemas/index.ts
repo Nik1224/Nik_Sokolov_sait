@@ -5,9 +5,7 @@ import { mediaAsset } from './objects/media';
 import {
   contactChannel,
   credit,
-  faqItem,
   linkItem,
-  processStep,
   seoFields,
   socialLink,
 } from './objects/shared';
@@ -24,7 +22,6 @@ import {
   project,
   testimonial,
   redirect,
-  service,
   workFormat,
 } from './documents';
 
@@ -36,8 +33,6 @@ export const schemaTypes = [
   mediaAsset,
   seoFields,
   credit,
-  processStep,
-  faqItem,
   contactChannel,
   linkItem,
   socialLink,
@@ -50,7 +45,6 @@ export const schemaTypes = [
   workFormat,
   person,
   project,
-  service,
   article,
   pricingEntry,
   testimonial,

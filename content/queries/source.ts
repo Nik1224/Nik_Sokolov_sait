@@ -21,7 +21,6 @@ import type {
   PricingEntry,
   Project,
   Redirect,
-  Service,
   Testimonial,
   WorkFormat,
 } from '../types';
@@ -34,7 +33,6 @@ export type ContentSource = {
   albums(): Promise<Album[]>;
   articleTypes(): Promise<ArticleType[]>;
   workFormats(): Promise<WorkFormat[]>;
-  services(): Promise<Service[]>;
   projects(): Promise<Project[]>;
   articles(): Promise<Article[]>;
   pricing(): Promise<PricingEntry[]>;

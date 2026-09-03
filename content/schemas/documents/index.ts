@@ -229,6 +229,12 @@ export const category = defineType({
     defineField({ name: 'title', title: 'Название', type: 'localeString', validation: requiredRu }),
     slugField,
     defineField({
+      name: 'description',
+      title: 'Что внутри',
+      description: 'Одна строка: что человек увидит в этой категории. Пусто — плитка останется с одним названием.',
+      type: 'localeText',
+    }),
+    defineField({
       name: 'directions',
       title: 'Направления',
       type: 'array',
@@ -350,12 +356,6 @@ export const project = defineType({
     }),
     defineField({ name: 'media', title: 'Медиа', type: 'array', of: [{ type: 'mediaAsset' }] }),
     defineField({
-      name: 'services',
-      title: 'Связанные услуги',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'service' }] }],
-    }),
-    defineField({
       name: 'formats',
       title: 'Форматы',
       type: 'array',
@@ -368,51 +368,6 @@ export const project = defineType({
     demoField,
   ],
   preview: { select: { title: 'title.ru', subtitle: 'year', media: 'cover.image' } },
-});
-
-export const service = defineType({
-  name: 'service',
-  title: 'Услуга',
-  type: 'document',
-  fields: [
-    defineField({ name: 'title', title: 'Название', type: 'localeString', validation: requiredRu }),
-    slugField,
-    statusField,
-    defineField({
-      name: 'summary',
-      title: 'Обещание результата',
-      type: 'localeText',
-      validation: requiredRu,
-    }),
-    defineField({ name: 'body', title: 'Описание', type: 'localeBlocks' }),
-    defineField({
-      name: 'deliverables',
-      title: 'Что получает клиент',
-      type: 'array',
-      of: [{ type: 'localeString' }],
-    }),
-    defineField({
-      name: 'formats',
-      title: 'Доступные форматы',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'workFormat' }] }],
-    }),
-    defineField({ name: 'process', title: 'Этапы', type: 'array', of: [{ type: 'processStep' }] }),
-    defineField({ name: 'faq', title: 'FAQ', type: 'array', of: [{ type: 'faqItem' }] }),
-    defineField({ name: 'hero', title: 'Hero-медиа', type: 'mediaAsset' }),
-    defineField({ name: 'gallery', title: 'Галерея / showreel', type: 'array', of: [{ type: 'mediaAsset' }] }),
-    defineField({
-      name: 'pricing',
-      title: 'Принцип расчёта',
-      type: 'reference',
-      to: [{ type: 'pricingEntry' }],
-    }),
-    defineField({ name: 'leadTime', title: 'Сроки', type: 'localeString' }),
-    seoField,
-    defineField({ name: 'order', title: 'Порядок', type: 'number' }),
-    demoField,
-  ],
-  preview: { select: { title: 'title.ru', subtitle: 'summary.ru', media: 'hero.image' } },
 });
 
 export const article = defineType({

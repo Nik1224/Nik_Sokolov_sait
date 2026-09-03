@@ -18,7 +18,6 @@ import {
   getProject,
   getProjects,
   getRelatedProjects,
-  getServicesForProject,
   resolveFormats,
 } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
@@ -29,6 +28,32 @@ import { buildMetadata, seoText } from '@/lib/seo';
 import { DIRECTIONS, LOCALES, isSectionAvailable, type Direction, type Section } from '@/lib/site';
 
 export type WorkSection = 'cases' | 'work' | 'portfolio';
+
+/**
+ * Где у ветки живут страницы отдельных работ.
+ *
+ * BUSINESS с этого момента показывает и портфолио, и кейсы: портфолио — кадры
+ * и ролики по категориям, кейсы — разбор задачи текстом. Страница работы при
+ * этом одна: без этой таблицы один и тот же кейс открывался бы по двум
+ * адресам — /business/cases/… и /business/portfolio/… — и конкурировал бы сам
+ * с собой в поиске.
+ */
+const DETAIL_SECTION: Record<Direction, WorkSection> = {
+  private: 'portfolio',
+  business: 'cases',
+  production: 'work',
+};
+
+/**
+ * Что показывает список: кадры категорий или карточки работ.
+ *
+ * Решает раздел, а не наполнение. Раньше это выводилось из данных — «есть ли
+ * у категорий медиа» — и при таком правиле портфолио и кейсы BUSINESS
+ * показывали бы одно и то же.
+ */
+function showsGallery(section: WorkSection): boolean {
+  return section === 'portfolio';
+}
 
 type RouteParams = Promise<{ locale: string; direction: string }>;
 type SlugParams = Promise<{ locale: string; direction: string; slug: string }>;
@@ -74,7 +99,8 @@ export async function ProjectListingRoute({
   // Неизвестная категория не должна показывать пустую страницу без объяснения:
   // фильтр просто игнорируется.
   const activeCategory = categories.some((item) => item.slug === rawCategory) ? rawCategory : undefined;
-  const projects = await getProjects({ direction, categorySlug: activeCategory });
+  const gallery = showsGallery(section);
+  const projects = gallery ? [] : await getProjects({ direction, categorySlug: activeCategory });
 
   // Без фильтра показываем портфолио всех категорий ветки подряд.
   const shownCategories = categories.filter(
@@ -103,15 +129,6 @@ export async function ProjectListingRoute({
   const hasMedia = sections.photos.length + sections.videos.length + sections.reels.length > 0;
 
   /*
-   * Ветка, которая публикует галереи, говорит кадрами, а не карточками работ.
-   * Показать рядом с настоящей съёмкой карточку-заготовку хуже, чем честно
-   * сказать, что в этой категории пока пусто.
-   */
-  const publishesGalleries = categories.some(
-    (item) => (item.gallery?.length ?? 0) + (item.videos?.length ?? 0) + (item.reels?.length ?? 0) > 0,
-  );
-
-  /*
    * «Смотреть все» есть у списка работ и нет у галереи. Список работ так и
    * листают — подряд; а вперемешку свадьбы, портреты и семейные кадры не
    * складываются ни во что: человек выбирает, что ему снимать, а не смотрит
@@ -120,11 +137,11 @@ export async function ProjectListingRoute({
    * У списка работ ссылка тоже появляется, только когда наполнена не одна
    * категория: иначе она ведёт ровно туда же, куда единственная категория.
    */
-  const everything = publishesGalleries ? [] : await getProjects({ direction });
+  const everything = gallery ? [] : await getProjects({ direction });
   const filledCategories = categories.filter((item) =>
     everything.some((project) => project.categorySlugs.includes(item.slug)),
   ).length;
-  const showAll = !publishesGalleries && filledCategories > 1;
+  const showAll = !gallery && filledCategories > 1;
 
   // Полные серии показываем только там, где они есть: пустой переход хуже,
   // чем его отсутствие.
@@ -148,10 +165,10 @@ export async function ProjectListingRoute({
       dict={dict}
       title={dict.nav[section]}
       lead={localizedString(doc?.lead, locale)}
-      projects={publishesGalleries ? [] : projects}
+      projects={projects}
       categories={categories}
       activeCategory={activeCategory}
-      gallery={hasMedia ? sections : undefined}
+      gallery={gallery && hasMedia ? sections : undefined}
       categoryAlbums={categoryAlbums}
       backstage={backstage}
       showAll={showAll}
@@ -192,6 +209,8 @@ export async function projectDetailMetadata(
   if (!route) return {};
   const { locale, direction } = route;
 
+  if (DETAIL_SECTION[direction] !== section) return {};
+
   const project = await getProject(slug);
   if (!project || !project.directions.includes(direction)) return {};
 
@@ -224,15 +243,18 @@ export async function ProjectDetailRoute({
   );
   const dict = getDictionary(locale);
 
+  // Своя страница работы у ветки одна. У BUSINESS это кейсы: портфолио там
+  // показывает кадры, а не карточки, и вести из него на страницу работы некуда.
+  if (DETAIL_SECTION[direction] !== section) notFound();
+
   const project = await getProject(slug);
   // Работа, не относящаяся к этой ветке, по её адресу недоступна: иначе один
   // проект расползётся по чужим направлениям.
   if (!project || !project.directions.includes(direction)) notFound();
 
-  const [categories, formats, services, articles, related] = await Promise.all([
+  const [categories, formats, articles, related] = await Promise.all([
     getCategories(direction),
     resolveFormats(project.formatSlugs),
-    getServicesForProject(project),
     getArticlesForProject(project.slug, direction),
     getRelatedProjects(project, direction),
   ]);
@@ -246,7 +268,6 @@ export async function ProjectDetailRoute({
       project={project}
       categories={categories}
       formats={formats}
-      services={services}
       articles={articles}
       related={related}
     />

@@ -20,7 +20,6 @@ import type {
   PricingEntry,
   Project,
   Redirect,
-  Service,
   Testimonial,
   WorkFormat,
 } from '../types';
@@ -31,7 +30,8 @@ import {
   weddingReels,
   weddingVideos,
 } from './portfolio-galleries';
-import { weddingBackstage } from './backstage';
+import { portraitBackstage, weddingBackstage } from './backstage';
+import { businessCases } from './cases-business';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
 import { privateArticles } from './journal-private';
 import { weddingArticles } from './journal-wedding';
@@ -282,12 +282,12 @@ export const directions: DirectionDoc[] = [
     isDemo: true,
     title: { ru: 'Фото и видео для компаний и брендов', en: 'Photo and video for companies and brands' },
     lead: {
-      ru: 'Конференции, интервью, имиджевые и рекламные съёмки, контент для соцсетей. Один подрядчик или собранная под задачу команда.',
-      en: 'Conferences, interviews, brand and advertising shoots, social content. One contractor or a team assembled for the task.',
+      ru: 'Обучающие ролики, съёмка производства, подкасты, реклама, имиджевое видео и предметная съёмка. Один подрядчик или собранная под задачу команда.',
+      en: 'Training videos, manufacturing, podcasts, advertising, brand films and product shoots. One contractor or a team assembled for the task.',
     },
     gatewayDescription: {
-      ru: 'Задачи компаний: события, интервью, бренд, реклама, контент.',
-      en: 'Business needs: events, interviews, brand, advertising, content.',
+      ru: 'Задачи компаний: обучение, производство, подкасты, реклама, бренд.',
+      en: 'Business needs: training, manufacturing, podcasts, advertising, brand.',
     },
     highlights: [],
     hero: decorative('hero-business', 'wide', 3),
@@ -355,14 +355,20 @@ export const categories: Category[] = [
   // Категории с настоящим портфолио. fullSeries — там, где бывает полная
   // выдача одной съёмки: на такие категории ведёт переход к альбомам.
   { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true, backstage: weddingBackstage, preview: preview('wedding', 'Кадр со свадебной съёмки', 'Frame from a wedding shoot', 1310) },
-  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery, preview: preview('portrait', 'Кадр с портретной съёмки', 'Frame from a portrait shoot', 1280) },
+  { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery, backstage: portraitBackstage, preview: preview('portrait', 'Кадр с портретной съёмки', 'Frame from a portrait shoot', 1280) },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery, preview: preview('family', 'Кадр с семейной съёмки', 'Frame from a family shoot', 1280) },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, preview: preview('love-story', 'Кадр со съёмки love story', 'Frame from a love story shoot', 1280) },
   { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, preview: preview('private-event', 'Кадр со съёмки частного события', 'Frame from a private event shoot', 1280) },
-  { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, directions: ['business', 'production'], order: 6, isDemo: true },
-  { _id: 'cat.interview', slug: 'interview', title: { ru: 'Интервью и подкасты', en: 'Interviews and podcasts' }, directions: ['business'], order: 7, isDemo: true },
-  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, directions: ['business', 'production'], order: 8, isDemo: true },
-  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 9, isDemo: true },
+  // Категории ветки BUSINESS названы владельцем и идут в его порядке: он так же
+  // называет их клиенту, а клиент ищет глазами то, за чем пришёл.
+  { _id: 'cat.education', slug: 'education', title: { ru: 'Обучающие ролики', en: 'Training videos' }, description: { ru: 'Внутреннее обучение: спикер в кадре, презентация на экране, серия выпусков в одном свете и стиле.', en: 'In-house training: a speaker on camera, slides on screen, a series of episodes in one look.' }, directions: ['business'], order: 6, isDemo: true },
+  { _id: 'cat.manufacturing', slug: 'manufacturing', title: { ru: 'Производство', en: 'Manufacturing' }, description: { ru: 'Цеха, линии и люди за работой. Съёмка идёт на действующем производстве и не останавливает смену.', en: 'Shop floors, lines and people at work. Filmed on a working site without stopping the shift.' }, directions: ['business'], order: 7, isDemo: true },
+  { _id: 'cat.podcast', slug: 'podcast', title: { ru: 'Подкасты', en: 'Podcasts' }, description: { ru: 'Разговорные форматы со светом и звуком: выпуски снимаются блоками, к каждому — вертикальные нарезки.', en: 'Conversation formats with proper light and sound: episodes shot in blocks, each with vertical cutdowns.' }, directions: ['business'], order: 8, isDemo: true },
+  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, description: { ru: 'Проекты со сценарием и подготовкой: раскадровка, локации, собранная под задачу команда.', en: 'Projects with a script and preparation: storyboard, locations, a crew assembled for the task.' }, directions: ['business', 'production'], order: 9, isDemo: true },
+  { _id: 'cat.brand-video', slug: 'brand-video', title: { ru: 'Имиджевые видео', en: 'Brand films' }, description: { ru: 'Фильм о компании: чем занимаетесь, как устроена работа и кто за ней стоит.', en: 'A film about the company: what you do, how the work is run and who stands behind it.' }, directions: ['business'], order: 10, isDemo: true },
+  { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], order: 11, isDemo: true },
+  { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], order: 12, isDemo: true },
+  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 13, isDemo: true },
 ];
 
 /**
@@ -554,158 +560,9 @@ export const people: Person[] = [
   { _id: 'p.demo-3', displayName: 'Demo Person C', role: { ru: 'Монтаж', en: 'Editor' }, visibility: 'public', isDemo: true },
 ];
 
-export const services: Service[] = [
-  {
-    ...demo,
-    _id: 'svc.events',
-    slug: 'events-conferences',
-    direction: 'business',
-    order: 1,
-    title: { ru: 'События и конференции', en: 'Events & conferences' },
-    summary: {
-      ru: 'Репортаж, который можно сразу публиковать: спикеры, зал, детали, атмосфера.',
-      en: 'Coverage ready to publish: speakers, the room, details, atmosphere.',
-    },
-    body: bodyRuEn(
-      [
-        'Съёмка деловых событий требует незаметности и скорости. Важно не мешать программе, но не пропустить ключевые моменты: выход спикера, реакцию зала, живое общение в кулуарах.',
-        'Материал структурируется под задачи после события — отчёт, пресс-релиз, соцсети, сайт мероприятия следующего года.',
-      ],
-      [
-        'Covering business events takes discretion and speed. You must stay out of the programme yet miss none of the key moments: the speaker walking on, the room reacting, the real conversations in the foyer.',
-        'The material is then structured around what happens after the event — the report, the press release, social channels, next year\'s event page.',
-      ],
-    ),
-    deliverables: [
-      { ru: 'Отобранный и обработанный репортаж', en: 'Selected and edited coverage' },
-      { ru: 'Экспресс-подборка в день события', en: 'Same-day express selection' },
-      { ru: 'Горизонтальные и вертикальные кадрирования', en: 'Horizontal and vertical crops' },
-    ],
-    formatSlugs: ['photo', 'video', 'photo-video', 'team'],
-    process: [
-      { title: { ru: 'Бриф и тайминг', en: 'Brief and timing' }, body: { ru: 'Программа, ключевые моменты, список обязательных кадров.', en: 'Programme, key moments, must-have shot list.' } },
-      { title: { ru: 'Съёмочный день', en: 'Shooting day' }, body: { ru: 'Один или несколько специалистов в зависимости от площадок.', en: 'One or several specialists depending on the venues.' } },
-      { title: { ru: 'Отбор и обработка', en: 'Selection and editing' } },
-      { title: { ru: 'Передача материалов', en: 'Delivery' } },
-    ],
-    faq: [
-      { question: { ru: 'Как быстро приходят материалы?', en: 'How soon are the files delivered?' }, answer: { ru: 'Сроки согласуются под программу события и объём съёмки.', en: 'Timelines are agreed against the event programme and shooting volume.' } },
-      { question: { ru: 'Можно ли снимать несколько залов одновременно?', en: 'Can several halls be covered at once?' }, answer: { ru: 'Да, под такие задачи собирается команда.', en: 'Yes, a team is assembled for that.' } },
-    ],
-    hero: decorative('svc-events-hero', 'wide', 1),
-    gallery: [
-      image('svc-events-1', 'still', 1, 'Зал конференции во время выступления', 'Conference hall during a talk'),
-      image('svc-events-2', 'still', 2, 'Спикер у сцены', 'Speaker by the stage'),
-      image('svc-events-3', 'tall', 1, 'Общение участников в кулуарах', 'Attendees talking in the foyer'),
-    ],
-    pricingSlug: 'business-event',
-    leadTime: { ru: 'Сроки согласуются под задачу', en: 'Timelines agreed per project' },
-  },
-  {
-    ...demo,
-    _id: 'svc.interviews',
-    slug: 'interviews-podcasts',
-    direction: 'business',
-    order: 2,
-    title: { ru: 'Интервью и подкасты', en: 'Interviews & podcasts' },
-    summary: { ru: 'Разговорный формат со светом и звуком, который не стыдно поставить на главную.', en: 'Conversation formats with lighting and sound worth putting on your homepage.' },
-    body: bodyRuEn(
-      ['Интервью держится на трёх вещах: свет, звук и спокойный собеседник. Техническая часть готовится заранее, чтобы съёмочный день был про содержание, а не про настройку.'],
-      ['An interview rests on three things: light, sound and a calm guest. The technical side is prepared in advance so that the shooting day is about the conversation, not the setup.'],
-    ),
-    deliverables: [
-      { ru: 'Смонтированный выпуск', en: 'Edited episode' },
-      { ru: 'Вертикальные нарезки', en: 'Vertical cutdowns' },
-      { ru: 'Кадры со съёмки', en: 'Stills from the shoot' },
-    ],
-    formatSlugs: ['video', 'photo-video'],
-    process: [
-      { title: { ru: 'Подготовка студии', en: 'Studio prep' } },
-      { title: { ru: 'Съёмка', en: 'Shoot' } },
-      { title: { ru: 'Монтаж и звук', en: 'Edit and sound' } },
-    ],
-    faq: [{ question: { ru: 'Своя студия или выезд?', en: 'Studio or on location?' }, answer: { ru: 'Оба варианта: выбор зависит от формата и количества выпусков.', en: 'Both: the choice depends on the format and number of episodes.' } }],
-    hero: decorative('svc-int-hero', 'wide', 5),
-    gallery: [image('svc-int-1', 'still', 3, 'Съёмка интервью в студии', 'Interview being filmed in a studio')],
-    pricingSlug: 'business-interview',
-  },
-  {
-    ...demo,
-    _id: 'svc.brand',
-    slug: 'brand-image',
-    direction: 'business',
-    order: 3,
-    title: { ru: 'Бренд и имидж', en: 'Brand & image' },
-    summary: { ru: 'Команда, офис, производство и продукт в едином визуальном языке.', en: 'Team, office, production and product in one visual language.' },
-    body: bodyRuEn(
-      ['Имиджевая съёмка — это библиотека кадров, которой компания пользуется весь год: сайт, презентации, вакансии, СМИ.'],
-      ['A brand shoot produces a library the company draws on all year: website, decks, job ads, press requests.'],
-    ),
-    deliverables: [
-      { ru: 'Библиотека кадров под задачи компании', en: 'Shot library for company needs' },
-      { ru: 'Портреты команды в едином стиле', en: 'Team portraits in one consistent style' },
-    ],
-    formatSlugs: ['photo', 'photo-video'],
-    process: [{ title: { ru: 'Референсы и подготовка', en: 'References and prep' } }, { title: { ru: 'Съёмочный день', en: 'Shooting day' } }, { title: { ru: 'Обработка', en: 'Post' } }],
-    faq: [],
-    hero: decorative('svc-brand-hero', 'wide', 6),
-    gallery: [image('svc-brand-1', 'square', 1, 'Портрет сотрудника на рабочем месте', 'Employee portrait at the workplace')],
-    pricingSlug: 'business-brand',
-  },
-  {
-    ...demo,
-    _id: 'svc.advertising',
-    slug: 'advertising',
-    direction: 'business',
-    order: 4,
-    title: { ru: 'Рекламная съёмка', en: 'Advertising' },
-    summary: { ru: 'Проекты со сценарием, подготовкой и собранной под задачу командой.', en: 'Projects with a script, preparation and a team assembled for the task.' },
-    body: bodyRuEn(
-      ['Рекламный проект начинается задолго до камеры: идея, раскадровка, локации, каст, смета. Здесь важна предсказуемость — что именно получит клиент и в какой срок.'],
-      ['An advertising project starts long before the camera: concept, storyboard, locations, casting, budget. What matters here is predictability — exactly what the client receives, and when.'],
-    ),
-    deliverables: [
-      { ru: 'Основной ролик и версии под площадки', en: 'Master film and platform versions' },
-      { ru: 'Кадры со съёмки', en: 'Stills from the shoot' },
-    ],
-    formatSlugs: ['video', 'team'],
-    process: [
-      { title: { ru: 'Идея и раскадровка', en: 'Concept and storyboard' } },
-      { title: { ru: 'Препродакшн', en: 'Pre-production' } },
-      { title: { ru: 'Съёмка', en: 'Production' } },
-      { title: { ru: 'Постпродакшн', en: 'Post-production' } },
-    ],
-    faq: [],
-    hero: decorative('svc-adv-hero', 'wide', 2),
-    gallery: [image('svc-adv-1', 'still', 4, 'Подготовка света на съёмочной площадке', 'Lighting setup on set')],
-    pricingSlug: 'business-custom',
-  },
-  {
-    ...demo,
-    _id: 'svc.social',
-    slug: 'social-content',
-    direction: 'business',
-    order: 5,
-    title: { ru: 'Контент для соцсетей', en: 'Social content' },
-    summary: { ru: 'Регулярный поток вертикального видео и фото без просадки качества.', en: 'A steady stream of vertical video and photo without a drop in quality.' },
-    body: bodyRuEn(
-      ['Контент-съёмки работают на регулярности. Формат один раз настраивается, дальше повторяется циклами и не требует каждый раз нового согласования.'],
-      ['Content shoots work through regularity. The format is set up once, then repeats in cycles without needing fresh approval every time.'],
-    ),
-    deliverables: [
-      { ru: 'Пакет вертикальных роликов', en: 'Batch of vertical videos' },
-      { ru: 'Фото под ленту и сторис', en: 'Photos for feed and stories' },
-    ],
-    formatSlugs: ['photo', 'video', 'photo-video'],
-    process: [{ title: { ru: 'Контент-план', en: 'Content plan' } }, { title: { ru: 'Съёмочный блок', en: 'Shooting block' } }, { title: { ru: 'Монтаж', en: 'Edit' } }],
-    faq: [],
-    hero: decorative('svc-social-hero', 'wide', 3),
-    gallery: [image('svc-social-1', 'tall', 3, 'Вертикальный кадр со съёмки контента', 'Vertical frame from a content shoot')],
-    pricingSlug: 'business-social',
-  },
-];
-
 export const projects: Project[] = [
+  // Настоящие кейсы идут первыми: demo-записи ниже — заготовки под замену.
+  ...businessCases,
   {
     ...demo,
     _id: 'prj.conference',
@@ -714,7 +571,7 @@ export const projects: Project[] = [
     categorySlugs: ['conference'],
     year: 2025,
     featured: true,
-    order: 1,
+    order: 11,
     title: { ru: 'Отраслевая конференция', en: 'Industry conference' },
     role: { ru: 'Фотограф, координация съёмочной группы', en: 'Photographer, crew coordination' },
     lead: { ru: 'Двухдневная программа, три зала, съёмка для отчёта и коммуникаций следующего сезона.', en: 'A two-day programme, three halls, coverage for the report and next season communications.' },
@@ -727,7 +584,6 @@ export const projects: Project[] = [
       image('prj-conf-2', 'tall', 1, 'Разговор участников в перерыве', 'Attendees talking during a break', { ru: 'Кулуары важнее сцены: там договариваются.', en: 'The foyer matters more than the stage: deals happen there.' }),
       image('prj-conf-3', 'still', 3, 'Общий план сцены', 'Wide shot of the stage'),
     ],
-    serviceSlugs: ['events-conferences'],
     formatSlugs: ['photo', 'team'],
     credits: [{ person: people[0] }, { person: people[1] }],
   },
@@ -736,10 +592,10 @@ export const projects: Project[] = [
     _id: 'prj.podcast',
     slug: 'demo-podcast-season',
     directions: ['business'],
-    categorySlugs: ['interview'],
+    categorySlugs: ['podcast'],
     year: 2025,
     featured: true,
-    order: 2,
+    order: 12,
     title: { ru: 'Сезон подкаста', en: 'Podcast season' },
     role: { ru: 'Съёмка и монтаж', en: 'Filming and editing' },
     lead: { ru: 'Восемь выпусков, снятых блоками, с единым светом и типографикой.', en: 'Eight episodes shot in blocks with consistent lighting and typography.' },
@@ -747,7 +603,6 @@ export const projects: Project[] = [
     solution: bodyRu('Схема света и точки камер фиксировались один раз, а различие между выпусками задавалось фоном и раскладкой графики.'),
     cover: image('prj-pod-cover', 'still', 4, 'Съёмка подкаста в студии', 'Podcast being filmed in a studio'),
     media: [image('prj-pod-1', 'still', 5, 'Два собеседника за столом', 'Two people talking at a table'), video('prj-pod-v', 4, 'Фрагмент выпуска подкаста', 'Excerpt from a podcast episode', 92)],
-    serviceSlugs: ['interviews-podcasts'],
     formatSlugs: ['video'],
     credits: [{ person: people[2] }],
   },
@@ -758,7 +613,7 @@ export const projects: Project[] = [
     directions: ['business'],
     categorySlugs: ['commercial'],
     year: 2024,
-    order: 3,
+    order: 13,
     title: { ru: 'Имиджевая библиотека', en: 'Brand image library' },
     role: { ru: 'Фотограф', en: 'Photographer' },
     lead: { ru: 'Съёмка команды, офиса и производства для сайта и внутренних коммуникаций.', en: 'Team, office and production photography for the website and internal communications.' },
@@ -766,7 +621,6 @@ export const projects: Project[] = [
     solution: bodyRu('Съёмка была построена как маршрут: мобильный свет переносился между точками, а очередь сотрудников шла по расписанию.'),
     cover: image('prj-brand-cover', 'square', 2, 'Портрет сотрудника в интерьере офиса', 'Employee portrait in an office interior'),
     media: [image('prj-brand-1', 'still', 6, 'Рабочее пространство', 'Working space'), image('prj-brand-2', 'tall', 4, 'Портрет в производственном цехе', 'Portrait in a production facility')],
-    serviceSlugs: ['brand-image'],
     formatSlugs: ['photo'],
     credits: [],
   },
@@ -786,7 +640,6 @@ export const projects: Project[] = [
     solution: bodyRu('Порядок сцен был выстроен по движению солнца, а не по сценарию, чтобы уложиться в свет.'),
     cover: image('prj-film-cover', 'wide', 5, 'Кадр со съёмочной площадки', 'Frame from the set'),
     media: [video('prj-film-v', 5, 'Фрагмент проекта', 'Project excerpt', 74), image('prj-film-1', 'wide', 6, 'Работа на площадке', 'Work on set')],
-    serviceSlugs: [],
     formatSlugs: ['video', 'team'],
     credits: [{ person: people[0] }, { person: people[1] }, { person: people[2] }],
   },
@@ -805,7 +658,6 @@ export const projects: Project[] = [
     solution: bodyRu('Каждая сцена сразу снималась в двух кадрированиях, чтобы вертикальные версии не пришлось добирать отдельно.'),
     cover: image('prj-com-cover', 'wide', 1, 'Кадр из рекламного ролика', 'Frame from a commercial'),
     media: [video('prj-com-v', 1, 'Рекламный ролик', 'Commercial spot', 30)],
-    serviceSlugs: ['advertising'],
     formatSlugs: ['video', 'team'],
     credits: [{ person: people[1] }],
   },
@@ -826,7 +678,6 @@ export const projects: Project[] = [
       image('prj-wed-2', 'still', 3, 'Гости во время поздравлений', 'Guests during the toasts'),
       image('prj-wed-3', 'still', 4, 'Вечерний танец', 'Evening dance'),
     ],
-    serviceSlugs: [],
     formatSlugs: ['photo'],
     credits: [],
   },
@@ -842,7 +693,6 @@ export const projects: Project[] = [
     lead: { ru: 'Час на локации и спокойный ритм — без списка обязательных поз.', en: 'An hour on location at a calm pace — no mandatory pose list.' },
     cover: image('prj-por-cover', 'tall', 6, 'Портрет в естественном свете', 'Portrait in natural light'),
     media: [image('prj-por-1', 'square', 3, 'Портрет крупным планом', 'Close-up portrait')],
-    serviceSlugs: [],
     formatSlugs: ['photo'],
     credits: [],
   },
@@ -858,7 +708,6 @@ export const projects: Project[] = [
     lead: { ru: 'Дом и прогулка: съёмка, в которой детям не надо позировать.', en: 'Home and a walk: a shoot where children do not have to pose.' },
     cover: image('prj-fam-cover', 'still', 5, 'Семья на прогулке', 'A family on a walk'),
     media: [image('prj-fam-1', 'square', 4, 'Дети играют дома', 'Children playing at home')],
-    serviceSlugs: [],
     formatSlugs: ['photo'],
     credits: [],
   },
@@ -1314,11 +1163,11 @@ export const pricingEntries: PricingEntry[] = [
   },
 
   // BUSINESS — расчёт индивидуальный, подтверждённых цифр пока нет.
-  { _id: 'pr.business-event', slug: 'business-event', direction: 'business', kind: 'package', order: 1, active: true, isDemo: true, title: { ru: 'События и конференции', en: 'Events & conferences' }, description: { ru: 'Расчёт зависит от длительности программы, числа площадок и состава группы.', en: 'Calculated from programme length, number of venues and crew size.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-interview', slug: 'business-interview', direction: 'business', kind: 'package', order: 2, active: true, isDemo: true, title: { ru: 'Интервью и подкасты', en: 'Interviews & podcasts' }, description: { ru: 'Расчёт зависит от числа выпусков и глубины монтажа.', en: 'Calculated from episode count and depth of editing.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-brand', slug: 'business-brand', direction: 'business', kind: 'package', order: 3, active: true, isDemo: true, title: { ru: 'Бренд и имидж', en: 'Brand & image' }, description: { ru: 'Расчёт зависит от числа площадок и объёма съёмки.', en: 'Calculated from number of locations and shooting volume.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-social', slug: 'business-social', direction: 'business', kind: 'package', order: 4, active: true, isDemo: true, title: { ru: 'Контент для соцсетей', en: 'Social content' }, description: { ru: 'Расчёт зависит от объёма пакета и периодичности.', en: 'Calculated from package size and frequency.' }, includes: [], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
-  { _id: 'pr.business-custom', slug: 'business-custom', direction: 'business', kind: 'package', order: 5, active: true, isDemo: true, title: { ru: 'Рекламные и сложные проекты', en: 'Advertising and complex projects' }, description: { ru: 'Индивидуальная смета: препродакшн, команда, локации, постпродакшн.', en: 'Individual estimate: pre-production, crew, locations, post-production.' }, includes: [], disclaimer: { ru: 'Только индивидуальный расчёт.', en: 'Individual estimate only.' } },
+  { _id: 'pr.business-event', slug: 'business-event', direction: 'business', kind: 'package', order: 1, active: true, isDemo: true, title: { ru: 'События и конференции', en: 'Events & conferences' }, description: { ru: 'Расчёт зависит от длительности программы, числа площадок и состава группы.', en: 'Calculated from programme length, number of venues and crew size.' }, includes: [{ ru: 'Отобранный и обработанный репортаж', en: 'Selected and edited coverage' }, { ru: 'Экспресс-подборка в день события', en: 'Same-day express selection' }, { ru: 'Горизонтальные и вертикальные кадрирования', en: 'Horizontal and vertical crops' }], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-interview', slug: 'business-interview', direction: 'business', kind: 'package', order: 2, active: true, isDemo: true, title: { ru: 'Интервью и подкасты', en: 'Interviews & podcasts' }, description: { ru: 'Расчёт зависит от числа выпусков и глубины монтажа.', en: 'Calculated from episode count and depth of editing.' }, includes: [{ ru: 'Смонтированный выпуск', en: 'Edited episode' }, { ru: 'Вертикальные нарезки', en: 'Vertical cutdowns' }, { ru: 'Кадры со съёмки', en: 'Stills from the shoot' }], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-brand', slug: 'business-brand', direction: 'business', kind: 'package', order: 3, active: true, isDemo: true, title: { ru: 'Бренд и имидж', en: 'Brand & image' }, description: { ru: 'Расчёт зависит от числа площадок и объёма съёмки.', en: 'Calculated from number of locations and shooting volume.' }, includes: [{ ru: 'Библиотека кадров под задачи компании', en: 'Shot library for company needs' }, { ru: 'Портреты команды в едином стиле', en: 'Team portraits in one consistent style' }], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-social', slug: 'business-social', direction: 'business', kind: 'package', order: 4, active: true, isDemo: true, title: { ru: 'Контент для соцсетей', en: 'Social content' }, description: { ru: 'Расчёт зависит от объёма пакета и периодичности.', en: 'Calculated from package size and frequency.' }, includes: [{ ru: 'Пакет вертикальных роликов', en: 'Batch of vertical videos' }, { ru: 'Фото под ленту и сторис', en: 'Photos for feed and stories' }], disclaimer: { ru: 'Итоговая смета формируется после брифа.', en: 'The final estimate is prepared after the brief.' } },
+  { _id: 'pr.business-custom', slug: 'business-custom', direction: 'business', kind: 'package', order: 5, active: true, isDemo: true, title: { ru: 'Рекламные и сложные проекты', en: 'Advertising and complex projects' }, description: { ru: 'Индивидуальная смета: препродакшн, команда, локации, постпродакшн.', en: 'Individual estimate: pre-production, crew, locations, post-production.' }, includes: [{ ru: 'Основной ролик и версии под площадки', en: 'Master film and platform versions' }, { ru: 'Кадры со съёмки', en: 'Stills from the shoot' }], disclaimer: { ru: 'Только индивидуальный расчёт.', en: 'Individual estimate only.' } },
 
   // Дополнительные услуги — с lokos.pro. Показываются списком, а не карточками.
   { _id: 'pr.extra-hour', slug: 'extra-hour', direction: 'private', kind: 'extra', order: 20, active: true, title: { ru: 'Дополнительный час съёмки', en: 'Additional hour' }, description: { ru: '', en: '' }, price: 12000, currency: 'RUB', includes: [], disclaimer: { ru: 'Фото — 12 000 ₽, видео — 15 000 ₽. На свадьбе с четвёртого часа дешевле: к десятому час стоит 9 500 ₽.', en: 'Photo — 12,000 ₽, video — 15,000 ₽. At a wedding the rate drops from the fourth hour: by the tenth an hour costs 9,500 ₽.' } },

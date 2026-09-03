@@ -48,7 +48,7 @@ test('на странице ровно один h1 и уникальный title
   const paths = [
     '/ru',
     '/ru/business',
-    '/ru/business/services/events-conferences',
+    '/ru/business/portfolio',
     '/ru/business/cases/demo-industry-conference',
     '/ru/business/blog/demo-conference-backstage',
     '/ru/private/pricing',
@@ -862,7 +862,11 @@ test('страница не прокручивается дальше подва
 test('«Показать ещё» добавляет кадры вниз, не сдвигая показанные @safari', async ({ page }) => {
   await page.goto('/ru/private/portfolio?category=portrait');
 
-  const frames = page.locator('main figure button');
+  /*
+   * Только кадры галереи: ниже на странице стоит блок бэкстейджа, и он от
+   * догрузки честно уезжает вниз — к проверке это отношения не имеет.
+   */
+  const frames = page.locator('[data-gallery] figure button');
   const positions = () =>
     frames.evaluateAll((items) =>
       items.map((item) => {
@@ -1364,17 +1368,24 @@ test('бэкстейджа на Home по одному с категории, н
     return new Set([...block.matchAll(/backstage\/(bs-[a-f0-9]+)-/g)].map((m) => m[1]));
   };
 
+  const home = await clips('/ru/private');
+  const weddingTab = await clips('/ru/private/portfolio?category=wedding');
+
   /*
    * На Home с каждой категории берётся один ролик: выложить все — значит
-   * утопить каждый, человек посмотрит первый и уйдёт.
+   * утопить каждый, человек посмотрит первый и уйдёт. Точное число не
+   * фиксируем — категорий с бэкстейджем со временем прибавится; проверяем
+   * то, ради чего правило и заведено: на Home их заметно меньше, чем во
+   * вкладке одной категории.
    */
-  expect((await clips('/ru/private')).size).toBe(1);
+  expect(home.size).toBeGreaterThan(0);
+  expect(home.size).toBeLessThan(weddingTab.size);
 
   /*
    * На визитке наоборот: её открывает пара, которая уже решает, и ей нужно
    * насмотреться. Ссылку присылает организатор, второго захода не будет.
    */
-  expect((await clips('/ru/nikita')).size).toBeGreaterThan(1);
+  expect((await clips('/ru/nikita')).size).toBe(weddingTab.size);
 });
 
 test('в портфолио бэкстейдж свой у каждой категории и только при фильтре', async ({ page }) => {
@@ -1383,11 +1394,12 @@ test('в портфолио бэкстейдж свой у каждой кате
     return (await page.getByRole('main').innerHTML()).includes('Как проходит съёмка');
   };
 
-  // У свадеб бэкстейдж есть — значит блок внизу страницы категории.
+  // Где бэкстейдж снят — блок внизу страницы категории.
   expect(await hasBlock('/ru/private/portfolio?category=wedding')).toBe(true);
+  expect(await hasBlock('/ru/private/portfolio?category=portrait')).toBe(true);
 
-  // У остальных его пока нет: пустой раздел хуже отсутствующего.
-  expect(await hasBlock('/ru/private/portfolio?category=portrait')).toBe(false);
+  // Где не снят — блока нет: пустой раздел хуже отсутствующего.
+  expect(await hasBlock('/ru/private/portfolio?category=family')).toBe(false);
 
   /*
    * Без фильтра страница и так собирает кадры всех категорий подряд;

@@ -26,9 +26,6 @@ export const fixtureSource: ContentSource = {
   async workFormats() {
     return seed.workFormats;
   },
-  async services() {
-    return seed.services;
-  },
   async projects() {
     return seed.projects;
   },

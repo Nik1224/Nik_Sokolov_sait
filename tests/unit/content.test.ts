@@ -17,7 +17,6 @@ import {
   getProjects,
   getProjectsForArticle,
   getRelatedProjects,
-  getServicesForProject,
 } from '@/content/queries';
 
 describe('журнал: одна коллекция на три ветки (§5.7)', () => {
@@ -91,12 +90,6 @@ describe('работы', () => {
 
     expect(related.some((p) => p.slug === project!.slug)).toBe(false);
     expect(new Set(related.map((p) => p._id)).size).toBe(related.length);
-  });
-
-  it('связанные услуги разворачиваются из slug-ов', async () => {
-    const project = await getProject('demo-industry-conference');
-    const services = await getServicesForProject(project!);
-    expect(services.map((s) => s.slug)).toEqual(['events-conferences']);
   });
 });
 

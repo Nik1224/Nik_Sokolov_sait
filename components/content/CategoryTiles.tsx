@@ -83,6 +83,13 @@ export function CategoryTiles({ categories, locale, direction }: Props) {
 
   const lastRow = Math.floor((categories.length - 1) / columns);
 
+  /*
+   * Пустые ячейки последнего ряда. Сетка держит хайрлайны фоном под зазором,
+   * поэтому недобранный ряд показывался сплошным серым прямоугольником —
+   * заметной дырой рядом с последней плиткой.
+   */
+  const fillers = (columns - (categories.length % columns)) % columns;
+
   return (
     <ul ref={gridRef} className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category, index) => (
@@ -97,6 +104,9 @@ export function CategoryTiles({ categories, locale, direction }: Props) {
             growsDown={Math.floor(index / columns) === lastRow}
           />
         </li>
+      ))}
+      {Array.from({ length: fillers }, (_, index) => (
+        <li key={`filler-${index}`} className="bg-ink" aria-hidden="true" />
       ))}
     </ul>
   );
@@ -135,6 +145,8 @@ function Tile({
    * поехали бы за человеком по сети ещё до того, как он на них посмотрел.
    */
   const [source, setSource] = useState<string | null>(null);
+
+  const description = localizedString(category.description, locale);
 
   const loop = category.preview?.type === 'video' ? category.preview : null;
   const shows = Boolean(loop?.loopSrc) && mode !== 'none';
@@ -339,18 +351,25 @@ function Tile({
        * Со стоящим кадром текст занимает левую половину: иначе длинное
        * название уходит под ролик, а стрелка оказывается прямо на нём.
        */}
-      <span
-        className={`relative flex items-center justify-between ${standing ? 'w-[54%]' : 'w-full'}`}
-      >
-        <span className="text-h3 text-bone transition-colors group-hover:text-accent">
-          {localizedString(category.title, locale)}
+      <span className={`relative block ${standing ? 'w-[54%]' : 'w-full'}`}>
+        <span className="flex items-center justify-between gap-4">
+          <span className="text-h3 text-bone transition-colors group-hover:text-accent">
+            {localizedString(category.title, locale)}
+          </span>
+          <span
+            aria-hidden="true"
+            className="label text-bone-faint transition-transform group-hover:translate-x-1"
+          >
+            →
+          </span>
         </span>
-        <span
-          aria-hidden="true"
-          className="label text-bone-faint transition-transform group-hover:translate-x-1"
-        >
-          →
-        </span>
+        {/*
+         * Строка о том, что внутри. Со стоящим кадром её нет: там на текст
+         * остаётся половина плитки, и три строки легли бы прямо под ролик.
+         */}
+        {description && !standing ? (
+          <span className="mt-3 block max-w-prose text-bone-dim">{description}</span>
+        ) : null}
       </span>
     </Link>
   );

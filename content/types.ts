@@ -96,6 +96,13 @@ export type Category = {
   _id: string;
   slug: string;
   title: LocaleString;
+  /**
+   * Одна строка о том, что человек увидит внутри. Названия «Производство» мало:
+   * оно не говорит, снимают там цех или рекламу про цех.
+   *
+   * Пусто — плитка остаётся с одним названием и не выглядит сломанной.
+   */
+  description?: LocaleString;
   directions: Direction[];
   /**
    * Портфолио категории: кадры, ролики и вертикальные видео. Живёт у категории,
@@ -210,30 +217,9 @@ export type Project = BaseDoc & {
   result?: LocaleBlocks;
   cover: MediaAsset;
   media: MediaAsset[];
-  serviceSlugs: string[];
   formatSlugs: string[];
   credits: Credit[];
   featured?: boolean;
-};
-
-export type ProcessStep = { title: LocaleString; body?: LocaleString };
-export type FaqItem = { question: LocaleString; answer: LocaleString };
-
-export type Service = BaseDoc & {
-  direction: 'business';
-  title: LocaleString;
-  /** Короткое обещание результата (§5.4). */
-  summary: LocaleString;
-  body?: LocaleBlocks;
-  deliverables: LocaleString[];
-  formatSlugs: string[];
-  process: ProcessStep[];
-  faq: FaqItem[];
-  hero?: MediaAsset;
-  gallery: MediaAsset[];
-  /** Ссылка на условия расчёта, а не выдуманная цена. */
-  pricingSlug?: string;
-  leadTime?: LocaleString;
 };
 
 export type Article = BaseDoc & {

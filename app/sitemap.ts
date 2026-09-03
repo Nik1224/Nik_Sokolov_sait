@@ -11,7 +11,6 @@ import {
   getArticles,
   getPricing,
   getProjects,
-  getServices,
 } from '@/content/queries';
 import { absoluteUrl, href, startHref } from '@/lib/routing';
 import { DIRECTION_SECTIONS, DIRECTIONS, LOCALES, siteUrl, type Direction, type Section } from '@/lib/site';
@@ -57,14 +56,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.6,
         });
       }
-    }
-
-    const services = await getServices();
-    for (const service of services) {
-      entries.push({
-        url: absoluteUrl(href({ locale, direction: 'business', section: 'services', slug: service.slug }), origin),
-        priority: 0.7,
-      });
     }
 
     // Условия стоимости отдельных URL не имеют — они блоки на странице Pricing.
