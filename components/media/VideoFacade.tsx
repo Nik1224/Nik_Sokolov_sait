@@ -23,9 +23,29 @@ type Props = {
   dict: Dictionary;
   sizes?: string;
   priority?: boolean;
+  /**
+   * Пропорции рамки, если они должны отличаться от пропорций постера. Нужны
+   * ленте кадров на странице работы: там все плитки одного размера, иначе
+   * вертикальный ролик и вертикальный кадр в одном ряду разной высоты.
+   */
+  ratio?: number;
+  /**
+   * Не показывать строку про сторонний плеер под этим роликом. Нужно ленте
+   * кадров: там роликов несколько, и одна и та же фраза повторялась бы под
+   * каждым. Предупреждение в этом случае печатает сама лента — один раз.
+   */
+  hideConsent?: boolean;
 };
 
-export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = false }: Props) {
+export function VideoFacade({
+  media,
+  locale,
+  dict,
+  sizes = '100vw',
+  priority = false,
+  ratio,
+  hideConsent = false,
+}: Props) {
   const [playing, setPlaying] = useState(false);
 
   const alt = localizedString(media.alt, locale);
@@ -43,7 +63,7 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
     <figure className="m-0">
       <div
         className="relative overflow-hidden bg-ink-raised"
-        style={{ aspectRatio: String(media.poster.width / media.poster.height || 16 / 9) }}
+        style={{ aspectRatio: String(ratio ?? (media.poster.width / media.poster.height || 16 / 9)) }}
       >
         {playing && src ? (
           <iframe
@@ -116,7 +136,7 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
        * Хайрлайн сверху связывает строки с кадром: это подпись к нему, а не
        * следующий блок страницы.
        */}
-      {caption || isThirdParty ? (
+      {caption || (isThirdParty && !hideConsent) ? (
         <figcaption className="mt-4 border-t border-line pt-3">
           {/*
            * Ни хронометража, ни имени сервиса. Это техника, а не содержание:
@@ -126,7 +146,7 @@ export function VideoFacade({ media, locale, dict, sizes = '100vw', priority = f
           {caption ? <span className="block text-sm text-bone-dim">{caption}</span> : null}
           {/* Предупреждение видно ДО клика: это и есть осознанное согласие (§7).
               Отдельный экран подтверждения только добавлял бы второй клик. */}
-          {isThirdParty ? (
+          {isThirdParty && !hideConsent ? (
             <span className="mt-2 block text-xs text-bone-faint">{dict.media.videoConsent}</span>
           ) : null}
         </figcaption>

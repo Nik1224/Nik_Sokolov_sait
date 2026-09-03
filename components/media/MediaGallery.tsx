@@ -26,6 +26,8 @@ import { VideoFacade } from './VideoFacade';
 
 /** Насколько нужно смахнуть, чтобы жест сработал, а не был случайным. */
 const SWIPE_DISTANCE = 48;
+/** Пропорции вертикальной плитки в сетке работы: 2:3. */
+const TILE_RATIO = 2 / 3;
 const CLOSE_DISTANCE = 96;
 
 type Props = {
@@ -120,6 +122,15 @@ export function MediaGallery({
   const active = openIndex !== null ? images[openIndex] : null;
 
   /*
+   * Предупреждение о стороннем плеере печатается один раз на всю ленту.
+   * Под каждым роликом это была одна и та же фраза подряд шесть раз — она
+   * переставала читаться и превращалась в шум.
+   */
+  const hasThirdPartyVideo = items.some(
+    (item) => item.type === 'video' && item.provider !== 'file',
+  );
+
+  /*
    * Порции — каждая своей сеткой. У колонок высоты выравниваются по всему
    * содержимому: если досыпать кадры в общую сетку, она перекладывает и уже
    * показанные, и снимки разбегаются вверх и в середину.
@@ -151,24 +162,36 @@ export function MediaGallery({
           const caption = localizedString(item.caption, locale);
 
           if (item.type === 'video') {
+            /*
+             * Вертикальный ролик — такая же плитка, как вертикальный кадр.
+             * Раньше полосу во всю ширину занимал любой ролик, и четыре рилса
+             * подряд растягивали страницу на четыре экрана.
+             */
+            const videoIsWide = item.poster.width >= item.poster.height;
             return (
               <li
                 key={item._key}
                 className={
                   layout === 'masonry'
                     ? 'mb-4 break-inside-avoid lg:mb-6'
-                    : 'col-span-2 lg:col-span-3'
+                    : videoIsWide
+                      ? 'col-span-2 lg:col-span-3'
+                      : ''
                 }
               >
                 <VideoFacade
                   media={item}
                   locale={locale}
                   dict={dict}
+                  ratio={layout !== 'masonry' && !videoIsWide ? TILE_RATIO : undefined}
+                  hideConsent={hasThirdPartyVideo}
                   sizes={
                     layout === 'masonry'
                       ? '(min-width: 1024px) 33vw, 50vw'
                       : layout === 'rail'
-                        ? '(min-width: 1024px) 45rem, 100vw'
+                        ? videoIsWide
+                          ? '(min-width: 1024px) 45rem, 100vw'
+                          : '(min-width: 1024px) 15rem, 50vw'
                         : '100vw'
                   }
                 />
@@ -178,7 +201,15 @@ export function MediaGallery({
 
           const imageIndex = images.indexOf(item);
           const isWide = item.image.width >= item.image.height;
-          const ratio = item.image.width / item.image.height;
+          /*
+           * В сетке страницы работы вертикальные плитки одного размера: иначе
+           * ряд равняется по самой высокой, а под остальными висит пустота.
+           * Пропорции 2:3 — те же, что у кадров с телефона, поэтому фотографии
+           * не режутся вовсе, а вертикальному ролику отрезает по чуть-чуть
+           * сверху и снизу.
+           */
+          const ratio =
+            layout === 'masonry' || isWide ? item.image.width / item.image.height : TILE_RATIO;
 
           return (
             <li
@@ -230,6 +261,10 @@ export function MediaGallery({
         })}
       </ul>
       ))}
+
+      {hasThirdPartyVideo ? (
+        <p className="mt-4 text-xs text-bone-faint">{dict.media.videoConsent}</p>
+      ) : null}
 
       {shown < items.length ? (
         <div className="mt-10 flex flex-col items-center gap-3">

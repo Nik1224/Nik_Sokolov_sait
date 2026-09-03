@@ -13,9 +13,8 @@
 import type { MediaAsset, Project } from '../types';
 import { blocks } from './helpers';
 
-const CASE = 'epica-training';
-
 function shot(
+  folder: string,
   id: string,
   widths: number[],
   width: number,
@@ -24,9 +23,9 @@ function shot(
   altEn: string,
   caption?: { ru: string; en: string },
 ): MediaAsset {
-  const base = `/media/cases/${CASE}`;
+  const base = `/media/cases/${folder}`;
   return {
-    _key: id,
+    _key: `${folder}-${id}`,
     type: 'image',
     rights: 'owned',
     alt: { ru: altRu, en: altEn },
@@ -52,17 +51,18 @@ function shot(
  * ролик разбирать заново не нужно.
  */
 function clip(
+  folder: string,
   id: string,
   videoId: string,
   durationSeconds: number,
+  poster: { widths: number[]; width: number; height: number },
   altRu: string,
   altEn: string,
   caption?: { ru: string; en: string },
 ): MediaAsset {
-  const base = `/media/cases/${CASE}`;
-  const sizes = [600, 1200, 1800];
+  const base = `/media/cases/${folder}`;
   return {
-    _key: id,
+    _key: `${folder}-${id}`,
     type: 'video',
     provider: 'kinescope',
     videoId,
@@ -71,21 +71,135 @@ function clip(
     alt: { ru: altRu, en: altEn },
     caption,
     poster: {
-      src: `${base}/${id}-1800.jpg`,
-      width: 1800,
-      height: 1012,
-      sources: sizes.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
+      src: `${base}/${id}-${poster.width}.jpg`,
+      width: poster.width,
+      height: poster.height,
+      sources: poster.widths.map((size) => ({ width: size, src: `${base}/${id}-${size}.jpg` })),
     },
   };
 }
 
 /**
+ * Кейсы идут в порядке `order`: свежий сверху.
+ *
  * Обучающие ролики EPICA Professional.
  *
  * Восемнадцать роликов по продукту для внутреннего обучения: два дня технологи,
  * третий — менеджеры. Съёмка 2024 года.
  */
 export const businessCases: Project[] = [
+  {
+    _id: 'case.sesderma-anniversary',
+    slug: 'brand-anniversary-evening',
+    status: 'published',
+    directions: ['business'],
+    categorySlugs: ['conference'],
+    year: 2025,
+    featured: true,
+    order: 1,
+    client: 'Sesderma',
+    title: { ru: 'Десять лет бренда: вечер на 300 гостей', en: 'Ten years of the brand: an evening for 300' },
+    role: {
+      ru: 'Фотограф, сбор и координация съёмочной группы',
+      en: 'Photographer, assembling and running the crew',
+    },
+    lead: {
+      ru: 'Восемь часов программы, группа из девяти человек, фотографии у заказчика на следующий день.',
+      en: 'Eight hours of programme, a crew of nine, photographs delivered to the client the next day.',
+    },
+    /*
+     * Цифры из брифа и с площадки: число гостей и часов — от заказчика,
+     * размер группы и объём выдачи — свои.
+     */
+    figures: [
+      { value: { ru: '300+', en: '300+' }, label: { ru: 'гостей', en: 'guests' } },
+      { value: { ru: '8 часов', en: '8 hours' }, label: { ru: 'съёмки', en: 'of shooting' } },
+      { value: { ru: '9', en: '9' }, label: { ru: 'человек в группе', en: 'in the crew' } },
+      { value: { ru: '1000+', en: '1000+' }, label: { ru: 'фотографий', en: 'photographs' } },
+    ],
+    challenge: {
+      ru: blocks(
+        'Десятилетие компании: больше трёхсот гостей и восемь часов непрерывной программы — фотозона, ужин, сцена с ведущими и артистами, выступление президента корпорации, танцпол. У такого вечера нет второго дубля: что не снято, того не было.',
+        'Снимать нужно было одновременно фото и видео и в нескольких точках сразу. Пока на сцене идёт номер, у фотозоны стоит очередь, а в зале происходит то, ради чего люди и приходят на юбилей, — разговоры.',
+      ),
+      en: blocks(
+        'The company turned ten: more than three hundred guests and eight hours of uninterrupted programme — a photo zone, dinner, a stage with hosts and performers, a speech by the corporation president, a dance floor. An evening like this has no second take: whatever is not filmed did not happen.',
+        'Photo and video had to run at once, in several places at once. While a number is on stage, there is a queue at the photo zone, and in the room the thing people actually come for is happening — conversation.',
+      ),
+    },
+    solution: {
+      ru: blocks(
+        'Собрал группу из девяти человек — тех, с кем работал раньше. На такой площадке дороже резюме стоит слаженность: объяснять что-то по ходу вечера уже некогда.',
+        'Зоны разделили заранее: фотозона, зал, сцена, танцпол — у каждого свой участок и своя задача. Группа работала на связи, в гарнитурах, чтобы перестроиться, не собираясь вместе.',
+        'Фото и видео шли параллельно с первой минуты, поэтому к концу вечера материал был не грудой карт памяти, а разобранным по блокам программы.',
+      ),
+      en: blocks(
+        'I put together a crew of nine — people I had worked with before. On a night like this, being in sync beats any CV: there is no time to explain anything once the evening starts.',
+        'Zones were divided in advance: photo zone, room, stage, dance floor — each person with their own area and their own task. The crew stayed on headsets, so it could regroup without gathering in one place.',
+        'Photo and video ran in parallel from the first minute, so by the end of the night the material was not a pile of memory cards but footage already sorted by blocks of the programme.',
+      ),
+    },
+    result: {
+      ru: blocks(
+        'Больше тысячи фотографий в цветокоррекции и ретуши — переданы на следующий день. Тогда же ушли четыре вертикальных ролика: юбилей попал в соцсети, пока он ещё новость.',
+        'Итоговое видео — клип и полный фильм о вечере — заказчик получил через две недели.',
+      ),
+      en: blocks(
+        'More than a thousand photographs, colour-graded and retouched, were handed over the next day. Four vertical videos went out the same day, so the anniversary reached social media while it was still news.',
+        'The finished video — a short cut and a full film of the evening — was delivered two weeks later.',
+      ),
+    },
+    cover: shot(
+      'sesderma-anniversary',
+      '4fa2dbe953db',
+      [600, 1200],
+      1200,
+      800,
+      'Танцпол во время программы: гости, свет и фонтаны искр',
+      'The dance floor during the programme: guests, lights and sparks',
+    ),
+    media: [
+      clip(
+        'sesderma-anniversary',
+        'clip-poster',
+        '5j2CWcjbWFdPBp5K6QaQMS',
+        106,
+        { widths: [600, 1200, 1800], width: 1800, height: 1012 },
+        'Кадр из клипа о вечере',
+        'Frame from the film about the evening',
+        {
+          ru: 'Клип о вечере. Полный фильм остаётся у заказчика.',
+          en: 'The short cut. The full film stays with the client.',
+        },
+      ),
+      // Четыре вертикальных ролика — та самая выдача следующего дня.
+      clip('sesderma-anniversary', 'reel-1-poster', 'nymKFh14h466KSStHx8zYW', 34, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
+      clip('sesderma-anniversary', 'reel-2-poster', 'vmwXTC6jWn8NLNGFbZLguY', 34, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
+      clip('sesderma-anniversary', 'reel-3-poster', 'ahUBooxgkdJ4ErDvQihLCC', 38, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
+      clip('sesderma-anniversary', 'reel-4-poster', '4iDyL7xFCANnaqByzQhxLa', 30, { widths: [600, 1080], width: 1080, height: 1920 }, 'Вертикальный ролик с вечера', 'Vertical video from the evening'),
+      shot('sesderma-anniversary', 'e4eb297f42ce', [600, 853], 853, 1280, 'Выступление на сцене', 'A speech on stage'),
+      shot('sesderma-anniversary', 'eeb807ffab58', [600, 853], 853, 1280, 'Ведущие вечера', 'The hosts of the evening'),
+      shot('sesderma-anniversary', 'ddb91d924060', [600, 853], 853, 1280, 'Артистка во время номера', 'A performer during a number'),
+      shot('sesderma-anniversary', '72d155755700', [600, 1200], 1200, 2133, 'Съёмочная группа целиком', 'The full crew'),
+      shot('sesderma-anniversary', '8dcec0ddcc18', [600, 853], 853, 1280, 'Операторы в зале во время программы', 'Camera operators in the room during the programme'),
+      // Бэкстейдж закрывает ленту: до этого — что получилось, здесь — как это делалось.
+      clip(
+        'sesderma-anniversary',
+        'backstage-poster',
+        'icVNyHgNDnZYjHSupUrDeq',
+        67,
+        { widths: [600, 1200, 1800], width: 1800, height: 1012 },
+        'Кадр из бэкстейджа: группа за работой в зале',
+        'Frame from the backstage film: the crew working in the room',
+        {
+          ru: 'Бэкстейдж: как группа работала в зале все восемь часов.',
+          en: 'Backstage: how the crew worked the room for all eight hours.',
+        },
+      ),
+    ],
+    formatSlugs: ['photo-video', 'team'],
+    credits: [],
+  },
   {
     _id: 'case.epica-training',
     slug: 'in-house-training-videos',
@@ -94,7 +208,7 @@ export const businessCases: Project[] = [
     categorySlugs: ['education'],
     year: 2024,
     featured: true,
-    order: 1,
+    order: 2,
     client: 'EPICA Professional',
     title: { ru: 'Обучающие ролики для сотрудников', en: 'In-house training videos' },
     role: { ru: 'Съёмка, монтаж, подготовка графики', en: 'Filming, editing, graphics preparation' },
@@ -155,6 +269,7 @@ export const businessCases: Project[] = [
       { value: { ru: '2', en: '2' }, label: { ru: 'камеры', en: 'cameras' } },
     ],
     cover: shot(
+      'epica-training',
       '72a858263dfe',
       [600, 1200],
       1200,
@@ -166,9 +281,11 @@ export const businessCases: Project[] = [
       // Результат идёт первым: за ним человек и пришёл, кадры с площадки —
       // объяснение, как он получился. Кадр постера — 60-я секунда.
       clip(
+        'epica-training',
         'oxy-active-poster',
         'rGZYpW7Ecp4tA9VG7CVpkz',
         90,
+        { widths: [600, 1200, 1800], width: 1800, height: 1012 },
         'Кадр из обучающего ролика: спикер и слайд об окисляющих эмульсиях',
         'Frame from a training video: a speaker and a slide about oxidising emulsions',
         {
@@ -177,6 +294,7 @@ export const businessCases: Project[] = [
         },
       ),
       shot(
+        'epica-training',
         '205552b56890',
         [600, 720],
         720,
@@ -185,6 +303,7 @@ export const businessCases: Project[] = [
         'The set: a speaker at a white table under a softbox',
       ),
       shot(
+        'epica-training',
         'dd6e9b03c67d',
         [600, 720],
         720,
@@ -193,6 +312,7 @@ export const businessCases: Project[] = [
         'Camera operator filming a speaker on set',
       ),
       shot(
+        'epica-training',
         'af21c67866e7',
         [600, 720],
         720,
@@ -201,6 +321,7 @@ export const businessCases: Project[] = [
         'Wide shot of the set: light, table and camera',
       ),
       shot(
+        'epica-training',
         '9748951065e6',
         [600, 720],
         720,
@@ -213,6 +334,7 @@ export const businessCases: Project[] = [
         },
       ),
       shot(
+        'epica-training',
         'ad45be5e9bff',
         [600, 720],
         720,
@@ -221,6 +343,7 @@ export const businessCases: Project[] = [
         'Speakers between takes',
       ),
       shot(
+        'epica-training',
         'cf5ac70a97c0',
         [600, 853],
         853,
@@ -235,6 +358,7 @@ export const businessCases: Project[] = [
       // Горизонтальный кадр идёт последним: шесть вертикальных до него
       // укладываются в два ровных ряда, а он закрывает ленту полосой.
       shot(
+        'epica-training',
         'dd7e87bf60ac',
         [600, 1200],
         1200,
