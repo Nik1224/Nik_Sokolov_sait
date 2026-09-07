@@ -188,7 +188,7 @@ export default async function DirectionHome({ params }: Props) {
 
       {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
-          <CategoryTiles categories={categories} locale={locale} direction={direction} />
+          <CategoryTiles categories={categories} locale={locale} direction={direction} dict={dict} />
         </Section>
       ) : null}
 
