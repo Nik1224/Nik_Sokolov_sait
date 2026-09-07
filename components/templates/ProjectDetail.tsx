@@ -214,7 +214,7 @@ export function ProjectDetail({
                 {story.map(([label, value]) => (
                   <div key={label} className="border-t border-line pt-7">
                     <h2 className="label m-0 mb-5 text-eyebrow">{label}</h2>
-                    <PortableBody value={value!} locale={locale} dict={dict} className="case-body" />
+                    <PortableBody value={value!} locale={locale} dict={dict} className="lede" />
                   </div>
                 ))}
               </div>
