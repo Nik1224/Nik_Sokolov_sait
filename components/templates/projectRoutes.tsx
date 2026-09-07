@@ -157,6 +157,13 @@ export async function ProjectListingRoute({
   const albums =
     fullSeriesHere && isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
 
+  /*
+   * Обложка промо-блока — кадр из первого альбома с обложкой. Не украшение:
+   * блок зовёт посмотреть съёмку целиком, и обещание видно до перехода.
+   */
+  const promoCoverMedia = albums.find((album) => album.cover?.type === 'image')?.cover;
+  const promoCover = promoCoverMedia?.type === 'image' ? promoCoverMedia.image : undefined;
+
   return (
     <ProjectListing
       locale={locale}
@@ -180,6 +187,7 @@ export async function ProjectListingRoute({
               body: dict.albums.promoBody,
               action: dict.albums.promoAction,
               href: href({ locale, direction, section: 'albums' }),
+              cover: promoCover,
             }
           : undefined
       }

@@ -13,7 +13,8 @@ import { Breadcrumbs } from '@/components/global/misc';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery, type PortfolioSections } from '@/components/content/PortfolioGallery';
 import { MediaGallery } from '@/components/media/MediaGallery';
-import type { Album, Category, MediaAsset, Project } from '@/content/types';
+import { Picture } from '@/components/media/Picture';
+import type { Album, Category, ImageRef, MediaAsset, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -47,8 +48,18 @@ type Props = {
   /**
    * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
+   *
+   * С обложкой это приглашение, без неё — строка. Кадр берётся из того же
+   * раздела, куда блок ведёт: обещание видно до перехода.
    */
-  promo?: { label: string; title: string; body: string; action: string; href: string };
+  promo?: {
+    label: string;
+    title: string;
+    body: string;
+    action: string;
+    href: string;
+    cover?: ImageRef;
+  };
   /**
    * «Смотреть все» имеет смысл, только когда наполнена не одна категория.
    * Иначе это второе имя для той же самой подборки.
@@ -88,19 +99,35 @@ export function ProjectListing({
       {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
 
       {promo ? (
+        /*
+         * Приглашение, а не уведомление. Раньше это был прямоугольник с
+         * рамкой — с виду системное сообщение, — и звал он при этом в самое
+         * ценное, что есть в ветке: целую съёмку от начала до конца.
+         */
         <Link
           href={promo.href}
-          className="group mt-12 flex flex-col gap-6 border border-line p-7 transition-colors hover:border-line-strong hover:bg-ink-raised md:flex-row md:items-end md:justify-between md:gap-10 lg:p-9"
+          className="group mt-12 grid overflow-hidden md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]"
         >
-          <span className="max-w-xl">
+          {promo.cover ? (
+            <span className="relative block min-h-[12rem] overflow-hidden bg-ink-raised">
+              <Picture
+                image={promo.cover}
+                alt=""
+                sizes="(min-width: 768px) 26rem, 100vw"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+              />
+            </span>
+          ) : null}
+
+          <span className="flex flex-col justify-center py-7 md:pl-9 lg:py-9 lg:pl-12">
             <span className="label block text-eyebrow">{promo.label}</span>
-            <span className="text-h3 mt-3 block text-bone transition-colors group-hover:text-accent">
+            <span className="text-h3 mt-3 block max-w-md text-balance text-bone transition-colors group-hover:text-accent">
               {promo.title}
             </span>
-            <span className="mt-3 block text-bone-dim">{promo.body}</span>
-          </span>
-          <span className="label shrink-0 text-bone transition-colors group-hover:text-accent">
-            {promo.action} →
+            <span className="mt-3 block max-w-md text-bone-dim">{promo.body}</span>
+            <span className="label mt-6 text-accent transition-transform group-hover:translate-x-1">
+              {promo.action} →
+            </span>
           </span>
         </Link>
       ) : null}
