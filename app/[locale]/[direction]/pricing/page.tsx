@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function BlockHeading({ step, title }: { step: string; title: string }) {
   return (
     <div className="border-t border-line pt-6">
-      <p className="label m-0 text-accent">{step}</p>
+      <p className="label m-0 text-eyebrow">{step}</p>
       <h2 className="text-h2 m-0 mt-4 text-balance">{title}</h2>
     </div>
   );
@@ -87,7 +87,7 @@ function HourRates({
 
   return (
     <section className="mt-14 border-t border-line pt-6">
-      <p className="label m-0 text-accent">{dict.pricing.rates}</p>
+      <p className="label m-0 text-eyebrow">{dict.pricing.rates}</p>
       <dl className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
         {rows.map((row) => (
           <div key={row.role} className="bg-ink py-6 pr-6 sm:px-6 sm:first:pl-0">

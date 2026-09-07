@@ -163,7 +163,7 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
               <div id={panelId} className="pricing-panel pb-10">
                 {available.length > 1 ? (
                   <fieldset className="m-0 mb-8 border-0 p-0">
-                    <legend className="label mb-4 p-0 text-accent">{dict.calculator.formats}</legend>
+                    <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.formats}</legend>
                     <div className="flex flex-wrap gap-3">
                       {available.map((value) => (
                         <label

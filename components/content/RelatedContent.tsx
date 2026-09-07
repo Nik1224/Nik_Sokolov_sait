@@ -25,7 +25,7 @@ export function RelatedArticleLinks({ articles, locale, direction, title }: Arti
 
   return (
     <div className="border-t border-line pt-6">
-      <p className="label mb-6 text-accent">{title}</p>
+      <p className="label mb-6 text-eyebrow">{title}</p>
       <ul className="m-0 list-none space-y-px p-0">
         {articles.map((article) => (
           <li key={article._id}>
@@ -59,7 +59,7 @@ export function RelatedProjectCallout({ projects, locale, direction, section, ti
 
   return (
     <div className="border-t border-line pt-6">
-      <p className="label mb-6 text-accent">{title}</p>
+      <p className="label mb-6 text-eyebrow">{title}</p>
       <ul className="m-0 grid list-none gap-8 p-0 sm:grid-cols-2">
         {projects.map((project) => {
           const cover = project.cover;

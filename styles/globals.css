@@ -34,6 +34,49 @@
     --color-danger: #a32318;
     --color-line: rgba(42, 33, 28, 0.14);
     --color-line-strong: rgba(42, 33, 28, 0.32);
+    /* Метка — не акцент. Красный остаётся тому, что можно нажать: активному
+       пункту меню, выбранному фильтру, кнопке. Контраст к самой тёмной
+       подложке темы (#e9dfd1) — 4.95:1. */
+    --color-eyebrow: #6a5b4e;
+
+    /* Заголовки — антиква. Гротеск остаётся в тексте: контраст двух гарнитур
+       и есть то, что отличает каталог от интерфейса. */
+    --font-display: var(--font-display-face), Georgia, "Times New Roman", serif;
+    --font-display-weight: 500;
+
+    /* Метки — тот же гротеск капителью. Моноширинный читается как чек или
+       код: честно, но не про свадьбу. */
+    --font-label: var(--font-sans);
+    --font-label-weight: 600;
+    --text-label--letter-spacing: 0.17em;
+
+    /* Имя подписывает работы, а не интерфейс: антиква и широкая разрядка
+       вместо служебной строчки в 12 px. */
+    --font-brand: var(--font-display-face), Georgia, "Times New Roman", serif;
+    --font-brand-weight: 500;
+    --text-brand: 1.0625rem;
+    --text-brand--letter-spacing: 0.2em;
+
+    /*
+     * Своя шкала кеглей. Антиква оптически мельче гротеска в том же размере,
+     * а отрицательный трекинг, который нужен Inter, ей вредит: засечки
+     * начинают слипаться. Поэтому кегль крупнее, а трекинг — около нуля.
+     */
+    --text-display: clamp(3rem, 7.6vw, 7rem);
+    --text-display--line-height: 0.94;
+    --text-display--letter-spacing: -0.012em;
+
+    --text-h1: clamp(2.5rem, 5.4vw, 4.5rem);
+    --text-h1--line-height: 1.02;
+    --text-h1--letter-spacing: -0.008em;
+
+    --text-h2: clamp(1.85rem, 3.4vw, 2.9rem);
+    --text-h2--line-height: 1.08;
+    --text-h2--letter-spacing: -0.005em;
+
+    --text-h3: clamp(1.3rem, 2.1vw, 1.75rem);
+    --text-h3--line-height: 1.18;
+    --text-h3--letter-spacing: 0;
 
     background-color: var(--color-ink);
     color: var(--color-bone);
@@ -78,6 +121,42 @@
   }
 }
 
+/* --- Заголовки -----------------------------------------------------------
+   Кегли задаются утилитами Tailwind, а гарнитура — токеном: ветке достаточно
+   переопределить `--font-display`, и ни один компонент об этом не узнает.
+
+   Слой `components`, а не `base`: в base правило проигрывало бы утилите
+   размера, а вне слоёв — побеждало бы `font-mono` там, где моноширинный
+   выбран осознанно (полоса фактов на странице работы).
+   ------------------------------------------------------------------------- */
+
+@layer components {
+  /*
+   * Только утилиты кегля, без голых h1–h3. Заголовок в разметке иногда
+   * оборачивает не одну строку, а целую группу — в пакетах это `h3` вокруг
+   * кнопки с описанием и сводкой, — и антиква оттуда протекала на весь
+   * мелкий текст внутри. Утилита стоит ровно на той строке, которая и есть
+   * заголовок.
+   */
+  :is(.text-display, .text-h1, .text-h2, .text-h3) {
+    font-family: var(--font-display);
+    font-weight: var(--font-display-weight);
+  }
+
+  /*
+   * Цифры. У антиквы по умолчанию минускульные («старостильные») — красиво в
+   * тексте, но в цене их читать труднее: разряды пляшут по высоте. Там, где
+   * цифра — содержание, а не украшение, ставим прописные и табличные.
+   */
+  :is(.text-display, .text-h1, .text-h2, .text-h3) {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
 /* --- Фокус (§11: видимый keyboard focus) --------------------------------- */
 
 :focus-visible {
@@ -107,10 +186,20 @@
 /* --- Утилиты ------------------------------------------------------------- */
 
 @utility label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: var(--font-label-weight);
   font-size: var(--text-label);
   line-height: var(--text-label--line-height);
   letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+@utility brand {
+  font-family: var(--font-brand);
+  font-weight: var(--font-brand-weight);
+  font-size: var(--text-brand);
+  line-height: 1;
+  letter-spacing: var(--text-brand--letter-spacing);
   text-transform: uppercase;
 }
 

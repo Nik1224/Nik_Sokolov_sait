@@ -89,7 +89,7 @@ export function ProjectListing({
           className="group mt-12 flex flex-col gap-6 border border-line p-7 transition-colors hover:border-line-strong hover:bg-ink-raised md:flex-row md:items-end md:justify-between md:gap-10 lg:p-9"
         >
           <span className="max-w-xl">
-            <span className="label block text-accent">{promo.label}</span>
+            <span className="label block text-eyebrow">{promo.label}</span>
             <span className="text-h3 mt-3 block text-bone transition-colors group-hover:text-accent">
               {promo.title}
             </span>

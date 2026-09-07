@@ -63,7 +63,7 @@ export default async function Page({ params }: Props) {
       {/* Тот же список без окна: кому-то удобнее скопировать номер или ник. */}
       {settings.contacts.length > 0 ? (
         <section className="mt-16 border-t border-line pt-10">
-          <h2 className="label m-0 text-accent">{dict.contact.directContacts}</h2>
+          <h2 className="label m-0 text-eyebrow">{dict.contact.directContacts}</h2>
           <ul className="m-0 mt-6 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {settings.contacts.map((contact) => (
               <li key={contact.href} className="m-0">

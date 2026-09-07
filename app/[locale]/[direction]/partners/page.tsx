@@ -72,14 +72,14 @@ export default async function Page({ params }: Props) {
         работа после съёмки, — поэтому его можно обещать.
       */}
       <section className="mt-14 border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.promiseLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.promiseLabel}</p>
         <p className="text-h2 m-0 mt-6 max-w-4xl text-balance">{t.promise}</p>
         <p className="mt-6 max-w-2xl text-bone-dim">{t.promiseBody}</p>
       </section>
 
       <section className="mt-20">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.packLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.packLabel}</p>
           <h2 className="text-h2 m-0 mt-4 text-balance">{t.packTitle}</h2>
         </div>
         <ul className="m-0 mt-10 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -99,7 +99,7 @@ export default async function Page({ params }: Props) {
       */}
       <section className="mt-20">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.whyLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.whyLabel}</p>
           <h2 className="text-h2 m-0 mt-4 max-w-3xl text-balance">{t.whyTitle}</h2>
         </div>
 
@@ -131,13 +131,13 @@ export default async function Page({ params }: Props) {
 
       <section className="mt-20 max-w-3xl">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.rightsLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.rightsLabel}</p>
           <h2 className="text-h2 m-0 mt-4 text-balance">{t.rightsTitle}</h2>
         </div>
         <ul className="m-0 mt-8 list-none space-y-4 p-0">
           {t.rights.map((line) => (
             <li key={line} className="flex gap-4 text-bone-dim">
-              <span aria-hidden="true" className="label text-accent">
+              <span aria-hidden="true" className="label text-eyebrow">
                 —
               </span>
               <span>{line}</span>
@@ -151,7 +151,7 @@ export default async function Page({ params }: Props) {
         отправит паре: до сих пор это была переписка и пересказ своими словами.
       */}
       <section className="mt-20 max-w-3xl border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.cardLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.cardLabel}</p>
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.cardTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.cardBody}</p>
         <p className="mt-6">
@@ -179,7 +179,7 @@ export default async function Page({ params }: Props) {
       </section>
 
       <section className="mt-20 max-w-2xl border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.startLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.startLabel}</p>
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.startTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.startBody}</p>
         <div className="mt-8">

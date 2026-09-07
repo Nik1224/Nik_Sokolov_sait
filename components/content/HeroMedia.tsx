@@ -55,7 +55,7 @@ export function HeroMedia({
       ) : null}
 
       <div className={`container-content relative ${compact ? 'py-16' : 'py-20 lg:py-28'}`}>
-        {eyebrow ? <p className="label mb-5 text-accent">{eyebrow}</p> : null}
+        {eyebrow ? <p className="label mb-5 text-eyebrow">{eyebrow}</p> : null}
         <h1 className={`${compact ? 'text-h1' : 'text-display'} m-0 max-w-4xl text-balance`}>{title}</h1>
         {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
 

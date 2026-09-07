@@ -59,7 +59,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
    */
   const text = (
     <>
-      {eyebrow ? <p className="label m-0 text-accent">{eyebrow}</p> : null}
+      {eyebrow ? <p className="label m-0 text-eyebrow">{eyebrow}</p> : null}
       <h1 className="text-h3 mt-3 max-w-lg text-balance lg:text-h2">{title}</h1>
       {lead ? <p className="mt-3 max-w-md text-bone-dim lg:text-base">{lead}</p> : null}
 

@@ -4,7 +4,7 @@
  */
 
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google';
 import { getGlobalSettings, hasDemoContent } from '@/content/queries';
 import { DemoBanner, SkipLink } from '@/components/global/misc';
 import { PaintTransition } from '@/components/global/PaintTransition';
@@ -22,6 +22,19 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-mono-face',
+  display: 'swap',
+});
+
+/**
+ * Заголовочная антиква. Её берёт только PRIVATE: частному клиенту нужна
+ * интонация каталога, а не интерфейса. BUSINESS и PRODUCTION остаются на
+ * гротеске — какая ветка какой шрифт берёт, решает токен `--font-display`
+ * в `styles/globals.css`, а не этот файл.
+ */
+const display = Cormorant_Garamond({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600'],
+  variable: '--font-display-face',
   display: 'swap',
 });
 
@@ -62,7 +75,7 @@ export default async function LocaleLayout({
   const showDemoBanner = await hasDemoContent();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${mono.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${mono.variable} ${display.variable}`}>
       <body>
         <SkipLink label={dict.common.skipToContent} />
         {showDemoBanner ? <DemoBanner dict={dict} /> : null}

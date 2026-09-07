@@ -32,7 +32,7 @@ export function GlobalHeader({ locale, direction, sections, directions, contacts
         <div className="flex items-center gap-6 lg:gap-8">
           <Link
             href={directionHomeHref(locale, direction)}
-            className="label whitespace-nowrap text-bone"
+            className="brand whitespace-nowrap text-bone"
           >
             {dict.brand.name}
           </Link>

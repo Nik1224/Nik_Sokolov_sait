@@ -35,7 +35,7 @@ export function Section({
       {eyebrow || title || action ? (
         <div className="mb-10 flex flex-col gap-6 border-t border-line pt-6 md:flex-row md:items-end md:justify-between lg:mb-14">
           <div className="max-w-2xl">
-            {eyebrow ? <p className="label mb-4 text-accent">{eyebrow}</p> : null}
+            {eyebrow ? <p className="label mb-4 text-eyebrow">{eyebrow}</p> : null}
             {title ? <Heading className="text-h2 m-0 text-balance">{title}</Heading> : null}
             {lead ? <p className="mt-4 text-lead text-bone-dim">{lead}</p> : null}
           </div>

@@ -109,7 +109,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-14">
       <div className="flex flex-col gap-9">
         <fieldset className="m-0 border-0 p-0">
-          <legend className="label mb-4 p-0 text-accent">{dict.calculator.formats}</legend>
+          <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.formats}</legend>
           <div className="flex flex-wrap gap-3">
             {(['photo', 'video'] as const).map((format) => {
               const active = formats.includes(format);
@@ -136,7 +136,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
         </fieldset>
 
         <fieldset className="m-0 border-0 p-0">
-          <legend className="label mb-4 p-0 text-accent">{dict.calculator.shootType}</legend>
+          <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.shootType}</legend>
           <div className="flex flex-wrap gap-3">
             {config.types.map((option) => {
               const active = option.slug === type.slug;
@@ -164,7 +164,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
         </fieldset>
 
         <div>
-          <label htmlFor="calc-hours" className="label block text-accent">
+          <label htmlFor="calc-hours" className="label block text-eyebrow">
             {dict.calculator.hours}
           </label>
           <div className="mt-4 flex items-center gap-5">
