@@ -20,6 +20,7 @@ import { Testimonials } from '@/components/content/Testimonials';
 import { ArticleCard, ProjectCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
+import { Picture } from '@/components/media/Picture';
 import { VideoFacade } from '@/components/media/VideoFacade';
 import {
   getArticleTypes,
@@ -32,6 +33,7 @@ import {
   getTestimonials,
   getWorkFormats,
 } from '@/content/queries';
+import type { MediaAsset } from '@/content/types';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
@@ -126,6 +128,30 @@ export default async function DirectionHome({ params }: Props) {
   let sectionIndex = 0;
   const step = () => String(++sectionIndex).padStart(2, '0');
 
+  /*
+   * Кадр-разрыв: одна фотография во всю ширину, без полей и без подписи.
+   *
+   * После обложки страница идёт восемью одинаковыми блоками — линия, метка,
+   * заголовок, сетка. Ритм настолько ровный, что превращается в гул, и до
+   * отзывов долистывают не глядя. Разрыв делит страницу на «про съёмку» и
+   * «про деньги» и даёт вдохнуть.
+   *
+   * Ровно один на страницу: три таких — и приём перестаёт работать.
+   *
+   * Пока только у PRIVATE. Монотонность общая для всех веток, но просили
+   * разобрать эту, а менять раскладку двух других заодно — не то же самое,
+   * что чинить ту, о которой шла речь.
+   */
+  const breakImage =
+    direction === 'private'
+      ? categories
+          .flatMap((category) => category.gallery ?? [])
+          .find(
+            (media): media is Extract<MediaAsset, { type: 'image' }> =>
+              media.type === 'image' && media.image.width > media.image.height,
+          )?.image
+      : undefined;
+
   const showreelProject = selected.find((project) =>
     project.media.some((media) => media.type === 'video'),
   );
@@ -205,6 +231,20 @@ export default async function DirectionHome({ params }: Props) {
             ))}
           </ul>
         </Section>
+      ) : null}
+
+      {breakImage ? (
+        <section
+          className="relative w-full overflow-hidden bg-ink-raised"
+          style={{ height: 'clamp(18rem, 42vh, 30rem)' }}
+        >
+          <Picture
+            image={breakImage}
+            alt=""
+            sizes="100vw"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </section>
       ) : null}
 
       {showsSelected ? (

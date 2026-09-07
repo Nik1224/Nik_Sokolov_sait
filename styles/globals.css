@@ -206,6 +206,27 @@
   }
 }
 
+@layer components {
+  /*
+   * Смена отзыва. Только проявление, без сдвига: цитата занимает своё место,
+   * и подъезжающий текст дёргал бы блок каждые семь секунд.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .quote {
+      animation: quote-in var(--duration-slow) var(--ease-out-soft) both;
+    }
+  }
+}
+
+@keyframes quote-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes reveal {
   from {
     opacity: 0;
