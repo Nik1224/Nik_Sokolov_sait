@@ -10,6 +10,7 @@ import { DemoBanner, SkipLink } from '@/components/global/misc';
 import { PaintTransition } from '@/components/global/PaintTransition';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
+import { REVEAL_SCRIPT } from '@/lib/reveal';
 import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
 import '@/styles/globals.css';
 
@@ -77,6 +78,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${inter.variable} ${mono.variable} ${display.variable}`}>
       <body>
+        {/*
+          Первым в теле, до всей разметки: скрипт прячет блоки до прокрутки, и
+          сделать это он должен раньше, чем браузер их нарисует. Подключённый
+          обычным образом файл выполнился бы после отрисовки — блоки успели бы
+          мигнуть и пропасть.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_SCRIPT }} />
         <SkipLink label={dict.common.skipToContent} />
         {showDemoBanner ? <DemoBanner dict={dict} /> : null}
         {children}

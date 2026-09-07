@@ -16,7 +16,7 @@ export function Testimonials({ items, locale, dict }: Props) {
   if (items.length === 0) return null;
 
   return (
-    <ul className="m-0 grid list-none gap-8 p-0 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
+    <ul data-reveal-stagger className="m-0 grid list-none gap-8 p-0 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
       {items.map((item) => {
         const text = localizedString(item.text, locale);
         const isFallback = !hasTranslation(item.text, locale);

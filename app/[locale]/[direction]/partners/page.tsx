@@ -82,7 +82,7 @@ export default async function Page({ params }: Props) {
           <p className="label m-0 text-eyebrow">{t.packLabel}</p>
           <h2 className="text-h2 m-0 mt-4 text-balance">{t.packTitle}</h2>
         </div>
-        <ul className="m-0 mt-10 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul data-reveal className="m-0 mt-10 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
           {t.pack.map((item) => (
             <li key={item.title} className="bg-ink p-6 lg:p-8">
               <h3 className="text-h3 m-0 text-bone">{item.title}</h3>
@@ -118,7 +118,7 @@ export default async function Page({ params }: Props) {
           <p className="max-w-2xl text-lead text-bone-dim">{t.portraitBody}</p>
         </div>
 
-        <ol className="m-0 mt-14 grid list-none gap-10 p-0 lg:grid-cols-3 lg:gap-8">
+        <ol data-reveal-stagger className="m-0 mt-14 grid list-none gap-10 p-0 lg:grid-cols-3 lg:gap-8">
           {t.why.map((item, index) => (
             <li key={item.title}>
               <p className="label m-0 text-bone-faint">{String(index + 1).padStart(2, '0')}</p>

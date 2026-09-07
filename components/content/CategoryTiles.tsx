@@ -97,7 +97,7 @@ export function CategoryTiles({ categories, locale, direction, dict }: Props) {
   const featured = categories.length % 3 === 2;
 
   return (
-    <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
+    <ul data-reveal-stagger className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
       {categories.map((category, index) => (
         <li
           key={category._id}

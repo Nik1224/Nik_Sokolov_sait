@@ -194,7 +194,7 @@ export default async function DirectionHome({ params }: Props) {
 
       {doc.highlights.length > 0 ? (
         <Section eyebrow={step()} title={dict.common.included}>
-          <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+          <ul data-reveal className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
             {doc.highlights.map((item, index) => (
               <li key={index} className="bg-ink p-6 lg:p-8">
                 <h3 className="text-h3 m-0 text-bone">{localizedString(item.title, locale)}</h3>
@@ -213,7 +213,7 @@ export default async function DirectionHome({ params }: Props) {
           title={dict.nav[section]}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section }) }}
         >
-          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
             {selected.map((project, index) => (
               <li key={project._id}>
                 <ProjectCard
@@ -314,7 +314,7 @@ export default async function DirectionHome({ params }: Props) {
           title={dict.nav.blog}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section: 'blog' }) }}
         >
-          <ul className="m-0 grid list-none gap-12 p-0 md:grid-cols-3">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-12 p-0 md:grid-cols-3">
             {articles.map((article) => (
               <li key={article._id}>
                 <ArticleCard

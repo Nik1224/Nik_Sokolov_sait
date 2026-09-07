@@ -88,7 +88,7 @@ function HourRates({
   return (
     <section className="mt-14 border-t border-line pt-6">
       <p className="label m-0 text-eyebrow">{dict.pricing.rates}</p>
-      <dl className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
+      <dl data-reveal className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
         {rows.map((row) => (
           <div key={row.role} className="bg-ink py-6 pr-6 sm:px-6 sm:first:pl-0">
             <dt className="text-h3 m-0 text-bone-dim">{row.role}</dt>

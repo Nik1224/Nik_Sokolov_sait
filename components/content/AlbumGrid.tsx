@@ -23,7 +23,7 @@ type Props = {
 
 export function AlbumGrid({ albums, locale, dict }: Props) {
   return (
-    <ul className="m-0 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
+    <ul data-reveal-stagger className="m-0 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
       {albums.map((album, index) => {
         const title = localizedString(album.title, locale);
         const place = localizedString(album.location, locale);

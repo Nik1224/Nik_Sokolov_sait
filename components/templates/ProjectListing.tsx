@@ -152,7 +152,7 @@ export function ProjectListing({
         ) : categoryAlbums.length > 0 ? null : projects.length === 0 ? (
           <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
         ) : (
-          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
             {projects.map((project, index) => (
               <li key={project._id}>
                 <ProjectCard
