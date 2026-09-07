@@ -142,12 +142,31 @@ function Tile({
   const deactivate = useCallback(() => setActive(false), []);
 
   /*
-   * Играет — когда навели (или всегда, если наведения на этом экране не
-   * бывает). Запуск живёт в эффекте, а не в обработчике: в момент наведения
-   * состояние ещё не доехало до разметки, и вызванный тут же play() не нашёл
-   * бы, что играть.
+   * Где наведения не бывает, петля живёт по видимости плитки: играет, пока
+   * она на экране, и стоит, когда ушла. Ушедшая с экрана плитка не должна
+   * крутить кадр и тратить батарею — на телефоне это заметно.
    */
-  const playing = standing || active;
+  const [onScreen, setOnScreen] = useState(false);
+
+  useEffect(() => {
+    const el = linkRef.current;
+    if (!el || !standing) return;
+
+    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), {
+      threshold: 0.25,
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [standing]);
+
+  /*
+   * Играет — когда навели, а на сенсорном экране — когда плитка видна.
+   * Запуск живёт в эффекте, а не в обработчике: в момент наведения состояние
+   * ещё не доехало до разметки, и вызванный тут же play() не нашёл бы, что
+   * играть.
+   */
+  const playing = standing ? onScreen : active;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -161,9 +180,14 @@ function Tile({
     }
 
     video.pause();
-    // С начала: иначе при следующем наведении кадр продолжится с середины.
-    video.currentTime = 0;
-  }, [playing, source]);
+    /*
+     * Отматываем только уход мыши: следующее наведение должно начинаться с
+     * начала. На сенсорном экране плитка вернётся в кадр при обратной
+     * прокрутке, и продолжить с того же места естественнее, чем начинать
+     * заново.
+     */
+    if (!standing) video.currentTime = 0;
+  }, [playing, source, standing]);
 
   const title = localizedString(category.title, locale);
   const description = localizedString(category.description, locale);
