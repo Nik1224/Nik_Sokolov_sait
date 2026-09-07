@@ -84,7 +84,7 @@ export function ProjectCard({
           ratio={ratio}
           sizes={sizes}
           priority={priority}
-          className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
+          className="frame-in"
         />
         <div className="mt-5">
           {/*
@@ -139,7 +139,7 @@ export function ArticleCard({
             alt=""
             ratio={16 / 9}
             sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw"
-            className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
+            className="frame-in"
           />
         ) : null}
         <div className={showCover ? 'mt-5' : ''}>

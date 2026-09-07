@@ -56,7 +56,7 @@ export function AlbumGrid({ albums, locale, dict }: Props) {
                   ratio={3 / 2}
                   priority={index < 3}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+                  className="frame-in"
                 />
               ) : null}
 

@@ -227,6 +227,63 @@
   }
 }
 
+@layer components {
+  /*
+   * Заголовок страницы выезжает из-под невидимой шторки (M2).
+   *
+   * Правило берёт `h1` с утилитой кегля — то есть ровно заголовок страницы,
+   * без разметки в каждом файле. Один раз на страницу: на переходе `h1`
+   * монтируется заново, и шторка проигрывается для новой страницы.
+   *
+   * Конечный кадр обрезки — с отрицательными отступами: на нуле маска
+   * проходит по краю строки и срезает выносные элементы у букв вроде «р» и
+   * «у», а заметно это становится уже после анимации, насовсем.
+   */
+  .reveal-ready :is(h1.text-h1, h1.text-display) {
+    animation: title-in var(--duration-slow) var(--ease-out-soft) both;
+  }
+}
+
+@layer components {
+  /*
+   * Кадр въезжает чуть увеличенным и за полторы секунды встаёт на место (M3).
+   *
+   * Не «зум по наведению»: наведения нет на телефоне, откуда приходит
+   * большинство, — а это ровно те люди, которые видят карточки первыми.
+   * Поэтому наезд при наведении с карточек снят: две анимации transform на
+   * одном элементе всё равно спорили бы, и выиграла бы та, что с `both`.
+   *
+   * Задержка та же, что у самой карточки, — кадр и её появление идут вместе.
+   */
+  .reveal-ready [data-reveal].is-revealed .frame-in,
+  .reveal-ready [data-reveal-stagger].is-revealed > * .frame-in {
+    animation: frame-in 1500ms var(--ease-out-soft) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+@keyframes frame-in {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes title-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-25% -10% -25% -10%);
+    transform: none;
+  }
+}
+
 @keyframes reveal {
   from {
     opacity: 0;

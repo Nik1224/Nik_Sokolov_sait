@@ -235,6 +235,7 @@ export default async function DirectionHome({ params }: Props) {
 
       {breakImage ? (
         <section
+          data-reveal
           className="relative w-full overflow-hidden bg-ink-raised"
           style={{ height: 'clamp(18rem, 42vh, 30rem)' }}
         >
@@ -242,7 +243,7 @@ export default async function DirectionHome({ params }: Props) {
             image={breakImage}
             alt=""
             sizes="100vw"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="frame-in absolute inset-0 h-full w-full object-cover"
           />
         </section>
       ) : null}

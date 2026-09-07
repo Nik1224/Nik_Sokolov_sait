@@ -9,6 +9,7 @@ import type { Metadata } from 'next';
 import type { CalculatorConfig } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import type { Locale } from '@/lib/site';
+import { CountUp } from '@/components/content/CountUp';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingExtras } from '@/components/content/PricingBlock';
 import { PricingPackages } from '@/components/content/PricingPackages';
@@ -92,9 +93,12 @@ function HourRates({
         {rows.map((row) => (
           <div key={row.role} className="bg-ink py-6 pr-6 sm:px-6 sm:first:pl-0">
             <dt className="text-h3 m-0 text-bone-dim">{row.role}</dt>
-            {/* Ставка — самое крупное, что есть на странице: за ней и пришли. */}
+            {/*
+              Ставка — самое крупное, что есть на странице: за ней и пришли.
+              Она же единственное место, где число отсчитывается от нуля.
+            */}
             <dd className="text-display m-0 mt-2 whitespace-nowrap text-bone">
-              {money.format(row.price)}
+              <CountUp value={row.price} locale={locale} currency={config.currency} />
             </dd>
           </div>
         ))}
