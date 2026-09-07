@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { ContactButton } from '@/components/contact/ContactButton';
 import { Breadcrumbs } from '@/components/global/misc';
 import { Picture } from '@/components/media/Picture';
-import type { ImageRef } from '@/content/types';
+import { PORTRAIT } from '@/content/portrait';
 import { getGlobalSettings } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
@@ -23,14 +23,6 @@ import { cardHref, href } from '@/lib/routing';
 import { buildMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
-
-/** Тот же портрет, что и на странице «О себе». */
-const PORTRAIT: ImageRef = {
-  src: '/media/about/nikita-1200.jpg',
-  width: 1200,
-  height: 1800,
-  sources: [600, 1200].map((width) => ({ width, src: `/media/about/nikita-${width}.jpg` })),
-};
 
 export function generateStaticParams() {
   return sectionStaticParams('partners');
