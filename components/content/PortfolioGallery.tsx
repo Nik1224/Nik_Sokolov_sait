@@ -11,6 +11,7 @@
 import { useState } from 'react';
 import type { MediaAsset } from '@/content/types';
 import { MediaGallery } from '@/components/media/MediaGallery';
+import { useSlidingUnderline } from './useSlidingUnderline';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import type { Locale } from '@/lib/site';
 
@@ -34,39 +35,59 @@ const ORDER: SectionKey[] = ['photos', 'videos', 'reels'];
 export function PortfolioGallery({ sections, locale, dict }: Props) {
   const available = ORDER.filter((key) => sections[key].length > 0);
   const [active, setActive] = useState<SectionKey>(available[0] ?? 'photos');
+  const current = available.includes(active) ? active : (available[0] ?? 'photos');
+  // Хук стоит до раннего выхода: порядок хуков не должен зависеть от данных.
+  const { containerRef, barRef, setItem, placed } = useSlidingUnderline(current);
 
   if (available.length === 0) return null;
-
-  const current = available.includes(active) ? active : available[0];
   const items = sections[current];
 
   return (
     <div>
       {available.length > 1 ? (
+        /*
+         * Уточнение к выбранной категории, а не второй такой же выбор. Раньше
+         * здесь стояли крупные кнопки, и выбранная была залита чёрным: на
+         * бумажной теме это оказывался самый тяжёлый элемент страницы — у
+         * фильтра, а не у работ.
+         */
         <fieldset className="m-0 mb-10 border-0 p-0 lg:mb-12">
           <legend className="sr-only">{dict.media.sectionLegend}</legend>
-          {/* По центру и крупнее фильтра категорий: это главный выбор на
-              странице, а не уточнение к нему. */}
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-            {available.map((key) => (
-              <label
-                key={key}
-                className={`label cursor-pointer border px-8 py-4 text-[0.8125rem] transition-colors ${
-                  key === current
-                    ? 'border-bone bg-bone text-ink'
-                    : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="portfolio-section"
-                  className="sr-only"
-                  checked={key === current}
-                  onChange={() => setActive(key)}
-                />
-                {dict.media[key]}
-              </label>
-            ))}
+          <div ref={containerRef} className="relative inline-block">
+            <div className="flex flex-wrap gap-x-7 gap-y-2">
+              {available.map((key) => (
+                <label
+                  key={key}
+                  ref={setItem(key)}
+                  className={`label cursor-pointer pb-2 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-accent ${
+                    key === current ? 'text-bone' : 'text-bone-faint hover:text-bone'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="portfolio-section"
+                    className="sr-only"
+                    checked={key === current}
+                    onChange={() => setActive(key)}
+                  />
+                  {dict.media[key]}
+                </label>
+              ))}
+            </div>
+            {/*
+              Линия чернилами, а не акцентом: красный уже стоит под выбранной
+              категорией выше, и два красных подчёркивания на экране спорили бы
+              за то, какой из выборов главный.
+            */}
+            <span
+              ref={barRef}
+              aria-hidden="true"
+              className={`pointer-events-none absolute left-0 top-0 h-px w-0 bg-bone ${
+                placed
+                  ? 'transition-[transform,width] duration-[var(--duration-base)] ease-[var(--ease-out-soft)]'
+                  : ''
+              }`}
+            />
           </div>
         </fieldset>
       ) : null}

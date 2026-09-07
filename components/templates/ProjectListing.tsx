@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { ProjectCard } from '@/components/content/cards';
+import { FilterNav } from '@/components/content/FilterNav';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
@@ -17,6 +18,9 @@ import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
 import type { Direction, Locale } from '@/lib/site';
+
+/** Ключ пункта «смотреть все»: у него нет slug, а линии нужен адрес пункта. */
+const ALL = 'all';
 
 type Props = {
   locale: Locale;
@@ -102,40 +106,20 @@ export function ProjectListing({
       ) : null}
 
       {categories.length > 0 ? (
-        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">
-          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
-            {showAll ? (
-              <li>
-                <Link
-                  href={listingHref}
-                  aria-current={!activeCategory ? 'true' : undefined}
-                  className={`label transition-colors ${
-                    !activeCategory ? 'text-accent' : 'text-bone-faint hover:text-bone'
-                  }`}
-                >
-                  {dict.common.viewAll}
-                </Link>
-              </li>
-            ) : null}
-            {categories.map((category) => {
-              const isActive = category.slug === activeCategory;
-              return (
-                <li key={category._id}>
-                  <Link
-                    // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
-                    href={`${listingHref}?category=${category.slug}`}
-                    aria-current={isActive ? 'true' : undefined}
-                    className={`label transition-colors ${
-                      isActive ? 'text-accent' : 'text-bone-faint hover:text-bone'
-                    }`}
-                  >
-                    {localizedString(category.title, locale)}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <FilterNav
+          className="mt-12"
+          label={dict.common.filterBy}
+          active={activeCategory ?? (showAll ? ALL : undefined)}
+          items={[
+            ...(showAll ? [{ key: ALL, label: dict.common.viewAll, href: listingHref }] : []),
+            ...categories.map((category) => ({
+              key: category.slug,
+              label: localizedString(category.title, locale),
+              // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
+              href: `${listingHref}?category=${category.slug}`,
+            })),
+          ]}
+        />
       ) : null}
 
       {/* Признак для тестов: «кадры галереи» — это то, что внутри, а не любой
