@@ -14,6 +14,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLoopMode, useLoopPreload } from '@/components/media/useLoopPreview';
 import type { MediaAsset } from '@/content/types';
 import { track } from '@/lib/analytics';
 import { localizedString } from '@/lib/i18n/localize';
@@ -30,38 +31,26 @@ type Props = {
   locale: Locale;
 };
 
-type Mode = 'none' | 'hover' | 'always';
-
 export function DirectionCard({ index, direction, label, description, media, locale }: Props) {
   const cardRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [mode, setMode] = useState<Mode>('none');
-  const [source, setSource] = useState<string | null>(null);
+  const [active, setActive] = useState(false);
+  const mode = useLoopMode();
 
   const loop = media?.type === 'video' ? media : null;
 
-  useEffect(() => {
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const hover = window.matchMedia('(hover: hover)');
-
-    const update = () => {
-      // Экономия трафика — осознанный выбор человека, и он важнее украшений.
-      const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
-      if (motion.matches || connection?.saveData) {
-        setMode('none');
-        return;
-      }
-      setMode(hover.matches ? 'hover' : 'always');
-    };
-
-    update();
-    motion.addEventListener('change', update);
-    hover.addEventListener('change', update);
-    return () => {
-      motion.removeEventListener('change', update);
-      hover.removeEventListener('change', update);
-    };
-  }, []);
+  /*
+   * Ролик греется, как только карточка показалась на экране. Раньше загрузка
+   * начиналась в момент наведения — и полтора мегабайта ехали по сети уже
+   * после того, как человек навёл: видео появлялось секунд через пять, когда
+   * мышь давно ушла. Карточки идут по очереди, чтобы не делить канал.
+   */
+  const { source, warmNow } = useLoopPreload({
+    target: cardRef,
+    loopSrc: loop?.loopSrc,
+    mode,
+    order: index - 1,
+  });
 
   /**
    * Без наведения видео живёт по видимости карточки: играет, когда она на
@@ -78,7 +67,6 @@ export function DirectionCard({ index, direction, label, description, media, loc
       ([entry]) => {
         const video = videoRef.current;
         if (entry.isIntersecting) {
-          setSource((current) => current ?? loop.loopSrc ?? null);
           void video?.play().catch(() => {
             /* автозапуск может быть запрещён — карточка работает и без видео */
           });
@@ -91,23 +79,40 @@ export function DirectionCard({ index, direction, label, description, media, loc
 
     observer.observe(card);
     return () => observer.disconnect();
-  }, [mode, loop]);
+  }, [mode, loop, source]);
 
   const activate = useCallback(() => {
     if (mode !== 'hover' || !loop?.loopSrc) return;
-    setSource((current) => current ?? loop.loopSrc ?? null);
-    void videoRef.current?.play().catch(() => {
-      /* автозапуск может быть запрещён — карточка работает и без видео */
-    });
-  }, [mode, loop]);
+    // На случай, если навели раньше, чем очередь дошла до этой карточки.
+    warmNow();
+    setActive(true);
+  }, [mode, loop, warmNow]);
 
   const deactivate = useCallback(() => {
     if (mode !== 'hover') return;
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    video.currentTime = 0;
+    setActive(false);
   }, [mode]);
+
+  /*
+   * Запуск живёт в эффекте, а не в обработчике наведения: при первом наведении
+   * адрес только попадает в состояние, и в этот момент у элемента ещё нет
+   * источника — вызванный тут же play() не находит, что играть.
+   */
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || mode !== 'hover' || !source) return;
+
+    if (active) {
+      void video.play().catch(() => {
+        /* автозапуск может быть запрещён — карточка работает и без видео */
+      });
+      return;
+    }
+
+    video.pause();
+    // С начала: иначе при следующем наведении кадр продолжится с середины.
+    video.currentTime = 0;
+  }, [mode, active, source]);
 
   const showsVideo = Boolean(loop) && mode !== 'none';
 
@@ -147,7 +152,8 @@ export function DirectionCard({ index, direction, label, description, media, loc
             muted
             loop
             playsInline
-            preload={mode === 'always' ? 'metadata' : 'none'}
+            /* Адрес подставлен осознанно и заранее — грузим целиком. */
+            preload="auto"
             aria-hidden="true"
             className="pointer-events-none absolute inset-y-0 right-0 w-[42%] object-cover opacity-100 transition-opacity duration-[var(--duration-slow)] lg:inset-0 lg:w-full lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100"
           />

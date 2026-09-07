@@ -367,13 +367,29 @@ test('при уменьшенной анимации движения нет', a
 test('карточка направления раскрывается при наведении и играет видео', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'mobile', 'наведения на touch-устройствах нет (§5.1)');
 
-  await page.goto('/ru');
-  const card = page.getByRole('main').getByRole('link', { name: /Private/ });
+  /*
+   * Петля греется заранее, чтобы к наведению играть сразу, — но не в ущерб
+   * первому экрану: до полной загрузки страницы за ней никто не идёт. Фоновый
+   * шоурил в этот счёт не входит, он и есть первый экран.
+   */
+  const early: string[] = [];
+  let loaded = false;
+  page.on('request', (request) => {
+    if (!loaded && /\/(private|business|production)-loop\.mp4/.test(request.url())) {
+      early.push(request.url());
+    }
+  });
 
+  await page.goto('/ru');
+  await page.waitForLoadState('load');
+  loaded = true;
+  expect(early, 'петли карточек не должны отбирать канал у первого экрана').toEqual([]);
+
+  const card = page.getByRole('main').getByRole('link', { name: /Private/ });
   const collapsed = (await card.boundingBox())!.height;
-  // Файл подключается только при наведении: три ролика на старте были бы
-  // мегабайтами впустую.
-  await expect(card.locator('video')).toHaveJSProperty('currentSrc', '');
+
+  // А дальше ролик приезжает сам, без всякого наведения.
+  await expect(card.locator('video')).toHaveAttribute('src', /private-loop\.mp4$/);
 
   await card.hover();
   await page.waitForTimeout(1200);
@@ -976,13 +992,13 @@ test('плитка категории — это кадр, петля подхв
   await expect(tile.getByText('Свадьбы', { exact: true })).toBeVisible();
 
   /*
-   * До наведения адрес петли не подставлен: пять роликов не должны ехать за
-   * человеком по сети, пока он на них не посмотрел.
+   * Петля греется заранее, ещё до наведения: адрес подставлен, файл едет.
+   * Раньше загрузка начиналась в момент наведения — и полтора мегабайта
+   * доезжали секунд через пять-десять, когда мышь давно ушла.
    */
-  await expect(video).not.toHaveAttribute('src', /./);
+  await expect(video).toHaveAttribute('src', /category-wedding-loop\.mp4$/);
 
   await tile.hover();
-  await expect(video).toHaveAttribute('src', /category-wedding-loop\.mp4$/);
   await expect(video).toHaveJSProperty('paused', false);
   // Кадр действительно идёт, а не просто «не на паузе».
   await expect
@@ -1143,10 +1159,21 @@ test('наведение на плитку не двигает страницу,
   await expect(grid.locator('> li')).toHaveCount(5);
   await expect(grid.locator('> li a')).toHaveCount(5);
 
-  // Первая плитка шире остальных: свадьбы — главная категория ветки.
+  /*
+   * Плитки одинаковые, и рамка повторяет пропорции самого кадра.
+   *
+   * Раньше первая была широкой, 3:2 на две колонки. Съёмки сняты вертикально,
+   * 9:16: в такой рамке от кадра оставалась треть по высоте, и лица резались.
+   */
   const first = (await tile(/^Свадьбы/).boundingBox())!;
   const second = (await tile(/^Портрет/).boundingBox())!;
-  expect(first.width).toBeGreaterThan(second.width);
+  expect(first.width).toBeCloseTo(second.width, 0);
+  expect(first.height).toBeCloseTo(second.height, 0);
+
+  const frame = await tile(/^Портрет/)
+    .locator('img')
+    .evaluate((img: HTMLImageElement) => img.naturalWidth / img.naturalHeight);
+  expect(first.width / first.height, 'рамка режет кадр').toBeCloseTo(frame, 2);
 
   /*
    * Считаем от документа, а не от окна: hover() сам прокручивает страницу к

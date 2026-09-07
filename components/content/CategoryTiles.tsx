@@ -3,10 +3,8 @@
 /**
  * Плитки категорий портфолио на Home ветки PRIVATE (ТЗ §5.2, §7).
  *
- * Плитка — это кадр, а не строка. Раньше здесь стояли названия со стрелкой, а
- * фотография показывалась только при наведении: на телефоне, откуда приходит
- * большинство, её не видел никто. Теперь постер стоит всегда, название лежит
- * поверх на вуали, а петля — усиление сверху.
+ * Плитка — это кадр, а не строка. Постер стоит всегда, название лежит поверх
+ * на вуали, а петля со съёмки — усиление сверху.
  *
  * Две подачи одного и того же:
  *  • где есть мышь — при наведении кадр медленно наезжает и подхватывается
@@ -20,6 +18,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Picture } from '@/components/media/Picture';
+import { useLoopMode, useLoopPreload, type LoopMode } from '@/components/media/useLoopPreview';
 import type { Category, ImageRef, MediaAsset } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
@@ -33,10 +32,8 @@ type Props = {
   dict: Dictionary;
 };
 
-type Mode = 'none' | 'hover' | 'always';
-
 /** Кадр для плитки: превью, а если его нет — первое, что есть у категории. */
-function coverOf(category: Category): { image: ImageRef; alt?: MediaAsset['alt'] } | null {
+function coverOf(category: Category): ImageRef | null {
   const candidates: MediaAsset[] = [
     ...(category.preview ? [category.preview] : []),
     ...(category.gallery ?? []),
@@ -45,71 +42,54 @@ function coverOf(category: Category): { image: ImageRef; alt?: MediaAsset['alt']
 
   for (const media of candidates) {
     const image = media.type === 'image' ? media.image : media.poster;
-    if (image) return { image, alt: media.alt };
+    if (image) return image;
   }
   return null;
 }
 
+/**
+ * Пропорции плиток. Берутся из самих кадров, а не назначаются на глаз.
+ *
+ * Раньше плитки были 3:4, а первая — 3:2 во всю ширину двух колонок. Съёмки же
+ * сняты вертикально, 9:16: широкая рамка показывала от такого кадра меньше
+ * трети по высоте и резала лица, а обычная теряла четверть. Кадр — это то,
+ * ради чего сюда пришли, и обрезать его рамкой, выбранной вёрсткой, нельзя.
+ *
+ * Одно число на всю сетку, а не своё у каждой плитки: ряд должен стоять ровно.
+ * Медиана, а не среднее — один нетипичный кадр не должен перекашивать всех.
+ */
+function gridRatio(categories: Category[]): number {
+  const ratios = categories
+    .map((category) => coverOf(category))
+    .filter((image): image is ImageRef => Boolean(image?.width && image?.height))
+    .map((image) => image.width / image.height)
+    .sort((a, b) => a - b);
+
+  if (ratios.length === 0) return 3 / 4;
+  return ratios[Math.floor(ratios.length / 2)];
+}
+
 export function CategoryTiles({ categories, locale, direction, dict }: Props) {
-  /*
-   * Как показывать петли. Решается один раз на весь список: условия одинаковые
-   * для всех плиток, и пять одинаковых подписок на media query ничего не
-   * добавляют.
-   */
-  const [mode, setMode] = useState<Mode>('none');
-
-  useEffect(() => {
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const hover = window.matchMedia('(hover: hover)');
-
-    const update = () => {
-      // Экономия трафика — осознанный выбор человека, и он важнее украшений.
-      const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
-      if (motion.matches || connection?.saveData) {
-        setMode('none');
-        return;
-      }
-      setMode(hover.matches ? 'hover' : 'always');
-    };
-
-    update();
-    motion.addEventListener('change', update);
-    hover.addEventListener('change', update);
-    return () => {
-      motion.removeEventListener('change', update);
-      hover.removeEventListener('change', update);
-    };
-  }, []);
+  const mode = useLoopMode();
+  const ratio = gridRatio(categories);
 
   /*
-   * Первая плитка занимает две колонки, когда это ровно достраивает сетку до
-   * целых рядов: пять категорий — это 2 + 3, без дыры в углу. Раньше дыру
-   * закрывала пустая ячейка, и на светлой теме она читалась сплошным серым
-   * прямоугольником — заметной поломкой рядом с последней плиткой.
-   *
-   * Когда арифметика не сходится, все плитки одинаковые, а недобранный ряд
-   * остаётся воздухом: сетка больше не держит хайрлайны фоном, и пустое место
-   * выглядит полем, а не дырой.
-   *
-   * Считается только для трёх колонок: на двух и на одной первая плитка всегда
-   * обычная — там широкий кадр занял бы весь экран.
+   * Недобранный ряд остаётся воздухом. Сетка не держит хайрлайны фоном,
+   * поэтому пустое место выглядит полем, а не дырой, — и подпирать его пустой
+   * ячейкой, как было раньше, не нужно.
    */
-  const featured = categories.length % 3 === 2;
-
   return (
     <ul data-reveal-stagger className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
       {categories.map((category, index) => (
-        <li
-          key={category._id}
-          className={featured && index === 0 ? 'lg:col-span-2' : undefined}
-        >
+        <li key={category._id}>
           <Tile
             category={category}
             locale={locale}
             direction={direction}
             dict={dict}
             mode={mode}
-            wide={featured && index === 0}
+            ratio={ratio}
+            order={index}
           />
         </li>
       ))}
@@ -123,48 +103,57 @@ function Tile({
   direction,
   dict,
   mode,
-  wide,
+  ratio,
+  order,
 }: {
   category: Category;
   locale: Locale;
   direction: Direction;
   dict: Dictionary;
-  mode: Mode;
-  wide: boolean;
+  mode: LoopMode;
+  ratio: number;
+  order: number;
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(false);
-  /*
-   * Адрес подставляется только при первом наведении. Иначе пять роликов
-   * поехали бы за человеком по сети ещё до того, как он на них посмотрел.
-   */
-  const [source, setSource] = useState<string | null>(null);
 
   const cover = coverOf(category);
   const loop = category.preview?.type === 'video' ? category.preview : null;
-  const shows = Boolean(loop?.loopSrc) && mode !== 'none';
-  const standing = shows && mode === 'always';
+  const standing = Boolean(loop?.loopSrc) && mode === 'always';
+
+  /*
+   * Ролик греется, как только плитка показалась на экране, — к наведению он
+   * уже в кэше. Раньше загрузка начиналась в момент наведения, и петля
+   * появлялась через пять-десять секунд, когда мышь давно ушла.
+   */
+  const { source, ready, warmNow, markReady } = useLoopPreload({
+    target: linkRef,
+    loopSrc: loop?.loopSrc,
+    mode,
+    order,
+  });
 
   const activate = useCallback(() => {
-    if (mode !== 'hover' || !loop?.loopSrc) return;
-    setSource((current) => current ?? loop.loopSrc ?? null);
+    // На случай, если навели раньше, чем очередь дошла сюда.
+    warmNow();
     setActive(true);
-  }, [mode, loop]);
-
+  }, [warmNow]);
   const deactivate = useCallback(() => setActive(false), []);
 
   /*
-   * Запуск живёт в эффекте, а не в обработчике наведения. При первом
-   * наведении адрес только попадает в состояние, и в этот момент у элемента
-   * ещё нет источника: вызванный тут же play() не находит, что играть, и
-   * ролик молча остаётся на нулевой секунде.
+   * Играет — когда навели (или всегда, если наведения на этом экране не
+   * бывает). Запуск живёт в эффекте, а не в обработчике: в момент наведения
+   * состояние ещё не доехало до разметки, и вызванный тут же play() не нашёл
+   * бы, что играть.
    */
+  const playing = standing || active;
+
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || standing) return;
+    if (!video || !source) return;
 
-    if (active && source) {
+    if (playing) {
       void video.play().catch(() => {
         /* автозапуск может быть запрещён — плитка работает и без видео */
       });
@@ -174,36 +163,7 @@ function Tile({
     video.pause();
     // С начала: иначе при следующем наведении кадр продолжится с середины.
     video.currentTime = 0;
-  }, [standing, active, source]);
-
-  /*
-   * Без наведения кадр живёт по видимости плитки: играет, пока она на экране,
-   * и стоит, когда ушла. Простого autoplay мало — браузер не запускает ролик,
-   * который в момент загрузки был за пределами экрана, и после прокрутки он
-   * так и остаётся на паузе.
-   */
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || !standing || !loop?.loopSrc) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const video = videoRef.current;
-        if (entry.isIntersecting) {
-          setSource((current) => current ?? loop.loopSrc ?? null);
-          void video?.play().catch(() => {
-            /* автозапуск может быть запрещён — плитка работает и без видео */
-          });
-        } else {
-          video?.pause();
-        }
-      },
-      { threshold: 0.25 },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [standing, loop]);
+  }, [playing, source]);
 
   const title = localizedString(category.title, locale);
   const description = localizedString(category.description, locale);
@@ -216,43 +176,39 @@ function Tile({
       onFocus={activate}
       onBlur={deactivate}
       ref={linkRef}
-      /*
-       * Пропорции задаются плиткой, а не содержимым: широкая в две колонки
-       * получается той же высоты, что обычная рядом, и ряд стоит ровно.
-       * На узком экране широкой плитки не бывает — там все вертикальные.
-       */
-      className={`group on-media relative block overflow-hidden bg-ink-sunken ${
-        wide ? 'aspect-[3/4] sm:aspect-[3/2]' : 'aspect-[3/4]'
-      }`}
+      // Пропорции — от кадра, поэтому object-cover ничего не срезает.
+      style={{ aspectRatio: ratio }}
+      className="group on-media relative block overflow-hidden bg-ink-sunken"
     >
       {cover ? (
         <Picture
-          image={cover.image}
+          image={cover}
           alt=""
-          sizes={
-            wide
-              ? '(min-width: 1024px) 52rem, (min-width: 640px) 50vw, 100vw'
-              : '(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw'
-          }
+          sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1100ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.06] group-focus-visible:scale-[1.06]"
         />
       ) : null}
 
-      {shows && loop ? (
+      {source && loop ? (
+        /*
+         * Показывается только когда действительно может играть: недогруженный
+         * ролик выводит чёрный кадр поверх постера, и вместо кино получается
+         * дыра. `preload="auto"` — потому что адрес уже подставлен осознанно,
+         * ровно для того, чтобы к наведению всё было готово.
+         */
         <video
           ref={videoRef}
-          src={source ?? undefined}
+          src={source}
           poster={loop.poster.src}
           autoPlay={standing}
           muted
           loop
           playsInline
-          preload={standing ? 'metadata' : 'none'}
+          preload="auto"
           aria-hidden="true"
+          onCanPlay={markReady}
           className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] ${
-            standing
-              ? 'opacity-100'
-              : 'opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100'
+            ready && playing ? 'opacity-100' : 'opacity-0'
           }`}
         />
       ) : null}
