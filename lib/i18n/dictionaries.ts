@@ -30,6 +30,7 @@ export type Dictionary = {
     breadcrumb: string;
     readMore: string;
     viewAll: string;
+    view: string;
     packages: string;
     client: string;
     role: string;
@@ -257,6 +258,7 @@ const ru: Dictionary = {
     breadcrumb: 'Вы здесь',
     readMore: 'Читать',
     viewAll: 'Смотреть все',
+    view: 'Смотреть',
     packages: 'Пакетные предложения',
     client: 'Клиент',
     role: 'Роль',
@@ -516,6 +518,7 @@ const en: Dictionary = {
     breadcrumb: 'You are here',
     readMore: 'Read',
     viewAll: 'View all',
+    view: 'View',
     packages: 'Package offers',
     client: 'Client',
     role: 'Role',

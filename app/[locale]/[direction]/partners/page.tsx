@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { ContactButton } from '@/components/contact/ContactButton';
 import { Breadcrumbs } from '@/components/global/misc';
 import { Picture } from '@/components/media/Picture';
-import type { ImageRef } from '@/content/types';
+import { PORTRAIT } from '@/content/portrait';
 import { getGlobalSettings } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { resolveDirectionRoute, tryResolveDirectionRoute, sectionStaticParams } from '@/lib/guard';
@@ -23,14 +23,6 @@ import { cardHref, href } from '@/lib/routing';
 import { buildMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
-
-/** Тот же портрет, что и на странице «О себе». */
-const PORTRAIT: ImageRef = {
-  src: '/media/about/nikita-1200.jpg',
-  width: 1200,
-  height: 1800,
-  sources: [600, 1200].map((width) => ({ width, src: `/media/about/nikita-${width}.jpg` })),
-};
 
 export function generateStaticParams() {
   return sectionStaticParams('partners');
@@ -72,17 +64,17 @@ export default async function Page({ params }: Props) {
         работа после съёмки, — поэтому его можно обещать.
       */}
       <section className="mt-14 border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.promiseLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.promiseLabel}</p>
         <p className="text-h2 m-0 mt-6 max-w-4xl text-balance">{t.promise}</p>
         <p className="mt-6 max-w-2xl text-bone-dim">{t.promiseBody}</p>
       </section>
 
       <section className="mt-20">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.packLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.packLabel}</p>
           <h2 className="text-h2 m-0 mt-4 text-balance">{t.packTitle}</h2>
         </div>
-        <ul className="m-0 mt-10 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul data-reveal className="m-0 mt-10 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
           {t.pack.map((item) => (
             <li key={item.title} className="bg-ink p-6 lg:p-8">
               <h3 className="text-h3 m-0 text-bone">{item.title}</h3>
@@ -99,7 +91,7 @@ export default async function Page({ params }: Props) {
       */}
       <section className="mt-20">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.whyLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.whyLabel}</p>
           <h2 className="text-h2 m-0 mt-4 max-w-3xl text-balance">{t.whyTitle}</h2>
         </div>
 
@@ -118,7 +110,7 @@ export default async function Page({ params }: Props) {
           <p className="max-w-2xl text-lead text-bone-dim">{t.portraitBody}</p>
         </div>
 
-        <ol className="m-0 mt-14 grid list-none gap-10 p-0 lg:grid-cols-3 lg:gap-8">
+        <ol data-reveal-stagger className="m-0 mt-14 grid list-none gap-10 p-0 lg:grid-cols-3 lg:gap-8">
           {t.why.map((item, index) => (
             <li key={item.title}>
               <p className="label m-0 text-bone-faint">{String(index + 1).padStart(2, '0')}</p>
@@ -131,13 +123,13 @@ export default async function Page({ params }: Props) {
 
       <section className="mt-20 max-w-3xl">
         <div className="border-t border-line pt-6">
-          <p className="label m-0 text-accent">{t.rightsLabel}</p>
+          <p className="label m-0 text-eyebrow">{t.rightsLabel}</p>
           <h2 className="text-h2 m-0 mt-4 text-balance">{t.rightsTitle}</h2>
         </div>
         <ul className="m-0 mt-8 list-none space-y-4 p-0">
           {t.rights.map((line) => (
             <li key={line} className="flex gap-4 text-bone-dim">
-              <span aria-hidden="true" className="label text-accent">
+              <span aria-hidden="true" className="label text-eyebrow">
                 —
               </span>
               <span>{line}</span>
@@ -151,7 +143,7 @@ export default async function Page({ params }: Props) {
         отправит паре: до сих пор это была переписка и пересказ своими словами.
       */}
       <section className="mt-20 max-w-3xl border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.cardLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.cardLabel}</p>
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.cardTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.cardBody}</p>
         <p className="mt-6">
@@ -179,7 +171,7 @@ export default async function Page({ params }: Props) {
       </section>
 
       <section className="mt-20 max-w-2xl border-t border-line pt-6">
-        <p className="label m-0 text-accent">{t.startLabel}</p>
+        <p className="label m-0 text-eyebrow">{t.startLabel}</p>
         <h2 className="text-h2 m-0 mt-4 text-balance">{t.startTitle}</h2>
         <p className="mt-6 text-bone-dim">{t.startBody}</p>
         <div className="mt-8">

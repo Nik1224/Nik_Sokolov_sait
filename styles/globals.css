@@ -34,6 +34,49 @@
     --color-danger: #a32318;
     --color-line: rgba(42, 33, 28, 0.14);
     --color-line-strong: rgba(42, 33, 28, 0.32);
+    /* Метка — не акцент. Красный остаётся тому, что можно нажать: активному
+       пункту меню, выбранному фильтру, кнопке. Контраст к самой тёмной
+       подложке темы (#e9dfd1) — 4.95:1. */
+    --color-eyebrow: #6a5b4e;
+
+    /* Заголовки — антиква. Гротеск остаётся в тексте: контраст двух гарнитур
+       и есть то, что отличает каталог от интерфейса. */
+    --font-display: var(--font-display-face), Georgia, "Times New Roman", serif;
+    --font-display-weight: 500;
+
+    /* Метки — тот же гротеск капителью. Моноширинный читается как чек или
+       код: честно, но не про свадьбу. */
+    --font-label: var(--font-sans);
+    --font-label-weight: 600;
+    --text-label--letter-spacing: 0.17em;
+
+    /* Имя подписывает работы, а не интерфейс: антиква и широкая разрядка
+       вместо служебной строчки в 12 px. */
+    --font-brand: var(--font-display-face), Georgia, "Times New Roman", serif;
+    --font-brand-weight: 500;
+    --text-brand: 1.0625rem;
+    --text-brand--letter-spacing: 0.2em;
+
+    /*
+     * Своя шкала кеглей. Антиква оптически мельче гротеска в том же размере,
+     * а отрицательный трекинг, который нужен Inter, ей вредит: засечки
+     * начинают слипаться. Поэтому кегль крупнее, а трекинг — около нуля.
+     */
+    --text-display: clamp(3rem, 7.6vw, 7rem);
+    --text-display--line-height: 0.94;
+    --text-display--letter-spacing: -0.012em;
+
+    --text-h1: clamp(2.5rem, 5.4vw, 4.5rem);
+    --text-h1--line-height: 1.02;
+    --text-h1--letter-spacing: -0.008em;
+
+    --text-h2: clamp(1.85rem, 3.4vw, 2.9rem);
+    --text-h2--line-height: 1.08;
+    --text-h2--letter-spacing: -0.005em;
+
+    --text-h3: clamp(1.3rem, 2.1vw, 1.75rem);
+    --text-h3--line-height: 1.18;
+    --text-h3--letter-spacing: 0;
 
     background-color: var(--color-ink);
     color: var(--color-bone);
@@ -78,6 +121,42 @@
   }
 }
 
+/* --- Заголовки -----------------------------------------------------------
+   Кегли задаются утилитами Tailwind, а гарнитура — токеном: ветке достаточно
+   переопределить `--font-display`, и ни один компонент об этом не узнает.
+
+   Слой `components`, а не `base`: в base правило проигрывало бы утилите
+   размера, а вне слоёв — побеждало бы `font-mono` там, где моноширинный
+   выбран осознанно (полоса фактов на странице работы).
+   ------------------------------------------------------------------------- */
+
+@layer components {
+  /*
+   * Только утилиты кегля, без голых h1–h3. Заголовок в разметке иногда
+   * оборачивает не одну строку, а целую группу — в пакетах это `h3` вокруг
+   * кнопки с описанием и сводкой, — и антиква оттуда протекала на весь
+   * мелкий текст внутри. Утилита стоит ровно на той строке, которая и есть
+   * заголовок.
+   */
+  :is(.text-display, .text-h1, .text-h2, .text-h3) {
+    font-family: var(--font-display);
+    font-weight: var(--font-display-weight);
+  }
+
+  /*
+   * Цифры. У антиквы по умолчанию минускульные («старостильные») — красиво в
+   * тексте, но в цене их читать труднее: разряды пляшут по высоте. Там, где
+   * цифра — содержание, а не украшение, ставим прописные и табличные.
+   */
+  :is(.text-display, .text-h1, .text-h2, .text-h3) {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
 /* --- Фокус (§11: видимый keyboard focus) --------------------------------- */
 
 :focus-visible {
@@ -104,13 +183,140 @@
   }
 }
 
+/* --- Появление по прокрутке ----------------------------------------------
+   Блок проявляется, когда до него дошли, а не показывается весь сразу.
+
+   Прятать содержимое разрешено только тогда, когда его точно есть кому
+   показать: класс `reveal-ready` ставит тот же скрипт, который заводит
+   наблюдателя. Не выполнился скрипт — нет и класса, и страница остаётся
+   обычной, целиком видимой. При «уменьшить движение» скрипт не ставит класс
+   вовсе, поэтому правилам ниже не на чем сработать.
+   ------------------------------------------------------------------------- */
+
+@layer components {
+  .reveal-ready [data-reveal],
+  .reveal-ready [data-reveal-stagger] > * {
+    opacity: 0;
+  }
+
+  .reveal-ready [data-reveal].is-revealed,
+  .reveal-ready [data-reveal-stagger].is-revealed > * {
+    animation: reveal var(--duration-reveal) var(--ease-out-soft) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+@layer components {
+  /*
+   * Смена отзыва. Только проявление, без сдвига: цитата занимает своё место,
+   * и подъезжающий текст дёргал бы блок каждые семь секунд.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .quote {
+      animation: quote-in var(--duration-slow) var(--ease-out-soft) both;
+    }
+  }
+}
+
+@keyframes quote-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  /*
+   * Заголовок страницы выезжает из-под невидимой шторки (M2).
+   *
+   * Правило берёт `h1` с утилитой кегля — то есть ровно заголовок страницы,
+   * без разметки в каждом файле. Один раз на страницу: на переходе `h1`
+   * монтируется заново, и шторка проигрывается для новой страницы.
+   *
+   * Конечный кадр обрезки — с отрицательными отступами: на нуле маска
+   * проходит по краю строки и срезает выносные элементы у букв вроде «р» и
+   * «у», а заметно это становится уже после анимации, насовсем.
+   */
+  .reveal-ready :is(h1.text-h1, h1.text-display) {
+    animation: title-in var(--duration-slow) var(--ease-out-soft) both;
+  }
+}
+
+@layer components {
+  /*
+   * Кадр въезжает чуть увеличенным и за полторы секунды встаёт на место (M3).
+   *
+   * Не «зум по наведению»: наведения нет на телефоне, откуда приходит
+   * большинство, — а это ровно те люди, которые видят карточки первыми.
+   * Поэтому наезд при наведении с карточек снят: две анимации transform на
+   * одном элементе всё равно спорили бы, и выиграла бы та, что с `both`.
+   *
+   * Задержка та же, что у самой карточки, — кадр и её появление идут вместе.
+   */
+  .reveal-ready [data-reveal].is-revealed .frame-in,
+  .reveal-ready [data-reveal-stagger].is-revealed > * .frame-in {
+    animation: frame-in 1500ms var(--ease-out-soft) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+@keyframes frame-in {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes title-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-25% -10% -25% -10%);
+    transform: none;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  /*
+   * Конечный кадр задан явно. Без него он берётся из собственных стилей
+   * элемента, а там как раз `opacity: 0` — блок «проявлялся» из нуля в ноль
+   * и оставался невидимым насовсем.
+   */
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* --- Утилиты ------------------------------------------------------------- */
 
 @utility label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: var(--font-label-weight);
   font-size: var(--text-label);
   line-height: var(--text-label--line-height);
   letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+@utility brand {
+  font-family: var(--font-brand);
+  font-weight: var(--font-brand-weight);
+  font-size: var(--text-brand);
+  line-height: 1;
+  letter-spacing: var(--text-brand--letter-spacing);
   text-transform: uppercase;
 }
 
@@ -247,6 +453,73 @@
 }
 
 @layer components {
+  /*
+   * Текст поверх фотографии. Тем же приёмом, что и в лайтбоксе: токены
+   * переопределяются локально, и вложенная разметка работает без правок.
+   *
+   * Светлый он в любой теме. В PRIVATE `bone` — почти чёрный, и на кадре
+   * такая подпись пропадает: цвет здесь задаёт не тема страницы, а то, что
+   * под текстом лежит снимок.
+   */
+  .on-media {
+    --color-bone: #fdfbf7;
+    --color-bone-dim: rgb(253 251 247 / 0.82);
+    --color-bone-faint: rgb(253 251 247 / 0.7);
+    --color-line: rgb(253 251 247 / 0.24);
+    --color-line-strong: rgb(253 251 247 / 0.44);
+
+    color: var(--color-bone);
+  }
+
+  /*
+   * Вуаль под подписью. Плотная у нижнего края и сходит на нет к середине:
+   * читаемость нужна строке, а не всему кадру. Цвет literal, а не токен, —
+   * затемнять снимок светлой заливкой темы бессмысленно.
+   */
+  .media-scrim {
+    background: linear-gradient(
+      to top,
+      rgb(26 19 15 / 0.78) 0%,
+      rgb(26 19 15 / 0.42) 34%,
+      rgb(26 19 15 / 0.08) 62%,
+      rgb(26 19 15 / 0) 100%
+    );
+  }
+
+  /*
+   * Раскрывающаяся панель: высота идёт от нуля к «по содержимому».
+   *
+   * `0fr → 1fr` на строке сетки — единственный способ анимировать такую
+   * высоту, не измеряя её скриптом.
+   *
+   * Свёрнутая панель остаётся в разметке, потому что на неё указывает
+   * `aria-controls`, — но `visibility: hidden` вынимает её и из очереди
+   * фокуса, и из дерева доступности: свёрнутого содержимого для человека нет
+   * ни глазами, ни на слух. Видимость переключается ступенькой в конце
+   * сворачивания и сразу в начале раскрытия — иначе панель либо исчезала бы
+   * до анимации, либо оставалась бы доступной после неё.
+   */
+  .collapsible {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out-soft),
+      visibility 0s linear var(--duration-base);
+  }
+
+  .collapsible[data-open='true'] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out-soft),
+      visibility 0s;
+  }
+
+  .collapsible > * {
+    overflow: hidden;
+  }
+
   /* Окно выбора мессенджера. Позиционируется браузером, здесь только вид. */
   .contact-dialog {
     margin: auto;
@@ -268,22 +541,6 @@
   from {
     opacity: 0;
     transform: translateY(0.75rem);
-  }
-}
-
-@layer components {
-  /* Раскрытая группа пакетов. Появление короткое: это не переход, а показ. */
-  @media (prefers-reduced-motion: no-preference) {
-    .pricing-panel {
-      animation: pricing-panel-in 200ms ease-out;
-    }
-  }
-}
-
-@keyframes pricing-panel-in {
-  from {
-    opacity: 0;
-    transform: translateY(-0.5rem);
   }
 }
 
@@ -474,13 +731,14 @@
 }
 
 /*
- * Первый абзац раздела кейса — крупнее и светлее остальных.
+ * Первый абзац — крупнее и светлее остальных.
  *
- * Три раздела подряд одинаково серым текстом читаются как стена: глазу не за
- * что зацепиться, и человек прокручивает мимо. Крупная первая фраза работает
- * входом в раздел — дальше кегль возвращается к обычному.
+ * Разделы подряд одинаково серым текстом читаются как стена: глазу не за что
+ * зацепиться, и человек прокручивает мимо. Крупная первая фраза работает
+ * входом — дальше кегль возвращается к обычному. Приём был заведён для
+ * разделов кейса, но нужен везде, где текст идёт сплошняком.
  */
-.case-body > p:first-of-type {
+.lede > p:first-of-type {
   font-size: var(--text-h3);
   line-height: var(--text-h3--line-height);
   letter-spacing: var(--text-h3--letter-spacing);

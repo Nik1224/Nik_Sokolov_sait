@@ -275,8 +275,13 @@ test('кнопка «Связаться» открывает мессендже�
 test('расчёт из калькулятора уезжает в сообщение мессенджера', async ({ page }) => {
   await page.goto('/ru/private/pricing');
 
-  await page.getByText('Свадебная', { exact: true }).click();
-  await page.getByText('Видео', { exact: true }).click();
+  /*
+   * Внутри калькулятора: «Видео» есть и здесь, и в переключателе формата
+   * свёрнутой группы пакетов выше.
+   */
+  const calculator = page.locator('[data-calculator]');
+  await calculator.getByText('Свадебная', { exact: true }).click();
+  await calculator.getByText('Видео', { exact: true }).click();
   await page.locator('#calc-hours').fill('8');
   await page.getByRole('button', { name: 'Обсудить съёмку' }).click();
 
@@ -951,44 +956,29 @@ test('альбом категории не дублируется на стра�
   await expect(page.getByRole('link', { name: /Марк и Екатерина/ })).toHaveCount(1);
 });
 
-test('плитка категории показывает петлю при наведении и гасит её при уходе', async ({
+test('плитка категории — это кадр, петля подхватывается при наведении', async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
 
   await page.goto('/ru/private');
   const tile = page.getByRole('main').getByRole('link', { name: /^Свадьбы/ });
+  const poster = tile.locator('img');
   const video = tile.locator('video');
-  const grid = tile.locator('xpath=ancestor::ul[1]');
 
   /*
-   * Отступы названий всех плиток от верха сетки. Берём их у самих плиток, а не
-   * поиском по странице: те же слова встречаются в лиде и в заголовках статей,
-   * и по ним проверка молча мерила бы чужой текст.
+   * Кадр стоит всегда — плитка не бывает текстовой строкой. Раньше он
+   * появлялся только при наведении, и с телефона его не видел никто.
    */
-  const names = ['Свадьбы', 'Портрет', 'Семья', 'Love story', 'Частные события'];
-  const titleOffsets = async () => {
-    const top = (await grid.boundingBox())!.y;
-    const out: Record<string, number> = {};
-    for (const name of names) {
-      const title = grid
-        .getByRole('link', { name: new RegExp(`^${name}`) })
-        .getByText(name, { exact: true });
-      out[name] = Math.round((await title.boundingBox())!.y - top);
-    }
-    return out;
-  };
-
-  const before = (await tile.boundingBox())!;
-  const gridHeight = (await grid.boundingBox())!.height;
-  const offsets = await titleOffsets();
-  expect(Object.keys(offsets)).toHaveLength(5);
+  await expect(poster).toBeVisible();
+  await expect(poster).toHaveAttribute('src', /category-wedding-poster/);
+  // Название читается поверх кадра — ради него всё и затемняется.
+  await expect(tile.getByText('Свадьбы', { exact: true })).toBeVisible();
 
   /*
-   * До наведения адрес не подставлен: пять роликов не должны ехать за
+   * До наведения адрес петли не подставлен: пять роликов не должны ехать за
    * человеком по сети, пока он на них не посмотрел.
    */
-  await expect(video).toHaveAttribute('poster', /category-wedding-poster/);
   await expect(video).not.toHaveAttribute('src', /./);
 
   await tile.hover();
@@ -999,42 +989,11 @@ test('плитка категории показывает петлю при н�
     .poll(async () => video.evaluate((el: HTMLVideoElement) => el.currentTime))
     .toBeGreaterThan(0);
 
-  // Название читается поверх кадра — ради него всё и затемняется.
-  await expect(tile.getByText('Свадьбы')).toBeVisible();
-
-  /*
-   * Плитка раскрылась под кадр: её пропорции повторяют пропорции ролика,
-   * значит object-cover ничего не срезал и кадр виден целиком.
-   */
-  const source = await video.evaluate((el: HTMLVideoElement) => el.videoWidth / el.videoHeight);
-  /*
-   * Раскрывается слой с кадром, а не сама плитка, поэтому меряем его. Ждём,
-   * пока пропорции встанут: анимация длится доли секунды, и первый попавшийся
-   * кадр анимации ещё ничего не значит.
-   */
-  const panel = video.locator('xpath=..');
-  await expect
-    .poll(async () => {
-      const box = (await panel.boundingBox())!;
-      return box.width / box.height;
-    })
-    .toBeCloseTo(source, 1);
-
-  expect((await panel.boundingBox())!.height).toBeGreaterThan(before.height * 3);
-
-  /*
-   * И при этом ни одно название не сдвинулось: плитка растёт вниз, а строка
-   * остаётся там, где человек её прочитал. Считаем от сетки — страница ниже
-   * действительно уезжает, а вот текст внутри сетки стоять обязан.
-   */
-  expect(await titleOffsets()).toEqual(offsets);
-
-  /*
-   * И сама сетка не выросла: кадр раскрывается слоем поверх страницы. Иначе
-   * строка сетки тянула бы за собой всё, что ниже, — нижний ряд плиток уезжал
-   * вниз на шестьсот с лишним пикселей.
-   */
-  expect((await grid.boundingBox())!.height).toBeCloseTo(gridHeight, 0);
+  // Петля закрывает плитку целиком, а не полосой из середины.
+  const box = (await tile.boundingBox())!;
+  const frame = (await video.boundingBox())!;
+  expect(frame.width).toBeCloseTo(box.width, 0);
+  expect(frame.height).toBeCloseTo(box.height, 0);
 
   // Уводим мышь: ролик встаёт и отматывается назад, иначе в следующий раз
   // он продолжится с середины.
@@ -1166,13 +1125,29 @@ test('цены везде с символом рубля, а не с кодом 
   }
 });
 
-test('плитки раскрываются вверх и вниз слоем, не двигая страницу', async ({ page }, testInfo) => {
+test('наведение на плитку не двигает страницу, а в сетке нет пустых ячеек', async ({
+  page,
+}, testInfo) => {
   test.skip(testInfo.project.name === 'mobile', 'наведения на сенсорном экране не бывает');
 
   await page.goto('/ru/private');
   const main = page.getByRole('main');
   const tile = (name: RegExp) => main.getByRole('link', { name });
-  const panel = (name: RegExp) => tile(name).locator('video').locator('xpath=..');
+  const grid = tile(/^Свадьбы/).locator('xpath=ancestor::ul[1]');
+
+  /*
+   * Ячеек ровно столько, сколько категорий. Раньше недобранный ряд закрывала
+   * пустая ячейка, и на светлой теме она читалась сплошным серым
+   * прямоугольником — заметной поломкой рядом с последней плиткой.
+   */
+  await expect(grid.locator('> li')).toHaveCount(5);
+  await expect(grid.locator('> li a')).toHaveCount(5);
+
+  // Первая плитка шире остальных: свадьбы — главная категория ветки.
+  const first = (await tile(/^Свадьбы/).boundingBox())!;
+  const second = (await tile(/^Портрет/).boundingBox())!;
+  expect(first.width).toBeGreaterThan(second.width);
+
   /*
    * Считаем от документа, а не от окна: hover() сам прокручивает страницу к
    * элементу, и в оконных координатах сдвинется даже то, что стоит на месте.
@@ -1183,34 +1158,21 @@ test('плитки раскрываются вверх и вниз слоем, �
   };
 
   const anchor = await below();
+  const gridHeight = (await grid.boundingBox())!.height;
 
   /*
-   * Верхний ряд уходит вверх, в воздух над сеткой. Вниз ему нельзя: он накрыл
-   * бы соседний ряд плиток. Поток при этом не двигается — заголовок ниже
-   * стоит там же.
+   * Наведение только наезжает кадром внутри плитки. Ничего не раскрывается и
+   * не отодвигается: страница на каждое движение мыши дёргаться не должна.
    */
-  const top = tile(/^Свадьбы/);
-  await top.hover();
-  await expect.poll(async () => (await panel(/^Свадьбы/).boundingBox())!.height).toBeGreaterThan(400);
-  expect(
-    (await panel(/^Свадьбы/).boundingBox())!.y,
-    'слой должен уйти выше плитки',
-  ).toBeLessThan((await top.boundingBox())!.y);
-  expect(await below(), 'верхний ряд не должен двигать страницу').toBe(anchor);
+  for (const name of [/^Свадьбы/, /^Love story/]) {
+    const box = (await tile(name).boundingBox())!;
+    await tile(name).hover();
+    await expect(tile(name).locator('video')).toHaveAttribute('src', /loop\.mp4$/);
 
-  /*
-   * Нижний ряд уходит вниз — и тоже слоем поверх страницы. Раньше он рос
-   * по-настоящему и отодвигал следующий блок; от этого отказались: страница
-   * дёргалась на каждое наведение, а взамен сдвиг ничего не давал.
-   */
-  const bottom = tile(/^Love story/);
-  await bottom.hover();
-  await expect.poll(async () => (await panel(/^Love story/).boundingBox())!.height).toBeGreaterThan(400);
-  expect(
-    (await panel(/^Love story/).boundingBox())!.y,
-    'слой должен начинаться от плитки',
-  ).toBeCloseTo((await bottom.boundingBox())!.y, 0);
-  expect(await below(), 'нижний ряд тоже не должен двигать страницу').toBe(anchor);
+    expect((await tile(name).boundingBox())!.height, 'плитка не растёт').toBeCloseTo(box.height, 0);
+    expect((await grid.boundingBox())!.height, 'сетка не растёт').toBeCloseTo(gridHeight, 0);
+    expect(await below(), 'страница ниже не двигается').toBe(anchor);
+  }
 });
 
 test('на сенсорном экране кадр стоит в плитке и играет по видимости', async ({
@@ -1227,11 +1189,12 @@ test('на сенсорном экране кадр стоит в плитке �
   await expect(video).toHaveAttribute('src', /category-wedding-loop\.mp4$/);
   await expect(video).toHaveJSProperty('paused', false);
 
-  // Кадр занимает правую часть плитки, название — левую, они не наезжают.
+  // Кадр занимает плитку целиком, а название лежит поверх него на вуали.
   const box = (await tile.boundingBox())!;
   const frame = (await video.boundingBox())!;
-  expect(frame.height).toBeGreaterThan(frame.width);
-  expect(frame.x).toBeGreaterThan(box.x + box.width / 2);
+  expect(frame.width).toBeCloseTo(box.width, 0);
+  expect(frame.height).toBeCloseTo(box.height, 0);
+  await expect(tile.getByText('Свадьбы', { exact: true })).toBeVisible();
 
   // Ушедшая с экрана плитка не тратит батарею впустую.
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

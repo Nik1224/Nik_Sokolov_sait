@@ -4,12 +4,13 @@
  */
 
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Cormorant_Garamond, Inter, JetBrains_Mono } from 'next/font/google';
 import { getGlobalSettings, hasDemoContent } from '@/content/queries';
 import { DemoBanner, SkipLink } from '@/components/global/misc';
 import { PaintTransition } from '@/components/global/PaintTransition';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
+import { REVEAL_SCRIPT } from '@/lib/reveal';
 import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
 import '@/styles/globals.css';
 
@@ -22,6 +23,19 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-mono-face',
+  display: 'swap',
+});
+
+/**
+ * Заголовочная антиква. Её берёт только PRIVATE: частному клиенту нужна
+ * интонация каталога, а не интерфейса. BUSINESS и PRODUCTION остаются на
+ * гротеске — какая ветка какой шрифт берёт, решает токен `--font-display`
+ * в `styles/globals.css`, а не этот файл.
+ */
+const display = Cormorant_Garamond({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600'],
+  variable: '--font-display-face',
   display: 'swap',
 });
 
@@ -62,8 +76,15 @@ export default async function LocaleLayout({
   const showDemoBanner = await hasDemoContent();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${mono.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${mono.variable} ${display.variable}`}>
       <body>
+        {/*
+          Первым в теле, до всей разметки: скрипт прячет блоки до прокрутки, и
+          сделать это он должен раньше, чем браузер их нарисует. Подключённый
+          обычным образом файл выполнился бы после отрисовки — блоки успели бы
+          мигнуть и пропасть.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_SCRIPT }} />
         <SkipLink label={dict.common.skipToContent} />
         {showDemoBanner ? <DemoBanner dict={dict} /> : null}
         {children}

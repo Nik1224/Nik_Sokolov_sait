@@ -14,9 +14,27 @@ const PAGES = [
   ['404', '/ru/nope'],
 ] as const;
 
+/**
+ * Проверяем страницу в покое.
+ *
+ * Блоки проявляются по прокрутке, и на полпути текст полупрозрачен: axe
+ * считает контраст по тому, что видит сейчас, и на промежуточном кадре
+ * получает смесь цвета текста с фоном. Требование WCAG — про итоговое
+ * состояние, а не про кадр анимации; при «уменьшить движение» её и вовсе нет.
+ */
+async function settled(page: import('@playwright/test').Page) {
+  await page.waitForFunction(
+    () => document.getAnimations().every((animation) => animation.playState !== 'running'),
+    undefined,
+    { timeout: 5000 },
+  );
+}
+
 for (const [name, path] of PAGES) {
   test(`${name}: нет нарушений WCAG 2.1 A/AA`, async ({ page }) => {
     await page.goto(path);
+    await settled(page);
+
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();

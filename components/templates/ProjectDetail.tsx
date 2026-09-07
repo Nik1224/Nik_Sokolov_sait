@@ -213,8 +213,8 @@ export function ProjectDetail({
               <div className="space-y-10 lg:space-y-14">
                 {story.map(([label, value]) => (
                   <div key={label} className="border-t border-line pt-7">
-                    <h2 className="label m-0 mb-5 text-accent">{label}</h2>
-                    <PortableBody value={value!} locale={locale} dict={dict} className="case-body" />
+                    <h2 className="label m-0 mb-5 text-eyebrow">{label}</h2>
+                    <PortableBody value={value!} locale={locale} dict={dict} className="lede" />
                   </div>
                 ))}
               </div>
@@ -233,7 +233,7 @@ export function ProjectDetail({
             <div className="space-y-12">
               {project.credits.length > 0 ? (
                 <div className="border-t border-line pt-6">
-                  <p className="label mb-6 text-accent">{dict.common.credits}</p>
+                  <p className="label mb-6 text-eyebrow">{dict.common.credits}</p>
                   <ul className="m-0 list-none space-y-3 p-0">
                     {project.credits.map((entry) => (
                       <li key={entry.person._id} className="flex flex-wrap justify-between gap-4">

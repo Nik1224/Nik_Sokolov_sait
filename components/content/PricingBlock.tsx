@@ -51,7 +51,7 @@ export function PricingBlock({
         return (
           <li key={entry._id} className="flex flex-col bg-ink p-6 lg:p-8">
             <Heading className="text-h3 m-0 text-bone">{localizedString(entry.title, locale)}</Heading>
-            <p className="label mt-4 text-accent">{formatPrice(entry, locale, dict)}</p>
+            <p className="label tabular mt-4 text-bone">{formatPrice(entry, locale, dict)}</p>
             <p className="mt-4 text-bone-dim">{localizedString(entry.description, locale)}</p>
 
             {entry.includes.length > 0 ? (
@@ -108,7 +108,7 @@ export function PricingExtras({ entries, locale, dict }: Omit<Props, 'contacts' 
           <li key={entry._id} className="border-t border-line py-4">
             <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
               <span className="text-bone">{localizedString(entry.title, locale)}</span>
-              <span className="label shrink-0 text-accent">
+              <span className="label tabular shrink-0 text-bone">
                 {price ?? (note ? null : dict.pricing.onRequest)}
               </span>
             </div>

@@ -9,6 +9,7 @@ import type { Metadata } from 'next';
 import type { CalculatorConfig } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import type { Locale } from '@/lib/site';
+import { CountUp } from '@/components/content/CountUp';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingExtras } from '@/components/content/PricingBlock';
 import { PricingPackages } from '@/components/content/PricingPackages';
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function BlockHeading({ step, title }: { step: string; title: string }) {
   return (
     <div className="border-t border-line pt-6">
-      <p className="label m-0 text-accent">{step}</p>
+      <p className="label m-0 text-eyebrow">{step}</p>
       <h2 className="text-h2 m-0 mt-4 text-balance">{title}</h2>
     </div>
   );
@@ -87,14 +88,17 @@ function HourRates({
 
   return (
     <section className="mt-14 border-t border-line pt-6">
-      <p className="label m-0 text-accent">{dict.pricing.rates}</p>
-      <dl className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
+      <p className="label m-0 text-eyebrow">{dict.pricing.rates}</p>
+      <dl data-reveal className="m-0 mt-8 grid gap-px bg-line sm:grid-cols-2">
         {rows.map((row) => (
           <div key={row.role} className="bg-ink py-6 pr-6 sm:px-6 sm:first:pl-0">
             <dt className="text-h3 m-0 text-bone-dim">{row.role}</dt>
-            {/* Ставка — самое крупное, что есть на странице: за ней и пришли. */}
+            {/*
+              Ставка — самое крупное, что есть на странице: за ней и пришли.
+              Она же единственное место, где число отсчитывается от нуля.
+            */}
             <dd className="text-display m-0 mt-2 whitespace-nowrap text-bone">
-              {money.format(row.price)}
+              <CountUp value={row.price} locale={locale} currency={config.currency} />
             </dd>
           </div>
         ))}

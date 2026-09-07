@@ -20,6 +20,7 @@ import { Testimonials } from '@/components/content/Testimonials';
 import { ArticleCard, ProjectCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
+import { Picture } from '@/components/media/Picture';
 import { VideoFacade } from '@/components/media/VideoFacade';
 import {
   getArticleTypes,
@@ -32,6 +33,7 @@ import {
   getTestimonials,
   getWorkFormats,
 } from '@/content/queries';
+import type { MediaAsset } from '@/content/types';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
@@ -126,6 +128,30 @@ export default async function DirectionHome({ params }: Props) {
   let sectionIndex = 0;
   const step = () => String(++sectionIndex).padStart(2, '0');
 
+  /*
+   * Кадр-разрыв: одна фотография во всю ширину, без полей и без подписи.
+   *
+   * После обложки страница идёт восемью одинаковыми блоками — линия, метка,
+   * заголовок, сетка. Ритм настолько ровный, что превращается в гул, и до
+   * отзывов долистывают не глядя. Разрыв делит страницу на «про съёмку» и
+   * «про деньги» и даёт вдохнуть.
+   *
+   * Ровно один на страницу: три таких — и приём перестаёт работать.
+   *
+   * Пока только у PRIVATE. Монотонность общая для всех веток, но просили
+   * разобрать эту, а менять раскладку двух других заодно — не то же самое,
+   * что чинить ту, о которой шла речь.
+   */
+  const breakImage =
+    direction === 'private'
+      ? categories
+          .flatMap((category) => category.gallery ?? [])
+          .find(
+            (media): media is Extract<MediaAsset, { type: 'image' }> =>
+              media.type === 'image' && media.image.width > media.image.height,
+          )?.image
+      : undefined;
+
   const showreelProject = selected.find((project) =>
     project.media.some((media) => media.type === 'video'),
   );
@@ -188,13 +214,13 @@ export default async function DirectionHome({ params }: Props) {
 
       {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
-          <CategoryTiles categories={categories} locale={locale} direction={direction} />
+          <CategoryTiles categories={categories} locale={locale} direction={direction} dict={dict} />
         </Section>
       ) : null}
 
       {doc.highlights.length > 0 ? (
         <Section eyebrow={step()} title={dict.common.included}>
-          <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+          <ul data-reveal className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
             {doc.highlights.map((item, index) => (
               <li key={index} className="bg-ink p-6 lg:p-8">
                 <h3 className="text-h3 m-0 text-bone">{localizedString(item.title, locale)}</h3>
@@ -207,13 +233,28 @@ export default async function DirectionHome({ params }: Props) {
         </Section>
       ) : null}
 
+      {breakImage ? (
+        <section
+          data-reveal
+          className="relative w-full overflow-hidden bg-ink-raised"
+          style={{ height: 'clamp(18rem, 42vh, 30rem)' }}
+        >
+          <Picture
+            image={breakImage}
+            alt=""
+            sizes="100vw"
+            className="frame-in absolute inset-0 h-full w-full object-cover"
+          />
+        </section>
+      ) : null}
+
       {showsSelected ? (
         <Section
           eyebrow={step()}
           title={dict.nav[section]}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section }) }}
         >
-          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
             {selected.map((project, index) => (
               <li key={project._id}>
                 <ProjectCard
@@ -314,7 +355,7 @@ export default async function DirectionHome({ params }: Props) {
           title={dict.nav.blog}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section: 'blog' }) }}
         >
-          <ul className="m-0 grid list-none gap-12 p-0 md:grid-cols-3">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-12 p-0 md:grid-cols-3">
             {articles.map((article) => (
               <li key={article._id}>
                 <ArticleCard

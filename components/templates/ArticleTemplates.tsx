@@ -8,6 +8,7 @@
 
 import Link from 'next/link';
 import { ArticleCard } from '@/components/content/cards';
+import { FilterNav } from '@/components/content/FilterNav';
 import { PortableBody } from '@/components/content/PortableBody';
 import { RelatedProjectCallout } from '@/components/content/RelatedContent';
 import { EmptyState, Section } from '@/components/content/Section';
@@ -18,6 +19,9 @@ import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { formatDate, localizedString, pageNeedsFallbackNotice, resolveLocalized } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
 import type { Direction, Locale } from '@/lib/site';
+
+/** Ключ пункта «смотреть все»: у него нет slug, а линии нужен адрес пункта. */
+const ALL = 'all';
 
 type ListingProps = {
   locale: Locale;
@@ -55,37 +59,19 @@ export function ArticleListing({
       {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
 
       {types.length > 0 ? (
-        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">
-          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
-            <li>
-              <Link
-                href={listingHref}
-                aria-current={!activeType ? 'true' : undefined}
-                className={`label transition-colors ${
-                  !activeType ? 'text-accent' : 'text-bone-faint hover:text-bone'
-                }`}
-              >
-                {dict.common.viewAll}
-              </Link>
-            </li>
-            {types.map((type) => {
-              const isActive = type.slug === activeType;
-              return (
-                <li key={type._id}>
-                  <Link
-                    href={`${listingHref}?type=${type.slug}`}
-                    aria-current={isActive ? 'true' : undefined}
-                    className={`label transition-colors ${
-                      isActive ? 'text-accent' : 'text-bone-faint hover:text-bone'
-                    }`}
-                  >
-                    {localizedString(type.title, locale)}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <FilterNav
+          className="mt-12"
+          label={dict.common.filterBy}
+          active={activeType ?? ALL}
+          items={[
+            { key: ALL, label: dict.common.viewAll, href: listingHref },
+            ...types.map((type) => ({
+              key: type.slug,
+              label: localizedString(type.title, locale),
+              href: `${listingHref}?type=${type.slug}`,
+            })),
+          ]}
+        />
       ) : null}
 
       <div className="mt-12">

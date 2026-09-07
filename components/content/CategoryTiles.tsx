@@ -3,19 +3,25 @@
 /**
  * Плитки категорий портфолио на Home ветки PRIVATE (ТЗ §5.2, §7).
  *
- * При наведении плитка показывает короткую петлю со съёмки этой категории.
- * Видео — усиление, а не условие: название и переход работают всегда, и без
- * ролика плитка выглядит ровно так же, как выглядела.
+ * Плитка — это кадр, а не строка. Раньше здесь стояли названия со стрелкой, а
+ * фотография показывалась только при наведении: на телефоне, откуда приходит
+ * большинство, её не видел никто. Теперь постер стоит всегда, название лежит
+ * поверх на вуали, а петля — усиление сверху.
  *
- * Две подачи одного и того же, как у карточек направлений на START:
- *  • где есть мышь — плитка при наведении раскрывается кадром поверх страницы;
- *  • на сенсорных экранах наведения не существует, поэтому вертикальный кадр
- *    просто стоит справа в плитке и играет, пока она на экране.
+ * Две подачи одного и того же:
+ *  • где есть мышь — при наведении кадр медленно наезжает и подхватывается
+ *    петля со съёмки этой категории;
+ *  • на сенсорных экранах наведения не существует, поэтому петля играет сама,
+ *    пока плитка на экране.
+ *
+ * Без петли плитка выглядит ровно так же: движение — не условие.
  */
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Category } from '@/content/types';
+import { Picture } from '@/components/media/Picture';
+import type { Category, ImageRef, MediaAsset } from '@/content/types';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
 import type { Direction, Locale } from '@/lib/site';
@@ -24,11 +30,27 @@ type Props = {
   categories: Category[];
   locale: Locale;
   direction: Direction;
+  dict: Dictionary;
 };
 
 type Mode = 'none' | 'hover' | 'always';
 
-export function CategoryTiles({ categories, locale, direction }: Props) {
+/** Кадр для плитки: превью, а если его нет — первое, что есть у категории. */
+function coverOf(category: Category): { image: ImageRef; alt?: MediaAsset['alt'] } | null {
+  const candidates: MediaAsset[] = [
+    ...(category.preview ? [category.preview] : []),
+    ...(category.gallery ?? []),
+    ...(category.backstage ?? []),
+  ];
+
+  for (const media of candidates) {
+    const image = media.type === 'image' ? media.image : media.poster;
+    if (image) return { image, alt: media.alt };
+  }
+  return null;
+}
+
+export function CategoryTiles({ categories, locale, direction, dict }: Props) {
   /*
    * Как показывать петли. Решается один раз на весь список: условия одинаковые
    * для всех плиток, и пять одинаковых подписок на media query ничего не
@@ -60,53 +82,36 @@ export function CategoryTiles({ categories, locale, direction }: Props) {
   }, []);
 
   /*
-   * Сколько колонок сейчас в сетке. Нужно, чтобы понять, в каком ряду плитка:
-   * верхние раскрываются вверх, нижние вниз. Число колонок задано брейкпойнтами
-   * (1 / 2 / 3), поэтому читаем его у самой сетки, а не повторяем в коде — иначе
-   * при правке класса они разойдутся молча.
+   * Первая плитка занимает две колонки, когда это ровно достраивает сетку до
+   * целых рядов: пять категорий — это 2 + 3, без дыры в углу. Раньше дыру
+   * закрывала пустая ячейка, и на светлой теме она читалась сплошным серым
+   * прямоугольником — заметной поломкой рядом с последней плиткой.
+   *
+   * Когда арифметика не сходится, все плитки одинаковые, а недобранный ряд
+   * остаётся воздухом: сетка больше не держит хайрлайны фоном, и пустое место
+   * выглядит полем, а не дырой.
+   *
+   * Считается только для трёх колонок: на двух и на одной первая плитка всегда
+   * обычная — там широкий кадр занял бы весь экран.
    */
-  const gridRef = useRef<HTMLUListElement>(null);
-  const [columns, setColumns] = useState(1);
-
-  useEffect(() => {
-    const el = gridRef.current;
-    if (!el) return;
-
-    const count = () =>
-      setColumns(getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length || 1);
-
-    count();
-    const observer = new ResizeObserver(count);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const lastRow = Math.floor((categories.length - 1) / columns);
-
-  /*
-   * Пустые ячейки последнего ряда. Сетка держит хайрлайны фоном под зазором,
-   * поэтому недобранный ряд показывался сплошным серым прямоугольником —
-   * заметной дырой рядом с последней плиткой.
-   */
-  const fillers = (columns - (categories.length % columns)) % columns;
+  const featured = categories.length % 3 === 2;
 
   return (
-    <ul ref={gridRef} className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+    <ul data-reveal-stagger className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
       {categories.map((category, index) => (
-        <li key={category._id} className="bg-ink">
+        <li
+          key={category._id}
+          className={featured && index === 0 ? 'lg:col-span-2' : undefined}
+        >
           <Tile
             category={category}
             locale={locale}
             direction={direction}
+            dict={dict}
             mode={mode}
-            // Нижний ряд раскрывается вниз и отодвигает то, что под сеткой.
-            // Остальные — вверх, в воздух над плитками.
-            growsDown={Math.floor(index / columns) === lastRow}
+            wide={featured && index === 0}
           />
         </li>
-      ))}
-      {Array.from({ length: fillers }, (_, index) => (
-        <li key={`filler-${index}`} className="bg-ink" aria-hidden="true" />
       ))}
     </ul>
   );
@@ -116,73 +121,30 @@ function Tile({
   category,
   locale,
   direction,
+  dict,
   mode,
-  growsDown,
+  wide,
 }: {
   category: Category;
   locale: Locale;
   direction: Direction;
+  dict: Dictionary;
   mode: Mode;
-  growsDown: boolean;
+  wide: boolean;
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(false);
-  /*
-   * Две высоты плитки, обе в пикселях: без числа с обеих сторон переход не
-   * анимируется, а «по содержимому» числом не является.
-   *
-   * Сложенная измеряется у самой плитки, а не задаётся константой: она зависит
-   * от кегля и отступов, и стоит им поменяться — плитка дёрнется на первом же
-   * наведении. Раскрытая считается от ширины колонки, чтобы кадр встал целиком,
-   * а не полосой из середины. Потолок в 80vh нужен на низких экранах: строка
-   * выше экрана — это уже не превью.
-   */
-  const [collapsed, setCollapsed] = useState<number | null>(null);
-  const [expanded, setExpanded] = useState<number | null>(null);
   /*
    * Адрес подставляется только при первом наведении. Иначе пять роликов
    * поехали бы за человеком по сети ещё до того, как он на них посмотрел.
    */
   const [source, setSource] = useState<string | null>(null);
 
-  const description = localizedString(category.description, locale);
-
+  const cover = coverOf(category);
   const loop = category.preview?.type === 'video' ? category.preview : null;
   const shows = Boolean(loop?.loopSrc) && mode !== 'none';
   const standing = shows && mode === 'always';
-
-  const ratio = loop ? loop.poster.height / loop.poster.width : 0;
-
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || mode !== 'hover' || !shows || !ratio) return;
-
-    const fit = () =>
-      setExpanded(Math.round(Math.min(el.clientWidth * ratio, window.innerHeight * 0.8)));
-
-    fit();
-    // Ширина колонки и высота экрана меняются вместе с окном. Заодно
-    // сбрасываем измеренную сложенную высоту: с новой шириной заголовок может
-    // переноситься иначе, и старое число уже не про эту плитку.
-    const onResize = () => {
-      setCollapsed(null);
-      fit();
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [mode, shows, ratio]);
-
-  /*
-   * Сложенную высоту измеряем ровно в тот момент, когда она ещё своя: до того,
-   * как мы сами её проставили, и не во время раскрытия — иначе в неё попадёт
-   * промежуточный кадр анимации и плитка «усохнет» до него.
-   */
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || mode !== 'hover' || !shows || active || collapsed !== null) return;
-    setCollapsed(el.getBoundingClientRect().height);
-  }, [mode, shows, active, collapsed]);
 
   const activate = useCallback(() => {
     if (mode !== 'hover' || !loop?.loopSrc) return;
@@ -243,6 +205,9 @@ function Tile({
     return () => observer.disconnect();
   }, [standing, loop]);
 
+  const title = localizedString(category.title, locale);
+  const description = localizedString(category.description, locale);
+
   return (
     <Link
       href={`${href({ locale, direction, section: 'portfolio' })}?category=${category.slug}`}
@@ -252,124 +217,65 @@ function Tile({
       onBlur={deactivate}
       ref={linkRef}
       /*
-       * Сетка в потоке не меняется никогда: раскрывается только слой с кадром,
-       * поверх страницы. Направление решает ряд — верхние ряды уходят вверх,
-       * чтобы не накрыть соседние плитки, нижний вниз.
-       *
-       * Раньше нижний ряд рос по-настоящему и отодвигал следующий блок. Отказ
-       * от этого — сознательный: страница дёргалась на каждое наведение, а
-       * ничего взамен этот сдвиг не давал. Кадру и так есть куда лечь.
+       * Пропорции задаются плиткой, а не содержимым: широкая в две колонки
+       * получается той же высоты, что обычная рядом, и ряд стоит ровно.
+       * На узком экране широкой плитки не бывает — там все вертикальные.
        */
-      style={standing ? undefined : { minHeight: collapsed ?? undefined }}
-      /*
-       * Название прижато к верхнему краю и стоит выше слоя с кадром: раскрытие
-       * его не трогает. В сложенном виде `items-start` ничего не меняет —
-       * содержимое и так занимало всю высоту между отступами.
-       *
-       * Плитка тянется на всю высоту своей ячейки (`h-full`), чтобы нажимать
-       * на неё можно было по всей площади.
-       *
-       * Со стоящим кадром плитка выше: колонка под ролик получается около
-       * 150 px, и в строку высотой со строку текста вертикальный кадр лёг бы
-       * горизонтальной полосой из середины. Целиком он потребовал бы почти
-       * 280 px на плитку — список из пяти категорий на телефоне превратился
-       * бы в ленту на полтора экрана.
-       */
-      className={`group relative flex h-full justify-between p-6 lg:p-8 ${
-        standing ? 'min-h-[12.5rem] items-center' : 'items-start'
-      } ${active ? 'z-10' : ''}`}
-      data-grows={growsDown ? 'down' : 'up'}
+      className={`group on-media relative block overflow-hidden bg-ink-sunken ${
+        wide ? 'aspect-[3/4] sm:aspect-[3/2]' : 'aspect-[3/4]'
+      }`}
     >
-      {standing && loop ? (
-        /*
-         * Сенсорный экран: кадр стоит в правой части плитки и играет сам.
-         * Раскрывать нечему — наведения здесь не существует.
-         */
-        <>
-          <video
-            ref={videoRef}
-            src={source ?? undefined}
-            poster={loop.poster.src}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 h-full w-[42%] object-cover"
-          />
-          {/* Кромка слева от кадра: без неё он упирается в текст встык. */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-[42%] w-16 bg-gradient-to-l from-ink/60 to-transparent"
-          />
-        </>
+      {cover ? (
+        <Picture
+          image={cover.image}
+          alt=""
+          sizes={
+            wide
+              ? '(min-width: 1024px) 52rem, (min-width: 640px) 50vw, 100vw'
+              : '(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw'
+          }
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1100ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.06] group-focus-visible:scale-[1.06]"
+        />
       ) : null}
 
-      {!standing && shows && loop ? (
-        /*
-         * Слой с кадром. Растёт вниз за пределы плитки и накрывает то, что под
-         * ней, — поэтому у раскрытой плитки поднят z-index. Пропорции слоя
-         * повторяют пропорции ролика, поэтому object-cover ничего не срезает.
-         */
+      {shows && loop ? (
+        <video
+          ref={videoRef}
+          src={source ?? undefined}
+          poster={loop.poster.src}
+          autoPlay={standing}
+          muted
+          loop
+          playsInline
+          preload={standing ? 'metadata' : 'none'}
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] ${
+            standing
+              ? 'opacity-100'
+              : 'opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100'
+          }`}
+        />
+      ) : null}
+
+      <span aria-hidden="true" className="media-scrim pointer-events-none absolute inset-0" />
+
+      <span className="absolute inset-x-0 bottom-0 flex flex-col p-5 lg:p-7">
+        <span className="text-h3 text-balance text-bone">{title}</span>
+        {description ? (
+          <span className="mt-1 line-clamp-2 max-w-prose text-sm text-bone-dim">{description}</span>
+        ) : null}
+        {/*
+         * Строка появляется по наведению: указывать «смотреть» на каждой из
+         * пяти плиток разом — значит не указывать никуда. На сенсорном экране
+         * наведения нет, поэтому там она стоит всегда.
+         */}
         <span
-          style={{ height: (active ? expanded : collapsed) ?? undefined }}
-          className={`absolute inset-x-0 block overflow-hidden bg-ink transition-[height] duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] ${
-            growsDown ? 'top-0' : 'bottom-0'
+          className={`label mt-3 text-bone-faint transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
+            mode === 'always' ? '' : 'translate-y-1 opacity-0'
           }`}
         >
-          {/* Постер стоит здесь же: пока грузится первый кадр, плитка не
-              мигает пустотой. */}
-          <video
-            ref={videoRef}
-            src={source ?? undefined}
-            poster={loop.poster.src}
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:opacity-100 group-focus-visible:opacity-100"
-          />
-          {/*
-           * Вуаль цветом фона — со стороны названия: оно должно читаться при
-           * любом кадре. Дальше она сходит почти на нет: закрывать ради одной
-           * строки весь кадр незачем. У растущего вверх слоя название внизу,
-           * поэтому и вуаль снизу. Цвет берётся из токена, поэтому в светлой
-           * теме PRIVATE вуаль светлая, а в тёмных ветках была бы тёмной.
-           */}
-          <span
-            aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 from-ink from-16% via-ink/35 via-38% to-ink/5 opacity-0 transition-opacity duration-[var(--duration-slow)] group-hover:opacity-100 group-focus-visible:opacity-100 ${
-              growsDown ? 'bg-gradient-to-b' : 'bg-gradient-to-t'
-            }`}
-          />
+          {dict.common.view} →
         </span>
-      ) : null}
-
-      {/*
-       * Со стоящим кадром текст занимает левую половину: иначе длинное
-       * название уходит под ролик, а стрелка оказывается прямо на нём.
-       */}
-      <span className={`relative block ${standing ? 'w-[54%]' : 'w-full'}`}>
-        <span className="flex items-center justify-between gap-4">
-          <span className="text-h3 text-bone transition-colors group-hover:text-accent">
-            {localizedString(category.title, locale)}
-          </span>
-          <span
-            aria-hidden="true"
-            className="label text-bone-faint transition-transform group-hover:translate-x-1"
-          >
-            →
-          </span>
-        </span>
-        {/*
-         * Строка о том, что внутри. Со стоящим кадром её нет: там на текст
-         * остаётся половина плитки, и три строки легли бы прямо под ролик.
-         */}
-        {description && !standing ? (
-          <span className="mt-3 block max-w-prose text-bone-dim">{description}</span>
-        ) : null}
       </span>
     </Link>
   );
