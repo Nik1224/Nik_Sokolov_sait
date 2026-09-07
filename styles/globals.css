@@ -486,6 +486,40 @@
     );
   }
 
+  /*
+   * Раскрывающаяся панель: высота идёт от нуля к «по содержимому».
+   *
+   * `0fr → 1fr` на строке сетки — единственный способ анимировать такую
+   * высоту, не измеряя её скриптом.
+   *
+   * Свёрнутая панель остаётся в разметке, потому что на неё указывает
+   * `aria-controls`, — но `visibility: hidden` вынимает её и из очереди
+   * фокуса, и из дерева доступности: свёрнутого содержимого для человека нет
+   * ни глазами, ни на слух. Видимость переключается ступенькой в конце
+   * сворачивания и сразу в начале раскрытия — иначе панель либо исчезала бы
+   * до анимации, либо оставалась бы доступной после неё.
+   */
+  .collapsible {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out-soft),
+      visibility 0s linear var(--duration-base);
+  }
+
+  .collapsible[data-open='true'] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-out-soft),
+      visibility 0s;
+  }
+
+  .collapsible > * {
+    overflow: hidden;
+  }
+
   /* Окно выбора мессенджера. Позиционируется браузером, здесь только вид. */
   .contact-dialog {
     margin: auto;

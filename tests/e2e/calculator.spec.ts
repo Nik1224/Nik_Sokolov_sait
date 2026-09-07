@@ -12,7 +12,12 @@ async function openCalculator(page: import('@playwright/test').Page) {
   const panel = slider
     .locator('xpath=ancestor::div[contains(@class,"grid")][1]')
     .locator('[role="status"]');
-  return { slider, panel };
+  /*
+   * Переключатели ищутся внутри калькулятора, а не по всей странице: «Фото» и
+   * «Видео» есть и здесь, и в свёрнутой группе пакетов выше.
+   */
+  const calculator = page.locator('[data-calculator]');
+  return { slider, panel, calculator };
 }
 
 test('свадьба: десять часов фото стоят 110 000, а не 120 000', async ({ page }) => {
@@ -27,16 +32,16 @@ test('свадьба: десять часов фото стоят 110 000, а н
 });
 
 test('фото и видео вместе дают скидку 10%', async ({ page }) => {
-  const { slider, panel } = await openCalculator(page);
+  const { slider, panel, calculator } = await openCalculator(page);
 
-  await page.getByText('Семейная', { exact: true }).click();
+  await calculator.getByText('Семейная', { exact: true }).click();
   await slider.fill('5');
 
   // Только фото — скидки нет.
   await expect(panel).toContainText('60 000');
   await expect(panel).not.toContainText('Скидка');
 
-  await page.getByText('Видео', { exact: true }).click();
+  await calculator.getByText('Видео', { exact: true }).click();
   await expect(panel).toContainText('Скидка');
   await expect(panel).toContainText('13 500');
   await expect(panel).toContainText('121 500');
@@ -69,9 +74,9 @@ test('смена типа подтягивает часы в допустимы�
 });
 
 test('без выбранного формата сумма не показывается', async ({ page }) => {
-  const { panel } = await openCalculator(page);
+  const { panel, calculator } = await openCalculator(page);
 
-  await page.getByText('Фото', { exact: true }).click();
+  await calculator.getByText('Фото', { exact: true }).click();
   await expect(panel).toContainText('Выберите фото, видео или оба формата');
 });
 

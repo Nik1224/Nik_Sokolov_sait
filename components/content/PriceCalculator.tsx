@@ -106,7 +106,15 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
   const note = localizedString(config.note, locale);
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-14">
+    /*
+      Признак для тестов: «Фото» и «Видео» на этой странице встречаются дважды
+      — здесь и в переключателе формата внутри свёрнутой группы пакетов.
+      Искать их по всей странице значит однажды нажать не на то.
+    */
+    <div
+      data-calculator
+      className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-14"
+    >
       <div className="flex flex-col gap-9">
         <fieldset className="m-0 border-0 p-0">
           <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.formats}</legend>

@@ -170,25 +170,9 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
               </button>
             </h3>
 
-            {/*
-              Панель раскрывается высотой, а не появляется скачком: `0fr → 1fr`
-              на строке сетки — единственный способ анимировать высоту «по
-              содержимому», не измеряя её скриптом.
-
-              Панель остаётся в разметке всегда: `aria-controls` на кнопке
-              должен указывать на существующий узел.
-            */}
-            <div
-              id={panelId}
-              className="grid transition-[grid-template-rows] duration-[var(--duration-base)] ease-[var(--ease-out-soft)]"
-              style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
-            >
-              {/*
-                Свёрнутая панель остаётся в потоке, поэтому её содержимое нужно
-                вынуть из очереди фокуса и из озвучки: иначе Tab уводит в
-                невидимые кнопки закрытой группы.
-              */}
-              <div className="overflow-hidden" inert={!expanded}>
+            {/* Раскрытие и правила видимости — в утилите `.collapsible`. */}
+            <div id={panelId} className="collapsible" data-open={expanded}>
+              <div>
                 <div className="pb-10">
                 {available.length > 1 ? (
                   <fieldset className="m-0 mb-8 border-0 p-0">
