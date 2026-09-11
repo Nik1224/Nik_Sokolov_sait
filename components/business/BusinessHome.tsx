@@ -108,15 +108,19 @@ function Shot({
 /* --- 01. Первый экран ------------------------------------------------------ */
 
 /**
- * Разворот, а не текст поверх фотографии.
+ * Кадр во весь экран, набор поверх него.
  *
- * Левая часть — спокойная типографическая поверхность: заголовок здесь главный
- * графический элемент страницы, и накладывать его на кадр значит отнять силу у
- * обоих. Правая — кадр во всю высоту экрана, уходящий за правый край.
+ * Кадр лежит `inset-0` и занимает первый экран целиком — это поверхность, а не
+ * иллюстрация в колонке. Заголовок стоит на ней слева, в семи колонках из
+ * двенадцати, и читается благодаря вуали (`.hero-scrim`): она гасит кадр в
+ * бумагу под текстом и отпускает его к правому краю, где текста нет.
  *
- * На телефоне разворот разворачивается в вертикаль: сначала слово, потом кадр.
- * Порядок именно такой — человек должен понять, куда попал, до того как начнёт
- * рассматривать.
+ * Раскладка одна на все ширины — на телефоне меняется только вуаль, которая
+ * забирает больше высоты: колонка там во всю ширину, и кадру под ней нужно
+ * уйти тише.
+ *
+ * Прежняя редакция этого блока делила экран пополам — слева типографика,
+ * справа кадр. От неё осталось описание, но не вёрстка.
  */
 function Opening({
   locale,
@@ -213,33 +217,25 @@ function Opening({
                 {dict.nav.cases}
               </Cta>
             </div>
-          </div>
-        </div>
 
-        {/*
-         * Подвал разворота: слева переходы в категории, справа полный шоурил
-         * со звуком. Тонкая линия над ними — та же, что разделяет полосы ниже,
-         * поэтому первый экран заканчивается не обрывом, а строкой.
-         */}
-        <div className="mt-14 border-t border-line pt-6 lg:mt-20">
-          <div className="editorial-grid items-center gap-y-6">
-            {quickLinks.length > 0 ? (
-              <ul className="col-span-12 m-0 flex list-none flex-wrap gap-x-7 gap-y-3 p-0 lg:col-span-7">
-                {quickLinks.map((category) => (
-                  <li key={category._id}>
-                    <Link
-                      href={`${href({ locale, direction: 'business', section: 'portfolio' })}?category=${category.slug}`}
-                      className="label-fine text-bone-dim transition-colors hover:text-bone"
-                    >
-                      {localizedString(category.title, locale)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-
+            {/*
+             * Шоурил — третье действие в том же гнезде, что и две кнопки, но
+             * набранное тише: строка со знаком вместо плашки.
+             *
+             * Раньше он стоял в подвале разворота справа, на плотной тёмной
+             * плашке. Плашка была нужна не сама по себе: справа внизу вуаль уже
+             * сошла на нет, и под строкой — голый кадр, который по ходу петли то
+             * светлеет, то темнеет. Но она же была третьей тёмной фигурой на
+             * экране и самой тяжёлой из трёх — при том что обещает меньше всех.
+             *
+             * Здесь плашка не нужна вовсе: левая колонка лежит на сплошной
+             * бумаге по всей высоте, и строка читается тоном полосы. Заодно
+             * шоурил встаёт туда, где принимают решение, — рядом со «Связаться»,
+             * а не в выходных данных. Компании, выбирающей подрядчика по видео,
+             * он нужнее всего остального на этом экране.
+             */}
             {reel?.videoId ? (
-              <div className="reel-cta col-span-12 lg:col-span-5 lg:justify-self-end">
+              <div className="reel-cta mt-8">
                 <ShowreelDialog
                   provider={reel.provider}
                   videoId={reel.videoId}
@@ -249,6 +245,28 @@ function Opening({
               </div>
             ) : null}
           </div>
+        </div>
+
+        {/*
+         * Подвал разворота: переходы в категории и выходные данные. Тонкая
+         * линия над ними — та же, что разделяет полосы ниже, поэтому первый
+         * экран заканчивается не обрывом, а строкой.
+         */}
+        <div className="mt-14 border-t border-line pt-6 lg:mt-20">
+          {quickLinks.length > 0 ? (
+            <ul className="m-0 flex list-none flex-wrap gap-x-7 gap-y-3 p-0">
+              {quickLinks.map((category) => (
+                <li key={category._id}>
+                  <Link
+                    href={`${href({ locale, direction: 'business', section: 'portfolio' })}?category=${category.slug}`}
+                    className="label-fine text-bone-dim transition-colors hover:text-bone"
+                  >
+                    {localizedString(category.title, locale)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
           <FineRow
             className="mt-8 text-bone-faint"
@@ -379,11 +397,17 @@ function Portfolio({
                       className="relative overflow-hidden bg-ink-sunken"
                       style={{ aspectRatio: '3 / 4' }}
                     >
+                      {/*
+                       * Без `priority`. Лента лежит примерно в полутора экранах
+                       * ниже обреза, и поднятые в высокий приоритет обложки
+                       * соревновались за канал с постером первого экрана — тем
+                       * самым кадром, по которому и меряется LCP. Три высоких
+                       * приоритета сразу означают, что высокого нет ни у кого.
+                       */}
                       <Picture
                         image={cover}
                         alt=""
                         sizes="(min-width: 1024px) 26vw, (min-width: 640px) 46vw, 76vw"
-                        priority={position < 3}
                         className="frame-in absolute inset-0 h-full w-full object-cover"
                       />
                     </div>
@@ -599,6 +623,64 @@ function Cases({
   );
 }
 
+/* --- Кадр-разрыв ------------------------------------------------------------ */
+
+/**
+ * Одна фотография во всю ширину, без полей, без подписи и без ссылки.
+ *
+ * После первого экрана страница идёт восемью полосами, и четыре из них набраны
+ * одной фигурой: заголовок, волосяная линия, список строк. Ритм настолько
+ * ровный, что превращается в гул. Разрыв делит полосу надвое — всё выше него
+ * про съёмку, всё ниже про деньги — и даёт вдохнуть перед тёмной главой.
+ *
+ * Ровно один на страницу: три таких, и приём перестаёт работать.
+ *
+ * Края резаные, как у полос. Кадр ниже ведущего кадра кейса (`ratio-break`):
+ * он пауза, а не ещё одна работа, и спорить с ней за внимание ему нечем.
+ */
+function Break({ image }: { image: ImageRef }) {
+  return (
+    <section data-reveal className="ratio-break relative w-full overflow-hidden bg-ink-sunken">
+      <Picture
+        image={image}
+        alt=""
+        sizes="100vw"
+        className="frame-in absolute inset-0 h-full w-full object-cover"
+      />
+    </section>
+  );
+}
+
+/**
+ * Кадр для разрыва: горизонтальный и ещё не показанный на этой странице.
+ *
+ * Обложки уже стоят в ленте портфолио и в кейсах, и повтор одного из них
+ * читался бы не как пауза, а как сбой вёрстки — «эту фотографию я только что
+ * видел». Поэтому берётся кадр из материалов работы, а всё, что уже было на
+ * полосе, отсеивается по адресу файла.
+ *
+ * Не нашлось — разрыва нет. Пустая полоса хуже отсутствующей, а подставлять
+ * сюда что попало значит ставить случайный кадр на самое заметное место.
+ */
+function breakFrame(projects: Project[], covers: Record<string, ImageRef | undefined>) {
+  const shown = new Set<string>();
+  for (const image of Object.values(covers)) if (image) shown.add(image.src);
+  for (const project of projects) {
+    const cover = frameOf(project.cover);
+    if (cover) shown.add(cover.src);
+  }
+
+  for (const project of projects) {
+    for (const media of project.media) {
+      const image = frameOf(media);
+      if (!image || shown.has(image.src)) continue;
+      if (image.width <= image.height) continue;
+      return image;
+    }
+  }
+  return undefined;
+}
+
 /* --- 06. Стоимость ---------------------------------------------------------- */
 
 function Pricing({
@@ -767,6 +849,9 @@ function Journal({
     return found ? localizedString(found.title, locale) : undefined;
   };
 
+  const [lead, ...rest] = articles;
+  const leadImage = frameOf(lead?.cover);
+
   return (
     <Band from="paper" core="paper" to="warm-grey" space="tight">
       <BandHead
@@ -778,45 +863,70 @@ function Journal({
       />
 
       {/*
-       * Заметки строками с маленьким кадром слева. Три равные карточки с
-       * обложками спорили бы с портфолио и кейсами за одно и то же внимание, а
-       * журнал здесь — не витрина, а список: человек читает заголовки.
+       * Ведущая заметка кадром, остальные строками.
+       *
+       * Тремя равными строками журнал был четвёртой полосой подряд с одной и
+       * той же фигурой — заголовок, волосяная линия, список, — и к этому месту
+       * ритм уже не читался как ритм. Своя раскладка возвращает полосе лицо, не
+       * превращая её в витрину: карточек по-прежнему нет, крупный кадр ровно
+       * один, и спорить с портфолио и кейсами ему нечем — он в конце полосы, на
+       * половине её ширины.
+       *
+       * Ведущей идёт первая заметка: список приходит отсортированным по дате, и
+       * выбирать «главную» вручную здесь нечем и незачем.
        */}
-      <ul className="m-0 mt-12 list-none p-0 lg:mt-16">
-        {articles.map((article) => {
-          const image = frameOf(article.cover);
-          return (
-            <li key={article._id} data-reveal className="border-t border-line">
-              <Link
-                href={href({ locale, direction: 'business', section: 'blog', slug: article.slug })}
-                className="group editorial-grid items-center gap-y-5 py-8 lg:py-10"
-              >
-                {image ? (
-                  <div className="col-span-4 lg:col-span-2">
-                    <Shot
-                      image={image}
-                      ratio={4 / 3}
-                      sizes="(min-width: 1024px) 16vw, 33vw"
-                    />
-                  </div>
-                ) : null}
-                <div className={image ? 'col-span-8 lg:col-span-6' : 'col-span-12 lg:col-span-8'}>
-                  <h3 className="text-h3 m-0 uppercase text-balance text-bone transition-colors group-hover:text-accent">
+      <div className="editorial-grid mt-12 gap-y-12 lg:mt-16">
+        {lead ? (
+          <article data-reveal className="col-span-12 lg:col-span-6">
+            <Link
+              href={href({ locale, direction: 'business', section: 'blog', slug: lead.slug })}
+              className="group block"
+            >
+              {leadImage ? (
+                <Shot
+                  image={leadImage}
+                  ratio={3 / 2}
+                  sizes="(min-width: 1024px) 46vw, 100vw"
+                />
+              ) : null}
+              <FineRow
+                className="mt-6 text-bone-faint"
+                items={[typeOf(lead.typeSlug), formatDate(lead.publishedAt, locale)]}
+              />
+              <h3 className="text-h2 m-0 mt-3 uppercase text-balance text-bone transition-colors group-hover:text-accent">
+                {localizedString(lead.title, locale)}
+              </h3>
+              <p className="mt-4 max-w-[46ch] text-bone-dim">
+                {localizedString(lead.excerpt, locale)}
+              </p>
+            </Link>
+          </article>
+        ) : null}
+
+        {rest.length > 0 ? (
+          <ul className="col-span-12 m-0 list-none self-end p-0 lg:col-span-5 lg:col-start-8">
+            {rest.map((article) => (
+              <li key={article._id} data-reveal className="border-t border-line">
+                <Link
+                  href={href({ locale, direction: 'business', section: 'blog', slug: article.slug })}
+                  className="group block py-7 lg:py-8"
+                >
+                  <FineRow
+                    className="text-bone-faint"
+                    items={[typeOf(article.typeSlug), formatDate(article.publishedAt, locale)]}
+                  />
+                  <h3 className="text-h3 m-0 mt-3 uppercase text-balance text-bone transition-colors group-hover:text-accent">
                     {localizedString(article.title, locale)}
                   </h3>
-                  <p className="mt-3 max-w-[52ch] text-sm text-bone-dim">
+                  <p className="mt-2 max-w-[46ch] text-sm text-bone-dim">
                     {localizedString(article.excerpt, locale)}
                   </p>
-                </div>
-                <FineRow
-                  className="col-span-12 text-bone-faint lg:col-span-4 lg:justify-end"
-                  items={[typeOf(article.typeSlug), formatDate(article.publishedAt, locale)]}
-                />
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
     </Band>
   );
 }
@@ -878,6 +988,8 @@ export function BusinessHome({
   articleTypes,
   settings,
 }: Props) {
+  const breakImage = breakFrame(projects, covers);
+
   return (
     <>
       <HeaderState />
@@ -915,6 +1027,10 @@ export function BusinessHome({
           categories={categories}
         />
       ) : null}
+
+      {/* Разрыв стоит перед «Стоимостью»: здесь полоса переходит от съёмки к
+          деньгам, и это единственный шов страницы, который стоит отметить. */}
+      {breakImage ? <Break image={breakImage} /> : null}
 
       {pricing.length > 0 ? (
         <Pricing

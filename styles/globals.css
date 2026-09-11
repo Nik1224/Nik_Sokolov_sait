@@ -510,46 +510,6 @@
 }
 
 /**
- * Мелкая техническая подпись: номер полосы, формат, год.
- *
- * Не уменьшенный `label`, а отдельный регистр. На журнальной полосе такие
- * строки работают в паре с очень крупным заголовком: контраст масштабов и
- * есть то, что отличает свёрстанный разворот от последовательности блоков.
- */
-@utility label-fine {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  line-height: 1.1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-/**
- * Двенадцать колонок. Асимметрия набирается спанами на самих элементах:
- * текст на четырёх, кадр на восьми, в следующем блоке наоборот.
- */
-@utility editorial-grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: clamp(1rem, 2vw, 2.25rem);
-}
-
-/**
- * Мелкая техническая подпись: номер полосы, формат, год.
- *
- * Не уменьшенный `label`, а отдельный регистр. На журнальной полосе такие
- * строки работают в паре с очень крупным заголовком: контраст масштабов и
- * есть то, что отличает свёрстанный разворот от последовательности блоков.
- */
-@utility label-fine {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  line-height: 1.1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-/**
  * Двенадцать колонок. Асимметрия набирается спанами на самих элементах:
  * текст на четырёх, кадр на восьми, в следующем блоке наоборот.
  */
@@ -1282,53 +1242,6 @@
   transform: scaleX(1);
 }
 
-/* --- Два голоса одной гарнитуры -------------------------------------------
-   Заголовки набраны на максимальной резкости контуров, текст — на нулевой.
-   Разница между дисплейным и текстовым голосом здесь не в кегле и не в другой
-   гарнитуре, а в том, насколько остры углы букв: у заголовка они рубленые, у
-   абзаца скруглены до нормы. Для студии, которая продаёт резкость кадра, это
-   единственный параметр шрифта, который стоит трогать.
-   -------------------------------------------------------------------------- */
-
-[data-theme='business'] {
-  font-variation-settings: 'SHRP' 0;
-}
-
-[data-theme='business'] h1,
-[data-theme='business'] h2,
-[data-theme='business'] h3,
-[data-theme='business'] .label,
-[data-theme='business'] .label-fine {
-  font-variation-settings: 'SHRP' 100;
-}
-
-/* --- Зерно ----------------------------------------------------------------
-   Ровный вертикальный градиент между близкими тёплыми тонами на восьмистах
-   пикселях высоты неизбежно идёт ступенями: восьми бит на канал для такого
-   перехода не хватает, и полосы видно на любом приличном экране. Именно это
-   делает поле похожим на заливку из редактора.
-
-   Зерно решает обе задачи разом. Оно размывает границы ступеней — банда
-   исчезает, — и даёт поверхности фактуру снятого материала вместо чистой
-   математики. Для студии фото и видео это ещё и её собственный материал, а не
-   абстрактная текстура.
-
-   Слой лежит поверх всего и ничего не ловит. Плотность подобрана так, чтобы
-   на мелком тексте зерно не читалось: 4,5% на светлом поле хватает.
-   -------------------------------------------------------------------------- */
-
-[data-theme='business']::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   /* Зерно неподвижно, поэтому остаётся: убирать его незачем. */
 }
@@ -1435,68 +1348,77 @@ html[data-scrolled] [data-theme='business'] > header {
   }
 }
 
-/* --- Кнопка шоурила на кадре ----------------------------------------------
-   Обводка на фотографии не работает: кадр в первом экране то светлеет, то
-   темнеет по ходу петли, и любая полупрозрачная кнопка на нём то пропадает,
-   то режет глаз. Плотная плашка читается на любом кадре — так же, как круглая
-   кнопка воспроизведения на постере фильма.
+/* --- Шоурил в первом экране -----------------------------------------------
+   Строка со знаком, а не плашка.
+
+   Плашка ставилась потому, что кадр по ходу петли то светлеет, то темнеет, и
+   обводка на нём то пропадает, то режет глаз. Но она решала задачу, которой в
+   этом месте нет: вуаль первого экрана внизу уже сходит в сплошную бумагу —
+   на десктопе плотно на последних 5rem, на телефоне на всей нижней трети. Под
+   строкой не кадр, а поле страницы, и текст на нём читается сам.
+
+   Плашка при этом стоила дорого: она была третьей тёмной фигурой на экране
+   после двух кнопок и самой тяжёлой из них — при том что обещает меньше всех.
    -------------------------------------------------------------------------- */
-
-/* Кнопка и сноска о стороннем плеере — один объект на одной плашке. Двумя
-   плашками разной ширины они читались как случайно совпавшие элементы. */
-[data-theme='business'] .reel-cta {
-  display: inline-block;
-  background-color: color-mix(in srgb, var(--t-ink) 84%, transparent);
-  backdrop-filter: blur(3px);
-}
-
-[data-theme='business'] .reel-cta button {
-  min-height: 3.5rem;
-  width: 100%;
-  border-color: transparent;
-  background-color: transparent;
-  color: var(--t-ivory);
-}
-
-/* Наезд заливки — тот же приём, что у остальных кнопок. Плашка тёмная всегда,
-   поэтому наезжает светлая бронза, а надпись выворачивается в тёмное. */
-[data-theme='business'] .reel-cta button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-color: var(--t-warm-grey);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--duration-wipe) var(--ease-out-soft);
-}
 
 [data-theme='business'] .reel-cta button {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: 3.5rem;
-  transition: color var(--duration-wipe) var(--ease-out-soft);
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  /* Тон полосы, а не выворотка: под строкой бумага. */
+  color: var(--color-bone);
+  transition: color var(--duration-base) var(--ease-out-soft);
 }
 
+/* Подчёркивание вырастает от левого края — тот же приём, что у пунктов меню.
+   Наезда заливки здесь нет: заливать нечего, плашки больше нет. */
+[data-theme='business'] .reel-cta button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.35rem;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-base) var(--ease-out-soft);
+}
+
+/* Плашка на наведении тоже не возвращается: утилита `hover:bg-ink/40` живёт в
+   общей кнопке шоурила, а здесь фон должен остаться бумагой. */
 [data-theme='business'] .reel-cta button:hover,
 [data-theme='business'] .reel-cta button:focus-visible {
-  color: var(--t-ink);
+  background-color: transparent;
+  color: var(--color-accent);
 }
 
-[data-theme='business'] .reel-cta button:hover::before,
-[data-theme='business'] .reel-cta button:focus-visible::before {
+[data-theme='business'] .reel-cta button:hover::after,
+[data-theme='business'] .reel-cta button:focus-visible::after {
   transform: scaleX(1);
 }
 
-/* Строка о стороннем плеере лежит на том же кадре, что и кнопка, и на телефоне
-   попадает уже на светлую часть вуали. Своя плашка — единственный способ
-   сделать её читаемой независимо от того, что под ней. */
+/* Знак воспроизведения — единственное, что осталось от кнопки: он и делает
+   строку узнаваемой с одного взгляда. */
+[data-theme='business'] .reel-cta button > [aria-hidden] {
+  color: var(--color-accent);
+}
+
+/* Сноска о стороннем плеере уходит в тот же регистр, что и остальные
+   технические подписи разворота: она предупреждение, а не призыв. */
 [data-theme='business'] .reel-cta p {
-  margin: 0;
-  padding: 0 1.5rem 0.9rem;
-  color: var(--t-ivory);
-  opacity: 0.62;
+  margin: 0.55rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  /* Меры не задаём: предупреждение о стороннем плеере обязано быть видно до
+     нажатия, но собственная узкая колонка ломала его на три строки, и под
+     кнопками оно начинало весить больше самого действия. Пусть его держит
+     колонка разворота — на широком экране это одна строка, на телефоне две. */
+  color: var(--color-bone-faint);
 }
 
 /* --- Вуаль подписи на обложке --------------------------------------------
@@ -1550,192 +1472,26 @@ html[data-scrolled] [data-theme='business'] > header {
   }
 }
 
-/* --- Кнопка ---------------------------------------------------------------
-   Не чип, а строка. Надпись прижата к левому краю, стрелка отброшена к правому
-   и стоит в своей ячейке за волосяной линией — так кнопка читается как пункт
-   списка съёмки, а не как элемент интерфейса. Ровно этим отличается кнопка на
-   присланном референсе от той, что ставится по умолчанию: расстоянием между
-   словом и стрелкой.
-
-   Заливка приходит справа, от стрелки, и тянет за собой всю кнопку. Наезд
-   снизу, стоявший тут раньше, — приём общего пользования; движение от стрелки
-   объясняет само себя: нажатие уводит вправо, туда же ведёт и цвет.
+/* --- Пропорция кадра-разрыва ----------------------------------------------
+   Разрыв должен читаться как пауза, а не как ещё одна работа, поэтому он ниже
+   ведущего кадра кейса на каждой ширине: тот показывает, этот даёт вдохнуть.
+   Края резаные — те же, что у полос: размыв здесь отменён вместе с `.bleed-soft`.
    -------------------------------------------------------------------------- */
 
-@layer components {
-  .btn {
-    position: relative;
-    isolation: isolate;
-    display: inline-grid;
-    grid-template-columns: 1fr auto;
-    align-items: stretch;
-    min-height: 3.5rem;
-    min-width: 13.5rem;
-    overflow: hidden;
-  }
+.ratio-break {
+  aspect-ratio: 3 / 2;
+}
 
-  .btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: var(--btn-wipe, var(--color-accent));
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform var(--duration-wipe) var(--ease-out-soft);
-  }
-
-  .btn:hover::before,
-  .btn:focus-visible::before {
-    transform: scaleX(1);
-  }
-
-  .btn-label {
-    display: flex;
-    align-items: center;
-    padding-inline: 1.5rem;
-  }
-
-  /* Линия рисуется цветом самой надписи: одна кнопка на светлом поле, другая
-     на тёмном, и обе должны делиться одинаково. */
-  .btn-arrow {
-    display: flex;
-    align-items: center;
-    padding-inline: 1.25rem;
-    border-left: 1px solid color-mix(in srgb, currentColor 26%, transparent);
-    transition: transform var(--duration-base) var(--ease-out-soft);
-  }
-
-  .btn:hover .btn-arrow,
-  .btn:focus-visible .btn-arrow {
-    transform: translateX(3px);
-  }
-
-  /* Кнопка без стрелки — там, где переход открывает окно, а не ведёт дальше
-     по странице. Геометрия та же, ячейки для стрелки просто нет. */
-  .btn-solo {
-    grid-template-columns: 1fr;
-    place-items: center start;
-    padding-inline: 1.5rem;
+@media (min-width: 48rem) {
+  .ratio-break {
+    aspect-ratio: 21 / 9;
   }
 }
 
-/* --- Раскрытие первого экрана --------------------------------------------
-   Строка выезжает из-под обреза, а не проявляется прозрачностью. Причина не
-   эстетическая: полсекунды на половине непрозрачности текст стоит с контрастом
-   ниже нормы, и на первом экране это цена, которую платить не за что. Под
-   обрезом текст либо не виден вовсе, либо виден полностью.
-
-   Обрез с запасом (`overflow: clip` + отступ), чтобы кольцо фокуса на ссылке
-   внутри не срезалось краем маски.
-   -------------------------------------------------------------------------- */
-
-@layer components {
-  .rise {
-    overflow: clip;
-    overflow-clip-margin: 6px;
+@media (min-width: 64rem) {
+  .ratio-break {
+    aspect-ratio: 32 / 9;
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .rise > * {
-      animation: rise var(--duration-rise) var(--ease-out-soft) both;
-      animation-delay: var(--rise-delay, 0ms);
-    }
-  }
-}
-
-@keyframes rise {
-  from {
-    transform: translateY(105%);
-  }
-  to {
-    transform: none;
-  }
-}
-
-/* --- Подчёркивание в меню -------------------------------------------------
-   Выезжает слева, как строка текста. Смена цвета у пункта меню осталась —
-   линия её усиливает, а не заменяет: цвет читается и без движения.
-   -------------------------------------------------------------------------- */
-
-[data-theme='business'] > header nav a {
-  position: relative;
-}
-
-[data-theme='business'] > header nav a::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  bottom: -0.45rem;
-  height: 1px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--duration-wipe) var(--ease-out-soft);
-}
-
-[data-theme='business'] > header nav a:hover::after,
-[data-theme='business'] > header nav a:focus-visible::after {
-  transform: scaleX(1);
-}
-
-/* --- Кадр, впечатанный в страницу ----------------------------------------
-   Фотография во всю ширину с ножевыми краями сверху и снизу — самый заметный
-   «обрубок» на полосе: она читается как вставленный прямоугольник, а не как
-   часть разворота. В печати такой кадр сходит в бумагу, и здесь он делает то
-   же самое: по пять сантиметров тона страницы сверху и снизу, дальше кадр во
-   всю силу. Вуаль лежит поверх изображения и не трогает его самого.
-   -------------------------------------------------------------------------- */
-
-/* --- Два голоса одной гарнитуры -------------------------------------------
-   Заголовки набраны на максимальной резкости контуров, текст — на нулевой.
-   Разница между дисплейным и текстовым голосом здесь не в кегле и не в другой
-   гарнитуре, а в том, насколько остры углы букв: у заголовка они рубленые, у
-   абзаца скруглены до нормы. Для студии, которая продаёт резкость кадра, это
-   единственный параметр шрифта, который стоит трогать.
-   -------------------------------------------------------------------------- */
-
-[data-theme='business'] {
-  font-variation-settings: 'SHRP' 0;
-}
-
-[data-theme='business'] h1,
-[data-theme='business'] h2,
-[data-theme='business'] h3,
-[data-theme='business'] .label,
-[data-theme='business'] .label-fine {
-  font-variation-settings: 'SHRP' 100;
-}
-
-/* --- Зерно ----------------------------------------------------------------
-   Ровный вертикальный градиент между близкими тёплыми тонами на восьмистах
-   пикселях высоты неизбежно идёт ступенями: восьми бит на канал для такого
-   перехода не хватает, и полосы видно на любом приличном экране. Именно это
-   делает поле похожим на заливку из редактора.
-
-   Зерно решает обе задачи разом. Оно размывает границы ступеней — банда
-   исчезает, — и даёт поверхности фактуру снятого материала вместо чистой
-   математики. Для студии фото и видео это ещё и её собственный материал, а не
-   абстрактная текстура.
-
-   Слой лежит поверх всего и ничего не ловит. Плотность подобрана так, чтобы
-   на мелком тексте зерно не читалось: 4,5% на светлом поле хватает.
-   -------------------------------------------------------------------------- */
-
-[data-theme='business']::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* Зерно неподвижно, поэтому остаётся: убирать его незачем. */
 }
 
 /* --- Меню: читаемость вместо мелкого капса --------------------------------

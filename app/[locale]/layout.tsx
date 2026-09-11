@@ -92,8 +92,20 @@ export default async function LocaleLayout({
   const dict = getDictionary(locale);
   const showDemoBanner = await hasDemoContent();
 
+  /*
+   * `suppressHydrationWarning` — про класс `reveal-ready`. Скрипт в начале тела
+   * ставит его на `<html>` до того, как React дойдёт до гидратации: иначе блоки
+   * успевают мигнуть. React сверяет свой `className` с тем, что уже в DOM,
+   * видит лишний класс и печатает несовпадение на каждой загрузке. Гасится
+   * ровно этот элемент и только его собственные атрибуты — содержимое страницы
+   * проверяется как обычно.
+   */
   return (
-    <html lang={locale} className={`${inter.variable} ${mono.variable} ${display.variable} ${grotesk.variable}`}>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${inter.variable} ${mono.variable} ${display.variable} ${grotesk.variable}`}
+    >
       <body>
         {/*
           Первым в теле, до всей разметки: скрипт прячет блоки до прокрутки, и
