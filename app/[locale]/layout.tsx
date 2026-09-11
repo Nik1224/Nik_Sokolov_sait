@@ -4,7 +4,7 @@
  */
 
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Geologica, JetBrains_Mono } from 'next/font/google';
 import { getGlobalSettings, hasDemoContent } from '@/content/queries';
 import { DemoBanner, SkipLink } from '@/components/global/misc';
 import { PaintTransition } from '@/components/global/PaintTransition';
@@ -13,9 +13,23 @@ import { localizedString } from '@/lib/i18n/localize';
 import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
 import '@/styles/globals.css';
 
-const inter = Inter({
+/*
+ * Geologica — гротеск с родной кириллицей и осью резкости контуров (SHRP).
+ *
+ * Ось здесь не украшение: заголовок ветки BUSINESS набран на максимальной
+ * резкости, текст — на нулевой. Одна семья говорит двумя голосами, и разница
+ * между ними не в кегле, а в том, насколько остры углы букв. Для студии,
+ * которая продаёт резкость кадра, это единственный параметр шрифта, который
+ * вообще стоит трогать.
+ *
+ * Inter, стоявший здесь раньше, — интерфейсный гротеск: в крупном кириллическом
+ * капсе у него нет напряжения, «И», «Д» и «Б» выходят пустыми. Плюс это самый
+ * узнаваемый шрифт всех продуктовых сайтов подряд.
+ */
+const display = Geologica({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-inter',
+  axes: ['SHRP'],
+  variable: '--font-display',
   display: 'swap',
 });
 
@@ -62,7 +76,7 @@ export default async function LocaleLayout({
   const showDemoBanner = await hasDemoContent();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${mono.variable}`}>
+    <html lang={locale} className={`${display.variable} ${mono.variable}`}>
       <body>
         <SkipLink label={dict.common.skipToContent} />
         {showDemoBanner ? <DemoBanner dict={dict} /> : null}

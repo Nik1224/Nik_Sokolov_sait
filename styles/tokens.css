@@ -22,7 +22,7 @@
   --color-line-strong: rgba(242, 240, 236, 0.28);
 
   /* --- Типографика ------------------------------------------------------ */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, "SF Mono", monospace;
 
   --text-display: clamp(2.75rem, 7vw, 6.5rem);
@@ -62,4 +62,13 @@
   --duration-fast: 160ms;
   --duration-base: 320ms;
   --duration-slow: 620ms;
+  /* Появление блока при прокрутке идёт заметно медленнее любого отклика на
+     действие: это не реакция интерфейса, а проявление кадра. */
+  --duration-reveal: 900ms;
+  /* Наезд заливки по кнопке. Медленнее отклика на нажатие и заметно быстрее
+     появления блока: это реакция на курсор, а не событие. */
+  --duration-wipe: 520ms;
+  /* Раскрытие первого экрана. Одно движение на всю страницу — и оно должно
+     успеть договорить прежде, чем человек начнёт листать. */
+  --duration-rise: 1000ms;
 }

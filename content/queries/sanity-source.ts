@@ -62,7 +62,7 @@ const GLOBAL_SETTINGS = groq`*[_type == "globalSettings"][0]{
 }`;
 
 const DIRECTIONS = groq`*[_type == "direction"]{
-  _id, key, title, lead, gatewayDescription, highlights, navOrder, order, isDemo, pricingGroups,
+  _id, key, title, lead, gatewayDescription, highlights, clients, navOrder, order, isDemo, pricingGroups,
   hero ${MEDIA}, gatewayMedia ${MEDIA}, seo ${SEO}
 }`;
 

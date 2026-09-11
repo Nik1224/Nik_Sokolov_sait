@@ -6,10 +6,22 @@
    от специфичности, и тогда `h-full` на картинке перестаёт работать.
    ------------------------------------------------------------------------- */
 
-/* --- Тема направления PRIVATE --------------------------------------------
-   Частному клиенту нужна другая интонация: мягкая бумага вместо кинематогра-
-   фичной черноты и красный акцент вместо песочного (ТЗ §5.2 — эмоциональная
-   подача). BUSINESS и PRODUCTION остаются на базовой палитре.
+/* --- Темы направлений -----------------------------------------------------
+   Базовая палитра — кинематографичная чернота — остаётся у PRODUCTION: там
+   работа идёт в монтажной, и тёмный интерфейс не спорит с материалом.
+
+   PRIVATE и BUSINESS звучат иначе, каждый по-своему.
+
+   PRIVATE — мягкая бумага и красный акцент: частный клиент выбирает не
+   подрядчика, а человека, и интонация здесь важнее строгости (ТЗ §5.2).
+
+   BUSINESS — тёплый песочный свет и бронзовый акцент. Причина не в моде:
+   компания приходит смотреть работы, а на чёрном фоне их приходится приглушать
+   вуалями, иначе текст поверх не читается. На светлой подложке кадр стоит в
+   полную силу и остаётся единственным источником цвета на странице —
+   интерфейс уходит в фон, что для портфолио и есть правильный порядок.
+   Хроматики в самой палитре поэтому почти нет: бронза нужна ровно там, где
+   надо показать цифру или отметить выбранное.
 
    Переопределяются только токены. Компоненты не меняются вовсе — ради этого
    цвета и вынесены в переменные.
@@ -18,6 +30,7 @@
 @layer base {
   :root {
     --private-ground: #f6f1e9;
+    --business-ground: #d5cec3;
   }
 
   [data-theme='private'] {
@@ -40,11 +53,89 @@
     color-scheme: light;
   }
 
+  /* --- BUSINESS: тональная лестница ---------------------------------------
+     Восемь ступеней от почти чёрного до молочного, все тёплые. Страница не
+     делится на полосы разного цвета — она едет по этой лестнице сверху вниз
+     одним непрерывным полем, и каждый блок принимает поле там, где его оставил
+     предыдущий. Стыков в этой системе нет по построению, а не потому, что их
+     замазали.
+
+     Про середину. `stone-dark` (#777168) стоит ровно посередине шкалы, и на нём
+     не читается ничего: тёмный текст даёт 3.78, светлый — те же 3.78. Это тон
+     перехода, а не поверхность: содержимое на нём не стоит никогда, поле лишь
+     проходит его насквозь по пути из светлого в тёмное.
+
+     Отсюда два набора текста. На светлом поле (ivory…stone) текст `ink`,
+     вторичный `graphite`, третичный `warm-graphite` — худшая пара 4.68:1 на
+     самой тёмной ступени. На тёмном (warm-graphite…ink) — `ivory`, `warm-grey`,
+     `stone`, худшая пара те же 4.68:1.
+     ----------------------------------------------------------------------- */
+  [data-theme='business'] {
+    --t-ink: #191918;
+    --t-graphite: #292927;
+    --t-warm-graphite: #3a3834;
+    --t-stone-dark: #777168;
+    --t-stone: #aaa399;
+    --t-warm-grey: #c0b8ac;
+    --t-paper: #d5cec3;
+    --t-ivory: #e8e3db;
+
+    /* Значения по умолчанию — на случай элемента вне какой-либо полосы. */
+    --color-ink: var(--t-paper);
+    --color-ink-raised: var(--t-ivory);
+    --color-ink-sunken: var(--t-warm-grey);
+    --color-bone: var(--t-ink);
+    --color-bone-dim: var(--t-graphite);
+    --color-bone-faint: var(--t-warm-graphite);
+    --color-accent: var(--t-warm-graphite);
+    --color-accent-dim: var(--t-ink);
+    --color-danger: #8f2a1d;
+    --color-line: rgba(25, 25, 24, 0.18);
+    --color-line-strong: rgba(25, 25, 24, 0.34);
+
+    /* Типографика ветки. Заголовок — главный графический элемент страницы,
+       поэтому он крупнее базового и стоит плотнее: интерлиньяж ниже единицы,
+       трекинг отрицательный. Мелкая техническая подпись рядом с ним даёт тот
+       самый контраст масштабов, на котором держится журнальная полоса.
+
+       Кегль подобран по реальной колонке: в русском капсе самое длинное слово
+       — «КОМПАНИЙ» — должно умещаться в строку на всех ширинах от 390 до
+       1920 px. */
+    --text-display: clamp(2.75rem, 5.6vw, 6.5rem);
+    --text-display--line-height: 0.88;
+    --text-display--letter-spacing: -0.045em;
+
+    --text-h1: clamp(2.5rem, 5.6vw, 5rem);
+    --text-h1--line-height: 0.92;
+    --text-h1--letter-spacing: -0.04em;
+
+    --text-h2: clamp(1.875rem, 3.8vw, 3.5rem);
+    --text-h2--line-height: 0.96;
+    --text-h2--letter-spacing: -0.035em;
+
+    --text-h3: clamp(1.125rem, 1.6vw, 1.5rem);
+    --text-h3--line-height: 1.14;
+    --text-h3--letter-spacing: -0.02em;
+
+    /* Вертикальный ритм крупнее базового и с запасом на разброс: воздух здесь
+       такая же часть композиции, как кегль. */
+    --spacing-section: clamp(4.5rem, 9vw, 11rem);
+
+    background-color: var(--t-paper);
+    color: var(--t-ink);
+    color-scheme: light;
+  }
+
   /* Подложка страницы и «резинка» прокрутки тоже должны быть светлыми,
      иначе по краям проглядывает тёмный фон. */
   html:has([data-theme='private']),
   body:has([data-theme='private']) {
     background-color: var(--private-ground);
+  }
+
+  html:has([data-theme='business']),
+  body:has([data-theme='business']) {
+    background-color: var(--business-ground);
   }
 }
 
@@ -76,6 +167,605 @@
     max-width: 100%;
     height: auto;
   }
+}
+
+/* --- Полоса поля ----------------------------------------------------------
+   Полоса не красится в свой цвет — она принимает поле там, где его оставила
+   предыдущая, ведёт через свой тон и передаёт следующей. Границы задаются
+   снаружи, из состава страницы: каждая полоса знает, чем закончилась соседняя
+   сверху и чем начнётся соседняя снизу. Поэтому шва между ними нет вовсе — не
+   «почти нет», а нет: в точке стыка обе полосы имеют один и тот же цвет.
+
+   Переход происходит в отступах, а не под текстом: до 28% и после 72% высоты.
+   Содержимое всегда стоит на ровном тоне, и контраст под ним не плавает.
+
+   `band-edge` — для тёмной главы внутри светлого поля. Там переход должен быть
+   коротким: длинный ramp из бумаги в почти чёрное читался бы как размытие, а
+   не как смена главы.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  /*
+   * Два слоя. Снизу — вертикальный переход поля, он и держит стык с соседями,
+   * поэтому наклонять его нельзя: на широком экране наклон в четыре градуса
+   * уводит цвет по краям на сотню пикселей, и точный стык рассыпается.
+   *
+   * Сверху — свет. Одно мягкое пятно, падающее наискось сверху слева, как
+   * прибор, поставленный на бумагу. Амплитуда крошечная, в пределах одной
+   * ступени лестницы: задача не осветить, а снять с поверхности ощущение
+   * математически ровной заливки. Именно этого не хватало полю, а не цвета.
+   */
+  .band {
+    background-image:
+      radial-gradient(
+        130% 90% at 18% 0%,
+        var(--band-lift) 0%,
+        color-mix(in srgb, var(--band-lift) 40%, transparent) 34%,
+        transparent 68%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--band-from) 0%,
+        var(--band-core) 28%,
+        var(--band-core) 72%,
+        var(--band-to) 100%
+      );
+  }
+
+  .band-edge {
+    background-image:
+      radial-gradient(
+        130% 90% at 18% 0%,
+        var(--band-lift) 0%,
+        color-mix(in srgb, var(--band-lift) 40%, transparent) 34%,
+        transparent 68%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--band-from) 0,
+        var(--band-core) 3.5rem,
+        var(--band-core) calc(100% - 3.5rem),
+        var(--band-to) 100%
+      );
+  }
+
+  /* Светлое поле: текст тёмный. */
+  .band-light {
+    /* Свет на светлом поле — ступень вверх по лестнице, не белый. */
+    --band-lift: color-mix(in srgb, var(--t-ivory) 48%, transparent);
+    --color-ink: var(--band-core);
+    --color-ink-raised: var(--t-ivory);
+    --color-ink-sunken: var(--t-stone);
+    --color-bone: var(--t-ink);
+    --color-bone-dim: var(--t-graphite);
+    --color-bone-faint: var(--t-warm-graphite);
+    --color-accent: var(--t-warm-graphite);
+    --color-accent-dim: var(--t-ink);
+    --color-line: rgba(25, 25, 24, 0.18);
+    --color-line-strong: rgba(25, 25, 24, 0.34);
+    color: var(--t-ink);
+  }
+
+  /* Тёмное поле: текст выворачивается. Роли те же, компоненты внутри о
+     перевороте не знают. `.on-image` — подпись, лежащая на кадре: подложки у
+     неё нет, её заменяет вуаль по самому изображению. */
+  .band-dark,
+  [data-theme='business'] .on-image,
+  [data-theme='business'] > footer {
+    /* На тёмном поле свет заметнее, поэтому ступень берётся ближе. */
+    --band-lift: color-mix(in srgb, var(--t-warm-graphite) 62%, transparent);
+    --color-ink: var(--band-core, var(--t-graphite));
+    --color-ink-raised: var(--t-warm-graphite);
+    --color-ink-sunken: var(--t-ink);
+    --color-bone: var(--t-ivory);
+    --color-bone-dim: var(--t-warm-grey);
+    --color-bone-faint: var(--t-stone);
+    --color-accent: var(--t-warm-grey);
+    --color-accent-dim: var(--t-ivory);
+    --color-line: rgba(232, 227, 219, 0.18);
+    --color-line-strong: rgba(232, 227, 219, 0.34);
+    color: var(--t-ivory);
+  }
+}
+
+/* --- Появление при прокрутке ---------------------------------------------
+   Скрывает только то, что скрывать безопасно: состояние «спрятано» висит на
+   `html[data-reveal-ready]`, а этот признак ставит скрипт. Не выполнился
+   скрипт — страница просто показана целиком, без единого невидимого блока.
+
+   Элементы, попавшие в первый экран, помечаются показанными до того, как
+   признак выставлен: иначе содержимое мигнуло бы, спрятавшись на кадр.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  [data-reveal],
+  [data-reveal-media] img {
+    transition:
+      opacity var(--duration-reveal) var(--ease-out-soft),
+      transform var(--duration-reveal) var(--ease-out-soft);
+  }
+
+  /*
+   * Текст выезжает, но не растворяется.
+   *
+   * Прозрачность на тексте выглядит мягче, но полсекунды он проводит на
+   * половине непрозрачности — и всё это время его контраст ниже нормы. Для
+   * украшения это слишком высокая цена: читаемость не должна зависеть от того,
+   * в какой момент анимации человек посмотрел на экран. Растворение осталось
+   * там, где оно ничего не стоит, — на кадрах.
+   */
+  html[data-reveal-ready] [data-reveal]:not([data-revealed]) {
+    transform: translateY(1.75rem);
+  }
+
+  /* Кадр выходит изнутри рамки, а не вместе с ней: рамка стоит на месте,
+     двигается только изображение под `overflow: hidden`. */
+  html[data-reveal-ready] [data-reveal-media]:not([data-revealed]) img {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-reveal-ready] [data-reveal]:not([data-revealed]),
+  html[data-reveal-ready] [data-reveal-media]:not([data-revealed]) img {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Шапка и подвал ветки BUSINESS ---------------------------------------
+   Правила намеренно стоят ВНЕ слоёв: шапка и подвал общие для всех веток, их
+   фон задан утилитами Tailwind, а утилиты бьют любой слой независимо от
+   специфичности. Переписывать общие компоненты ради одной ветки — значит
+   завести в них флаг направления и риск сломать соседние; правило, начатое с
+   `[data-theme='business']`, не может подействовать нигде, кроме этой ветки.
+
+   Шапка на первом экране — чистая линия без подложки: она стоит в потоке над
+   разворотом, на той же бумаге, и рамка под ней разрезала бы полосу пополам.
+   Подложка и линия появляются, когда страница поехала и шапка начала
+   накрывать содержимое.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] > header {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  transition:
+    background-color var(--duration-base) var(--ease-out-soft),
+    border-color var(--duration-base) var(--ease-out-soft);
+}
+
+html[data-scrolled] [data-theme='business'] > header {
+  background-color: color-mix(in srgb, var(--t-paper) 94%, transparent);
+  border-bottom-color: var(--color-line);
+  backdrop-filter: blur(6px);
+}
+
+/* Подвал — тёмная ступень лестницы: страница заканчивается графитом, как и
+   начиналась светлым камнем. Роли токенов переворачивает правило поверхностей
+   в слое компонентов, здесь остаётся только фон и воздух. */
+/* Подвал — конец страницы. Поле спускается в него из `stone-dark`, на котором
+   блок «Связаться» заканчивается, и дальше держит графит ровно. */
+[data-theme='business'] > footer {
+  margin-top: 0;
+  border-top-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    var(--t-stone) 0,
+    var(--t-stone-dark) 2rem,
+    var(--t-graphite) 6rem,
+    var(--t-graphite) 100%
+  );
+}
+
+[data-theme='business'] > footer > div {
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+
+/* --- Вуаль первого экрана ветки BUSINESS ---------------------------------
+   Кадр идёт во всю ширину, а типографика лежит НА нём. Шва между «полем для
+   текста» и «полем для фотографии» быть не должно: он сразу превращает
+   разворот в две колонки, поставленные рядом.
+
+   Поэтому вуаль — не заливка половины, а растворение. Со стороны заголовка она
+   цветом страницы и почти непрозрачна, к середине сходит на нет, у правого
+   края её нет вовсе. Граница кадра при этом не читается нигде.
+
+   Вторым слоем — короткая вуаль сверху: шапка лежит поверх кадра, и её пункты
+   обязаны читаться на любом кадре, а не только на удачном.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] .hero-scrim {
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--t-paper) 72%, transparent) 0%,
+      color-mix(in srgb, var(--t-paper) 20%, transparent) 14%,
+      transparent 26%
+    ),
+    linear-gradient(
+      to top,
+      var(--t-paper) 0%,
+      color-mix(in srgb, var(--t-paper) 92%, transparent) 38%,
+      color-mix(in srgb, var(--t-paper) 40%, transparent) 66%,
+      transparent 92%
+    );
+}
+
+/* На широком экране заголовок стоит слева, и растворение идёт по горизонтали:
+   плотно у левого края, ничего у правого. */
+@media (min-width: 64rem) {
+  [data-theme='business'] .hero-scrim {
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--t-paper) 55%, transparent) 0%,
+        transparent 16%
+      ),
+      linear-gradient(
+        to top,
+        var(--t-paper) 0%,
+        color-mix(in srgb, var(--t-paper) 45%, transparent) 5rem,
+        transparent 11rem
+      ),
+      linear-gradient(
+        to right,
+        var(--t-paper) 0%,
+        var(--t-paper) 24%,
+        color-mix(in srgb, var(--t-paper) 94%, transparent) 38%,
+        color-mix(in srgb, var(--t-paper) 52%, transparent) 56%,
+        color-mix(in srgb, var(--t-paper) 12%, transparent) 74%,
+        transparent 86%
+      );
+  }
+}
+
+/* --- Кнопка шоурила на кадре ----------------------------------------------
+   Обводка на фотографии не работает: кадр в первом экране то светлеет, то
+   темнеет по ходу петли, и любая полупрозрачная кнопка на нём то пропадает,
+   то режет глаз. Плотная плашка читается на любом кадре — так же, как круглая
+   кнопка воспроизведения на постере фильма.
+   -------------------------------------------------------------------------- */
+
+/* Кнопка и сноска о стороннем плеере — один объект на одной плашке. Двумя
+   плашками разной ширины они читались как случайно совпавшие элементы. */
+[data-theme='business'] .reel-cta {
+  display: inline-block;
+  background-color: color-mix(in srgb, var(--t-ink) 84%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+[data-theme='business'] .reel-cta button {
+  min-height: 3.5rem;
+  width: 100%;
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--t-ivory);
+}
+
+/* Наезд заливки — тот же приём, что у остальных кнопок. Плашка тёмная всегда,
+   поэтому наезжает светлая бронза, а надпись выворачивается в тёмное. */
+[data-theme='business'] .reel-cta button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--t-warm-grey);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--duration-wipe) var(--ease-out-soft);
+}
+
+[data-theme='business'] .reel-cta button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 3.5rem;
+  transition: color var(--duration-wipe) var(--ease-out-soft);
+}
+
+[data-theme='business'] .reel-cta button:hover,
+[data-theme='business'] .reel-cta button:focus-visible {
+  color: var(--t-ink);
+}
+
+[data-theme='business'] .reel-cta button:hover::before,
+[data-theme='business'] .reel-cta button:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Строка о стороннем плеере лежит на том же кадре, что и кнопка, и на телефоне
+   попадает уже на светлую часть вуали. Своя плашка — единственный способ
+   сделать её читаемой независимо от того, что под ней. */
+[data-theme='business'] .reel-cta p {
+  margin: 0;
+  padding: 0 1.5rem 0.9rem;
+  color: var(--t-ivory);
+  opacity: 0.62;
+}
+
+/* --- Вуаль подписи на обложке --------------------------------------------
+   Подпись лежит на кадре, и без вуали её читаемость зависит от того, что
+   попало в нижнюю треть снимка. Вуаль плотная у самого низа и полностью
+   сходит к середине: кадр остаётся кадром.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] .cover-scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--t-ink) 94%, transparent) 0%,
+    color-mix(in srgb, var(--t-ink) 72%, transparent) 34%,
+    color-mix(in srgb, var(--t-ink) 20%, transparent) 62%,
+    transparent 84%
+  );
+}
+
+/* Лента обложек. Полоса прокрутки здесь — служебный элемент чужой темы, а не
+   часть вёрстки: уводим её, оставляя саму прокрутку. */
+.rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Пропорция крупного кадра кейса ---------------------------------------
+   Кино-формат 21:9 хорош на широком экране и бесполезен на телефоне: полоса в
+   170 px высотой не показывает ничего. Раньше это лечилось `min-height`, но
+   `aspect-ratio` вместе с минимальной высотой заставляет браузер добирать
+   ШИРИНУ до пропорции — блок выходил за экран, и страница ехала вбок.
+   Пропорция должна меняться целиком, а не подпираться высотой.
+   -------------------------------------------------------------------------- */
+
+.ratio-case-lead {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 48rem) {
+  .ratio-case-lead {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (min-width: 64rem) {
+  .ratio-case-lead {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+/* --- Кнопка ---------------------------------------------------------------
+   Не чип, а строка. Надпись прижата к левому краю, стрелка отброшена к правому
+   и стоит в своей ячейке за волосяной линией — так кнопка читается как пункт
+   списка съёмки, а не как элемент интерфейса. Ровно этим отличается кнопка на
+   присланном референсе от той, что ставится по умолчанию: расстоянием между
+   словом и стрелкой.
+
+   Заливка приходит справа, от стрелки, и тянет за собой всю кнопку. Наезд
+   снизу, стоявший тут раньше, — приём общего пользования; движение от стрелки
+   объясняет само себя: нажатие уводит вправо, туда же ведёт и цвет.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .btn {
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    grid-template-columns: 1fr auto;
+    align-items: stretch;
+    min-height: 3.5rem;
+    min-width: 13.5rem;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--btn-wipe, var(--color-accent));
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-wipe) var(--ease-out-soft);
+  }
+
+  .btn:hover::before,
+  .btn:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  .btn-label {
+    display: flex;
+    align-items: center;
+    padding-inline: 1.5rem;
+  }
+
+  /* Линия рисуется цветом самой надписи: одна кнопка на светлом поле, другая
+     на тёмном, и обе должны делиться одинаково. */
+  .btn-arrow {
+    display: flex;
+    align-items: center;
+    padding-inline: 1.25rem;
+    border-left: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+    transition: transform var(--duration-base) var(--ease-out-soft);
+  }
+
+  .btn:hover .btn-arrow,
+  .btn:focus-visible .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Кнопка без стрелки — там, где переход открывает окно, а не ведёт дальше
+     по странице. Геометрия та же, ячейки для стрелки просто нет. */
+  .btn-solo {
+    grid-template-columns: 1fr;
+    place-items: center start;
+    padding-inline: 1.5rem;
+  }
+}
+
+/* --- Раскрытие первого экрана --------------------------------------------
+   Строка выезжает из-под обреза, а не проявляется прозрачностью. Причина не
+   эстетическая: полсекунды на половине непрозрачности текст стоит с контрастом
+   ниже нормы, и на первом экране это цена, которую платить не за что. Под
+   обрезом текст либо не виден вовсе, либо виден полностью.
+
+   Обрез с запасом (`overflow: clip` + отступ), чтобы кольцо фокуса на ссылке
+   внутри не срезалось краем маски.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .rise {
+    overflow: clip;
+    overflow-clip-margin: 6px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rise > * {
+      animation: rise var(--duration-rise) var(--ease-out-soft) both;
+      animation-delay: var(--rise-delay, 0ms);
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* --- Подчёркивание в меню -------------------------------------------------
+   Выезжает слева, как строка текста. Смена цвета у пункта меню осталась —
+   линия её усиливает, а не заменяет: цвет читается и без движения.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] > header nav a {
+  position: relative;
+}
+
+[data-theme='business'] > header nav a::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -0.45rem;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-wipe) var(--ease-out-soft);
+}
+
+[data-theme='business'] > header nav a:hover::after,
+[data-theme='business'] > header nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* --- Кадр, впечатанный в страницу ----------------------------------------
+   Фотография во всю ширину с ножевыми краями сверху и снизу — самый заметный
+   «обрубок» на полосе: она читается как вставленный прямоугольник, а не как
+   часть разворота. В печати такой кадр сходит в бумагу, и здесь он делает то
+   же самое: по пять сантиметров тона страницы сверху и снизу, дальше кадр во
+   всю силу. Вуаль лежит поверх изображения и не трогает его самого.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] .bleed-soft::before,
+[data-theme='business'] .bleed-soft::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  z-index: 1;
+  height: clamp(3rem, 7vw, 6rem);
+  pointer-events: none;
+}
+
+[data-theme='business'] .bleed-soft::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--t-paper) 0%,
+    color-mix(in srgb, var(--t-paper) 40%, transparent) 55%,
+    transparent 100%
+  );
+}
+
+[data-theme='business'] .bleed-soft::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--t-paper) 0%,
+    color-mix(in srgb, var(--t-paper) 40%, transparent) 55%,
+    transparent 100%
+  );
+}
+
+/* --- Два голоса одной гарнитуры -------------------------------------------
+   Заголовки набраны на максимальной резкости контуров, текст — на нулевой.
+   Разница между дисплейным и текстовым голосом здесь не в кегле и не в другой
+   гарнитуре, а в том, насколько остры углы букв: у заголовка они рубленые, у
+   абзаца скруглены до нормы. Для студии, которая продаёт резкость кадра, это
+   единственный параметр шрифта, который стоит трогать.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] {
+  font-variation-settings: 'SHRP' 0;
+}
+
+[data-theme='business'] h1,
+[data-theme='business'] h2,
+[data-theme='business'] h3,
+[data-theme='business'] .label,
+[data-theme='business'] .label-fine {
+  font-variation-settings: 'SHRP' 100;
+}
+
+/* --- Зерно ----------------------------------------------------------------
+   Ровный вертикальный градиент между близкими тёплыми тонами на восьмистах
+   пикселях высоты неизбежно идёт ступенями: восьми бит на канал для такого
+   перехода не хватает, и полосы видно на любом приличном экране. Именно это
+   делает поле похожим на заливку из редактора.
+
+   Зерно решает обе задачи разом. Оно размывает границы ступеней — банда
+   исчезает, — и даёт поверхности фактуру снятого материала вместо чистой
+   математики. Для студии фото и видео это ещё и её собственный материал, а не
+   абстрактная текстура.
+
+   Слой лежит поверх всего и ничего не ловит. Плотность подобрана так, чтобы
+   на мелком тексте зерно не читалось: 4,5% на светлом поле хватает.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Зерно неподвижно, поэтому остаётся: убирать его незачем. */
+}
+
+/* --- Меню: читаемость вместо мелкого капса --------------------------------
+   Двенадцать пикселей моноширинного капса с трекингом 0.14em выглядят
+   аккуратно и сканируются плохо: глаз читает такую строку по буквам. Пункт
+   меню — то, чем пользуются, а не то, на что смотрят, поэтому здесь кегль
+   больше, трекинг меньше, а зона нажатия выше нормы для пальца.
+   -------------------------------------------------------------------------- */
+
+[data-theme='business'] > header nav a,
+[data-theme='business'] > header nav button {
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  padding-block: 0.75rem;
 }
 
 /* --- Фокус (§11: видимый keyboard focus) --------------------------------- */
@@ -119,6 +809,43 @@
   max-width: var(--container-content);
   margin-inline: auto;
   padding-inline: var(--spacing-gutter);
+}
+
+/**
+ * Мелкая техническая подпись: номер полосы, формат, год.
+ *
+ * Не уменьшенный `label`, а отдельный регистр. На журнальной полосе такие
+ * строки работают в паре с очень крупным заголовком: контраст масштабов и
+ * есть то, что отличает свёрстанный разворот от последовательности блоков.
+ */
+@utility label-fine {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/**
+ * Двенадцать колонок. Асимметрия набирается спанами на самих элементах:
+ * текст на четырёх, кадр на восьми, в следующем блоке наоборот.
+ */
+@utility editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2.25rem);
+}
+
+/**
+ * Широкая полоса: содержимое подходит заметно ближе к краям экрана, чем
+ * основной контейнер. Нужна там, где кадр должен читаться как самостоятельная
+ * поверхность, а не как картинка внутри колонки.
+ */
+@utility container-wide {
+  width: 100%;
+  max-width: 108rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.5vw, 4.5rem);
 }
 
 @utility container-prose {

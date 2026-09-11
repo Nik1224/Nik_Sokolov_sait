@@ -46,6 +46,12 @@ type Props = {
    */
   promo?: { label: string; title: string; body: string; action: string; href: string };
   /**
+   * Куда вести из пустого раздела. У BUSINESS портфолио наполняется позже
+   * кейсов, и «здесь пока пусто» без продолжения врёт: работа по этой
+   * категории есть, просто разобрана текстом в соседнем разделе.
+   */
+  emptyAction?: { label: string; href: string };
+  /**
    * «Смотреть все» имеет смысл, только когда наполнена не одна категория.
    * Иначе это второе имя для той же самой подборки.
    */
@@ -66,6 +72,7 @@ export function ProjectListing({
   categoryAlbums = [],
   backstage = [],
   promo,
+  emptyAction,
   showAll = true,
 }: Props) {
   const listingHref = href({ locale, direction, section });
@@ -102,15 +109,27 @@ export function ProjectListing({
       ) : null}
 
       {categories.length > 0 ? (
-        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-4">
-          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
+        /*
+         * Фильтры — кнопки, а не строка мелкого капса.
+         *
+         * Раньше восемь подписей стояли в одну линию одним кеглем, и выбранная
+         * отличалась только цветом: на телефоне в неё было трудно попасть
+         * пальцем, а глазами — найти. Рамка даёт и то, и другое: цель размером
+         * с палец и видимую границу между пунктами. Выбранный залит светлым —
+         * тем же способом, каким на странице стоимости помечен выбранный
+         * формат съёмки, чтобы «выбрано» на сайте выглядело одинаково.
+         */
+        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-5">
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {showAll ? (
               <li>
                 <Link
                   href={listingHref}
                   aria-current={!activeCategory ? 'true' : undefined}
-                  className={`label transition-colors ${
-                    !activeCategory ? 'text-accent' : 'text-bone-faint hover:text-bone'
+                  className={`label inline-block border px-4 py-2.5 transition-colors ${
+                    !activeCategory
+                      ? 'border-bone bg-bone text-ink'
+                      : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
                   }`}
                 >
                   {dict.common.viewAll}
@@ -125,8 +144,10 @@ export function ProjectListing({
                     // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
                     href={`${listingHref}?category=${category.slug}`}
                     aria-current={isActive ? 'true' : undefined}
-                    className={`label transition-colors ${
-                      isActive ? 'text-accent' : 'text-bone-faint hover:text-bone'
+                    className={`label inline-block border px-4 py-2.5 transition-colors ${
+                      isActive
+                        ? 'border-bone bg-bone text-ink'
+                        : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
                     }`}
                   >
                     {localizedString(category.title, locale)}
@@ -150,7 +171,11 @@ export function ProjectListing({
         {gallery ? (
           <PortfolioGallery sections={gallery} locale={locale} dict={dict} />
         ) : categoryAlbums.length > 0 ? null : projects.length === 0 ? (
-          <EmptyState title={dict.states.emptyTitle} body={dict.states.emptyBody} />
+          <EmptyState
+            title={dict.states.emptyTitle}
+            body={emptyAction ? dict.states.emptyCasesBody : dict.states.emptyBody}
+            action={emptyAction}
+          />
         ) : (
           <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
             {projects.map((project, index) => (

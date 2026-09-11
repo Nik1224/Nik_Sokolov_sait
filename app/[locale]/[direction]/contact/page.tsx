@@ -60,6 +60,29 @@ export default async function Page({ params }: Props) {
         draft={{ subject: dict.contact.directionSubject[direction] }}
       />
 
+      {/*
+        Как устроена работа с юрлицом. Показывается только у BUSINESS: частный
+        клиент про счёт и закрывающие документы не спрашивает, а компания без
+        этого ответа дальше не идёт — подрядчика, которого не провести через
+        бухгалтерию, не выбирают, каким бы ни было портфолио.
+      */}
+      {direction === 'business' ? (
+        <section className="mt-16 border-t border-line pt-10">
+          <h2 className="text-h2 m-0 text-balance">{dict.contact.termsTitle}</h2>
+          <p className="mt-4 max-w-2xl text-lead text-bone-dim">{dict.contact.termsLead}</p>
+          <ul className="m-0 mt-10 list-none p-0">
+            {dict.contact.terms.map((term) => (
+              <li key={term.title} className="border-t border-line first:border-t-0">
+                <div className="grid gap-3 py-7 md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] md:gap-10">
+                  <h3 className="text-h3 m-0 text-bone">{term.title}</h3>
+                  <p className="m-0 max-w-[62ch] text-bone-dim">{term.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       {/* Тот же список без окна: кому-то удобнее скопировать номер или ник. */}
       {settings.contacts.length > 0 ? (
         <section className="mt-16 border-t border-line pt-10">

@@ -11,24 +11,37 @@
  *  • где есть мышь — плитка при наведении раскрывается кадром поверх страницы;
  *  • на сенсорных экранах наведения не существует, поэтому вертикальный кадр
  *    просто стоит справа в плитке и играет, пока она на экране.
+ *
+ * Петли есть не у всех веток. У BUSINESS их нет вовсе, и семь плиток сводились
+ * к семи серым прямоугольникам с текстом — худшее, что может показать сетка на
+ * сайте фотографа. Поэтому у плитки есть третья подача: неподвижная обложка,
+ * взятая из работ этой категории. Она приглушена, чтобы название читалось, и
+ * проявляется под курсором. Ни обложки, ни петли — плитка остаётся текстовой и
+ * выглядит ровно так же, как выглядела.
  */
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Category } from '@/content/types';
+import type { Category, ImageRef } from '@/content/types';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
+import { Picture } from '../media/Picture';
 import type { Direction, Locale } from '@/lib/site';
 
 type Props = {
   categories: Category[];
   locale: Locale;
   direction: Direction;
+  /**
+   * Обложки по ключу категории. Приходят снаружи, а не из самой категории:
+   * кадр берётся у работ ветки, и знать про работы плиткам незачем.
+   */
+  covers?: Record<string, ImageRef | undefined>;
 };
 
 type Mode = 'none' | 'hover' | 'always';
 
-export function CategoryTiles({ categories, locale, direction }: Props) {
+export function CategoryTiles({ categories, locale, direction, covers }: Props) {
   /*
    * Как показывать петли. Решается один раз на весь список: условия одинаковые
    * для всех плиток, и пять одинаковых подписок на media query ничего не
@@ -99,6 +112,7 @@ export function CategoryTiles({ categories, locale, direction }: Props) {
             locale={locale}
             direction={direction}
             mode={mode}
+            cover={covers?.[category.slug]}
             // Нижний ряд раскрывается вниз и отодвигает то, что под сеткой.
             // Остальные — вверх, в воздух над плитками.
             growsDown={Math.floor(index / columns) === lastRow}
@@ -117,12 +131,14 @@ function Tile({
   locale,
   direction,
   mode,
+  cover,
   growsDown,
 }: {
   category: Category;
   locale: Locale;
   direction: Direction;
   mode: Mode;
+  cover?: ImageRef;
   growsDown: boolean;
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -151,6 +167,13 @@ function Tile({
   const loop = category.preview?.type === 'video' ? category.preview : null;
   const shows = Boolean(loop?.loopSrc) && mode !== 'none';
   const standing = shows && mode === 'always';
+  /*
+   * Обложка нужна там, где петли нет: с петлёй два изображения в одной плитке
+   * спорили бы друг с другом. `mode === 'none'` сюда попадает намеренно — при
+   * выключенной анимации и экономии трафика неподвижный кадр как раз уместен,
+   * это не движение.
+   */
+  const showsCover = Boolean(cover) && !shows;
 
   const ratio = loop ? loop.poster.height / loop.poster.width : 0;
 
@@ -275,11 +298,44 @@ function Tile({
        * 280 px на плитку — список из пяти категорий на телефоне превратился
        * бы в ленту на полтора экрана.
        */
+      /*
+       * С обложкой плитке нужен рост: в высоту текстовой строки кадр ложится
+       * полосой из середины и перестаёт быть кадром. 13 rem — примерно
+       * половина ширины колонки на десктопе, то есть узнаваемый кусок сцены.
+       */
       className={`group relative flex h-full justify-between p-6 lg:p-8 ${
         standing ? 'min-h-[12.5rem] items-center' : 'items-start'
-      } ${active ? 'z-10' : ''}`}
+      } ${showsCover ? 'min-h-[11rem] lg:min-h-[13rem]' : ''} ${active ? 'z-10' : ''}`}
       data-grows={growsDown ? 'down' : 'up'}
     >
+      {showsCover && cover ? (
+        /*
+         * Кадр лежит фоном, а не стоит сбоку: у горизонтальной обложки боковая
+         * колонка обрезала бы её до полосы. Приглушение постоянное — название
+         * поверх яркого кадра не читается, — а под курсором кадр выходит
+         * вперёд: это и есть ответ на вопрос «что там внутри».
+         */
+        <>
+          <Picture
+            image={cover}
+            alt=""
+            sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:opacity-85 group-focus-visible:opacity-85"
+          />
+          {/*
+           * Вуаль плотная сверху, где стоит название, и сходит на нет внизу.
+           * Направление здесь не декоративное: текст в плитке прижат к верхнему
+           * краю, и вуаль, сгущённая снизу, оставила бы его на самом светлом
+           * месте кадра. Цвет берётся токеном — в светлой теме PRIVATE вуаль
+           * станет светлой вместе с фоном.
+           */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink from-40% via-ink/85 via-78% to-ink/45"
+          />
+        </>
+      ) : null}
+
       {standing && loop ? (
         /*
          * Сенсорный экран: кадр стоит в правой части плитки и играет сам.

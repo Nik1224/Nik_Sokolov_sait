@@ -223,6 +223,44 @@ export default async function Page({ params }: Props) {
         ) : null}
       </div>
 
+      {/*
+        От чего зависит смета. Показывается там, где нет калькулятора: у
+        PRIVATE ту же работу делает он — двигаешь ползунок и видишь, как
+        меняется сумма. У BUSINESS считать нечего, потому что считать нужно
+        проект целиком, и без объяснения страница превращается в пять карточек
+        с подписью «по запросу». Это не ответ, а отказ отвечать.
+
+        Цифр здесь нет намеренно: назвать сумму до брифа — значит назвать не ту
+        сумму. Но порядок величин человек прикидывает сам, если знает, что на
+        неё влияет.
+      */}
+      {!doc?.calculator ? (
+        <section className="mt-20">
+          <BlockHeading
+            step={extras.length > 0 ? '03' : '02'}
+            title={dict.pricing.factorsTitle}
+          />
+          <p className="mt-6 max-w-2xl text-lead text-bone-dim">{dict.pricing.factorsLead}</p>
+          <ol className="m-0 mt-10 grid list-none gap-px bg-line p-0 md:grid-cols-2">
+            {dict.pricing.factors.map((factor, index) => (
+              <li key={factor.title} className="bg-ink p-6 lg:p-8">
+                <p className="label m-0 text-accent">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="text-h3 m-0 mt-4 text-bone">{factor.title}</h3>
+                <p className="mt-3 text-bone-dim">{factor.body}</p>
+              </li>
+            ))}
+            {/*
+             * Пятый пункт в двух колонках оставляет ячейку пустой, а фон под
+             * зазором показал бы её светлым прямоугольником. Заглушка — самое
+             * дешёвое решение там, где число пунктов задано и известно.
+             */}
+            {dict.pricing.factors.length % 2 === 1 ? (
+              <li className="bg-ink" aria-hidden="true" />
+            ) : null}
+          </ol>
+        </section>
+      ) : null}
+
       {/* Калькулятор — последним: он для того, кто уже посмотрел ставку и
           пакеты и хочет посчитать свой случай. */}
       {doc?.calculator ? (

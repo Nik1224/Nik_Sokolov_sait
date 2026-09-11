@@ -15,6 +15,7 @@ import {
   getArticlesForProject,
   getCategories,
   getDirection,
+  getGlobalSettings,
   getProject,
   getProjects,
   getRelatedProjects,
@@ -157,6 +158,26 @@ export async function ProjectListingRoute({
   const albums =
     fullSeriesHere && isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
 
+  /*
+   * Выход из пустой галереи. Ведёт в тот раздел, где у ветки лежат страницы
+   * работ, и с тем же фильтром — человек искал производство, а не «что-нибудь».
+   *
+   * Проверка на наличие работ обязательна: переход в раздел, где его тоже
+   * ждёт «здесь пока пусто», хуже тупика — он тратит ещё один клик.
+   */
+  const detailSection = DETAIL_SECTION[direction];
+  const emptyAction =
+    gallery && !hasMedia && categoryAlbums.length === 0 && detailSection !== section
+      ? (await getProjects({ direction, categorySlug: activeCategory })).length > 0
+        ? {
+            label: dict.states.emptyCasesAction,
+            href: activeCategory
+              ? `${href({ locale, direction, section: detailSection as Section })}?category=${activeCategory}`
+              : href({ locale, direction, section: detailSection as Section }),
+          }
+        : undefined
+      : undefined;
+
   return (
     <ProjectListing
       locale={locale}
@@ -172,6 +193,7 @@ export async function ProjectListingRoute({
       categoryAlbums={categoryAlbums}
       backstage={backstage}
       showAll={showAll}
+      emptyAction={emptyAction}
       promo={
         albums.length > 0
           ? {
@@ -252,11 +274,12 @@ export async function ProjectDetailRoute({
   // проект расползётся по чужим направлениям.
   if (!project || !project.directions.includes(direction)) notFound();
 
-  const [categories, formats, articles, related] = await Promise.all([
+  const [categories, formats, articles, related, settings] = await Promise.all([
     getCategories(direction),
     resolveFormats(project.formatSlugs),
     getArticlesForProject(project.slug, direction),
     getRelatedProjects(project, direction),
+    getGlobalSettings(),
   ]);
 
   return (
@@ -270,6 +293,7 @@ export async function ProjectDetailRoute({
       formats={formats}
       articles={articles}
       related={related}
+      contacts={settings.contacts}
     />
   );
 }

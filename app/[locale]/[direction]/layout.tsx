@@ -8,6 +8,7 @@
 import { notFound } from 'next/navigation';
 import { Footer } from '@/components/global/Footer';
 import { GlobalHeader } from '@/components/global/GlobalHeader';
+import { StickyContact } from '@/components/contact/StickyContact';
 import { getDirection, getDirections, getGlobalSettings } from '@/content/queries';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { navSections } from '@/lib/nav';
@@ -64,6 +65,24 @@ export default async function DirectionLayout({
       <main id="main" className="flex-1">
         {children}
       </main>
+      {/*
+        Липкая связь на телефоне — только у BUSINESS. Это ветка, где решение
+        принимает не один человек и не за один заход: сравнивают подрядчиков,
+        возвращаются, показывают руководителю. Терять такого посетителя на
+        полпути из-за того, что кнопка осталась в начале страницы, — дороже,
+        чем полоса в двадцать пикселей высотой.
+
+        У PRIVATE подача другая: там страница ведёт человека и заканчивается
+        разговором, и плавающая кнопка поверх кадров ей мешает.
+      */}
+      {direction === 'business' ? (
+        <StickyContact
+          dict={dict}
+          contacts={settings.contacts}
+          subject={dict.contact.directionSubject[direction]}
+        />
+      ) : null}
+
       <Footer
         locale={locale}
         settings={settings}

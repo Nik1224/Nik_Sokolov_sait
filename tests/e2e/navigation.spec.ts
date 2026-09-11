@@ -109,23 +109,32 @@ test('мобильное меню содержит разделы, направ�
   await expect(dialog).not.toBeVisible();
 });
 
-test('PRIVATE открывается в светлой теме, остальные ветки — в тёмной', async ({ page }) => {
-  await page.goto('/ru/private');
-  const light = await page
-    .locator('[data-theme="private"]')
-    .evaluate((el) => getComputedStyle(el).backgroundColor);
+test('у каждой ветки своя подложка: PRIVATE и BUSINESS светлые, PRODUCTION тёмная', async ({
+  page,
+}) => {
+  const ground = async (direction: string) => {
+    await page.goto(`/ru/${direction}`);
+    return page
+      .locator(`[data-theme="${direction}"]`)
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+  };
 
-  await page.goto('/ru/business');
-  const dark = await page
-    .locator('[data-theme="business"]')
-    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  const privateGround = await ground('private');
+  const businessGround = await ground('business');
+  const productionGround = await ground('production');
 
-  expect(light).not.toBe(dark);
-  // Светлая подложка PRIVATE: сумма каналов заведомо выше, чем у тёмной.
+  // Сумма каналов: у светлой подложки заведомо выше, чем у тёмной.
   const sum = (rgb: string) =>
     (rgb.match(/\d+/g) ?? []).slice(0, 3).reduce((a, v) => a + Number(v), 0);
-  expect(sum(light)).toBeGreaterThan(600);
-  expect(sum(dark)).toBeLessThan(100);
+
+  // Бумага PRIVATE и песок BUSINESS обе светлые — но это разные темы, и
+  // совпасть они не должны: ветки различаются в том числе цветом.
+  expect(sum(privateGround)).toBeGreaterThan(600);
+  expect(sum(businessGround)).toBeGreaterThan(600);
+  expect(privateGround).not.toBe(businessGround);
+
+  // PRODUCTION остаётся на базовой тёмной палитре.
+  expect(sum(productionGround)).toBeLessThan(100);
 });
 
 test('переход краской закрывает экран прежде, чем меняется страница', async ({ page }, testInfo) => {

@@ -6,7 +6,7 @@
  * PRODUCTION Work и PRIVATE Portfolio.
  */
 
-import Link from 'next/link';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { PortableBody } from '@/components/content/PortableBody';
 import { ProjectCard } from '@/components/content/cards';
 import { RelatedArticleLinks } from '@/components/content/RelatedContent';
@@ -14,7 +14,8 @@ import { Section } from '@/components/content/Section';
 import { Breadcrumbs, FallbackNotice, UnconfirmedTag } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
 import { Picture } from '@/components/media/Picture';
-import type { Article, Category, Project, WorkFormat } from '@/content/types';
+import type { Article, Category, ContactChannel, Project, WorkFormat } from '@/content/types';
+import { quotedSubject } from '@/lib/contact/message';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString, pageNeedsFallbackNotice, resolveLocalized } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
@@ -30,6 +31,8 @@ type Props = {
   formats: WorkFormat[];
   articles: Article[];
   related: Project[];
+  /** Каналы связи: разговор начинается прямо со страницы кейса. */
+  contacts: ContactChannel[];
 };
 
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
@@ -51,6 +54,7 @@ export function ProjectDetail({
   formats,
   articles,
   related,
+  contacts,
 }: Props) {
   const title = localizedString(project.title, locale);
   const cover = project.cover;
@@ -260,6 +264,33 @@ export function ProjectDetail({
         </Section>
       ) : null}
 
+      {/*
+       * Разговор предлагается здесь, а не только в самом низу.
+       *
+       * Убеждает кейс, и убеждает он в конце — на «результате». Дальше шли
+       * «похожие проекты», и человек уходил листать их: кнопка ждала его
+       * следующим экраном, за чужими обложками. Теперь предложение стоит там,
+       * где решение уже принято, а похожие проекты остаются тем, чем и были, —
+       * запасным путём для тех, кого этот кейс не убедил.
+       *
+       * Сообщение начинается с названия кейса: разговор продолжает страницу,
+       * а не начинается с чистого листа, и владелец сразу видит, о чём речь.
+       */}
+      <Section>
+        <div className="border-t border-line pt-10">
+          <h2 className="text-h2 m-0 max-w-2xl text-balance">{dict.contact.caseTitle}</h2>
+          <p className="mt-4 max-w-xl text-bone-dim">{dict.contact.caseLead}</p>
+          <ContactButton
+            dict={dict}
+            contacts={contacts}
+            className="mt-8"
+            draft={{
+              subject: quotedSubject(dict.contact.caseWord, title),
+            }}
+          />
+        </div>
+      </Section>
+
       {related.length > 0 ? (
         <Section title={dict.common.relatedProjects}>
           <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -279,14 +310,6 @@ export function ProjectDetail({
         </Section>
       ) : null}
 
-      <Section>
-        <Link
-          href={href({ locale, direction, section: 'contact' })}
-          className="label inline-block bg-bone px-7 py-4 text-ink transition-colors hover:bg-accent"
-        >
-          {dict.contact.heading}
-        </Link>
-      </Section>
     </article>
   );
 }

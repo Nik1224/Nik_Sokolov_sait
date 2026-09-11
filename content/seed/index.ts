@@ -289,7 +289,74 @@ export const directions: DirectionDoc[] = [
       ru: 'Задачи компаний: обучение, производство, подкасты, реклама, бренд.',
       en: 'Business needs: training, manufacturing, podcasts, advertising, brand.',
     },
-    highlights: [],
+    /*
+     * Не «что входит», а порядок работы. Компания приходит с задачей, а не со
+     * списком услуг, и первый её вопрос — что будет происходить после письма.
+     *
+     * Сроков в цифрах здесь нет сознательно: они разные у репортажа и у
+     * рекламного ролика, и обещание «за три дня» на главной противоречило бы
+     * смете. Срок называется там, где считается, — в смете и в кейсе.
+     */
+    highlights: [
+      {
+        title: { ru: 'Бриф и смета', en: 'Brief and estimate' },
+        body: {
+          ru: 'Разбираем задачу: что снимаем, где, и куда пойдёт результат — на сайт, в обучение, на маркетплейс или в соцсети. Смета считается после брифа: до него любая цифра была бы гаданием.',
+          en: 'We work through the task: what we shoot, where, and where the result goes — a website, internal training, a marketplace or social media. The estimate follows the brief: before it any figure would be guesswork.',
+        },
+      },
+      {
+        title: { ru: 'Подготовка', en: 'Preparation' },
+        body: {
+          ru: 'Локации, доступы, расписание съёмочного дня и состав группы. Всё согласовано до выезда, чтобы на площадке не решать организационные вопросы.',
+          en: 'Locations, access, the shooting-day schedule and the crew. All agreed before we arrive, so that nothing organisational has to be settled on site.',
+        },
+      },
+      {
+        title: { ru: 'Съёмочный день', en: 'Shooting day' },
+        body: {
+          ru: 'Работаем внутри вашего графика: производство не останавливает смену, конференция идёт по программе, сотрудники заняты своим делом. Съёмка подстраивается под работу, а не наоборот.',
+          en: 'We work inside your schedule: the shop floor keeps its shift, the conference runs to programme, staff carry on with their work. The shoot adapts to the business, not the other way round.',
+        },
+      },
+      {
+        title: { ru: 'Материалы', en: 'Deliverables' },
+        body: {
+          ru: 'Отобранные и обработанные кадры, смонтированные ролики, вертикальные версии под площадки. Что именно входит и к какому сроку — записано в смете.',
+          en: 'Selected and edited stills, finished films, vertical versions for each platform. What exactly is included and by when is written into the estimate.',
+        },
+      },
+    ],
+    /*
+     * Названия взяты с уже опубликованных страниц: юбилей Sesderma и
+     * обучающие ролики Epica стоят в кейсах, «Живые люди» — в отзыве.
+     * Ничего нового здесь не заявлено (§1.2).
+     */
+    /*
+     * Заказчики, подтверждённые владельцем. Название — то, под которым знают
+     * компанию, а чем она занимается — строкой ниже: список из одних имён
+     * ничего не доказывает, а «Алиса» без пояснения не говорит вообще ничего.
+     *
+     * Логотипов пока нет: чужой знак ставится только официальным файлом от
+     * самого клиента. Набранное имя — не заглушка, а рабочий вид.
+     */
+    clients: [
+      { name: 'Sesderma', note: { ru: 'Юбилей бренда', en: 'Brand anniversary' } },
+      { name: 'Epica Professional', note: { ru: 'Обучающие ролики', en: 'Training videos' } },
+      { name: 'Panthenol' },
+      { name: 'Hair Company Professional' },
+      { name: 'ОК Студио' },
+      { name: 'МОСПРОМ' },
+      { name: 'Московский спорт' },
+      {
+        name: 'Федерация спортивной гимнастики и акробатики',
+      },
+      {
+        name: '«Алиса»',
+        note: { ru: 'Мебельная фабрика, Батайск', en: 'Furniture factory, Bataysk' },
+      },
+      { name: '«Авеню»', note: { ru: 'Сеть поликлиник', en: 'Network of clinics' } },
+    ],
     hero: decorative('hero-business', 'wide', 3),
     // Вертикальная петля 22 с без звука, 873 КБ. Исходник снят в 480 px —
     // вверх не растягиваем, иначе вырастет вес без прибавки в качестве.
@@ -351,6 +418,48 @@ function preview(slug: string, ru: string, en: string, height: number): MediaAss
   };
 }
 
+/**
+ * Имиджевые ролики: постер лежит у нас, сам ролик — на Kinescope.
+ *
+ * Три ширины постера, как у кадров кейсов: 600 для телефона, 1200 для сетки,
+ * 1800 для крупной подачи. Исходник постера — кадр 1920×1080, выше не тянем.
+ */
+function brandFilm(
+  slug: string,
+  videoId: string,
+  altRu: string,
+  altEn: string,
+): MediaAsset {
+  const base = `/media/portfolio/brand-video/${slug}`;
+  return {
+    _key: `brand-video-${slug}`,
+    type: 'video',
+    provider: 'kinescope',
+    videoId,
+    rights: 'owned',
+    alt: { ru: altRu, en: altEn },
+    poster: {
+      src: `${base}-1200.jpg`,
+      width: 1920,
+      height: 1080,
+      sources: [600, 1200, 1800].map((width) => ({ width, src: `${base}-${width}.jpg` })),
+    },
+  };
+}
+
+/*
+ * Названия даны по содержанию кадра, а не по имени файла у владельца:
+ * «Kollekciya_2025_Gotov» — рабочее имя монтажа, на сайте ему не место.
+ * Подписи к роликам владелец уточнит в CMS.
+ */
+const brandFilms: MediaAsset[] = [
+  brandFilm('epica-short', 'pbyqjbsBD4ZDoCKHnLo5p8', 'Имиджевый ролик Epica', 'Epica brand film'),
+  brandFilm('short-final', 'ceHqKdkqTh5gGPptNtBa6U', 'Имиджевый ролик бренда', 'Brand film'),
+  brandFilm('tennis', 'sU9QuGgccRh5yysNzzMQMF', 'Съёмка на теннисном корте', 'Filmed on a tennis court'),
+  brandFilm('collection-2025', 'sTJ8ZwUMyRCRHaK1wQbkWn', 'Ролик о коллекции 2025 года', 'Film about the 2025 collection'),
+  brandFilm('shampoo', 'cfm4pTrBLBzJP3XqSayWEQ', 'Предметно-имиджевый ролик шампуня', 'Shampoo product and brand film'),
+];
+
 export const categories: Category[] = [
   // Категории с настоящим портфолио. fullSeries — там, где бывает полная
   // выдача одной съёмки: на такие категории ведёт переход к альбомам.
@@ -365,7 +474,28 @@ export const categories: Category[] = [
   { _id: 'cat.manufacturing', slug: 'manufacturing', title: { ru: 'Производство', en: 'Manufacturing' }, description: { ru: 'Цеха, линии и люди за работой. Съёмка идёт на действующем производстве и не останавливает смену.', en: 'Shop floors, lines and people at work. Filmed on a working site without stopping the shift.' }, directions: ['business'], order: 7, isDemo: true },
   { _id: 'cat.podcast', slug: 'podcast', title: { ru: 'Подкасты', en: 'Podcasts' }, description: { ru: 'Разговорные форматы со светом и звуком: выпуски снимаются блоками, к каждому — вертикальные нарезки.', en: 'Conversation formats with proper light and sound: episodes shot in blocks, each with vertical cutdowns.' }, directions: ['business'], order: 8, isDemo: true },
   { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, description: { ru: 'Проекты со сценарием и подготовкой: раскадровка, локации, собранная под задачу команда.', en: 'Projects with a script and preparation: storyboard, locations, a crew assembled for the task.' }, directions: ['business', 'production'], order: 9, isDemo: true },
-  { _id: 'cat.brand-video', slug: 'brand-video', title: { ru: 'Имиджевые видео', en: 'Brand films' }, description: { ru: 'Фильм о компании: чем занимаетесь, как устроена работа и кто за ней стоит.', en: 'A film about the company: what you do, how the work is run and who stands behind it.' }, directions: ['business'], order: 10, isDemo: true },
+  {
+    _id: 'cat.brand-video',
+    slug: 'brand-video',
+    title: { ru: 'Имиджевые видео', en: 'Brand films' },
+    description: {
+      ru: 'Фильм о компании: чем занимаетесь, как устроена работа и кто за ней стоит.',
+      en: 'A film about the company: what you do, how the work is run and who stands behind it.',
+    },
+    directions: ['business'],
+    order: 10,
+    /*
+     * Ролики владельца, не demo. Лежат на Kinescope: своими файлами такое не
+     * отдаётся — исходники весят десятки мегабайт и в репозитории дали бы этот
+     * вес каждой сборке навсегда, без перемотки и без подстройки под скорость
+     * сети. То же правило, что у бэкстейджа и у клипа в кейсе юбилея.
+     *
+     * Постеры сняты с самих роликов и лежат рядом в трёх размерах: подставлять
+     * первый кадр силами сервиса нельзя — он часто пустой, и превью выходит
+     * серым прямоугольником.
+     */
+    videos: brandFilms,
+  },
   { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], order: 11, isDemo: true },
   { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], order: 12, isDemo: true },
   { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 13, isDemo: true },

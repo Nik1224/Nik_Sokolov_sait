@@ -41,10 +41,12 @@ export type Dictionary = {
     finalCase: string;
     moreFromDirection: string;
     testimonials: string;
+    clients: string;
     included: string;
     formats: string;
     deliverables: string;
     process: string;
+    processLead: string;
     faq: string;
     challenge: string;
     solution: string;
@@ -53,6 +55,9 @@ export type Dictionary = {
   states: {
     emptyTitle: string;
     emptyBody: string;
+    /** Выход из пустого раздела: кадры категории ещё не выложены, а кейс уже есть. */
+    emptyCasesBody: string;
+    emptyCasesAction: string;
     notFoundTitle: string;
     notFoundBody: string;
     errorTitle: string;
@@ -75,6 +80,8 @@ export type Dictionary = {
     closeGallery: string;
     previous: string;
     next: string;
+    /** Лента обложек: подпись группы для ассистивных технологий. */
+    rail: string;
     imageOf: string;
     showMore: string;
     /** Вкладки портфолио. */
@@ -171,6 +178,14 @@ export type Dictionary = {
     photographerHour: string;
     videographerHour: string;
     ratesNote: string;
+    /**
+     * Из чего складывается смета у BUSINESS. Пять пакетов подряд с подписью
+     * «по запросу» не отвечают ни на один вопрос о деньгах: человек уходит
+     * считать бюджет к тому, кто хотя бы объяснил, от чего цена зависит.
+     */
+    factorsTitle: string;
+    factorsLead: string;
+    factors: { title: string; body: string }[];
   };
   contact: {
     /** Заголовок блока связи и подпись кнопки. */
@@ -196,8 +211,20 @@ export type Dictionary = {
     /** Чем человек интересуется, если он пришёл с Home ветки. */
     directionSubject: { private: string; business: string; production: string };
     subjectPrefix: string;
+    /**
+     * Как устроена работа с юрлицом. Для компании это часто решающий блок:
+     * подрядчика, которого не проведёшь через бухгалтерию, не выбирают, каким
+     * бы ни было портфолио.
+     */
+    termsTitle: string;
+    termsLead: string;
+    terms: { title: string; body: string }[];
     packageWord: string;
     serviceWord: string;
+    /** Разговор со страницы кейса начинается с самого кейса, а не с нуля. */
+    caseWord: string;
+    caseTitle: string;
+    caseLead: string;
     estimatePrefix: string;
   };
   /** Визитка: страница, которую организатор пересылает паре. */
@@ -268,10 +295,13 @@ const ru: Dictionary = {
     finalCase: 'Финальный кейс',
     moreFromDirection: 'Ещё из этого направления',
     testimonials: 'Отзывы',
+    clients: 'С кем работали',
     included: 'Что входит всегда',
     formats: 'Форматы',
     deliverables: 'Что получает клиент',
-    process: 'Этапы работы',
+    process: 'Как устроена работа',
+    processLead:
+      'Один и тот же порядок на репортаже, на обучающей серии и на рекламном ролике. Меняется объём, не порядок.',
     faq: 'Частые вопросы',
     challenge: 'Задача',
     solution: 'Решение',
@@ -280,6 +310,9 @@ const ru: Dictionary = {
   states: {
     emptyTitle: 'Здесь пока пусто',
     emptyBody: 'Раздел скоро наполнится. Пока можно посмотреть другие материалы направления.',
+    emptyCasesBody:
+      'Кадры этой категории ещё не выложены. Но работа по ней разобрана в кейсе — что было в задаче, как снимали и что получил заказчик.',
+    emptyCasesAction: 'Смотреть кейсы',
     notFoundTitle: 'Страница не найдена',
     notFoundBody: 'Возможно, адрес изменился. Выберите направление или напишите напрямую.',
     errorTitle: 'Что-то пошло не так',
@@ -301,6 +334,7 @@ const ru: Dictionary = {
     openGallery: 'Открыть в галерее',
     closeGallery: 'Закрыть галерею',
     previous: 'Предыдущее',
+    rail: 'Категории съёмки, лента с прокруткой',
     next: 'Следующее',
     imageOf: 'из',
     showMore: 'Показать ещё',
@@ -427,6 +461,31 @@ const ru: Dictionary = {
     photographerHour: 'Фотограф',
     videographerHour: 'Видеограф',
     ratesNote: 'На свадебной съёмке с четвёртого часа ставка снижается.',
+    factorsTitle: 'От чего зависит смета',
+    factorsLead:
+      'Одна и та же съёмка стоит по-разному, и вот пять причин. Зная их, можно прикинуть свой порядок сумм ещё до разговора.',
+    factors: [
+      {
+        title: 'Объём съёмки',
+        body: 'Сколько смен и часов, одна площадка или несколько, один день или серия. Восемнадцать обучающих роликов не снимаются за смену, а конференция на три зала требует нескольких точек одновременно.',
+      },
+      {
+        title: 'Состав группы',
+        body: 'Один подрядчик или собранная под задачу команда: второй оператор, звук, свет, визажист. На событии без второй камеры часть программы просто не снимается — второго дубля у неё нет.',
+      },
+      {
+        title: 'Постпродакшн',
+        body: 'Глубина монтажа, графика и субтитры, цветокоррекция и ретушь. Репортаж и рекламный ролик одинаковой длины расходятся здесь в разы.',
+      },
+      {
+        title: 'Форматы выдачи',
+        body: 'Горизонталь, вертикальные версии под площадки, нарезки для соцсетей, кадры со съёмки. Каждый дополнительный формат — отдельная сборка, а не экспорт в другом размере.',
+      },
+      {
+        title: 'Логистика',
+        body: 'Выезд за пределы города, аренда студии, света и реквизита, пропуска на площадку. Это считается отдельной строкой и не прячется в ставку.',
+      },
+    ],
   },
   contact: {
     heading: 'Связаться',
@@ -450,8 +509,33 @@ const ru: Dictionary = {
       production: 'production-проект',
     },
     subjectPrefix: 'Интересует',
+    termsTitle: 'Как работаем с компаниями',
+    termsLead:
+      'Договор, счёт и закрывающие документы — обычная часть работы, а не отдельная услуга.',
+    terms: [
+      {
+        title: 'ИП',
+        body: 'Работаю как индивидуальный предприниматель. Реквизиты присылаю вместе со сметой.',
+      },
+      {
+        title: 'Договор на каждый проект',
+        body: 'В нём состав работ, сроки сдачи и права на использование материалов — что и где вы вправе публиковать.',
+      },
+      {
+        title: 'Счёт и безналичная оплата',
+        body: 'Оплата по счёту на расчётный счёт. Порядок платежей — аванс и остаток или поэтапно — фиксируется в договоре.',
+      },
+      {
+        title: 'Закрывающие документы',
+        body: 'Акт после сдачи материалов. Если бухгалтерии нужен свой пакет документов, скажите об этом на брифе.',
+      },
+    ],
     packageWord: 'пакет',
     serviceWord: 'услуга',
+    caseWord: 'задача как в кейсе',
+    caseTitle: 'Нужна похожая съёмка?',
+    caseLead:
+      'Напишите про задачу — отвечу лично, а смету посчитаю после короткого брифа. Сообщение уже начато: кейс, который вы читали, в нём назван.',
     estimatePrefix: 'Расчёт на сайте —',
   },
   card: {
@@ -527,10 +611,13 @@ const en: Dictionary = {
     finalCase: 'Final case',
     moreFromDirection: 'More from this direction',
     testimonials: 'Reviews',
+    clients: 'Selected clients',
     included: 'Always included',
     formats: 'Formats',
     deliverables: 'What you get',
-    process: 'Process',
+    process: 'How the work is run',
+    processLead:
+      'The same order on event coverage, on a training series and on an advertising film. The scale changes, the order does not.',
     faq: 'FAQ',
     challenge: 'Challenge',
     solution: 'Solution',
@@ -539,6 +626,9 @@ const en: Dictionary = {
   states: {
     emptyTitle: 'Nothing here yet',
     emptyBody: 'This section is being filled. Meanwhile, explore the rest of this direction.',
+    emptyCasesBody:
+      'The stills for this category are not published yet. The work itself is written up as a case study: the task, the shoot and what the client received.',
+    emptyCasesAction: 'View case studies',
     notFoundTitle: 'Page not found',
     notFoundBody: 'The address may have changed. Pick a direction below or get in touch.',
     errorTitle: 'Something went wrong',
@@ -560,6 +650,7 @@ const en: Dictionary = {
     openGallery: 'Open in gallery',
     closeGallery: 'Close gallery',
     previous: 'Previous',
+    rail: 'Shooting categories, scrollable rail',
     next: 'Next',
     imageOf: 'of',
     showMore: 'Show more',
@@ -686,6 +777,31 @@ const en: Dictionary = {
     photographerHour: 'Photographer',
     videographerHour: 'Videographer',
     ratesNote: 'On a wedding shoot the rate drops from the fourth hour.',
+    factorsTitle: 'What the estimate depends on',
+    factorsLead:
+      'The same shoot can cost very differently, and here are five reasons why. Knowing them, you can work out your own order of magnitude before we even talk.',
+    factors: [
+      {
+        title: 'Scale of the shoot',
+        body: 'How many days and hours, one location or several, a single shoot or a series. Eighteen training videos do not fit into one day, and a three-hall conference needs several cameras at once.',
+      },
+      {
+        title: 'The crew',
+        body: 'One contractor, or a team assembled for the task: second operator, sound, light, make-up. At an event without a second camera part of the programme simply goes unrecorded — there is no second take.',
+      },
+      {
+        title: 'Post-production',
+        body: 'Depth of editing, graphics and subtitles, grading and retouching. Event coverage and an advertising film of the same length diverge here several times over.',
+      },
+      {
+        title: 'Delivery formats',
+        body: 'Horizontal, vertical versions for each platform, cutdowns for social media, stills from the shoot. Every extra format is a separate assembly, not an export at another size.',
+      },
+      {
+        title: 'Logistics',
+        body: 'Travel outside the city, studio, lighting and prop rental, site passes. These are costed as their own line and are not hidden inside the rate.',
+      },
+    ],
   },
   contact: {
     heading: 'Get in touch',
@@ -709,8 +825,33 @@ const en: Dictionary = {
       production: 'a production project',
     },
     subjectPrefix: 'I am interested in',
+    termsTitle: 'Working with companies',
+    termsLead:
+      'A contract, an invoice and closing documents are part of the job, not a separate service.',
+    terms: [
+      {
+        title: 'Sole proprietor',
+        body: 'I work as a registered sole proprietor (IP). Company details come with the estimate.',
+      },
+      {
+        title: 'A contract for every project',
+        body: 'It sets out the scope, delivery dates and usage rights — what you may publish and where.',
+      },
+      {
+        title: 'Invoice and bank transfer',
+        body: 'Payment by invoice to a business account. The schedule — deposit and balance, or by stage — is fixed in the contract.',
+      },
+      {
+        title: 'Closing documents',
+        body: 'A completion act once the materials are delivered. If your accounting needs a particular set of papers, say so at the brief.',
+      },
+    ],
     packageWord: 'the package',
     serviceWord: 'the service',
+    caseWord: 'a task like the case',
+    caseTitle: 'Need something similar?',
+    caseLead:
+      'Tell me about the task — I reply personally, and the estimate follows a short brief. The message is already started: the case you were reading is named in it.',
     estimatePrefix: 'Website estimate —',
   },
   card: {

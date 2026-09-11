@@ -9,7 +9,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import type { Category, ImageRef, Project } from '@/content/types';
+import { BusinessHome } from '@/components/business/BusinessHome';
+import { CategoryCards } from '@/components/content/CategoryCards';
 import { CategoryTiles } from '@/components/content/CategoryTiles';
+import { ClientStrip } from '@/components/content/ClientStrip';
 import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
 import { ContactButton } from '@/components/contact/ContactButton';
@@ -20,6 +24,7 @@ import { Testimonials } from '@/components/content/Testimonials';
 import { ArticleCard, ProjectCard } from '@/components/content/cards';
 import { JsonLd } from '@/components/global/misc';
 import { MediaGallery } from '@/components/media/MediaGallery';
+import { PictureFrame } from '@/components/media/Picture';
 import { VideoFacade } from '@/components/media/VideoFacade';
 import {
   getArticleTypes,
@@ -37,9 +42,96 @@ import { localizedString } from '@/lib/i18n/localize';
 import { resolveDirectionRoute, tryResolveDirectionRoute } from '@/lib/guard';
 import { absoluteUrl, directionHomeHref, href } from '@/lib/routing';
 import { buildMetadata, professionalServiceJsonLd, seoText } from '@/lib/seo';
-import { isSectionAvailable, siteUrl, type Direction } from '@/lib/site';
+import { isSectionAvailable, siteUrl, type Direction, type Locale } from '@/lib/site';
 
 type Props = { params: Promise<{ locale: string; direction: string }> };
+
+/**
+ * Первая работа подборки — во всю ширину.
+ *
+ * Шесть одинаковых карточек в ряд не дают ни одной из них веса: глаз скользит
+ * по ним как по каталогу и не задерживается ни на чём. Между тем именно здесь
+ * лежит самое убедительное, что есть на сайте, — цифры проекта: сколько
+ * гостей, сколько часов, сколько человек в группе, сколько кадров на выходе.
+ * В маленькой карточке им нет места, и до кейса, где они стоят, доходит не
+ * каждый.
+ *
+ * Поэтому первая работа разворачивается: широкий кадр, крупное название и
+ * цифры строкой под ним. Остальные остаются карточками — иначе подборка
+ * превратится в шесть первых экранов подряд.
+ */
+function FeaturedProject({
+  project,
+  locale,
+  direction,
+  section,
+  categories,
+}: {
+  project: Project;
+  locale: Locale;
+  direction: Direction;
+  section: 'cases' | 'work' | 'portfolio';
+  categories: Category[];
+}) {
+  const cover = project.cover;
+  const image = cover.type === 'image' ? cover.image : cover.poster;
+  /** Больше четырёх цифр — уже таблица, а её никто не читает. */
+  const figures = (project.figures ?? []).slice(0, 4);
+  const categoryTitles = categories
+    .filter((category) => project.categorySlugs.includes(category.slug))
+    .map((category) => localizedString(category.title, locale));
+
+  return (
+    <article className="group">
+      <Link href={href({ locale, direction, section, slug: project.slug })} className="block">
+        {/*
+         * 16:9, а не пропорция обычной карточки. Кадр во всю ширину контейнера
+         * в пропорции 3:2 занял бы больше экрана, чем есть у экрана: под ним
+         * не осталось бы места ни названию, ни цифрам, ради которых он тут.
+         */}
+        <PictureFrame
+          image={image}
+          alt=""
+          ratio={16 / 9}
+          sizes="(min-width: 1200px) 78rem, 100vw"
+          priority
+          className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.02]"
+        />
+        <div className="mt-7 grid gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] lg:items-end lg:gap-12">
+          <div>
+            {categoryTitles.length > 0 ? (
+              <p className="label m-0 text-bone-faint">{categoryTitles.join(' · ')}</p>
+            ) : null}
+            <h3 className="text-h2 m-0 mt-3 text-balance text-bone transition-colors group-hover:text-accent">
+              {localizedString(project.title, locale)}
+            </h3>
+          </div>
+
+          {figures.length > 0 ? (
+            <dl className="m-0 flex flex-wrap gap-x-10 gap-y-4 lg:justify-end">
+              {figures.map((figure, index) => (
+                <div key={index}>
+                  {/* Цифра — акцентом: на чёрной странице это единственное
+                      тёплое пятно, и оно стоит там, где стоит доказательство. */}
+                  <dt className="text-h3 m-0 whitespace-nowrap text-accent">
+                    {localizedString(figure.value, locale)}
+                  </dt>
+                  <dd className="label m-0 mt-1 text-bone-faint">
+                    {localizedString(figure.label, locale)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p className="m-0 max-w-xl text-bone-dim lg:justify-self-end">
+              {localizedString(project.lead, locale)}
+            </p>
+          )}
+        </div>
+      </Link>
+    </article>
+  );
+}
 
 /** В какой раздел ветки ведут карточки работ. */
 function workSection(direction: Direction): 'cases' | 'work' | 'portfolio' {
@@ -115,6 +207,58 @@ export default async function DirectionHome({ params }: Props) {
   const showsCategories = direction !== 'production' && categories.length > 0;
 
   /*
+   * Обложки плиток портфолио. Кадр берётся у работы этой категории: своего
+   * изображения у категории нет, а семь текстовых прямоугольников — не то, что
+   * должен показывать сайт фотографа.
+   *
+   * Работы запрашиваются все, а не только шесть отобранных: у BUSINESS семь
+   * категорий, и подборка с главной покрыла бы не каждую. Первая подошедшая
+   * работа и выигрывает — порядок задан в CMS, и переспоривать его подсчётом
+   * «удачности» кадра здесь нечем.
+   */
+  /*
+   * Чем показывать категории — плитками или карточками.
+   *
+   * Петля под курсором сильнее неподвижного кадра: она показывает не только
+   * что снимают, но и как это выглядит в движении. Где такие петли сняты —
+   * у PRIVATE к каждой категории, — остаётся плитка, которая ими и живёт.
+   *
+   * Где петель нет, есть только кадр из работы, и плитка с ним не справляется:
+   * снимок уходит фоном под текст, от него остаётся полоса у нижнего края, и
+   * притушить её приходится настолько, что не видно ни кадра, ни выигрыша.
+   * Карточка ставит кадр в полную силу и подписывает его снизу — тем же
+   * приёмом, что карточки работ и статей на этой же странице.
+   */
+  const hasLoops = categories.some(
+    (category) => category.preview?.type === 'video' && Boolean(category.preview.loopSrc),
+  );
+
+  const categoryCovers: Record<string, ImageRef | undefined> = {};
+  if (showsCategories) {
+    /*
+     * Сначала — материал самой категории: её петля, её ролики, её кадры. Это
+     * ровно то, что человек увидит, перейдя внутрь, и лучшей обложки для неё
+     * не существует.
+     */
+    for (const category of categories) {
+      const own =
+        category.preview ?? category.videos?.[0] ?? category.gallery?.[0] ?? undefined;
+      if (!own) continue;
+      categoryCovers[category.slug] = own.type === 'image' ? own.image : own.poster;
+    }
+
+    // Затем — кадр работы этой категории: у категорий без своего материала
+    // обложка всё равно должна быть.
+    for (const project of await getProjects({ direction })) {
+      for (const slug of project.categorySlugs) {
+        if (categoryCovers[slug]) continue;
+        categoryCovers[slug] =
+          project.cover.type === 'image' ? project.cover.image : project.cover.poster;
+      }
+    }
+  }
+
+  /*
    * Подборка работ. У PRIVATE её заменяют категории — там оба блока назывались
    * «Портфолио» и вели в одно место. У BUSINESS они называются по-разному и
    * отвечают на разные вопросы: категории — что снимают, кейсы — как устроена
@@ -156,6 +300,30 @@ export default async function DirectionHome({ params }: Props) {
         })}
       />
 
+      {/*
+        BUSINESS собирается отдельным шаблоном. Состав и порядок разделов те
+        же, что ниже, — своя у ветки только вёрстка: тональная лестница,
+        двенадцать колонок с асимметрией и кадры разных пропорций. Выразить это
+        флагами в общей разметке значило бы протащить арт-дирекцию одной ветки
+        через шаблоны всех трёх; здесь же PRIVATE и PRODUCTION к ней даже не
+        прикасаются.
+      */}
+      {direction === 'business' ? (
+        <BusinessHome
+          locale={locale}
+          dict={dict}
+          doc={doc}
+          categories={categories}
+          covers={categoryCovers}
+          projects={selected}
+          pricing={pricing}
+          testimonials={testimonials}
+          articles={articles}
+          articleTypes={articleTypes}
+          settings={settings}
+        />
+      ) : (
+      <>
       {/* Видеообложка показывается целиком, поэтому у неё своя раскладка. */}
       {doc.hero?.type === 'video' ? (
         <CoverHero
@@ -179,6 +347,16 @@ export default async function DirectionHome({ params }: Props) {
         />
       )}
 
+      {/*
+        Полоса доверия. Стоит до перечня того, что снимают: решение про
+        подрядчика начинается с вопроса «кто рискнул до меня», а не со списка
+        услуг. Номера секции у неё нет — это не раздел, а строка о репутации,
+        и нумерация ставила бы её в один ряд с портфолио и кейсами.
+      */}
+      {doc.clients && doc.clients.length > 0 ? (
+        <ClientStrip clients={doc.clients} locale={locale} label={dict.common.clients} />
+      ) : null}
+
       {/* PRODUCTION: шоурил — главный элемент страницы (§5.6). */}
       {direction === 'production' && showreel && showreel.type === 'video' ? (
         <Section eyebrow={step()} title={dict.nav.showreel}>
@@ -188,22 +366,40 @@ export default async function DirectionHome({ params }: Props) {
 
       {showsCategories ? (
         <Section eyebrow={step()} title={dict.nav.portfolio}>
-          <CategoryTiles categories={categories} locale={locale} direction={direction} />
+          {hasLoops ? (
+            <CategoryTiles
+              categories={categories}
+              locale={locale}
+              direction={direction}
+              covers={categoryCovers}
+            />
+          ) : (
+            <CategoryCards
+              categories={categories}
+              locale={locale}
+              direction={direction}
+              covers={categoryCovers}
+            />
+          )}
         </Section>
       ) : null}
 
       {doc.highlights.length > 0 ? (
         <Section eyebrow={step()} title={dict.common.included}>
-          <ul className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {doc.highlights.map((item, index) => (
-              <li key={index} className="bg-ink p-6 lg:p-8">
-                <h3 className="text-h3 m-0 text-bone">{localizedString(item.title, locale)}</h3>
-                {item.body ? (
-                  <p className="mt-3 text-bone-dim">{localizedString(item.body, locale)}</p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          {/* Хайрлайны на самих карточках: фоном под зазором недобранный ряд
+              светился серым прямоугольником — см. PricingBlock. */}
+          <div className="overflow-hidden">
+            <ul className="-mt-px -ml-px m-0 grid list-none p-0 sm:grid-cols-2 lg:grid-cols-3">
+              {doc.highlights.map((item, index) => (
+                <li key={index} className="border-t border-l border-line bg-ink p-6 lg:p-8">
+                  <h3 className="text-h3 m-0 text-bone">{localizedString(item.title, locale)}</h3>
+                  {item.body ? (
+                    <p className="mt-3 text-bone-dim">{localizedString(item.body, locale)}</p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
         </Section>
       ) : null}
 
@@ -213,21 +409,35 @@ export default async function DirectionHome({ params }: Props) {
           title={dict.nav[section]}
           action={{ label: dict.common.viewAll, href: href({ locale, direction, section }) }}
         >
-          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
-            {selected.map((project, index) => (
-              <li key={project._id}>
-                <ProjectCard
-                  project={project}
-                  locale={locale}
-                  direction={direction}
-                  dict={dict}
-                  categories={categories}
-                  section={section}
-                  priority={index < 3}
-                />
-              </li>
-            ))}
-          </ul>
+          {/*
+            Первая работа разворачивается на всю ширину, остальные идут
+            карточками. Разворот один: два подряд читаются уже не как акцент,
+            а как «здесь всё главное», то есть как ничто.
+          */}
+          <FeaturedProject
+            project={selected[0]}
+            locale={locale}
+            direction={direction}
+            section={section}
+            categories={categories}
+          />
+
+          {selected.length > 1 ? (
+            <ul className="m-0 mt-16 grid list-none gap-10 p-0 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+              {selected.slice(1).map((project) => (
+                <li key={project._id}>
+                  <ProjectCard
+                    project={project}
+                    locale={locale}
+                    direction={direction}
+                    dict={dict}
+                    categories={categories}
+                    section={section}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </Section>
       ) : null}
 
@@ -350,6 +560,8 @@ export default async function DirectionHome({ params }: Props) {
           />
         </div>
       </Section>
+      </>
+      )}
     </>
   );
 }
