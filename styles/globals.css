@@ -248,6 +248,66 @@
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* --- Бегущая строка ------------------------------------------------------
+   Две одинаковые дорожки едут влево, каждая на свою ширину: когда первая
+   уходит целиком, вторая стоит ровно на её месте, и петля не даёт шва.
+
+   Скорость задана временем полного прохода, а не пикселями в секунду: при
+   любом числе названий строка едет одинаково спокойно, а не тем быстрее, чем
+   длиннее список.
+
+   Останавливается тремя способами: наведением, кнопкой рядом и системной
+   настройкой. При «уменьшить движение» полоса не едет вовсе — вторая дорожка
+   убирается, а первая листается пальцем, чтобы дальние названия остались
+   доступны.
+   ------------------------------------------------------------------------- */
+
+@layer components {
+  .marquee {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: baseline;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    padding-inline-end: clamp(2.5rem, 5vw, 5rem);
+    margin: 0;
+    list-style: none;
+    animation: marquee var(--duration-marquee) linear infinite;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee[data-paused] .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    padding-inline: clamp(1.25rem, 4.5vw, 4.5rem);
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  /* Копия нужна только петле. Без движения она превращается в повтор списка. */
+  .marquee-track[aria-hidden] {
+    display: none;
+  }
+}
+
 /* --- Фокус (§11: видимый keyboard focus) --------------------------------- */
 
 :focus-visible {

@@ -37,6 +37,7 @@ import type { Locale } from '@/lib/site';
 import { HeroReel } from './HeroReel';
 import { Rail } from './Rail';
 import { Band, BandHead, Cta, FineRow, Rise, bandField } from './parts';
+import { ClientMarquee } from './ClientMarquee';
 import { HeaderState } from './HeaderState';
 
 type Props = {
@@ -275,55 +276,21 @@ function Clients({
   clients: NonNullable<DirectionDoc['clients']>;
 }) {
   return (
-    <Band from="paper" core="paper" to="warm-grey" space="tight">
-      <p data-reveal className="label-fine m-0 text-bone-faint">
-        {dict.common.clients}
-      </p>
-
-      {/*
-       * По четыре в ряд, а не по шесть.
-       *
-       * Названия здесь очень разной длины — от «МОСПРОМ» до «Федерации
-       * спортивной гимнастики и акробатики», — и в узкой колонке длинное имя
-       * рассыпается на шесть строк. Четыре колонки дают ему три строки, и ряд
-       * держится. Неполный последний ряд при этом ничего не ломает: это список
-       * имён, выключенный влево, а не сетка карточек с пустой ячейкой.
-       *
-       * Логотипа у большинства пока нет. Когда официальные файлы появятся, имя
-       * заменится знаком по месту — вёрстку трогать не придётся.
-       */}
-      <ul
-        data-reveal
-        className="editorial-grid m-0 mt-10 list-none gap-y-9 p-0 lg:mt-14 lg:gap-y-12"
-      >
-        {clients.map((client) => {
-          const note = localizedString(client.note, locale);
-          return (
-            <li key={client.name} className="col-span-6 md:col-span-4 lg:col-span-3">
-              {client.logo ? (
-                <img
-                  src={client.logo.src}
-                  alt={client.name}
-                  width={client.logo.width}
-                  height={client.logo.height}
-                  loading="lazy"
-                  /*
-                   * Знак приводится к общему оптическому весу высотой, а не
-                   * шириной: у широкого и у квадратного логотипа одинаковая
-                   * рамка даёт совершенно разный вес в ряду.
-                   */
-                  className="block w-auto max-w-full"
-                  style={{ height: `${client.logo.height}px` }}
-                />
-              ) : (
-                <p className="m-0 text-lead leading-tight text-balance text-bone">{client.name}</p>
-              )}
-              {note ? <p className="label-fine mt-3 text-bone-faint">{note}</p> : null}
-            </li>
-          );
-        })}
-      </ul>
-    </Band>
+    /*
+     * Полоса, а не сетка. Десять названий сеткой занимали три ряда и треть
+     * экрана — непропорционально тому, что они сообщают. Бегущая строка говорит
+     * то же самое одной строкой и при этом заметнее неподвижного списка.
+     *
+     * Секция своя, а не `Band`: строка идёт от края до края экрана, а подпись и
+     * кнопка остаются в контейнере — контейнер вокруг движения сделал бы из
+     * полосы виджет.
+     */
+    <section
+      className="band band-light py-[clamp(2.5rem,4vw,4rem)]"
+      style={bandField('paper', 'paper', 'warm-grey')}
+    >
+      <ClientMarquee clients={clients} locale={locale} dict={dict} />
+    </section>
   );
 }
 

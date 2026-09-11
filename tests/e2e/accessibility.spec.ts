@@ -21,10 +21,22 @@ const PAGES = [
  * считает контраст по тому, что видит сейчас, и на промежуточном кадре
  * получает смесь цвета текста с фоном. Требование WCAG — про итоговое
  * состояние, а не про кадр анимации; при «уменьшить движение» её и вовсе нет.
+ *
+ * Зацикленное движение ждать нельзя: у бегущей строки заказчиков нет
+ * последнего кадра, и ожидание «пока всё остановится» истекало бы всегда.
+ * Такое движение не меняет цвет текста — оно только двигает его, — поэтому
+ * контрасту оно не мешает и из ожидания исключено.
  */
 async function settled(page: import('@playwright/test').Page) {
   await page.waitForFunction(
-    () => document.getAnimations().every((animation) => animation.playState !== 'running'),
+    () =>
+      document
+        .getAnimations()
+        .filter((animation) => {
+          const timing = (animation.effect as KeyframeEffect | null)?.getTiming();
+          return timing?.iterations !== Infinity;
+        })
+        .every((animation) => animation.playState !== 'running'),
     undefined,
     { timeout: 5000 },
   );

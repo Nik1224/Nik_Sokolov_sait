@@ -83,6 +83,9 @@ export type Dictionary = {
     next: string;
     /** Лента обложек: подпись группы для ассистивных технологий. */
     rail: string;
+    /** Бегущая строка клиентов: остановка движения (WCAG 2.2.2). */
+    pause: string;
+    resume: string;
     imageOf: string;
     showMore: string;
     /** Вкладки портфолио. */
@@ -337,6 +340,8 @@ const ru: Dictionary = {
     closeGallery: 'Закрыть галерею',
     previous: 'Предыдущее',
     rail: 'Категории съёмки, лента с прокруткой',
+    pause: 'Остановить движение',
+    resume: 'Возобновить движение',
     next: 'Следующее',
     imageOf: 'из',
     showMore: 'Показать ещё',
@@ -654,6 +659,8 @@ const en: Dictionary = {
     closeGallery: 'Close gallery',
     previous: 'Previous',
     rail: 'Shooting categories, scrollable rail',
+    pause: 'Stop the motion',
+    resume: 'Resume the motion',
     next: 'Next',
     imageOf: 'of',
     showMore: 'Show more',
