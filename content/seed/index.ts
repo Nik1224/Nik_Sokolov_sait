@@ -344,12 +344,13 @@ export const directions: DirectionDoc[] = [
       { name: 'Sesderma', note: { ru: 'Юбилей бренда', en: 'Brand anniversary' } },
       { name: 'Epica Professional', note: { ru: 'Обучающие ролики', en: 'Training videos' } },
       { name: 'Panthenol' },
-      { name: 'Hair Company Professional' },
+      { name: 'Hair Company Professional', short: 'Hair Company' },
       { name: 'ОК Студио' },
       { name: 'МОСПРОМ' },
       { name: 'Московский спорт' },
       {
         name: 'Федерация спортивной гимнастики и акробатики',
+        short: 'Федерация гимнастики',
       },
       {
         name: '«Алиса»',

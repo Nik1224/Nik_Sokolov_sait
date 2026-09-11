@@ -27,6 +27,8 @@ import type { Locale } from '@/lib/site';
 
 type Client = {
   name: string;
+  /** Короткая форма имени, когда полная не помещается в строку. */
+  short?: string;
   note?: LocaleString;
   logo?: { src: string; width: number; height: number };
 };
@@ -40,6 +42,14 @@ export function ClientMarquee({
   locale: Locale;
   dict: Dictionary;
 }) {
+  /*
+   * Состояние здесь только одно — нажатая кнопка. Остановку по ховеру целиком
+   * держит CSS (`.marquee:hover`), и заводить её ещё раз в React нельзя: пока
+   * обе причины писали в один `paused`, кнопка не работала вовсе. Нажал паузу,
+   * провёл мышью над полосой — и на выходе `onMouseLeave` снимал её вместе с
+   * `aria-pressed`, то есть ровно тот механизм остановки, которого требует
+   * WCAG 2.2.2.
+   */
   const [paused, setPaused] = useState(false);
 
   const track = (hidden: boolean) => (
@@ -57,7 +67,16 @@ export function ClientMarquee({
                 style={{ height: `${client.logo.height}px` }}
               />
           ) : (
-            <span className="text-lead whitespace-nowrap text-bone">{client.name}</span>
+            /*
+             * Полное имя остаётся в `title`: сокращение нужно полосе, а не
+             * заказчику, и в кредите он вправе называться целиком.
+             */
+            <span
+              title={client.short ? client.name : undefined}
+              className="text-lead whitespace-nowrap text-bone"
+            >
+              {client.short ?? client.name}
+            </span>
           )}
         </li>
       ))}
@@ -92,12 +111,7 @@ export function ClientMarquee({
         </button>
       </div>
 
-      <div
-        className="marquee mt-5"
-        data-paused={paused || undefined}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="marquee mt-5" data-paused={paused || undefined}>
         {track(false)}
         {track(true)}
       </div>

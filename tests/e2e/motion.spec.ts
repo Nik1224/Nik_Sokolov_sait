@@ -22,11 +22,28 @@ test('движение останавливается кнопкой', async ({ 
   await button.click();
   await expect(button).toHaveAttribute('aria-pressed', 'true');
 
-  const state = await band
-    .locator('.marquee-track')
-    .first()
-    .evaluate((el) => getComputedStyle(el).animationPlayState);
-  expect(state).toBe('paused');
+  const playState = () =>
+    band
+      .locator('.marquee-track')
+      .first()
+      .evaluate((el) => getComputedStyle(el).animationPlayState);
+
+  expect(await playState()).toBe('paused');
+
+  /*
+   * И остаётся нажатой, когда курсор прошёл над полосой.
+   *
+   * Ховер тоже останавливает движение, но это удобство, а не решение: увёл
+   * курсор — поехало дальше. Пока обе причины писали в одно состояние, выход
+   * курсора снимал и кнопку вместе с `aria-pressed`, то есть ровно тот
+   * механизм остановки, которого требует WCAG 2.2.2. Клик кнопки сам по себе
+   * этого не ловит: кнопка стоит вне полосы, и мышь на неё не заходит.
+   */
+  await band.locator('.marquee').hover();
+  await button.hover();
+
+  await expect(button).toHaveAttribute('aria-pressed', 'true');
+  expect(await playState()).toBe('paused');
 });
 
 test('при «уменьшить движение» полоса стоит, а названия остаются доступны', async ({ page }) => {
