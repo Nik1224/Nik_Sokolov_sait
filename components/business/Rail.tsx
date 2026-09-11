@@ -112,14 +112,39 @@ export function Rail({ children, dict, label }: Props) {
     );
     watcher.observe(el);
 
+    // Коснулись ленты — ход встаёт сразу, ещё до того как она сдвинулась хоть
+    // на пиксель: палец может лечь и не повести.
     const hold = () => {
       flags.manualUntil = performance.now() + MANUAL_PAUSE_MS;
-      // Листнули рукой — дальше ход продолжится с того места, где остановились.
-      flags.position = el.scrollLeft;
     };
     el.addEventListener('pointerdown', hold);
     el.addEventListener('wheel', hold, { passive: true });
     el.addEventListener('touchstart', hold, { passive: true });
+
+    /*
+     * Ход подхватывает ленту там, где её оставили.
+     *
+     * Раньше положение запоминалось в момент касания, и этого было мало:
+     * пока палец тянул, запомненная точка не двигалась, а через три секунды
+     * ход возвращал ленту ровно в неё — прокрутка отменялась сама собой.
+     *
+     * Ловить `touchend` тоже мало: после броска лента едет по инерции ещё
+     * секунду, и в момент отпускания она не там, где окажется. Единственное
+     * событие, которое знает настоящее положение, — сама прокрутка.
+     *
+     * Своя прокрутка от чужой отличается без флагов: собственный кадр пишет в
+     * `scrollLeft` ровно `flags.position`, поэтому после него расхождение
+     * меньше пикселя (браузер округляет дробную позицию). Всё, что больше, —
+     * не наше: палец, колесо или инерция.
+     */
+    const adopt = () => {
+      if (Math.abs(el.scrollLeft - flags.position) <= 2) return;
+      flags.position = el.scrollLeft;
+      // Инерция — продолжение жеста, а не новый: отсчёт паузы начинается
+      // заново, и ход не вступает посреди броска.
+      flags.manualUntil = performance.now() + MANUAL_PAUSE_MS;
+    };
+    el.addEventListener('scroll', adopt, { passive: true });
 
     let frame = 0;
     let previous = 0;
@@ -164,6 +189,7 @@ export function Rail({ children, dict, label }: Props) {
       el.removeEventListener('pointerdown', hold);
       el.removeEventListener('wheel', hold);
       el.removeEventListener('touchstart', hold);
+      el.removeEventListener('scroll', adopt);
     };
   }, [paused]);
 
