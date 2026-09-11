@@ -292,10 +292,11 @@ function Clients({
        * здесь значило бы получить три одинаковых пятна вместо трёх разных по
        * весу. Светлее обоих — и полоса читается акцентом, а не второй главой.
        *
-       * Переход короткий (`band-edge`): полоса невысокая, и растянутый спуск
-       * из бумаги в тёмное занял бы её целиком.
+       * Границы резаные (`band-cut`): сойтись мягко из бумаги в тёмное
+       * невозможно — переход прошёл бы через мёртвую середину шкалы и стал бы
+       * размывом. Поверхность держат свет и зерно, а не растушёвка края.
        */
-      className="band band-edge band-dark py-[clamp(2.5rem,4vw,4rem)]"
+      className="band band-cut band-dark py-[clamp(2.5rem,4vw,4rem)]"
       style={bandField('paper', 'warm-graphite', 'warm-grey')}
     >
       <ClientMarquee clients={clients} locale={locale} dict={dict} />
@@ -347,11 +348,7 @@ function Portfolio({
        * горизонтали не едет.
        */}
       <div className="mt-14 lg:mt-20">
-        <Rail
-          label={dict.media.rail}
-          previousLabel={dict.media.previous}
-          nextLabel={dict.media.next}
-        >
+        <Rail dict={dict} label={dict.media.rail}>
         <ul
           className="m-0 flex list-none snap-x snap-mandatory gap-4 p-0 lg:gap-5"
           style={{
@@ -520,12 +517,7 @@ function Cases({
         className="group block"
       >
         {leadImage ? (
-          <Shot
-            image={leadImage}
-            ratioClass="ratio-case-lead"
-            sizes="100vw"
-            className="bleed-soft"
-          />
+          <Shot image={leadImage} ratioClass="ratio-case-lead" sizes="100vw" />
         ) : null}
 
         <div className="container-wide">
@@ -628,7 +620,7 @@ function Pricing({
   };
 
   return (
-    <Band from="paper" core="ink" to="ivory" mode="dark" edge>
+    <Band from="paper" core="ink" to="ivory" mode="dark" cut>
       <BandHead
         title={dict.nav.pricing}
         action={{

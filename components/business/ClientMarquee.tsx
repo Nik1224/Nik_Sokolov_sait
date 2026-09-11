@@ -44,11 +44,9 @@ export function ClientMarquee({
 
   const track = (hidden: boolean) => (
     <ul className="marquee-track" aria-hidden={hidden || undefined}>
-      {clients.map((client) => {
-        const note = localizedString(client.note, locale);
-        return (
-          <li key={client.name} className="flex shrink-0 items-baseline gap-3">
-            {client.logo ? (
+      {clients.map((client) => (
+        <li key={client.name} className="flex shrink-0 items-baseline">
+          {client.logo ? (
               <img
                 src={client.logo.src}
                 alt={client.name}
@@ -58,15 +56,11 @@ export function ClientMarquee({
                 className="block w-auto"
                 style={{ height: `${client.logo.height}px` }}
               />
-            ) : (
-              <span className="text-lead whitespace-nowrap text-bone">{client.name}</span>
-            )}
-            {note ? (
-              <span className="label-fine whitespace-nowrap text-bone-faint">{note}</span>
-            ) : null}
-          </li>
-        );
-      })}
+          ) : (
+            <span className="text-lead whitespace-nowrap text-bone">{client.name}</span>
+          )}
+        </li>
+      ))}
     </ul>
   );
 

@@ -41,11 +41,11 @@ type BandProps = {
   /** Светлое поле или тёмное: от этого зависит, каким становится текст. */
   mode?: 'light' | 'dark';
   /**
-   * Короткий переход по краям вместо длинного. Нужен тёмной главе внутри
-   * светлого поля: растянутый спуск из бумаги в почти чёрное читается как
-   * размытие, а не как смена главы.
+   * Ровный тон до самого края вместо перехода. Нужен там, где полоса делает
+   * шаг через всю лестницу: сойтись мягко из бумаги в тёмное невозможно —
+   * переход пройдёт через мёртвую середину шкалы и станет размывом.
    */
-  edge?: boolean;
+  cut?: boolean;
   space?: keyof typeof SPACE;
   id?: string;
   children: ReactNode;
@@ -69,7 +69,7 @@ export function Band({
   core,
   to,
   mode = 'light',
-  edge = false,
+  cut = false,
   space = 'normal',
   id,
   children,
@@ -78,7 +78,7 @@ export function Band({
   return (
     <section
       id={id}
-      className={`band ${edge ? 'band-edge' : ''} ${mode === 'dark' ? 'band-dark' : 'band-light'} ${SPACE[space]} ${className}`}
+      className={`band ${cut ? 'band-cut' : ''} ${mode === 'dark' ? 'band-dark' : 'band-light'} ${SPACE[space]} ${className}`}
       style={
         {
           '--band-from': `var(--t-${from})`,
