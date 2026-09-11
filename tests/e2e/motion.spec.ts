@@ -125,3 +125,37 @@ test('стрелка листает ленту, кнопка держит её �
   await page.waitForTimeout(1600);
   expect(Math.abs((await rail.evaluate((el) => el.scrollLeft)) - held)).toBeLessThan(2);
 });
+
+test('пролистанная рукой лента едет дальше с того места, где её отпустили', async ({ page }) => {
+  await page.goto('/ru/business');
+  const rail = page.locator('.rail');
+  await rail.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1200);
+
+  /*
+   * Жест целиком: касание, протяжка, отпускание.
+   *
+   * Ход запоминал положение в момент КАСАНИЯ и через паузу возвращал ленту
+   * ровно туда — пролистанное пальцем отменялось само собой. Клик стрелки
+   * этого не ловит: он двигает ленту тем же кодом, который положение и пишет.
+   */
+  const dragged = await rail.evaluate(async (el) => {
+    el.dispatchEvent(new Event('touchstart', { bubbles: true }));
+    const start = el.scrollLeft;
+    for (let i = 1; i <= 10; i += 1) {
+      el.scrollLeft = start + i * 90;
+      await new Promise((resolve) => setTimeout(resolve, 30));
+    }
+    el.dispatchEvent(new Event('touchend', { bubbles: true }));
+    return el.scrollLeft;
+  });
+
+  expect(dragged).toBeGreaterThan(400);
+
+  // Дольше паузы после ручного листания: к этому моменту ход уже вступил.
+  await page.waitForTimeout(4200);
+
+  const after = await rail.evaluate((el) => el.scrollLeft);
+  // Поехала дальше, а не вернулась к точке касания.
+  expect(after).toBeGreaterThan(dragged - 2);
+});
