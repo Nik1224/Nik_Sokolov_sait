@@ -134,16 +134,27 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
 
                   {/* На узком экране сводка уходит под описание: справа для неё
                       нет места, а без неё свёрнутая группа ни о чём не говорит. */}
-                  <span className="label mt-3 block text-bone-dim sm:hidden">
-                    {packagesLabel(items.length)}
-                    {summary ? ` · ${summary}` : ''}
+                  <span className="mt-3 block sm:hidden">
+                    <span className="label block text-bone-faint">{packagesLabel(items.length)}</span>
+                    {summary ? (
+                      <span className="text-h3 tabular mt-1 block text-bone">{summary}</span>
+                    ) : null}
                   </span>
                 </span>
 
-                {/* Свёрнутая группа сразу отвечает: сколько пакетов и почём. */}
-                <span className="label hidden shrink-0 text-right text-bone-dim sm:block">
-                  <span className="block">{packagesLabel(items.length)}</span>
-                  {summary ? <span className="mt-1 block text-bone-faint">{summary}</span> : null}
+                {/*
+                  Свёрнутая группа сразу отвечает: сколько пакетов и почём.
+                  Вилка набрана крупно — это вторая по важности цифра на
+                  странице после часовой ставки, а стояла она самым мелким
+                  моноширинным, какой на странице был.
+                */}
+                <span className="hidden shrink-0 text-right sm:block">
+                  <span className="label block text-bone-faint">{packagesLabel(items.length)}</span>
+                  {summary ? (
+                    <span className="text-h3 tabular mt-1 block whitespace-nowrap text-bone">
+                      {summary}
+                    </span>
+                  ) : null}
                 </span>
 
                 <svg
@@ -159,11 +170,13 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
               </button>
             </h3>
 
-            {expanded ? (
-              <div id={panelId} className="pricing-panel pb-10">
+            {/* Раскрытие и правила видимости — в утилите `.collapsible`. */}
+            <div id={panelId} className="collapsible" data-open={expanded}>
+              <div>
+                <div className="pb-10">
                 {available.length > 1 ? (
                   <fieldset className="m-0 mb-8 border-0 p-0">
-                    <legend className="label mb-4 p-0 text-accent">{dict.calculator.formats}</legend>
+                    <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.formats}</legend>
                     <div className="flex flex-wrap gap-3">
                       {available.map((value) => (
                         <label
@@ -197,10 +210,9 @@ export function PricingPackages({ groups, entries, locale, dict, contacts }: Pro
                   contacts={contacts}
                   headingLevel="h4"
                 />
+                </div>
               </div>
-            ) : (
-              <div id={panelId} hidden />
-            )}
+            </div>
           </section>
         );
       })}

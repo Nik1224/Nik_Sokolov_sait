@@ -3,124 +3,95 @@
 /**
  * Плитки категорий портфолио на Home ветки PRIVATE (ТЗ §5.2, §7).
  *
- * При наведении плитка показывает короткую петлю со съёмки этой категории.
- * Видео — усиление, а не условие: название и переход работают всегда, и без
- * ролика плитка выглядит ровно так же, как выглядела.
+ * Плитка — это кадр, а не строка. Постер стоит всегда, название лежит поверх
+ * на вуали, а петля со съёмки — усиление сверху.
  *
- * Две подачи одного и того же, как у карточек направлений на START:
- *  • где есть мышь — плитка при наведении раскрывается кадром поверх страницы;
- *  • на сенсорных экранах наведения не существует, поэтому вертикальный кадр
- *    просто стоит справа в плитке и играет, пока она на экране.
+ * Две подачи одного и того же:
+ *  • где есть мышь — при наведении кадр медленно наезжает и подхватывается
+ *    петля со съёмки этой категории;
+ *  • на сенсорных экранах наведения не существует, поэтому петля играет сама,
+ *    пока плитка на экране.
  *
- * Петли есть не у всех веток. У BUSINESS их нет вовсе, и семь плиток сводились
- * к семи серым прямоугольникам с текстом — худшее, что может показать сетка на
- * сайте фотографа. Поэтому у плитки есть третья подача: неподвижная обложка,
- * взятая из работ этой категории. Она приглушена, чтобы название читалось, и
- * проявляется под курсором. Ни обложки, ни петли — плитка остаётся текстовой и
- * выглядит ровно так же, как выглядела.
+ * Без петли плитка выглядит ровно так же: движение — не условие.
  */
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Category, ImageRef } from '@/content/types';
+import { Picture } from '@/components/media/Picture';
+import { useLoopMode, useLoopPreload, type LoopMode } from '@/components/media/useLoopPreview';
+import type { Category, ImageRef, MediaAsset } from '@/content/types';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
-import { Picture } from '../media/Picture';
 import type { Direction, Locale } from '@/lib/site';
 
 type Props = {
   categories: Category[];
   locale: Locale;
   direction: Direction;
-  /**
-   * Обложки по ключу категории. Приходят снаружи, а не из самой категории:
-   * кадр берётся у работ ветки, и знать про работы плиткам незачем.
-   */
-  covers?: Record<string, ImageRef | undefined>;
+  dict: Dictionary;
 };
 
-type Mode = 'none' | 'hover' | 'always';
+/** Кадр для плитки: превью, а если его нет — первое, что есть у категории. */
+function coverOf(category: Category): ImageRef | null {
+  const candidates: MediaAsset[] = [
+    ...(category.preview ? [category.preview] : []),
+    ...(category.gallery ?? []),
+    ...(category.backstage ?? []),
+  ];
 
-export function CategoryTiles({ categories, locale, direction, covers }: Props) {
-  /*
-   * Как показывать петли. Решается один раз на весь список: условия одинаковые
-   * для всех плиток, и пять одинаковых подписок на media query ничего не
-   * добавляют.
-   */
-  const [mode, setMode] = useState<Mode>('none');
+  for (const media of candidates) {
+    const image = media.type === 'image' ? media.image : media.poster;
+    if (image) return image;
+  }
+  return null;
+}
 
-  useEffect(() => {
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const hover = window.matchMedia('(hover: hover)');
+/**
+ * Пропорции плиток. Берутся из самих кадров, а не назначаются на глаз.
+ *
+ * Раньше плитки были 3:4, а первая — 3:2 во всю ширину двух колонок. Съёмки же
+ * сняты вертикально, 9:16: широкая рамка показывала от такого кадра меньше
+ * трети по высоте и резала лица, а обычная теряла четверть. Кадр — это то,
+ * ради чего сюда пришли, и обрезать его рамкой, выбранной вёрсткой, нельзя.
+ *
+ * Одно число на всю сетку, а не своё у каждой плитки: ряд должен стоять ровно.
+ * Медиана, а не среднее — один нетипичный кадр не должен перекашивать всех.
+ */
+function gridRatio(categories: Category[]): number {
+  const ratios = categories
+    .map((category) => coverOf(category))
+    .filter((image): image is ImageRef => Boolean(image?.width && image?.height))
+    .map((image) => image.width / image.height)
+    .sort((a, b) => a - b);
 
-    const update = () => {
-      // Экономия трафика — осознанный выбор человека, и он важнее украшений.
-      const connection = (navigator as { connection?: { saveData?: boolean } }).connection;
-      if (motion.matches || connection?.saveData) {
-        setMode('none');
-        return;
-      }
-      setMode(hover.matches ? 'hover' : 'always');
-    };
+  if (ratios.length === 0) return 3 / 4;
+  return ratios[Math.floor(ratios.length / 2)];
+}
 
-    update();
-    motion.addEventListener('change', update);
-    hover.addEventListener('change', update);
-    return () => {
-      motion.removeEventListener('change', update);
-      hover.removeEventListener('change', update);
-    };
-  }, []);
-
-  /*
-   * Сколько колонок сейчас в сетке. Нужно, чтобы понять, в каком ряду плитка:
-   * верхние раскрываются вверх, нижние вниз. Число колонок задано брейкпойнтами
-   * (1 / 2 / 3), поэтому читаем его у самой сетки, а не повторяем в коде — иначе
-   * при правке класса они разойдутся молча.
-   */
-  const gridRef = useRef<HTMLUListElement>(null);
-  const [columns, setColumns] = useState(1);
-
-  useEffect(() => {
-    const el = gridRef.current;
-    if (!el) return;
-
-    const count = () =>
-      setColumns(getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length || 1);
-
-    count();
-    const observer = new ResizeObserver(count);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const lastRow = Math.floor((categories.length - 1) / columns);
+export function CategoryTiles({ categories, locale, direction, dict }: Props) {
+  const mode = useLoopMode();
+  const ratio = gridRatio(categories);
 
   /*
-   * Пустые ячейки последнего ряда. Сетка держит хайрлайны фоном под зазором,
-   * поэтому недобранный ряд показывался сплошным серым прямоугольником —
-   * заметной дырой рядом с последней плиткой.
+   * Недобранный ряд остаётся воздухом. Сетка не держит хайрлайны фоном,
+   * поэтому пустое место выглядит полем, а не дырой, — и подпирать его пустой
+   * ячейкой, как было раньше, не нужно.
    */
-  const fillers = (columns - (categories.length % columns)) % columns;
-
   return (
-    <ul ref={gridRef} className="m-0 grid list-none gap-px bg-line p-0 sm:grid-cols-2 lg:grid-cols-3">
+    <ul data-reveal-stagger className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-3">
       {categories.map((category, index) => (
-        <li key={category._id} className="bg-ink">
+        <li key={category._id}>
           <Tile
             category={category}
             locale={locale}
             direction={direction}
+            dict={dict}
             mode={mode}
-            cover={covers?.[category.slug]}
-            // Нижний ряд раскрывается вниз и отодвигает то, что под сеткой.
-            // Остальные — вверх, в воздух над плитками.
-            growsDown={Math.floor(index / columns) === lastRow}
+            ratio={ratio}
+            order={index}
           />
         </li>
-      ))}
-      {Array.from({ length: fillers }, (_, index) => (
-        <li key={`filler-${index}`} className="bg-ink" aria-hidden="true" />
       ))}
     </ul>
   );
@@ -130,102 +101,78 @@ function Tile({
   category,
   locale,
   direction,
+  dict,
   mode,
-  cover,
-  growsDown,
+  ratio,
+  order,
 }: {
   category: Category;
   locale: Locale;
   direction: Direction;
-  mode: Mode;
-  cover?: ImageRef;
-  growsDown: boolean;
+  dict: Dictionary;
+  mode: LoopMode;
+  ratio: number;
+  order: number;
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(false);
-  /*
-   * Две высоты плитки, обе в пикселях: без числа с обеих сторон переход не
-   * анимируется, а «по содержимому» числом не является.
-   *
-   * Сложенная измеряется у самой плитки, а не задаётся константой: она зависит
-   * от кегля и отступов, и стоит им поменяться — плитка дёрнется на первом же
-   * наведении. Раскрытая считается от ширины колонки, чтобы кадр встал целиком,
-   * а не полосой из середины. Потолок в 80vh нужен на низких экранах: строка
-   * выше экрана — это уже не превью.
-   */
-  const [collapsed, setCollapsed] = useState<number | null>(null);
-  const [expanded, setExpanded] = useState<number | null>(null);
-  /*
-   * Адрес подставляется только при первом наведении. Иначе пять роликов
-   * поехали бы за человеком по сети ещё до того, как он на них посмотрел.
-   */
-  const [source, setSource] = useState<string | null>(null);
 
-  const description = localizedString(category.description, locale);
-
+  const cover = coverOf(category);
   const loop = category.preview?.type === 'video' ? category.preview : null;
-  const shows = Boolean(loop?.loopSrc) && mode !== 'none';
-  const standing = shows && mode === 'always';
-  /*
-   * Обложка нужна там, где петли нет: с петлёй два изображения в одной плитке
-   * спорили бы друг с другом. `mode === 'none'` сюда попадает намеренно — при
-   * выключенной анимации и экономии трафика неподвижный кадр как раз уместен,
-   * это не движение.
-   */
-  const showsCover = Boolean(cover) && !shows;
-
-  const ratio = loop ? loop.poster.height / loop.poster.width : 0;
-
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || mode !== 'hover' || !shows || !ratio) return;
-
-    const fit = () =>
-      setExpanded(Math.round(Math.min(el.clientWidth * ratio, window.innerHeight * 0.8)));
-
-    fit();
-    // Ширина колонки и высота экрана меняются вместе с окном. Заодно
-    // сбрасываем измеренную сложенную высоту: с новой шириной заголовок может
-    // переноситься иначе, и старое число уже не про эту плитку.
-    const onResize = () => {
-      setCollapsed(null);
-      fit();
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [mode, shows, ratio]);
+  const standing = Boolean(loop?.loopSrc) && mode === 'always';
 
   /*
-   * Сложенную высоту измеряем ровно в тот момент, когда она ещё своя: до того,
-   * как мы сами её проставили, и не во время раскрытия — иначе в неё попадёт
-   * промежуточный кадр анимации и плитка «усохнет» до него.
+   * Ролик греется, как только плитка показалась на экране, — к наведению он
+   * уже в кэше. Раньше загрузка начиналась в момент наведения, и петля
+   * появлялась через пять-десять секунд, когда мышь давно ушла.
    */
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || mode !== 'hover' || !shows || active || collapsed !== null) return;
-    setCollapsed(el.getBoundingClientRect().height);
-  }, [mode, shows, active, collapsed]);
+  const { source, ready, warmNow, markReady } = useLoopPreload({
+    target: linkRef,
+    loopSrc: loop?.loopSrc,
+    mode,
+    order,
+  });
 
   const activate = useCallback(() => {
-    if (mode !== 'hover' || !loop?.loopSrc) return;
-    setSource((current) => current ?? loop.loopSrc ?? null);
+    // На случай, если навели раньше, чем очередь дошла сюда.
+    warmNow();
     setActive(true);
-  }, [mode, loop]);
-
+  }, [warmNow]);
   const deactivate = useCallback(() => setActive(false), []);
 
   /*
-   * Запуск живёт в эффекте, а не в обработчике наведения. При первом
-   * наведении адрес только попадает в состояние, и в этот момент у элемента
-   * ещё нет источника: вызванный тут же play() не находит, что играть, и
-   * ролик молча остаётся на нулевой секунде.
+   * Где наведения не бывает, петля живёт по видимости плитки: играет, пока
+   * она на экране, и стоит, когда ушла. Ушедшая с экрана плитка не должна
+   * крутить кадр и тратить батарею — на телефоне это заметно.
    */
+  const [onScreen, setOnScreen] = useState(false);
+
+  useEffect(() => {
+    const el = linkRef.current;
+    if (!el || !standing) return;
+
+    const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), {
+      threshold: 0.25,
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [standing]);
+
+  /*
+   * Играет — когда навели, а на сенсорном экране — когда плитка видна.
+   * Запуск живёт в эффекте, а не в обработчике: в момент наведения состояние
+   * ещё не доехало до разметки, и вызванный тут же play() не нашёл бы, что
+   * играть.
+   */
+  const playing = standing ? onScreen : active;
+
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || standing) return;
+    if (!video || !source) return;
 
-    if (active && source) {
+    if (playing) {
       void video.play().catch(() => {
         /* автозапуск может быть запрещён — плитка работает и без видео */
       });
@@ -233,38 +180,17 @@ function Tile({
     }
 
     video.pause();
-    // С начала: иначе при следующем наведении кадр продолжится с середины.
-    video.currentTime = 0;
-  }, [standing, active, source]);
+    /*
+     * Отматываем только уход мыши: следующее наведение должно начинаться с
+     * начала. На сенсорном экране плитка вернётся в кадр при обратной
+     * прокрутке, и продолжить с того же места естественнее, чем начинать
+     * заново.
+     */
+    if (!standing) video.currentTime = 0;
+  }, [playing, source, standing]);
 
-  /*
-   * Без наведения кадр живёт по видимости плитки: играет, пока она на экране,
-   * и стоит, когда ушла. Простого autoplay мало — браузер не запускает ролик,
-   * который в момент загрузки был за пределами экрана, и после прокрутки он
-   * так и остаётся на паузе.
-   */
-  useEffect(() => {
-    const el = linkRef.current;
-    if (!el || !standing || !loop?.loopSrc) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const video = videoRef.current;
-        if (entry.isIntersecting) {
-          setSource((current) => current ?? loop.loopSrc ?? null);
-          void video?.play().catch(() => {
-            /* автозапуск может быть запрещён — плитка работает и без видео */
-          });
-        } else {
-          video?.pause();
-        }
-      },
-      { threshold: 0.25 },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [standing, loop]);
+  const title = localizedString(category.title, locale);
+  const description = localizedString(category.description, locale);
 
   return (
     <Link
@@ -274,158 +200,62 @@ function Tile({
       onFocus={activate}
       onBlur={deactivate}
       ref={linkRef}
-      /*
-       * Сетка в потоке не меняется никогда: раскрывается только слой с кадром,
-       * поверх страницы. Направление решает ряд — верхние ряды уходят вверх,
-       * чтобы не накрыть соседние плитки, нижний вниз.
-       *
-       * Раньше нижний ряд рос по-настоящему и отодвигал следующий блок. Отказ
-       * от этого — сознательный: страница дёргалась на каждое наведение, а
-       * ничего взамен этот сдвиг не давал. Кадру и так есть куда лечь.
-       */
-      style={standing ? undefined : { minHeight: collapsed ?? undefined }}
-      /*
-       * Название прижато к верхнему краю и стоит выше слоя с кадром: раскрытие
-       * его не трогает. В сложенном виде `items-start` ничего не меняет —
-       * содержимое и так занимало всю высоту между отступами.
-       *
-       * Плитка тянется на всю высоту своей ячейки (`h-full`), чтобы нажимать
-       * на неё можно было по всей площади.
-       *
-       * Со стоящим кадром плитка выше: колонка под ролик получается около
-       * 150 px, и в строку высотой со строку текста вертикальный кадр лёг бы
-       * горизонтальной полосой из середины. Целиком он потребовал бы почти
-       * 280 px на плитку — список из пяти категорий на телефоне превратился
-       * бы в ленту на полтора экрана.
-       */
-      /*
-       * С обложкой плитке нужен рост: в высоту текстовой строки кадр ложится
-       * полосой из середины и перестаёт быть кадром. 13 rem — примерно
-       * половина ширины колонки на десктопе, то есть узнаваемый кусок сцены.
-       */
-      className={`group relative flex h-full justify-between p-6 lg:p-8 ${
-        standing ? 'min-h-[12.5rem] items-center' : 'items-start'
-      } ${showsCover ? 'min-h-[11rem] lg:min-h-[13rem]' : ''} ${active ? 'z-10' : ''}`}
-      data-grows={growsDown ? 'down' : 'up'}
+      // Пропорции — от кадра, поэтому object-cover ничего не срезает.
+      style={{ aspectRatio: ratio }}
+      className="group on-media relative block overflow-hidden bg-ink-sunken"
     >
-      {showsCover && cover ? (
-        /*
-         * Кадр лежит фоном, а не стоит сбоку: у горизонтальной обложки боковая
-         * колонка обрезала бы её до полосы. Приглушение постоянное — название
-         * поверх яркого кадра не читается, — а под курсором кадр выходит
-         * вперёд: это и есть ответ на вопрос «что там внутри».
-         */
-        <>
-          <Picture
-            image={cover}
-            alt=""
-            sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:opacity-85 group-focus-visible:opacity-85"
-          />
-          {/*
-           * Вуаль плотная сверху, где стоит название, и сходит на нет внизу.
-           * Направление здесь не декоративное: текст в плитке прижат к верхнему
-           * краю, и вуаль, сгущённая снизу, оставила бы его на самом светлом
-           * месте кадра. Цвет берётся токеном — в светлой теме PRIVATE вуаль
-           * станет светлой вместе с фоном.
-           */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink from-40% via-ink/85 via-78% to-ink/45"
-          />
-        </>
+      {cover ? (
+        <Picture
+          image={cover}
+          alt=""
+          sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1100ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.06] group-focus-visible:scale-[1.06]"
+        />
       ) : null}
 
-      {standing && loop ? (
+      {source && loop ? (
         /*
-         * Сенсорный экран: кадр стоит в правой части плитки и играет сам.
-         * Раскрывать нечему — наведения здесь не существует.
+         * Показывается только когда действительно может играть: недогруженный
+         * ролик выводит чёрный кадр поверх постера, и вместо кино получается
+         * дыра. `preload="auto"` — потому что адрес уже подставлен осознанно,
+         * ровно для того, чтобы к наведению всё было готово.
          */
-        <>
-          <video
-            ref={videoRef}
-            src={source ?? undefined}
-            poster={loop.poster.src}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 h-full w-[42%] object-cover"
-          />
-          {/* Кромка слева от кадра: без неё он упирается в текст встык. */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-[42%] w-16 bg-gradient-to-l from-ink/60 to-transparent"
-          />
-        </>
+        <video
+          ref={videoRef}
+          src={source}
+          poster={loop.poster.src}
+          autoPlay={standing}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onCanPlay={markReady}
+          className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] ${
+            ready && playing ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
       ) : null}
 
-      {!standing && shows && loop ? (
-        /*
-         * Слой с кадром. Растёт вниз за пределы плитки и накрывает то, что под
-         * ней, — поэтому у раскрытой плитки поднят z-index. Пропорции слоя
-         * повторяют пропорции ролика, поэтому object-cover ничего не срезает.
-         */
+      <span aria-hidden="true" className="media-scrim pointer-events-none absolute inset-0" />
+
+      <span className="absolute inset-x-0 bottom-0 flex flex-col p-5 lg:p-7">
+        <span className="text-h3 text-balance text-bone">{title}</span>
+        {description ? (
+          <span className="mt-1 line-clamp-2 max-w-prose text-sm text-bone-dim">{description}</span>
+        ) : null}
+        {/*
+         * Строка появляется по наведению: указывать «смотреть» на каждой из
+         * пяти плиток разом — значит не указывать никуда. На сенсорном экране
+         * наведения нет, поэтому там она стоит всегда.
+         */}
         <span
-          style={{ height: (active ? expanded : collapsed) ?? undefined }}
-          className={`absolute inset-x-0 block overflow-hidden bg-ink transition-[height] duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] ${
-            growsDown ? 'top-0' : 'bottom-0'
+          className={`label mt-3 text-bone-faint transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
+            mode === 'always' ? '' : 'translate-y-1 opacity-0'
           }`}
         >
-          {/* Постер стоит здесь же: пока грузится первый кадр, плитка не
-              мигает пустотой. */}
-          <video
-            ref={videoRef}
-            src={source ?? undefined}
-            poster={loop.poster.src}
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:opacity-100 group-focus-visible:opacity-100"
-          />
-          {/*
-           * Вуаль цветом фона — со стороны названия: оно должно читаться при
-           * любом кадре. Дальше она сходит почти на нет: закрывать ради одной
-           * строки весь кадр незачем. У растущего вверх слоя название внизу,
-           * поэтому и вуаль снизу. Цвет берётся из токена, поэтому в светлой
-           * теме PRIVATE вуаль светлая, а в тёмных ветках была бы тёмной.
-           */}
-          <span
-            aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 from-ink from-16% via-ink/35 via-38% to-ink/5 opacity-0 transition-opacity duration-[var(--duration-slow)] group-hover:opacity-100 group-focus-visible:opacity-100 ${
-              growsDown ? 'bg-gradient-to-b' : 'bg-gradient-to-t'
-            }`}
-          />
+          {dict.common.view} →
         </span>
-      ) : null}
-
-      {/*
-       * Со стоящим кадром текст занимает левую половину: иначе длинное
-       * название уходит под ролик, а стрелка оказывается прямо на нём.
-       */}
-      <span className={`relative block ${standing ? 'w-[54%]' : 'w-full'}`}>
-        <span className="flex items-center justify-between gap-4">
-          <span className="text-h3 text-bone transition-colors group-hover:text-accent">
-            {localizedString(category.title, locale)}
-          </span>
-          <span
-            aria-hidden="true"
-            className="label text-bone-faint transition-transform group-hover:translate-x-1"
-          >
-            →
-          </span>
-        </span>
-        {/*
-         * Строка о том, что внутри. Со стоящим кадром её нет: там на текст
-         * остаётся половина плитки, и три строки легли бы прямо под ролик.
-         */}
-        {description && !standing ? (
-          <span className="mt-3 block max-w-prose text-bone-dim">{description}</span>
-        ) : null}
       </span>
     </Link>
   );

@@ -1,0 +1,60 @@
+# Проверки на каждый пуш и каждый PR.
+#
+# До этого в репозитории не запускалось ничего: 127 юнит-тестов и больше
+# двухсот сквозных проверок лежали мёртвым грузом, а GitHub только дёргал
+# Vercel на сборку. Сломанное доезжало до прода и обнаруживалось глазами.
+
+name: Проверки
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Новый пуш в ту же ветку отменяет предыдущий прогон: проверять устаревший
+# коммит смысла нет, а минуты расходуются.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Типы, юниты и сквозные проверки
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Типы
+        run: npm run typecheck
+
+      - name: Юнит-тесты
+        run: npm test
+
+      # Chrome, а не встроенный Chromium: петли на сайте закодированы H.264,
+      # а сборка Chromium из открытых исходников этот кодек не умеет — все
+      # проверки воспроизведения на ней падают, ничего не проверив. WebKit
+      # нужен трём проверкам, помеченным @safari.
+      - name: Браузеры
+        run: npx playwright install --with-deps chrome webkit
+
+      # Сквозные проверки гоняются по продакшн-сборке: её и увидит человек.
+      # Сборку запускает сам Playwright, см. webServer в playwright.config.ts.
+      - name: Сквозные проверки и доступность
+        run: npm run test:e2e
+
+      - name: Следы упавших проверок
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7

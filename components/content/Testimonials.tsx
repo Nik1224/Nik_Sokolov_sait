@@ -1,10 +1,22 @@
+'use client';
+
 /**
  * Отзывы клиентов (ТЗ §5.2: «отзывы только подтверждённые»).
  *
  * Показываются те, что клиенты оставили публично. Имя обязательно: отзыв без
  * автора ничего не подтверждает.
+ *
+ * На экране всегда один отзыв, крупно. Шесть блоков серого текста одинакового
+ * веса читались стеной: глазу не за что зацепиться, и в итоге не читался ни
+ * один. Чем больше отзывов показать разом, тем меньше им верят.
+ *
+ * Отзывы сменяются сами, но смена — не условие: любой можно выбрать штрихом
+ * под цитатой, а при «уменьшить движение» автосмена не запускается вовсе.
+ * Пока на блоке курсор или фокус, отзыв не меняется: читающего нельзя
+ * перебивать.
  */
 
+import { useEffect, useRef, useState } from 'react';
 import type { Testimonial } from '@/content/types';
 import { hasTranslation, localizedString } from '@/lib/i18n/localize';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
@@ -12,52 +24,104 @@ import type { Locale } from '@/lib/site';
 
 type Props = { items: Testimonial[]; locale: Locale; dict: Dictionary };
 
+/** Сколько отзыв стоит на экране. Меньше — не успеть дочитать длинный. */
+const HOLD_MS = 7000;
+
 export function Testimonials({ items, locale, dict }: Props) {
+  const [index, setIndex] = useState(0);
+  const [held, setHeld] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (items.length < 2 || held) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    /*
+     * Смена идёт только пока блок на экране. Иначе к моменту, когда до него
+     * долистают, отзывы успеют прокрутиться по кругу и человек попадёт на
+     * середину набора без всякой причины.
+     */
+    const el = rootRef.current;
+    if (!el) return;
+
+    let timer: number | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        window.clearInterval(timer);
+        if (entry.isIntersecting) {
+          timer = window.setInterval(
+            () => setIndex((current) => (current + 1) % items.length),
+            HOLD_MS,
+          );
+        }
+      },
+      { threshold: 0.4 },
+    );
+
+    observer.observe(el);
+    return () => {
+      window.clearInterval(timer);
+      observer.disconnect();
+    };
+  }, [items.length, held]);
+
   if (items.length === 0) return null;
 
-  return (
-    /*
-     * Отзывы стоят карточками на приподнятой подложке, а не текстом под
-     * хайрлайном. Длина отзыва не в нашей власти: однострочное «отличные фото»
-     * рядом с десятистрочным разбором выглядело обрывком вёрстки, потому что
-     * между ними не было ничего, кроме воздуха. Подложка одинаковой высоты
-     * делает короткий отзыв коротким отзывом, а не ошибкой.
-     */
-    <div className="overflow-hidden">
-      <ul className="-mt-px -ml-px m-0 grid list-none p-0 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => {
-        const text = localizedString(item.text, locale);
-        const isFallback = !hasTranslation(item.text, locale);
+  const current = items[Math.min(index, items.length - 1)];
+  const text = localizedString(current.text, locale);
+  const isFallback = !hasTranslation(current.text, locale);
 
-        return (
-          <li
-            key={item._id}
-            className="border-t border-l border-line bg-ink-raised p-6 lg:p-8"
-          >
-            <figure className="m-0 flex h-full flex-col">
-              {/*
-               * Кавычка вместо иконки: она из того же набора, что и текст, и не
-               * тянет за собой чужую графику в монохромную вёрстку.
-               */}
-              <span aria-hidden="true" className="text-h2 block leading-none text-line-strong">
-                «
-              </span>
-              <blockquote className="m-0 mt-4 flex-1 text-lead leading-relaxed text-bone-dim">
-                {text}
-              </blockquote>
-              <figcaption className="label mt-6 flex flex-wrap items-center gap-3 text-bone">
-                {item.author}
-                {isFallback ? (
-                  <span lang="en" className="border border-line px-2 py-0.5 text-bone-faint">
-                    {dict.fallback.short}
-                  </span>
-                ) : null}
-              </figcaption>
-            </figure>
-          </li>
-        );
-        })}
-      </ul>
+  return (
+    <div
+      ref={rootRef}
+      onMouseEnter={() => setHeld(true)}
+      onMouseLeave={() => setHeld(false)}
+      onFocusCapture={() => setHeld(true)}
+      onBlurCapture={() => setHeld(false)}
+    >
+      <figure className="m-0 max-w-3xl">
+        {/*
+          key — чтобы проявление проигрывалось на каждой смене: без него React
+          переиспользует узел, и текст просто подменяется на месте.
+        */}
+        <blockquote key={current._id} className="quote m-0 text-h2 text-balance text-bone">
+          {text}
+        </blockquote>
+        <figcaption className="mt-8 flex flex-wrap items-center gap-3">
+          <span className="label text-bone-faint">{current.author}</span>
+          {isFallback ? (
+            <span lang="en" className="label border border-line px-2 py-0.5 text-bone-faint">
+              {dict.fallback.short}
+            </span>
+          ) : null}
+        </figcaption>
+      </figure>
+
+      {items.length > 1 ? (
+        <ul className="m-0 mt-10 flex list-none flex-wrap gap-2 p-0">
+          {items.map((item, position) => (
+            <li key={item._id} className="m-0">
+              <button
+                type="button"
+                onClick={() => setIndex(position)}
+                aria-current={position === index ? 'true' : undefined}
+                /*
+                 * Имя автора — единственная осмысленная подпись у штриха:
+                 * «отзыв 3 из 6» ничего не говорит о том, куда ведёт.
+                 */
+                aria-label={item.author}
+                className="group block cursor-pointer py-3"
+              >
+                <span
+                  className={`block h-px w-8 transition-colors ${
+                    position === index ? 'bg-accent' : 'bg-line-strong group-hover:bg-bone-faint'
+                  }`}
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 }

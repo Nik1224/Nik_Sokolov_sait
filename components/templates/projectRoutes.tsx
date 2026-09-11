@@ -159,11 +159,17 @@ export async function ProjectListingRoute({
     fullSeriesHere && isSectionAvailable(direction, 'albums') ? await getAlbums(direction) : [];
 
   /*
+   * Обложка промо-блока — кадр из первого альбома с обложкой. Не украшение:
+   * блок зовёт посмотреть съёмку целиком, и обещание видно до перехода.
+   */
+  const promoCoverMedia = albums.find((album) => album.cover?.type === 'image')?.cover;
+  const promoCover = promoCoverMedia?.type === 'image' ? promoCoverMedia.image : undefined;
+
+  /*
    * Выход из пустой галереи. Ведёт в тот раздел, где у ветки лежат страницы
-   * работ, и с тем же фильтром — человек искал производство, а не «что-нибудь».
-   *
-   * Проверка на наличие работ обязательна: переход в раздел, где его тоже
-   * ждёт «здесь пока пусто», хуже тупика — он тратит ещё один клик.
+   * работ, и с тем же фильтром — человек искал производство, а не
+   * «что-нибудь». Проверка на наличие работ обязательна: переход туда, где его
+   * тоже ждёт «здесь пока пусто», хуже тупика — он тратит ещё один клик.
    */
   const detailSection = DETAIL_SECTION[direction];
   const emptyAction =
@@ -202,6 +208,7 @@ export async function ProjectListingRoute({
               body: dict.albums.promoBody,
               action: dict.albums.promoAction,
               href: href({ locale, direction, section: 'albums' }),
+              cover: promoCover,
             }
           : undefined
       }

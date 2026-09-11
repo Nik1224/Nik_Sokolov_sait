@@ -106,10 +106,18 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
   const note = localizedString(config.note, locale);
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-14">
+    /*
+      Признак для тестов: «Фото» и «Видео» на этой странице встречаются дважды
+      — здесь и в переключателе формата внутри свёрнутой группы пакетов.
+      Искать их по всей странице значит однажды нажать не на то.
+    */
+    <div
+      data-calculator
+      className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-14"
+    >
       <div className="flex flex-col gap-9">
         <fieldset className="m-0 border-0 p-0">
-          <legend className="label mb-4 p-0 text-accent">{dict.calculator.formats}</legend>
+          <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.formats}</legend>
           <div className="flex flex-wrap gap-3">
             {(['photo', 'video'] as const).map((format) => {
               const active = formats.includes(format);
@@ -136,7 +144,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
         </fieldset>
 
         <fieldset className="m-0 border-0 p-0">
-          <legend className="label mb-4 p-0 text-accent">{dict.calculator.shootType}</legend>
+          <legend className="label mb-4 p-0 text-eyebrow">{dict.calculator.shootType}</legend>
           <div className="flex flex-wrap gap-3">
             {config.types.map((option) => {
               const active = option.slug === type.slug;
@@ -164,7 +172,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
         </fieldset>
 
         <div>
-          <label htmlFor="calc-hours" className="label block text-accent">
+          <label htmlFor="calc-hours" className="label block text-eyebrow">
             {dict.calculator.hours}
           </label>
           <div className="mt-4 flex items-center gap-5">
@@ -205,14 +213,14 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
                     {line.format === 'photo' ? dict.calculator.photo : dict.calculator.video},{' '}
                     {hoursLabel(line.hours)}
                   </span>
-                  <span className="whitespace-nowrap text-bone">{money.format(line.amount)}</span>
+                  <span className="tabular whitespace-nowrap text-bone">{money.format(line.amount)}</span>
                 </li>
               ))}
 
               {quote.discount > 0 ? (
                 <li className="flex justify-between gap-4 border-t border-line pt-3 text-accent">
                   <span>{dict.calculator.bundleDiscount}</span>
-                  <span className="whitespace-nowrap">−{money.format(quote.discount)}</span>
+                  <span className="tabular whitespace-nowrap">−{money.format(quote.discount)}</span>
                 </li>
               ) : null}
             </ul>
@@ -223,7 +231,7 @@ export function PriceCalculator({ config, locale, dict, contacts }: Props) {
             </p>
 
             {type.taper && quote.lastHourRate ? (
-              <p className="label mt-3 text-right text-bone-faint">
+              <p className="label tabular mt-3 text-right text-bone-faint">
                 {dict.calculator.perHourNow} — {money.format(quote.lastHourRate)}
               </p>
             ) : null}

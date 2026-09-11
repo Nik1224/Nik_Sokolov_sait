@@ -7,16 +7,21 @@
 
 import Link from 'next/link';
 import { ProjectCard } from '@/components/content/cards';
+import { FilterNav } from '@/components/content/FilterNav';
 import { EmptyState } from '@/components/content/Section';
 import { Breadcrumbs } from '@/components/global/misc';
 import { AlbumGrid } from '@/components/content/AlbumGrid';
 import { PortfolioGallery, type PortfolioSections } from '@/components/content/PortfolioGallery';
 import { MediaGallery } from '@/components/media/MediaGallery';
-import type { Album, Category, MediaAsset, Project } from '@/content/types';
+import { Picture } from '@/components/media/Picture';
+import type { Album, Category, ImageRef, MediaAsset, Project } from '@/content/types';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
 import type { Direction, Locale } from '@/lib/site';
+
+/** Ключ пункта «смотреть все»: у него нет slug, а линии нужен адрес пункта. */
+const ALL = 'all';
 
 type Props = {
   locale: Locale;
@@ -43,8 +48,18 @@ type Props = {
   /**
    * Заметный переход в соседний раздел. Стоит сразу под лидом: человек,
    * пришедший за полной съёмкой, не должен сначала пролистать сотню кадров.
+   *
+   * С обложкой это приглашение, без неё — строка. Кадр берётся из того же
+   * раздела, куда блок ведёт: обещание видно до перехода.
    */
-  promo?: { label: string; title: string; body: string; action: string; href: string };
+  promo?: {
+    label: string;
+    title: string;
+    body: string;
+    action: string;
+    href: string;
+    cover?: ImageRef;
+  };
   /**
    * Куда вести из пустого раздела. У BUSINESS портфолио наполняется позже
    * кейсов, и «здесь пока пусто» без продолжения врёт: работа по этой
@@ -91,72 +106,54 @@ export function ProjectListing({
       {lead ? <p className="mt-6 max-w-2xl text-lead text-bone-dim">{lead}</p> : null}
 
       {promo ? (
+        /*
+         * Приглашение, а не уведомление. Раньше это был прямоугольник с
+         * рамкой — с виду системное сообщение, — и звал он при этом в самое
+         * ценное, что есть в ветке: целую съёмку от начала до конца.
+         */
         <Link
           href={promo.href}
-          className="group mt-12 flex flex-col gap-6 border border-line p-7 transition-colors hover:border-line-strong hover:bg-ink-raised md:flex-row md:items-end md:justify-between md:gap-10 lg:p-9"
+          className="group mt-12 grid overflow-hidden md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]"
         >
-          <span className="max-w-xl">
-            <span className="label block text-accent">{promo.label}</span>
-            <span className="text-h3 mt-3 block text-bone transition-colors group-hover:text-accent">
+          {promo.cover ? (
+            <span className="relative block min-h-[12rem] overflow-hidden bg-ink-raised">
+              <Picture
+                image={promo.cover}
+                alt=""
+                sizes="(min-width: 768px) 26rem, 100vw"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+              />
+            </span>
+          ) : null}
+
+          <span className="flex flex-col justify-center py-7 md:pl-9 lg:py-9 lg:pl-12">
+            <span className="label block text-eyebrow">{promo.label}</span>
+            <span className="text-h3 mt-3 block max-w-md text-balance text-bone transition-colors group-hover:text-accent">
               {promo.title}
             </span>
-            <span className="mt-3 block text-bone-dim">{promo.body}</span>
-          </span>
-          <span className="label shrink-0 text-bone transition-colors group-hover:text-accent">
-            {promo.action} →
+            <span className="mt-3 block max-w-md text-bone-dim">{promo.body}</span>
+            <span className="label mt-6 text-accent transition-transform group-hover:translate-x-1">
+              {promo.action} →
+            </span>
           </span>
         </Link>
       ) : null}
 
       {categories.length > 0 ? (
-        /*
-         * Фильтры — кнопки, а не строка мелкого капса.
-         *
-         * Раньше восемь подписей стояли в одну линию одним кеглем, и выбранная
-         * отличалась только цветом: на телефоне в неё было трудно попасть
-         * пальцем, а глазами — найти. Рамка даёт и то, и другое: цель размером
-         * с палец и видимую границу между пунктами. Выбранный залит светлым —
-         * тем же способом, каким на странице стоимости помечен выбранный
-         * формат съёмки, чтобы «выбрано» на сайте выглядело одинаково.
-         */
-        <nav aria-label={dict.common.filterBy} className="mt-10 border-y border-line py-5">
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
-            {showAll ? (
-              <li>
-                <Link
-                  href={listingHref}
-                  aria-current={!activeCategory ? 'true' : undefined}
-                  className={`label inline-block border px-4 py-2.5 transition-colors ${
-                    !activeCategory
-                      ? 'border-bone bg-bone text-ink'
-                      : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
-                  }`}
-                >
-                  {dict.common.viewAll}
-                </Link>
-              </li>
-            ) : null}
-            {categories.map((category) => {
-              const isActive = category.slug === activeCategory;
-              return (
-                <li key={category._id}>
-                  <Link
-                    // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
-                    href={`${listingHref}?category=${category.slug}`}
-                    aria-current={isActive ? 'true' : undefined}
-                    className={`label inline-block border px-4 py-2.5 transition-colors ${
-                      isActive
-                        ? 'border-bone bg-bone text-ink'
-                        : 'border-line text-bone-dim hover:border-line-strong hover:text-bone'
-                    }`}
-                  >
-                    {localizedString(category.title, locale)}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <FilterNav
+          className="mt-12"
+          label={dict.common.filterBy}
+          active={activeCategory ?? (showAll ? ALL : undefined)}
+          items={[
+            ...(showAll ? [{ key: ALL, label: dict.common.viewAll, href: listingHref }] : []),
+            ...categories.map((category) => ({
+              key: category.slug,
+              label: localizedString(category.title, locale),
+              // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
+              href: `${listingHref}?category=${category.slug}`,
+            })),
+          ]}
+        />
       ) : null}
 
       {/* Признак для тестов: «кадры галереи» — это то, что внутри, а не любой
@@ -177,7 +174,7 @@ export function ProjectListing({
             action={emptyAction}
           />
         ) : (
-          <ul className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+          <ul data-reveal-stagger className="m-0 grid list-none gap-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
             {projects.map((project, index) => (
               <li key={project._id}>
                 <ProjectCard

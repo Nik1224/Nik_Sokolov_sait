@@ -37,7 +37,7 @@ import type { Locale } from '@/lib/site';
 import { HeroReel } from './HeroReel';
 import { Rail } from './Rail';
 import { Band, BandHead, Cta, FineRow, Rise, bandField } from './parts';
-import { Reveal } from './Reveal';
+import { HeaderState } from './HeaderState';
 
 type Props = {
   locale: Locale;
@@ -89,7 +89,7 @@ function Shot({
 }) {
   return (
     <div
-      data-reveal-media
+      data-reveal
       className={`relative overflow-hidden bg-ink-sunken ${ratioClass ?? ''} ${className}`}
       style={ratioClass ? undefined : { aspectRatio: String(ratio) }}
     >
@@ -98,7 +98,7 @@ function Shot({
         alt=""
         sizes={sizes}
         priority={priority}
-        className="absolute inset-0 h-full w-full object-cover transition-[transform,filter] duration-[1200ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.03] group-hover:brightness-105"
+        className="frame-in absolute inset-0 h-full w-full object-cover"
       />
     </div>
   );
@@ -402,7 +402,7 @@ function Portfolio({
                      * экранов. Пропорцию держит рамка, кадр её заполняет.
                      */
                     <div
-                      data-reveal-media
+                      data-reveal
                       className="relative overflow-hidden bg-ink-sunken"
                       style={{ aspectRatio: '3 / 4' }}
                     >
@@ -411,7 +411,7 @@ function Portfolio({
                         alt=""
                         sizes="(min-width: 1024px) 26vw, (min-width: 640px) 46vw, 76vw"
                         priority={position < 3}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+                        className="frame-in absolute inset-0 h-full w-full object-cover"
                       />
                     </div>
                   ) : (
@@ -912,7 +912,7 @@ export function BusinessHome({
 }: Props) {
   return (
     <>
-      <Reveal />
+      <HeaderState />
 
       <Opening
         locale={locale}

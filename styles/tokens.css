@@ -17,6 +17,9 @@
   --color-bone-faint: #8a8781;   /* подписи, метаданные */
   --color-accent: #c4a77d;       /* акцент: активное состояние, метки */
   --color-accent-dim: #8a7657;
+  /* Цвет надзаголовочных меток. По умолчанию совпадает с акцентом — ветка,
+     которой нужно тише, переопределяет его у себя. */
+  --color-eyebrow: var(--color-accent);
   --color-danger: #e5786a;
   --color-line: rgba(242, 240, 236, 0.12);
   --color-line-strong: rgba(242, 240, 236, 0.28);
@@ -24,6 +27,23 @@
   /* --- Типографика ------------------------------------------------------ */
   --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, "SF Mono", monospace;
+
+  /* Гарнитура заголовков. По умолчанию — тот же гротеск: ветка, которой нужна
+     другая, переопределяет токен у себя, и ни один компонент об этом не знает. */
+  --font-display: var(--font-sans);
+  --font-display-weight: 400;
+
+  /* Гарнитура меток. Тем же приёмом: моноширинный — значение по умолчанию,
+     а не обязательство. */
+  --font-label: var(--font-mono);
+  --font-label-weight: 400;
+
+  /* Логотип. Отдельно от метки: он подписывает не блок, а весь сайт, и кегль
+     с гарнитурой у него свои. По умолчанию выглядит ровно как метка. */
+  --font-brand: var(--font-mono);
+  --font-brand-weight: 400;
+  --text-brand: 0.75rem;
+  --text-brand--letter-spacing: 0.14em;
 
   --text-display: clamp(2.75rem, 7vw, 6.5rem);
   --text-display--line-height: 0.94;
@@ -60,6 +80,9 @@
   /* --- Движение (§10: reduced motion отключает всё декоративное) --------- */
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 160ms;
+  /* Появление блока по прокрутке. Дольше обычного перехода: это не отклик на
+     действие, а вход — торопиться ему некуда. */
+  --duration-reveal: 720ms;
   --duration-base: 320ms;
   --duration-slow: 620ms;
   /* Появление блока при прокрутке идёт заметно медленнее любого отклика на

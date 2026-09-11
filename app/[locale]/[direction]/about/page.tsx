@@ -57,49 +57,65 @@ export default async function Page({ params }: Props) {
   const heroImage = hero ? (hero.type === 'image' ? hero.image : hero.poster) : null;
   const showFallbackNotice = pageNeedsFallbackNotice([page.title, page.lead, page.body], locale);
 
+  /*
+   * Вертикальный кадр уходит на поля справа, горизонтальный ложится полосой
+   * над текстом.
+   *
+   * Раньше портрет стоял в контейнере шириной 78rem, а текст — в колонке
+   * 42rem по центру страницы: кадр не был выровнен с текстом ни по левому
+   * краю, ни по центру и просто висел слева от него. Теперь оба живут в одной
+   * сетке, и правый край кадра стоит на том же модуле, что и колонка текста.
+   */
+  const portrait = Boolean(heroImage && heroImage.height > heroImage.width);
+
+  const heroPicture = heroImage ? (
+    <Picture
+      image={heroImage}
+      alt={hero ? localizedString(hero.alt, locale) : ''}
+      sizes={portrait ? '(min-width: 1024px) 17rem, 100vw' : '(min-width: 1024px) 78rem, 100vw'}
+      priority
+      className="w-full"
+    />
+  ) : null;
+
   return (
-    <article className="py-16 lg:py-24">
-      <div className="container-prose">
-        <Breadcrumbs
-          dict={dict}
-          items={[{ label: dict.common.home, href: href({ locale, direction }) }, { label: dict.nav.about }]}
-        />
-        {showFallbackNotice ? (
-          <div className="mb-8">
-            <FallbackNotice dict={dict} />
+    <article className="container-content py-16 lg:py-24">
+      <Breadcrumbs
+        dict={dict}
+        items={[{ label: dict.common.home, href: href({ locale, direction }) }, { label: dict.nav.about }]}
+      />
+
+      {!portrait && heroPicture ? <div className="mb-12">{heroPicture}</div> : null}
+
+      {/*
+        Порядок в разметке — тот, в котором текст читается на узком экране:
+        заголовок, кадр, рассказ. На широком кадр встаёт во вторую колонку и
+        занимает оба ряда, поэтому в потоке он между ними и не мешает.
+      */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,42rem)_minmax(0,1fr)] lg:gap-14">
+        <div className="lg:col-start-1 lg:row-start-1">
+          {showFallbackNotice ? (
+            <div className="mb-8">
+              <FallbackNotice dict={dict} />
+            </div>
+          ) : null}
+
+          <h1 className="text-h1 m-0 text-balance">{localizedString(page.title, locale)}</h1>
+          <p className="mt-6 text-lead text-bone-dim">{localizedString(page.lead, locale)}</p>
+        </div>
+
+        {portrait && heroPicture ? (
+          <div className="mt-10 max-w-xs lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-2 lg:ml-auto lg:w-[17rem] lg:self-start">
+            {heroPicture}
           </div>
         ) : null}
 
-        <h1 className="text-h1 m-0 text-balance">{localizedString(page.title, locale)}</h1>
-        <p className="mt-6 text-lead text-bone-dim">{localizedString(page.lead, locale)}</p>
+        {body.value ? (
+          <div className="mt-12 lg:col-start-1 lg:row-start-2">
+            <PortableBody value={body.value} locale={locale} dict={dict} className="lede" />
+          </div>
+        ) : null}
       </div>
-
-      {heroImage ? (
-        /*
-         * Горизонтальный кадр идёт во всю ширину, вертикальный — колонкой.
-         * Портрет во всю ширину контейнера вырастает почти на три тысячи
-         * пикселей в высоту: читать после него нечего, всё уезжает за экран.
-         */
-        <div className="container-content mt-12">
-          <Picture
-            image={heroImage}
-            alt={hero ? localizedString(hero.alt, locale) : ''}
-            sizes={
-              heroImage.height > heroImage.width
-                ? '(min-width: 1024px) 28rem, 100vw'
-                : '(min-width: 1024px) 78rem, 100vw'
-            }
-            priority
-            className={heroImage.height > heroImage.width ? 'w-full max-w-md' : 'w-full'}
-          />
-        </div>
-      ) : null}
-
-      {body.value ? (
-        <div className="container-prose mt-12">
-          <PortableBody value={body.value} locale={locale} dict={dict} />
-        </div>
-      ) : null}
     </article>
   );
 }

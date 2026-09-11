@@ -27,7 +27,7 @@ export function Footer({ locale, settings, dict, showStartLink = true, partnersH
     <footer className="mt-[var(--spacing-section)] border-t border-line bg-ink-sunken">
       <div className="container-content flex flex-col gap-8 py-12 md:flex-row md:justify-between">
         <div>
-          <p className="label text-bone">{settings.siteName}</p>
+          <p className="brand text-bone">{settings.siteName}</p>
           <p className="label mt-2 text-bone-faint">{localizedString(settings.descriptor, locale)}</p>
           {settings.location ? (
             <p className="label mt-2 text-bone-faint">{localizedString(settings.location, locale)}</p>

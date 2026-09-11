@@ -62,10 +62,17 @@ export function MediaGallery({
   const [dragY, setDragY] = useState(0);
   /** Откуда приезжает новый кадр: подсказывает, в какую сторону листают. */
   const [slide, setSlide] = useState<'in' | 'next' | 'prev'>('in');
+  /**
+   * Прямоугольник плитки, по которой нажали (M6). Кадр вырастает из неё, а не
+   * проявляется посреди экрана: иначе связь между тем, куда нажали, и тем, что
+   * открылось, теряется.
+   */
+  const openedFrom = useRef<DOMRect | null>(null);
 
   const images = items.filter((item): item is Extract<MediaAsset, { type: 'image' }> => item.type === 'image');
 
-  const open = useCallback((index: number) => {
+  const open = useCallback((index: number, from?: HTMLElement | null) => {
+    openedFrom.current = from?.getBoundingClientRect() ?? null;
     setOpenIndex(index);
     setDragY(0);
     setSlide('in');
@@ -99,6 +106,51 @@ export function MediaGallery({
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [openIndex, step]);
+
+  /*
+   * Раскрытие из плитки. Считается по факту: где была плитка и где встал
+   * открытый кадр, — а дальше кадр проигрывается от первого положения ко
+   * второму. Масштаб один на обе оси: плитка обрезана по `cover`, открытый
+   * кадр вписан по `contain`, и разные масштабы по осям растянули бы картинку.
+   *
+   * Ждём загрузки: у неотрисованного изображения нулевые размеры, и считать
+   * от них нечего.
+   */
+  useEffect(() => {
+    const from = openedFrom.current;
+    openedFrom.current = null;
+    if (openIndex === null || !from) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const image = dialogRef.current?.querySelector<HTMLImageElement>('.lightbox-slide img');
+    if (!image) return;
+
+    let cancelled = false;
+    const play = () => {
+      if (cancelled) return;
+      const to = image.getBoundingClientRect();
+      if (!to.width || !to.height) return;
+
+      const scale = Math.max(from.width / to.width, from.height / to.height);
+      const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+      const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+
+      image.animate(
+        [
+          { transform: `translate(${dx}px, ${dy}px) scale(${scale})`, opacity: 0.5 },
+          { transform: 'none', opacity: 1 },
+        ],
+        { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+      );
+    };
+
+    if (image.complete) requestAnimationFrame(play);
+    else image.addEventListener('load', () => requestAnimationFrame(play), { once: true });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [openIndex]);
 
   useEffect(() => {
     if (openIndex === null || images.length < 2) return;
@@ -230,7 +282,7 @@ export function MediaGallery({
               <figure className={layout === 'feature' && isWide ? 'mx-auto m-0 max-w-4xl' : 'm-0'}>
                 <button
                   type="button"
-                  onClick={() => open(imageIndex)}
+                  onClick={(event) => open(imageIndex, event.currentTarget)}
                   className="group block w-full cursor-zoom-in overflow-hidden bg-ink-raised"
                   style={{ aspectRatio: String(ratio) }}
                 >
