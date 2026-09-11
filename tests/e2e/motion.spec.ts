@@ -84,3 +84,27 @@ test('лента не едет при «уменьшить движение»', 
   await page.waitForTimeout(1400);
   expect(Math.abs((await rail.evaluate((el) => el.scrollLeft)) - before)).toBeLessThan(2);
 });
+
+test('стрелка листает ленту, кнопка держит её на месте', async ({ page }) => {
+  await page.goto('/ru/business');
+  const rail = page.locator('.rail');
+  await rail.scrollIntoViewIfNeeded();
+  const group = page.getByRole('group', { name: /лента/i });
+
+  const before = await rail.evaluate((el) => el.scrollLeft);
+  await group.getByRole('button', { name: /следующ/i }).click();
+  await page.waitForTimeout(700);
+  // Шаг — ширина карточки: заметно больше, чем лента проезжает сама.
+  expect(await rail.evaluate((el) => el.scrollLeft)).toBeGreaterThan(before + 100);
+
+  const pause = group.getByRole('button', { name: /движение/i });
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+
+  // Курсор в стороне: иначе лента стояла бы и без кнопки.
+  await page.mouse.move(5, 5);
+  await page.waitForTimeout(300);
+  const held = await rail.evaluate((el) => el.scrollLeft);
+  await page.waitForTimeout(1600);
+  expect(Math.abs((await rail.evaluate((el) => el.scrollLeft)) - held)).toBeLessThan(2);
+});
