@@ -1058,8 +1058,13 @@
   .band-dark,
   [data-theme='business'] .on-image,
   [data-theme='business'] > footer {
-    /* На тёмном поле свет заметнее, поэтому ступень берётся ближе. */
-    --band-lift: color-mix(in srgb, var(--t-warm-graphite) 62%, transparent);
+    /*
+     * Свет на тёмном поле берётся ступенью `stone-dark`: она лежит выше любой
+     * из тёмных, поэтому поднимает и почти чёрную главу, и тёплый графит. Тон
+     * самой полосы для этого не годится — на полосе своего же цвета света не
+     * видно вовсе.
+     */
+    --band-lift: color-mix(in srgb, var(--t-stone-dark) 38%, transparent);
     --color-ink: var(--band-core, var(--t-graphite));
     --color-ink-raised: var(--t-warm-graphite);
     --color-ink-sunken: var(--t-ink);

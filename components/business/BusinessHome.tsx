@@ -286,8 +286,17 @@ function Clients({
      * полосы виджет.
      */
     <section
-      className="band band-light py-[clamp(2.5rem,4vw,4rem)]"
-      style={bandField('paper', 'paper', 'warm-grey')}
+      /*
+       * Тёмная ступень — `warm-graphite`: единственная, которая ещё не занята.
+       * `ink` держит главу «Стоимость», `graphite` — подвал, и повторять их
+       * здесь значило бы получить три одинаковых пятна вместо трёх разных по
+       * весу. Светлее обоих — и полоса читается акцентом, а не второй главой.
+       *
+       * Переход короткий (`band-edge`): полоса невысокая, и растянутый спуск
+       * из бумаги в тёмное занял бы её целиком.
+       */
+      className="band band-edge band-dark py-[clamp(2.5rem,4vw,4rem)]"
+      style={bandField('paper', 'warm-graphite', 'warm-grey')}
     >
       <ClientMarquee clients={clients} locale={locale} dict={dict} />
     </section>
