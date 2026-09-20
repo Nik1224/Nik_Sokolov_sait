@@ -31,6 +31,7 @@ import {
   weddingVideos,
 } from './portfolio-galleries';
 import { portraitBackstage, weddingBackstage } from './backstage';
+import { kinescopeReels, kinescopeVideos } from './kinescope';
 import { businessCases } from './cases-business';
 import { bodyRu, bodyRuEn, decorative, image, video } from './helpers';
 import { privateArticles } from './journal-private';
@@ -464,17 +465,17 @@ const brandFilms: MediaAsset[] = [
 export const categories: Category[] = [
   // Категории с настоящим портфолио. fullSeries — там, где бывает полная
   // выдача одной съёмки: на такие категории ведёт переход к альбомам.
-  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: weddingVideos, reels: weddingReels, fullSeries: true, backstage: weddingBackstage, preview: preview('wedding', 'Кадр со свадебной съёмки', 'Frame from a wedding shoot', 1310) },
+  { _id: 'cat.wedding', slug: 'wedding', title: { ru: 'Свадьбы', en: 'Weddings' }, directions: ['private'], order: 1, gallery: weddingGallery, videos: [...weddingVideos, ...kinescopeVideos('wedding')], reels: [...weddingReels, ...kinescopeReels('wedding')], fullSeries: true, backstage: weddingBackstage, preview: preview('wedding', 'Кадр со свадебной съёмки', 'Frame from a wedding shoot', 1310) },
   { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], order: 2, gallery: portraitGallery, backstage: portraitBackstage, preview: preview('portrait', 'Кадр с портретной съёмки', 'Frame from a portrait shoot', 1280) },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], order: 3, gallery: familyGallery, preview: preview('family', 'Кадр с семейной съёмки', 'Frame from a family shoot', 1280) },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], order: 4, preview: preview('love-story', 'Кадр со съёмки love story', 'Frame from a love story shoot', 1280) },
   { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], order: 5, preview: preview('private-event', 'Кадр со съёмки частного события', 'Frame from a private event shoot', 1280) },
   // Категории ветки BUSINESS названы владельцем и идут в его порядке: он так же
   // называет их клиенту, а клиент ищет глазами то, за чем пришёл.
-  { _id: 'cat.education', slug: 'education', title: { ru: 'Обучающие ролики', en: 'Training videos' }, description: { ru: 'Внутреннее обучение: спикер в кадре, презентация на экране, серия выпусков в одном свете и стиле.', en: 'In-house training: a speaker on camera, slides on screen, a series of episodes in one look.' }, directions: ['business'], order: 6, isDemo: true },
-  { _id: 'cat.manufacturing', slug: 'manufacturing', title: { ru: 'Производство', en: 'Manufacturing' }, description: { ru: 'Цеха, линии и люди за работой. Съёмка идёт на действующем производстве и не останавливает смену.', en: 'Shop floors, lines and people at work. Filmed on a working site without stopping the shift.' }, directions: ['business'], order: 7, isDemo: true },
-  { _id: 'cat.podcast', slug: 'podcast', title: { ru: 'Подкасты', en: 'Podcasts' }, description: { ru: 'Разговорные форматы со светом и звуком: выпуски снимаются блоками, к каждому — вертикальные нарезки.', en: 'Conversation formats with proper light and sound: episodes shot in blocks, each with vertical cutdowns.' }, directions: ['business'], order: 8, isDemo: true },
-  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, description: { ru: 'Проекты со сценарием и подготовкой: раскадровка, локации, собранная под задачу команда.', en: 'Projects with a script and preparation: storyboard, locations, a crew assembled for the task.' }, directions: ['business', 'production'], order: 9, isDemo: true },
+  { _id: 'cat.education', slug: 'education', title: { ru: 'Обучающие ролики', en: 'Training videos' }, description: { ru: 'Внутреннее обучение: спикер в кадре, презентация на экране, серия выпусков в одном свете и стиле.', en: 'In-house training: a speaker on camera, slides on screen, a series of episodes in one look.' }, directions: ['business'], order: 6, videos: kinescopeVideos('education'), reels: kinescopeReels('education') },
+  { _id: 'cat.manufacturing', slug: 'manufacturing', title: { ru: 'Производство', en: 'Manufacturing' }, description: { ru: 'Цеха, линии и люди за работой. Съёмка идёт на действующем производстве и не останавливает смену.', en: 'Shop floors, lines and people at work. Filmed on a working site without stopping the shift.' }, directions: ['business'], order: 7, videos: kinescopeVideos('manufacturing'), reels: kinescopeReels('manufacturing') },
+  { _id: 'cat.podcast', slug: 'podcast', title: { ru: 'Подкасты', en: 'Podcasts' }, description: { ru: 'Разговорные форматы со светом и звуком: выпуски снимаются блоками, к каждому — вертикальные нарезки.', en: 'Conversation formats with proper light and sound: episodes shot in blocks, each with vertical cutdowns.' }, directions: ['business'], order: 8, videos: kinescopeVideos('podcast'), reels: kinescopeReels('podcast') },
+  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, description: { ru: 'Проекты со сценарием и подготовкой: раскадровка, локации, собранная под задачу команда.', en: 'Projects with a script and preparation: storyboard, locations, a crew assembled for the task.' }, directions: ['business', 'production'], order: 9, videos: kinescopeVideos('commercial'), reels: kinescopeReels('commercial') },
   {
     _id: 'cat.brand-video',
     slug: 'brand-video',
@@ -495,11 +496,12 @@ export const categories: Category[] = [
      * первый кадр силами сервиса нельзя — он часто пустой, и превью выходит
      * серым прямоугольником.
      */
-    videos: brandFilms,
+    videos: [...brandFilms, ...kinescopeVideos('brand-video')],
+    reels: kinescopeReels('brand-video'),
   },
-  { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], order: 11, isDemo: true },
-  { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], order: 12, isDemo: true },
-  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 13, isDemo: true },
+  { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], order: 11, videos: kinescopeVideos('product'), reels: kinescopeReels('product'), /* Предметка ждёт кадров: сервис отдаёт первый кадр, а у этих роликов это белый лист перед проявкой. Снять пометку, когда постеры появятся. */ isDemo: true },
+  { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], order: 12, videos: kinescopeVideos('conference'), reels: kinescopeReels('conference') },
+  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 13, videos: kinescopeVideos('narrative'), reels: kinescopeReels('narrative') },
 ];
 
 /**
