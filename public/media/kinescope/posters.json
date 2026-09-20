@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T12:39:11Z",
+  "generatedAt": "2026-09-20T12:53:08Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
@@ -1241,18 +1241,6 @@
       "entropy": 6.9,
       "fingerprint": "73b3558eff94"
     },
-    "0Zs8w6KzyyocArc1hTNAMq": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1872,
-      "entropy": 7.69,
-      "fingerprint": "abbef8899c0a"
-    },
     "cJZRVvow4475vpJY8X9E19": {
       "width": 1800,
       "height": 1013,
@@ -1504,18 +1492,6 @@
       "sharpness": 897,
       "entropy": 7.33,
       "fingerprint": "9e013d41d041"
-    },
-    "iHnJRnaE5ziGZbXM63EbJS": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 747,
-      "entropy": 7.33,
-      "fingerprint": "1d8e426118f7"
     },
     "qzF5hKLkHVMveNSoNkMCfC": {
       "width": 1800,
@@ -3112,18 +3088,6 @@
       "entropy": 7.33,
       "fingerprint": "cfc0bbed1ef1"
     },
-    "taw99ZJAvUr7GfSMMT7trz": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 102,
-      "entropy": 6.18,
-      "fingerprint": "f467505f131e"
-    },
     "fss6fHeG7u8iyuA4LSx3yx": {
       "width": 1800,
       "height": 1013,
@@ -3135,42 +3099,6 @@
       "sharpness": 102,
       "entropy": 6.18,
       "fingerprint": "3f03771baf27"
-    },
-    "72rmRbvXx55zYLiaDzhZHw": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "10b713c85371"
-    },
-    "n1TcGaHAPawYAgsGnMFpqr": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "75cb21d0f1b7"
-    },
-    "jW26dufzwt77TZeDuCsyXL": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "ba978c39a254"
     },
     "7K4suDJZpm1sKJZkgpkp9J": {
       "width": 1800,
@@ -3641,5 +3569,37 @@
       "fingerprint": "0ff132308be0"
     }
   },
-  "weak": []
+  "weak": [],
+  "unplayable": [
+    {
+      "project": "Ивенты",
+      "title": "Красота_со_вкусом",
+      "videoId": "0Zs8w6KzyyocArc1hTNAMq"
+    },
+    {
+      "project": "Ивенты",
+      "title": "Sesderma_edit",
+      "videoId": "iHnJRnaE5ziGZbXM63EbJS"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik",
+      "videoId": "taw99ZJAvUr7GfSMMT7trz"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "72rmRbvXx55zYLiaDzhZHw"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "n1TcGaHAPawYAgsGnMFpqr"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "jW26dufzwt77TZeDuCsyXL"
+    }
+  ]
 }

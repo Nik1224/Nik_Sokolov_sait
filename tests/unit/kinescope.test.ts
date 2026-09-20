@@ -98,6 +98,21 @@ describe('ролики из каталога Kinescope', () => {
     }
   });
 
+  it('ролик, которого больше нет у сервиса, на сайт не идёт', () => {
+    /*
+     * Выгрузка каталога — снимок на момент запуска, а в кабинете ролики
+     * удаляют и переносят: адрес остаётся, а за ним уже пусто. Плитка, которая
+     * не открывается, хуже отсутствующей: по ней человек решает, что сломан
+     * сайт. Такие ролики отсеивает scripts/kinescope-posters.mjs.
+     */
+    const gone = new Set(
+      (posterManifest.unplayable as { videoId: string }[]).map((entry) => entry.videoId),
+    );
+    for (const media of fromKinescope) {
+      expect(gone.has(media.videoId ?? ''), `${media.videoId} больше не играет`).toBe(false);
+    }
+  });
+
   it('шоурил не лежит вторым экземпляром в категории', () => {
     // Он уже стоит на первом экране: встретить его ещё раз ниже — странно.
     const showreel = globalSettings.showreel;

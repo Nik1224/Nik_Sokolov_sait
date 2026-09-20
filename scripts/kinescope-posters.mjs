@@ -115,6 +115,43 @@ async function mappedProjects() {
   );
 }
 
+/**
+ * Играет ли ролик вообще. Выгрузка каталога — снимок на момент запуска, а в
+ * кабинете ролики удаляют и переносят: адрес остаётся, а за ним уже пусто.
+ * Плитка, которая не открывается, хуже отсутствующей — по ней человек решает,
+ * что сломан сайт.
+ *
+ * Одна повторная попытка на случай сетевой икоты: молча выкинуть живой ролик
+ * из-за обрыва связи нельзя.
+ */
+async function isPlayable(videoId) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch(`https://kinescope.io/embed/${videoId}`, { redirect: 'follow' });
+      if (response.ok) return true;
+      // 404 — ролика нет. Остальные коды могут быть временными, пробуем ещё раз.
+      if (response.status === 404) return false;
+    } catch {
+      // Сетевая ошибка: вторая попытка.
+    }
+  }
+  return false;
+}
+
+/** Проверка пачками: триста последовательных запросов тянулись бы минутами. */
+async function findUnplayable(videos) {
+  const dead = new Set();
+  const size = 10;
+  for (let i = 0; i < videos.length; i += size) {
+    const batch = videos.slice(i, i + size);
+    const results = await Promise.all(batch.map((video) => isPlayable(video.videoId)));
+    batch.forEach((video, index) => {
+      if (!results[index]) dead.add(video.videoId);
+    });
+  }
+  return dead;
+}
+
 async function exists(url) {
   try {
     await access(fileURLToPath(url));
@@ -185,6 +222,18 @@ try {
   // Первый запуск — манифеста ещё нет.
 }
 
+/*
+ * Сначала отсеиваем то, что уже не играет: качать и хранить постер для
+ * несуществующего ролика незачем.
+ */
+const mapped = catalog.categories
+  .filter((project) => projects.has(project.name))
+  .flatMap((project) => project.videos.map((video) => ({ ...video, project: project.name })));
+const dead = await findUnplayable(mapped);
+const unplayable = mapped
+  .filter((video) => dead.has(video.videoId))
+  .map((video) => ({ project: video.project, title: video.title, videoId: video.videoId }));
+
 const posters = {};
 const weak = [];
 const failed = [];
@@ -203,6 +252,8 @@ for (const project of catalog.categories) {
 
   for (const video of project.videos) {
     if (!video.poster) continue;
+    // Ролика больше нет: на сайт он не идёт, постер не нужен.
+    if (dead.has(video.videoId)) continue;
 
     // Отпечаток адреса ловит случай, когда постер у ролика сменили в кабинете.
     const fingerprint = createHash('sha1').update(video.poster).digest('hex').slice(0, 12);
@@ -285,6 +336,7 @@ await writeFile(
       thresholds: { sharpnessMin: SHARPNESS_MIN, flatEntropy: FLAT_ENTROPY, flatSharpness: FLAT_SHARPNESS },
       posters,
       weak,
+      unplayable,
     },
     null,
     2,
@@ -295,6 +347,10 @@ console.log(
   `постеров: ${Object.keys(posters).length} (от сервиса ${fetched}, вырезано из ролика ${cutFromVideo}, оставлено ${reused}, своих ${adopted})`,
 );
 console.log(`без годного кадра: ${weak.length} — перечислены в posters.json, на сайт не идут`);
+if (unplayable.length) {
+  console.warn(`не открываются у сервиса: ${unplayable.length} — на сайт не идут:`);
+  for (const video of unplayable) console.warn(`  ${video.project} / ${video.title}`);
+}
 if (failed.length) {
   console.warn(`не получилось (${failed.length}):`);
   for (const line of failed) console.warn(`  ${line}`);
