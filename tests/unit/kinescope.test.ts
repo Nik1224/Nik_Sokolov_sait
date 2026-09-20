@@ -10,7 +10,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { categories } from '@/content/seed';
+import { categories, globalSettings } from '@/content/seed';
 import { kinescopeUnmapped, kinescopeReels, kinescopeVideos } from '@/content/seed/kinescope';
 import { KINESCOPE_CATEGORIES, KINESCOPE_HAND_PICKED } from '@/content/seed/kinescope-map';
 import catalog from '@/content/kinescope-catalog.json';
@@ -64,6 +64,84 @@ describe('ролики из каталога Kinescope', () => {
       .filter((id): id is string => Boolean(id));
 
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  /*
+   * Страница портфолио без фильтра собирает материал всех категорий ветки
+   * подряд. Один ролик, попавший в две категории, встал бы на ней дважды —
+   * рядом, с одинаковым превью. Проверяется каждая ветка целиком, а не
+   * категория по отдельности: по отдельности повтор и не увидеть.
+   */
+  it('на одной странице ролик не встречается дважды', () => {
+    for (const direction of ['private', 'business', 'production'] as const) {
+      const shown = categories.filter((category) => category.directions.includes(direction));
+      const onPage = shown.flatMap((category) => [
+        ...(category.videos ?? []),
+        ...(category.reels ?? []),
+      ]);
+
+      const ids = onPage
+        .filter((media): media is Extract<MediaAsset, { type: 'video' }> => media.type === 'video')
+        .map((media) => media.videoId)
+        .filter((id): id is string => Boolean(id));
+      expect(new Set(ids).size, `${direction}: ролик повторяется`).toBe(ids.length);
+
+      // Одинаковый _key — это ещё и сломанный список для React.
+      const keys = onPage.map((media) => media._key);
+      expect(new Set(keys).size, `${direction}: повторяется ключ`).toBe(keys.length);
+
+      // Один постер у разных роликов читается как повтор, даже если ролики разные.
+      const posters = onPage
+        .filter((media): media is Extract<MediaAsset, { type: 'video' }> => media.type === 'video')
+        .map((media) => media.poster.src);
+      expect(new Set(posters).size, `${direction}: постер повторяется`).toBe(posters.length);
+    }
+  });
+
+  it('ролик, которого больше нет у сервиса, на сайт не идёт', () => {
+    /*
+     * Выгрузка каталога — снимок на момент запуска, а в кабинете ролики
+     * удаляют и переносят: адрес остаётся, а за ним уже пусто. Плитка, которая
+     * не открывается, хуже отсутствующей: по ней человек решает, что сломан
+     * сайт. Такие ролики отсеивает scripts/kinescope-posters.mjs.
+     */
+    const gone = new Set(
+      (posterManifest.unplayable as { videoId: string }[]).map((entry) => entry.videoId),
+    );
+    for (const media of fromKinescope) {
+      expect(gone.has(media.videoId ?? ''), `${media.videoId} больше не играет`).toBe(false);
+    }
+  });
+
+  it('шоурил не лежит вторым экземпляром в категории', () => {
+    // Он уже стоит на первом экране: встретить его ещё раз ниже — странно.
+    const showreel = globalSettings.showreel;
+    if (showreel?.type !== 'video' || !showreel.videoId) return;
+
+    const inCategories = categories.flatMap((category) => [
+      ...(category.videos ?? []),
+      ...(category.reels ?? []),
+      ...(category.backstage ?? []),
+    ]);
+    const repeated = inCategories.some(
+      (media) => media.type === 'video' && media.videoId === showreel.videoId,
+    );
+    expect(repeated).toBe(false);
+  });
+
+  it('внутри категории кадр не лежит и в галерее, и в бэкстейдже', () => {
+    for (const category of categories) {
+      const all = [
+        ...(category.gallery ?? []),
+        ...(category.videos ?? []),
+        ...(category.reels ?? []),
+        ...(category.backstage ?? []),
+      ];
+      const ids = all
+        .map((media) => (media.type === 'video' ? media.videoId : media.image.src))
+        .filter((id): id is string => Boolean(id));
+      expect(new Set(ids).size, `${category.slug}: материал повторяется`).toBe(ids.length);
+    }
   });
 
   it('описание ролика не выносит наружу рабочее имя файла', () => {

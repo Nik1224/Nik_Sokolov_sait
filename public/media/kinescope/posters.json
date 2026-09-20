@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T11:55:57Z",
+  "generatedAt": "2026-09-20T12:53:08Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
@@ -1241,18 +1241,6 @@
       "entropy": 6.9,
       "fingerprint": "73b3558eff94"
     },
-    "0Zs8w6KzyyocArc1hTNAMq": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1872,
-      "entropy": 7.69,
-      "fingerprint": "abbef8899c0a"
-    },
     "cJZRVvow4475vpJY8X9E19": {
       "width": 1800,
       "height": 1013,
@@ -1504,18 +1492,6 @@
       "sharpness": 897,
       "entropy": 7.33,
       "fingerprint": "9e013d41d041"
-    },
-    "iHnJRnaE5ziGZbXM63EbJS": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 747,
-      "entropy": 7.33,
-      "fingerprint": "1d8e426118f7"
     },
     "qzF5hKLkHVMveNSoNkMCfC": {
       "width": 1800,
@@ -3112,18 +3088,6 @@
       "entropy": 7.33,
       "fingerprint": "cfc0bbed1ef1"
     },
-    "taw99ZJAvUr7GfSMMT7trz": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 102,
-      "entropy": 6.18,
-      "fingerprint": "f467505f131e"
-    },
     "fss6fHeG7u8iyuA4LSx3yx": {
       "width": 1800,
       "height": 1013,
@@ -3135,42 +3099,6 @@
       "sharpness": 102,
       "entropy": 6.18,
       "fingerprint": "3f03771baf27"
-    },
-    "72rmRbvXx55zYLiaDzhZHw": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "10b713c85371"
-    },
-    "n1TcGaHAPawYAgsGnMFpqr": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "75cb21d0f1b7"
-    },
-    "jW26dufzwt77TZeDuCsyXL": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 819,
-      "entropy": 5.72,
-      "fingerprint": "ba978c39a254"
     },
     "7K4suDJZpm1sKJZkgpkp9J": {
       "width": 1800,
@@ -3195,6 +3123,90 @@
       "entropy": 7.03,
       "source": "frame@7s",
       "fingerprint": "d6c022f5638d"
+    },
+    "rdHSzNtZSXz4s9EUvhN5R8": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 386,
+      "entropy": 6.06,
+      "fingerprint": "aeea3ec8ecf3"
+    },
+    "shc5Eat7TdmzGVhcBHSG5P": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 314,
+      "entropy": 7.12,
+      "fingerprint": "a6993e8d66b9"
+    },
+    "ab6WMfp26KytZi8SgnsHMP": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 359,
+      "entropy": 7.22,
+      "fingerprint": "caeb4fad3fed"
+    },
+    "rs7uKfPPDPFw8zM1AF6aUv": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 730,
+      "entropy": 1.36,
+      "fingerprint": "a1e8159836b1"
+    },
+    "3n6KzJiXDw6Xiz86ndCQoB": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 41,
+      "entropy": 6.94,
+      "fingerprint": "e47cd9a9208a"
+    },
+    "8wQ9eURvDPKahaZQxQh4tE": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 514,
+      "entropy": 6.65,
+      "fingerprint": "788ccbd71ee6"
+    },
+    "rXRReNUCseTc2hTJFUWsLh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 531,
+      "entropy": 7.25,
+      "fingerprint": "60732f149053"
     },
     "uiAynYeZCUoVkMvE1qrQ7n": {
       "width": 1800,
@@ -3279,6 +3291,78 @@
       "sharpness": 705,
       "entropy": 7.21,
       "fingerprint": "9aeb59c1c39f"
+    },
+    "dhSRmoFzjeuupyPTg5gnKX": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 317,
+      "entropy": 6.88,
+      "fingerprint": "5dff95c73f6f"
+    },
+    "7oBSxDyC29naukfMeWaopF": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 171,
+      "entropy": 6.94,
+      "fingerprint": "86629b75a6fc"
+    },
+    "ava9FEYpGK5DBhCHDLDztW": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 226,
+      "entropy": 6.79,
+      "fingerprint": "c5bc2c781a7a"
+    },
+    "jWRwsGRag8tk9vXP2YDoFh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1572,
+      "entropy": 6.43,
+      "fingerprint": "48f07a1ae6ac"
+    },
+    "5PpFyrQxC4Sskn3CUi3nKo": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 278,
+      "entropy": 6.35,
+      "fingerprint": "266820f75257"
+    },
+    "8A4Zp2uamo8JhhxAGBifwR": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2129,
+      "entropy": 7.64,
+      "fingerprint": "ad32659c0341"
     },
     "5tysWLbuajg3iFbPogBbwC": {
       "width": 1800,
@@ -3471,7 +3555,51 @@
       "sharpness": 1382,
       "entropy": 7.48,
       "fingerprint": "59d6dd92020a"
+    },
+    "qjaXdKxQjyS4i7xrKu5ZC4": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1080,
+      "entropy": 7.23,
+      "fingerprint": "0ff132308be0"
     }
   },
-  "weak": []
+  "weak": [],
+  "unplayable": [
+    {
+      "project": "Ивенты",
+      "title": "Красота_со_вкусом",
+      "videoId": "0Zs8w6KzyyocArc1hTNAMq"
+    },
+    {
+      "project": "Ивенты",
+      "title": "Sesderma_edit",
+      "videoId": "iHnJRnaE5ziGZbXM63EbJS"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik",
+      "videoId": "taw99ZJAvUr7GfSMMT7trz"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "72rmRbvXx55zYLiaDzhZHw"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "n1TcGaHAPawYAgsGnMFpqr"
+    },
+    {
+      "project": "Школьные",
+      "title": "Rolik_posledniy_Zvonok",
+      "videoId": "jW26dufzwt77TZeDuCsyXL"
+    }
+  ]
 }

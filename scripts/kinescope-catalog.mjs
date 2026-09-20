@@ -14,20 +14,41 @@ const API = 'https://api.kinescope.io/v1';
 const OUT = new URL('../content/kinescope-catalog.json', import.meta.url);
 const PER_PAGE = 100;
 
+/*
+ * Токен можно не давать скрипту вовсе.
+ *
+ * Если переменная задана — подписываем запрос сами. Если нет — уходим без
+ * заголовка: его подставит шлюз, когда ключ хранится на стороне среды. Второй
+ * путь безопаснее, потому что ключ не попадает ни в переменные окружения, ни в
+ * вывод команд, ни на глаза тому, кто запускает скрипт.
+ */
 const token = process.env.KINESCOPE_API_TOKEN;
-if (!token) {
-  console.error('Нет KINESCOPE_API_TOKEN. Токен выпускается в кабинете: Настройки рабочей зоны → API-токены.');
-  process.exit(1);
-}
 
 async function get(path, params = {}) {
   const url = new URL(API + path);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, String(value));
 
-  const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  const response = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
+
   if (!response.ok) {
-    // Тело ответа несёт код ошибки Kinescope — без него «401» ни о чём не говорит.
-    throw new Error(`${response.status} ${url.pathname}${url.search}: ${await response.text()}`);
+    /*
+     * Про отсутствующий ключ Kinescope отвечает не только 401, но и 400 с
+     * текстом «authorization header not found». Голый код ответа тут сбивает
+     * с толку, поэтому разбираем и говорим человеческим языком.
+     */
+    const body = await response.text();
+    if (/authorization|unauthorized|forbidden/i.test(body) || [401, 403].includes(response.status)) {
+      console.error(
+        'Kinescope не пустил: ключа нет.\n' +
+          'Либо задайте KINESCOPE_API_TOKEN, либо пропишите ключ для api.kinescope.io\n' +
+          'на стороне среды, чтобы его подставлял шлюз и скрипт его не видел.\n' +
+          'Токен выпускается в кабинете: настройки рабочей зоны → API-токены.',
+      );
+      process.exit(1);
+    }
+    throw new Error(`${response.status} ${url.pathname}${url.search}: ${body}`);
   }
   return response.json();
 }

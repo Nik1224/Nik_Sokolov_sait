@@ -116,6 +116,29 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
     video: { ru: 'Школьная съёмка', en: 'School film' },
     reel: { ru: 'Вертикальный ролик со школьной съёмки', en: 'Vertical reel from a school shoot' },
   },
+  // В кабинете проект назван «Медецина». Название берётся оттуда как есть:
+  // сверка идёт по нему, а на сайте категория называется правильно.
+  Медецина: {
+    categorySlug: 'medical',
+    video: { ru: 'Съёмка в клинике', en: 'Filmed at a clinic' },
+    reel: { ru: 'Вертикальный ролик из клиники', en: 'Vertical reel from a clinic' },
+  },
+  /*
+   * Детские праздники и крещение идут в одну категорию детских событий.
+   * В частные события их класть нельзя: там по замыслу только альбомы, без
+   * отдельных кадров и вкладок. Под один ролик про крещение своя вкладка тоже
+   * не нужна — почти пустая категория хуже, чем её отсутствие.
+   */
+  'Дети дни рожденияния': {
+    categorySlug: 'kids',
+    video: { ru: 'Съёмка детского праздника', en: "Filmed at a child's party" },
+    reel: { ru: 'Вертикальный ролик с детского праздника', en: "Vertical reel from a child's party" },
+  },
+  Крещение: {
+    categorySlug: 'kids',
+    video: { ru: 'Съёмка крещения', en: 'Filmed at a christening' },
+    reel: { ru: 'Вертикальный ролик с крещения', en: 'Vertical reel from a christening' },
+  },
 };
 
 /**
