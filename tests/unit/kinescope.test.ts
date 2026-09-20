@@ -102,7 +102,10 @@ describe('ролики из каталога Kinescope', () => {
      * ролик обязан быть в списке негодных кадров. Иначе ролики пропали бы
      * молча, и понять почему было бы нельзя.
      */
-    const weakIds = new Set(posterManifest.weak.map((entry) => entry.videoId));
+    // Список пуст, пока у всех роликов есть кадр: тип у пустого массива в JSON
+    // выводится как never, поэтому форма записи описана явно.
+    const weak = posterManifest.weak as { videoId: string }[];
+    const weakIds = new Set(weak.map((entry) => entry.videoId));
     const catalogOf = (name: string) =>
       catalog.categories.find((project) => project.name === name)?.videos ?? [];
 

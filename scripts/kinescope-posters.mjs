@@ -28,6 +28,7 @@ import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { frameAt, hasFfmpeg } from './lib/hls.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const CATALOG = new URL('content/kinescope-catalog.json', ROOT);
@@ -37,6 +38,13 @@ const MANIFEST = new URL('posters.json', OUT_DIR);
 
 const WIDTHS = [600, 1200, 1800];
 const QUALITY = 78;
+
+/**
+ * Секунды, на которых ищется кадр, когда постер сервиса негоден. Седьмая —
+ * ролик к этому моменту уже показывает предмет, а вступление кончилось.
+ * Остальные идут по удалённости от неё: берётся первая годная.
+ */
+const FRAME_SECONDS = [7, 6, 8, 5, 9];
 
 /**
  * Отбраковка кадра идёт по двум числам, и оба подобраны глазами по контрольному
@@ -142,6 +150,30 @@ async function writeVariants(videoId, source, width, height) {
   return { ...largest, sizes };
 }
 
+/**
+ * Кадр из ролика: пробуем седьмую секунду, потом соседние. Возвращается первый
+ * годный — не лучший из всех: лишние попытки стоят мегабайтов, а разница между
+ * двумя годными кадрами всё равно на совести автора.
+ *
+ * Короткий ролик до девяти секунд разбирается по своим долям: седьмая секунда
+ * у пятисекундной нарезки — это конец, а там обычно уже уход из кадра.
+ */
+async function frameFromVideo(video) {
+  const duration = video.durationSeconds ?? 0;
+  const points =
+    duration > 0 && duration < FRAME_SECONDS[0] + 2
+      ? [0.5, 0.35, 0.65].map((share) => Math.round(duration * share * 10) / 10)
+      : FRAME_SECONDS;
+
+  for (const seconds of points) {
+    const buffer = await frameAt(video.videoId, seconds);
+    if (!buffer) continue;
+    const { usable, ...score } = await grade(buffer);
+    if (usable) return { buffer, seconds, ...score };
+  }
+  return null;
+}
+
 const catalog = JSON.parse(await readFile(fileURLToPath(CATALOG), 'utf8'));
 const projects = await mappedProjects();
 await mkdir(fileURLToPath(OUT_DIR), { recursive: true });
@@ -159,6 +191,12 @@ const failed = [];
 let fetched = 0;
 let reused = 0;
 let adopted = 0;
+let cutFromVideo = 0;
+
+const ffmpeg = await hasFfmpeg();
+if (!ffmpeg) {
+  console.warn('ffmpeg не найден: кадр из ролика взять не выйдет, негодные постеры останутся негодными.');
+}
 
 for (const project of catalog.categories) {
   if (!projects.has(project.name)) continue;
@@ -201,7 +239,27 @@ for (const project of catalog.categories) {
       const { usable, ...score } = await grade(buffer);
 
       if (!usable) {
-        weak.push({ project: project.name, title: video.title, videoId: video.videoId, ...score });
+        /*
+         * Постер сервиса негоден — ищем кадр в самом ролике. Скачивается
+         * только начало потока до нужной секунды, ролик целиком не тянется.
+         */
+        const cut = ffmpeg ? await frameFromVideo(video) : null;
+        if (!cut) {
+          weak.push({ project: project.name, title: video.title, videoId: video.videoId, ...score });
+          continue;
+        }
+
+        const frame = sharp(cut.buffer, { failOn: 'error' });
+        const size = await frame.metadata();
+        posters[video.videoId] = {
+          ...(await writeVariants(video.videoId, frame, size.width, size.height)),
+          sharpness: cut.sharpness,
+          entropy: cut.entropy,
+          // Секунда записана рядом: поменять кадр можно, не разбирая ролик заново.
+          source: `frame@${cut.seconds}s`,
+          fingerprint,
+        };
+        cutFromVideo += 1;
         continue;
       }
 
@@ -234,7 +292,7 @@ await writeFile(
 );
 
 console.log(
-  `постеров: ${Object.keys(posters).length} (скачано ${fetched}, оставлено ${reused}, своих ${adopted})`,
+  `постеров: ${Object.keys(posters).length} (от сервиса ${fetched}, вырезано из ролика ${cutFromVideo}, оставлено ${reused}, своих ${adopted})`,
 );
 console.log(`без годного кадра: ${weak.length} — перечислены в posters.json, на сайт не идут`);
 if (failed.length) {

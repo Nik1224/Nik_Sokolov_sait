@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T10:45:48Z",
+  "generatedAt": "2026-09-20T11:23:06Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
@@ -82,6 +82,18 @@
       "sharpness": 524,
       "entropy": 7.01,
       "fingerprint": "bb5f1cafd281"
+    },
+    "oQmbATJyCQ8CgX3GikYjCi": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 218,
+      "entropy": 6.92,
+      "source": "frame@7s",
+      "fingerprint": "1ead92a0e410"
     },
     "kY7siUmeyQ7y6BsSowamPt": {
       "width": 900,
@@ -259,6 +271,18 @@
       "entropy": 7.4,
       "fingerprint": "f0d01e48579c"
     },
+    "uWN4oFQfjzBcj2UwagVS9z": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 195,
+      "entropy": 7.14,
+      "source": "frame@7s",
+      "fingerprint": "3f4ee6d5ba08"
+    },
     "hAVYTrZ3sJUuKhvccjKcKq": {
       "width": 900,
       "height": 1200,
@@ -366,6 +390,414 @@
       "entropy": 6.49,
       "fingerprint": "292dfca48cb9"
     },
+    "7UUQLR8e24yuqabtzcfKUE": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 634,
+      "entropy": 5.06,
+      "source": "frame@7s",
+      "fingerprint": "9a59e9974e2f"
+    },
+    "6ioQpR8JLtjQuDBgJCD7rN": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1147,
+      "entropy": 5.15,
+      "source": "frame@7s",
+      "fingerprint": "8cfb606cac4c"
+    },
+    "eYafFUNvHs3qW18U4caw9L": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1588,
+      "entropy": 5.13,
+      "source": "frame@7s",
+      "fingerprint": "ebe77d90a1b7"
+    },
+    "7eYo4j3UGo7ZyVmDRzEosX": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1039,
+      "entropy": 6.78,
+      "source": "frame@7s",
+      "fingerprint": "84a4943de581"
+    },
+    "wpWWNBv1r5XM9rHpwsJhmj": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1292,
+      "entropy": 5.16,
+      "source": "frame@7s",
+      "fingerprint": "73cb4c8fdcb0"
+    },
+    "14QQPnzcc4SP8BaRescfYX": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 894,
+      "entropy": 5.55,
+      "source": "frame@7s",
+      "fingerprint": "34d1ef32dda6"
+    },
+    "sQAJ4ALoGiYGrPKQkj8HMM": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1284,
+      "entropy": 5.01,
+      "source": "frame@7s",
+      "fingerprint": "11c1b5aaa98b"
+    },
+    "8M88ev6vhz9NojcFJ4NuVJ": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1272,
+      "entropy": 5.36,
+      "source": "frame@7s",
+      "fingerprint": "37c1c6d7f1f5"
+    },
+    "3dkrJ9vk1mCdNNNn9MktV2": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1236,
+      "entropy": 6.94,
+      "source": "frame@7s",
+      "fingerprint": "66d8547cc2cf"
+    },
+    "gwrZxTrKd8izfGMtcz175v": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1275,
+      "entropy": 5.02,
+      "source": "frame@7s",
+      "fingerprint": "e536b54ad528"
+    },
+    "dbYN6rTYLkEPriTmVsQKqK": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1255,
+      "entropy": 5.04,
+      "source": "frame@7s",
+      "fingerprint": "e9e9b87b11d0"
+    },
+    "eGNR8KXui5URq3P5s4WhP8": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1499,
+      "entropy": 7.08,
+      "source": "frame@7s",
+      "fingerprint": "53687acd267c"
+    },
+    "tHRPyLZ8NuvxCEMv3xtsPk": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 767,
+      "entropy": 5.03,
+      "source": "frame@7s",
+      "fingerprint": "ae3f243362b8"
+    },
+    "5csVCSmEeSD8TZkYNTE1Jm": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 680,
+      "entropy": 6.29,
+      "source": "frame@7s",
+      "fingerprint": "4a91d8f1f99d"
+    },
+    "eT4vN76QckkYhVkQMKuosL": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1322,
+      "entropy": 5.08,
+      "source": "frame@7s",
+      "fingerprint": "75916157e07e"
+    },
+    "0NqjWEZjdDnrKwTUrjW8BC": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1274,
+      "entropy": 5.08,
+      "source": "frame@7s",
+      "fingerprint": "868c2043397f"
+    },
+    "pC3zxhC1DQiXD8Kk7obM1X": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1339,
+      "entropy": 5.14,
+      "source": "frame@7s",
+      "fingerprint": "2f71aaf36c20"
+    },
+    "h5mxpn22C3SVvZiY9xmUWs": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1202,
+      "entropy": 5.05,
+      "source": "frame@7s",
+      "fingerprint": "512a42d46531"
+    },
+    "qyBeZEd3x8v4ht4bt8KKrQ": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1050,
+      "entropy": 5.49,
+      "source": "frame@7s",
+      "fingerprint": "6d28d474973a"
+    },
+    "h7hHJ7bXpiZWm42GyHkFQm": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1537,
+      "entropy": 5.09,
+      "source": "frame@7s",
+      "fingerprint": "8d0721e5fe42"
+    },
+    "5cFFHKsDALCG9dacrjFK66": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 932,
+      "entropy": 6.06,
+      "source": "frame@7s",
+      "fingerprint": "8992a1ea67e5"
+    },
+    "xi6C1wNqwzq9nPkt6wyG3g": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 839,
+      "entropy": 4.9,
+      "source": "frame@7s",
+      "fingerprint": "6652434dd2d1"
+    },
+    "b15X9CG5ZnDByD9LyQsh23": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1290,
+      "entropy": 4.98,
+      "source": "frame@7s",
+      "fingerprint": "a144cd0aa928"
+    },
+    "jr6cmyHV8Aa19679NU3b2Q": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1382,
+      "entropy": 5.1,
+      "source": "frame@7s",
+      "fingerprint": "fe88f32144bf"
+    },
+    "nHYUKAL2ZqY8Jed2BJ3g47": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 746,
+      "entropy": 5.6,
+      "source": "frame@7s",
+      "fingerprint": "1604954d5549"
+    },
+    "cCUUAZtbuMGcSRqME3wXHa": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1058,
+      "entropy": 6.25,
+      "source": "frame@7s",
+      "fingerprint": "d1f4f0274d3b"
+    },
+    "wYYEgdV2BZhkqg45ALEiQM": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1195,
+      "entropy": 6.9,
+      "source": "frame@7s",
+      "fingerprint": "21b564100d5b"
+    },
+    "spZvxSBX5sbrAAx6NnBGE8": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1640,
+      "entropy": 5.53,
+      "source": "frame@7s",
+      "fingerprint": "6adc312e20c7"
+    },
+    "0dKTg9cQuDpJCmj7Zof4dL": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1172,
+      "entropy": 5.41,
+      "source": "frame@7s",
+      "fingerprint": "26d9fdaa108d"
+    },
+    "ted3G3ehphYEwnmD7qX75h": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1044,
+      "entropy": 6.32,
+      "source": "frame@7s",
+      "fingerprint": "840562a4b270"
+    },
+    "5KHGg2YKZJyP6z9WpoqryM": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1188,
+      "entropy": 6.14,
+      "source": "frame@7s",
+      "fingerprint": "62dc538e9fd9"
+    },
+    "8MHHdac74UZ5A5mHtK8L1R": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 1024,
+      "entropy": 6.18,
+      "source": "frame@7s",
+      "fingerprint": "21faa896d0c9"
+    },
+    "famccDqbEWbeD1tNHVdXU8": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 962,
+      "entropy": 5.4,
+      "source": "frame@7s",
+      "fingerprint": "f7554b410a6b"
+    },
+    "fVBsh5JNrAqeV95Tn3zKve": {
+      "width": 899,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 905,
+      "entropy": 6.84,
+      "source": "frame@7s",
+      "fingerprint": "62a2850376a7"
+    },
     "xxbY6pb4YZGp85ME4SJTAf": {
       "width": 1800,
       "height": 1013,
@@ -449,6 +881,18 @@
       "sharpness": 312,
       "entropy": 6.87,
       "fingerprint": "7049778bbaa1"
+    },
+    "5gyRvpukoShnPeryk1gKKt": {
+      "width": 1200,
+      "height": 675,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 823,
+      "entropy": 6.84,
+      "source": "frame@7s",
+      "fingerprint": "93fb982b0bdf"
     },
     "6KHRmw5VuWjh1YFuVTSeMk": {
       "width": 1800,
@@ -737,6 +1181,18 @@
       "sharpness": 1343,
       "entropy": 7.58,
       "fingerprint": "a645cb6925c0"
+    },
+    "a42h2D9axbsZ9ctbdBnydi": {
+      "width": 675,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 96,
+      "entropy": 6.96,
+      "source": "frame@7s",
+      "fingerprint": "7a8dccb0419a"
     },
     "hL9ZUE9uq5VQxuktXQzgYi": {
       "width": 1800,
@@ -1637,6 +2093,18 @@
       "entropy": 7.26,
       "fingerprint": "0eac8ca42f4b"
     },
+    "jfJyfWPDaJWPu5HdPWT5Pa": {
+      "width": 675,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 110,
+      "entropy": 7.41,
+      "source": "frame@7s",
+      "fingerprint": "d5c57020ada0"
+    },
     "fsQLEACayTyZKGHz3rr9F9": {
       "width": 1800,
       "height": 1013,
@@ -1720,6 +2188,18 @@
       "sharpness": 107,
       "entropy": 6.96,
       "fingerprint": "4cd881e12b6a"
+    },
+    "hexp5ojBBPDuxgLskFf97T": {
+      "width": 675,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 415,
+      "entropy": 7.2,
+      "source": "frame@7s",
+      "fingerprint": "2cce2c037bf5"
     },
     "q5zr4Xi6yEFkDiZaczkRR7": {
       "width": 1013,
@@ -1878,286 +2358,5 @@
       "fingerprint": "59d6dd92020a"
     }
   },
-  "weak": [
-    {
-      "project": "Предметка",
-      "title": "338603",
-      "videoId": "8M88ev6vhz9NojcFJ4NuVJ",
-      "sharpness": 0,
-      "entropy": 0.16
-    },
-    {
-      "project": "Предметка",
-      "title": "314324",
-      "videoId": "14QQPnzcc4SP8BaRescfYX",
-      "sharpness": 1,
-      "entropy": 3.91
-    },
-    {
-      "project": "Предметка",
-      "title": "385401",
-      "videoId": "nHYUKAL2ZqY8Jed2BJ3g47",
-      "sharpness": 1,
-      "entropy": 3.92
-    },
-    {
-      "project": "Предметка",
-      "title": "395328",
-      "videoId": "8MHHdac74UZ5A5mHtK8L1R",
-      "sharpness": 1,
-      "entropy": 3.9
-    },
-    {
-      "project": "Предметка",
-      "title": "395332",
-      "videoId": "famccDqbEWbeD1tNHVdXU8",
-      "sharpness": 1,
-      "entropy": 3.9
-    },
-    {
-      "project": "Предметка",
-      "title": "384113",
-      "videoId": "xi6C1wNqwzq9nPkt6wyG3g",
-      "sharpness": 4,
-      "entropy": 5.68
-    },
-    {
-      "project": "Предметка",
-      "title": "385727",
-      "videoId": "cCUUAZtbuMGcSRqME3wXHa",
-      "sharpness": 4,
-      "entropy": 5.8
-    },
-    {
-      "project": "Предметка",
-      "title": "303532",
-      "videoId": "7eYo4j3UGo7ZyVmDRzEosX",
-      "sharpness": 5,
-      "entropy": 7.01
-    },
-    {
-      "project": "Предметка",
-      "title": "313536",
-      "videoId": "wpWWNBv1r5XM9rHpwsJhmj",
-      "sharpness": 5,
-      "entropy": 5.64
-    },
-    {
-      "project": "Предметка",
-      "title": "380528",
-      "videoId": "h5mxpn22C3SVvZiY9xmUWs",
-      "sharpness": 5,
-      "entropy": 5.53
-    },
-    {
-      "project": "Предметка",
-      "title": "381596",
-      "videoId": "qyBeZEd3x8v4ht4bt8KKrQ",
-      "sharpness": 5,
-      "entropy": 6.76
-    },
-    {
-      "project": "Предметка",
-      "title": "382554",
-      "videoId": "5cFFHKsDALCG9dacrjFK66",
-      "sharpness": 5,
-      "entropy": 7.16
-    },
-    {
-      "project": "Предметка",
-      "title": "389476",
-      "videoId": "spZvxSBX5sbrAAx6NnBGE8",
-      "sharpness": 5,
-      "entropy": 6.83
-    },
-    {
-      "project": "Предметка",
-      "title": "392772",
-      "videoId": "ted3G3ehphYEwnmD7qX75h",
-      "sharpness": 5,
-      "entropy": 6.84
-    },
-    {
-      "project": "Предметка",
-      "title": "236012",
-      "videoId": "7UUQLR8e24yuqabtzcfKUE",
-      "sharpness": 6,
-      "entropy": 6.98
-    },
-    {
-      "project": "Предметка",
-      "title": "345055",
-      "videoId": "dbYN6rTYLkEPriTmVsQKqK",
-      "sharpness": 6,
-      "entropy": 4.33
-    },
-    {
-      "project": "Предметка",
-      "title": "362763",
-      "videoId": "tHRPyLZ8NuvxCEMv3xtsPk",
-      "sharpness": 6,
-      "entropy": 6.34
-    },
-    {
-      "project": "Предметка",
-      "title": "343146",
-      "videoId": "3dkrJ9vk1mCdNNNn9MktV2",
-      "sharpness": 7,
-      "entropy": 7.2
-    },
-    {
-      "project": "Предметка",
-      "title": "371222",
-      "videoId": "0NqjWEZjdDnrKwTUrjW8BC",
-      "sharpness": 8,
-      "entropy": 5.21
-    },
-    {
-      "project": "Предметка",
-      "title": "369974",
-      "videoId": "eT4vN76QckkYhVkQMKuosL",
-      "sharpness": 9,
-      "entropy": 5.66
-    },
-    {
-      "project": "Предметка",
-      "title": "380064",
-      "videoId": "pC3zxhC1DQiXD8Kk7obM1X",
-      "sharpness": 9,
-      "entropy": 5.81
-    },
-    {
-      "project": "Предметка",
-      "title": "384349",
-      "videoId": "b15X9CG5ZnDByD9LyQsh23",
-      "sharpness": 10,
-      "entropy": 5.16
-    },
-    {
-      "project": "Предметка",
-      "title": "368680",
-      "videoId": "5csVCSmEeSD8TZkYNTE1Jm",
-      "sharpness": 11,
-      "entropy": 7.42
-    },
-    {
-      "project": "Предметка",
-      "title": "384360",
-      "videoId": "jr6cmyHV8Aa19679NU3b2Q",
-      "sharpness": 14,
-      "entropy": 4.97
-    },
-    {
-      "project": "Ивенты",
-      "title": "Kartel_Pati_Aug",
-      "videoId": "5gyRvpukoShnPeryk1gKKt",
-      "sharpness": 14,
-      "entropy": 6.25
-    },
-    {
-      "project": "Предметка",
-      "title": "396403",
-      "videoId": "fVBsh5JNrAqeV95Tn3zKve",
-      "sharpness": 17,
-      "entropy": 7.43
-    },
-    {
-      "project": "Предметка",
-      "title": "319648",
-      "videoId": "sQAJ4ALoGiYGrPKQkj8HMM",
-      "sharpness": 18,
-      "entropy": 6.24
-    },
-    {
-      "project": "Предметка",
-      "title": "389697",
-      "videoId": "0dKTg9cQuDpJCmj7Zof4dL",
-      "sharpness": 19,
-      "entropy": 6.91
-    },
-    {
-      "project": "Предметка",
-      "title": "303071",
-      "videoId": "eYafFUNvHs3qW18U4caw9L",
-      "sharpness": 21,
-      "entropy": 5.05
-    },
-    {
-      "project": "Предметка",
-      "title": "258730",
-      "videoId": "6ioQpR8JLtjQuDBgJCD7rN",
-      "sharpness": 26,
-      "entropy": 4.98
-    },
-    {
-      "project": "Wedding",
-      "title": "05.03.22 1",
-      "videoId": "a42h2D9axbsZ9ctbdBnydi",
-      "sharpness": 29,
-      "entropy": 7.53
-    },
-    {
-      "project": "Обзорные видео низко бюджетная реклама",
-      "title": "Karyer 9",
-      "videoId": "uWN4oFQfjzBcj2UwagVS9z",
-      "sharpness": 30,
-      "entropy": 7.12
-    },
-    {
-      "project": "Заводы, стройки, производства",
-      "title": "3",
-      "videoId": "jfJyfWPDaJWPu5HdPWT5Pa",
-      "sharpness": 31,
-      "entropy": 7.17
-    },
-    {
-      "project": "Обзорные видео низко бюджетная реклама",
-      "title": "Karyer 10",
-      "videoId": "oQmbATJyCQ8CgX3GikYjCi",
-      "sharpness": 32,
-      "entropy": 5.87
-    },
-    {
-      "project": "Заводы, стройки, производства",
-      "title": "V_alisa_2",
-      "videoId": "hexp5ojBBPDuxgLskFf97T",
-      "sharpness": 34,
-      "entropy": 6.53
-    },
-    {
-      "project": "Предметка",
-      "title": "381868",
-      "videoId": "h7hHJ7bXpiZWm42GyHkFQm",
-      "sharpness": 37,
-      "entropy": 6.5
-    },
-    {
-      "project": "Предметка",
-      "title": "343272",
-      "videoId": "gwrZxTrKd8izfGMtcz175v",
-      "sharpness": 41,
-      "entropy": 4.35
-    },
-    {
-      "project": "Предметка",
-      "title": "345714",
-      "videoId": "eGNR8KXui5URq3P5s4WhP8",
-      "sharpness": 76,
-      "entropy": 4.91
-    },
-    {
-      "project": "Предметка",
-      "title": "394145",
-      "videoId": "5KHGg2YKZJyP6z9WpoqryM",
-      "sharpness": 76,
-      "entropy": 5.06
-    },
-    {
-      "project": "Предметка",
-      "title": "388195",
-      "videoId": "wYYEgdV2BZhkqg45ALEiQM",
-      "sharpness": 78,
-      "entropy": 4.93
-    }
-  ]
+  "weak": []
 }
