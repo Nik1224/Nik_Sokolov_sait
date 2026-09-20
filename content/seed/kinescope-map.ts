@@ -96,6 +96,26 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
     video: { ru: 'Бэкстейдж со съёмки', en: 'Backstage from a shoot' },
     reel: { ru: 'Вертикальный бэкстейдж со съёмки', en: 'Vertical backstage from a shoot' },
   },
+  Спорт: {
+    categorySlug: 'sport',
+    video: { ru: 'Съёмка спортивного события', en: 'Sports event coverage' },
+    reel: { ru: 'Вертикальный ролик со спортивной съёмки', en: 'Vertical reel from a sports shoot' },
+  },
+  Кухня: {
+    categorySlug: 'food',
+    video: { ru: 'Ролик о еде', en: 'Food film' },
+    reel: { ru: 'Вертикальный ролик о еде', en: 'Vertical food reel' },
+  },
+  Танцы: {
+    categorySlug: 'dance',
+    video: { ru: 'Съёмка танца', en: 'Dance film' },
+    reel: { ru: 'Вертикальный танцевальный ролик', en: 'Vertical dance reel' },
+  },
+  Школьные: {
+    categorySlug: 'school',
+    video: { ru: 'Школьная съёмка', en: 'School film' },
+    reel: { ru: 'Вертикальный ролик со школьной съёмки', en: 'Vertical reel from a school shoot' },
+  },
 };
 
 /**
@@ -106,7 +126,14 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
  * вертикальные ролики и так лежат во вкладке каждой категории, рядом со своей
  * съёмкой; отдельная свалка из сорока штук без темы ничего не добавляет.
  */
-export const KINESCOPE_NOT_PUBLISHED: ReadonlySet<string> = new Set(['Reels', 'Reels_NIk']);
+export const KINESCOPE_NOT_PUBLISHED: ReadonlySet<string> = new Set([
+  'Reels',
+  'Reels_NIk',
+  // «Бэки Команда» — про саму команду, а не услуга заказчику. Отдельные ролики
+  // оттуда уже стоят на сайте бэкстейджем категорий, подобранные руками в
+  // content/seed/backstage.ts. Вкладки у этого проекта нет и не нужно.
+  'Бэки Команда',
+]);
 
 /**
  * Ролики, уже подобранные руками в других файлах сида: свадебные фильмы и
