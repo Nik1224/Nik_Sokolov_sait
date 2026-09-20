@@ -267,6 +267,20 @@ export const category = defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
+      name: 'filterGroup',
+      title: 'Ряд фильтров',
+      description:
+        'В какой ряд попадёт категория на странице портфолио. «Что за ролик» — формат съёмки: обучающий, подкаст, реклама. «Что снимаем» — тема: авто, спорт, еда. Пусто — общий ряд без заголовка.',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Что за ролик', value: 'format' },
+          { title: 'Что снимаем', value: 'subject' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
       name: 'fullSeries',
       title: 'Бывают полные серии',
       description: 'Включите, если у этой категории бывает полная выдача одной съёмки. На такие категории ведёт переход к альбомам.',

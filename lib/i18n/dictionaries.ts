@@ -22,6 +22,8 @@ export type Dictionary = {
     closeMenu: string;
     chooseDirection: string;
     filterBy: string;
+    filterFormat: string;
+    filterSubject: string;
     allDirections: string;
     currentDirection: string;
     language: string;
@@ -280,6 +282,8 @@ const ru: Dictionary = {
     closeMenu: 'Закрыть меню',
     chooseDirection: 'Выбрать направление',
     filterBy: 'Фильтр',
+    filterFormat: 'Что за ролик',
+    filterSubject: 'Что снимаем',
     allDirections: 'Все направления',
     currentDirection: 'Текущее направление',
     language: 'Язык',
@@ -599,6 +603,8 @@ const en: Dictionary = {
     closeMenu: 'Close menu',
     chooseDirection: 'Choose a direction',
     filterBy: 'Filter',
+    filterFormat: 'Type of film',
+    filterSubject: 'What we film',
     allDirections: 'All directions',
     currentDirection: 'Current direction',
     language: 'Language',
