@@ -20,6 +20,7 @@ import type { ImageRef, MediaAsset } from '@/content/types';
 import {
   KINESCOPE_CATEGORIES,
   KINESCOPE_HAND_PICKED,
+  KINESCOPE_NOT_PUBLISHED,
   type KinescopeBucket,
 } from './kinescope-map';
 
@@ -90,7 +91,8 @@ function collect(): { byCategory: Map<string, Collected>; skipped: Map<string, n
   for (const project of catalog.categories) {
     const rule = KINESCOPE_CATEGORIES[project.name];
     if (!rule) {
-      skipped.set(project.name, project.count);
+      // Про проекты, которые решено не показывать, спрашивать больше не нужно.
+      if (!KINESCOPE_NOT_PUBLISHED.has(project.name)) skipped.set(project.name, project.count);
       continue;
     }
 
@@ -135,8 +137,9 @@ export function kinescopeReels(categorySlug: string): MediaAsset[] {
 }
 
 /**
- * Проекты Kinescope, которым не нашлось категории на сайте, и сколько в них
+ * Проекты Kinescope, про которые решение ещё не принято, и сколько в них
  * роликов. Нужны тесту и отчёту: молча потерянный проект заметить нельзя.
+ * Проекты из KINESCOPE_NOT_PUBLISHED сюда не попадают — по ним решение есть.
  */
 export const kinescopeUnmapped: { name: string; count: number }[] = [...collected.skipped]
   .map(([name, count]) => ({ name, count }))

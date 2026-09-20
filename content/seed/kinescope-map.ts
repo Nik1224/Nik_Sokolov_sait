@@ -81,7 +81,32 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
     video: { ru: 'Музыкальный клип', en: 'Music video' },
     reel: { ru: 'Вертикальный музыкальный ролик', en: 'Vertical music reel' },
   },
+  'Авто-Мото': {
+    categorySlug: 'auto-moto',
+    video: { ru: 'Ролик об автомобиле', en: 'Car film' },
+    reel: { ru: 'Вертикальный ролик об автомобиле', en: 'Vertical car reel' },
+  },
+  /*
+   * Бэкстейдж здесь — услуга: владельца зовут снять чужую съёмку. Не путать с
+   * полем `backstage` у категории: там процесс его собственной работы, и такие
+   * ролики лежат в content/seed/backstage.ts, подобранные руками.
+   */
+  Бэкстэйдж: {
+    categorySlug: 'backstage',
+    video: { ru: 'Бэкстейдж со съёмки', en: 'Backstage from a shoot' },
+    reel: { ru: 'Вертикальный бэкстейдж со съёмки', en: 'Vertical backstage from a shoot' },
+  },
 };
+
+/**
+ * Проекты, которые владелец решил не показывать на сайте. Не «ещё не
+ * разобрали», а осознанный выбор: спрашивать про них второй раз незачем.
+ *
+ * Reels и Reels_NIk — склад вертикальных нарезок вперемешку по темам. На сайте
+ * вертикальные ролики и так лежат во вкладке каждой категории, рядом со своей
+ * съёмкой; отдельная свалка из сорока штук без темы ничего не добавляет.
+ */
+export const KINESCOPE_NOT_PUBLISHED: ReadonlySet<string> = new Set(['Reels', 'Reels_NIk']);
 
 /**
  * Ролики, уже подобранные руками в других файлах сида: свадебные фильмы и

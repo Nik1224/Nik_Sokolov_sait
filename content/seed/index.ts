@@ -501,7 +501,14 @@ export const categories: Category[] = [
   },
   { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], order: 11, videos: kinescopeVideos('product'), reels: kinescopeReels('product') },
   { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], order: 12, videos: kinescopeVideos('conference'), reels: kinescopeReels('conference') },
-  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 13, videos: kinescopeVideos('narrative'), reels: kinescopeReels('narrative') },
+  { _id: 'cat.auto-moto', slug: 'auto-moto', title: { ru: 'Авто и мото', en: 'Cars and motorcycles' }, description: { ru: 'Машина в движении и в деталях: съёмка на ходу, статика в цеху и у салона, вертикальные нарезки под объявления.', en: 'The vehicle in motion and in detail: rolling shots, statics at the shop and the showroom, vertical cutdowns for listings.' }, directions: ['business'], order: 13, videos: kinescopeVideos('auto-moto'), reels: kinescopeReels('auto-moto') },
+  /*
+   * Бэкстейдж как услуга, а не как рассказ о себе: съёмочную группу зовут
+   * снимать чужую съёмку. У категорий есть своё поле `backstage` — там процесс
+   * работы владельца, и это другое. Здесь результат, за который заплатили.
+   */
+  { _id: 'cat.backstage', slug: 'backstage', title: { ru: 'Бэкстейдж', en: 'Backstage' }, description: { ru: 'Съёмка чужой съёмки: как работает площадка, что происходит между дублями и кто это делает.', en: 'Filming someone else\u2019s shoot: how the set works, what happens between takes and who makes it happen.' }, directions: ['business', 'production'], order: 14, videos: kinescopeVideos('backstage'), reels: kinescopeReels('backstage') },
+  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], order: 15, videos: kinescopeVideos('narrative'), reels: kinescopeReels('narrative') },
 ];
 
 /**
