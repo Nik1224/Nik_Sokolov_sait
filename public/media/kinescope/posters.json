@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T11:55:57Z",
+  "generatedAt": "2026-09-20T12:39:11Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
@@ -3196,6 +3196,90 @@
       "source": "frame@7s",
       "fingerprint": "d6c022f5638d"
     },
+    "rdHSzNtZSXz4s9EUvhN5R8": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 386,
+      "entropy": 6.06,
+      "fingerprint": "aeea3ec8ecf3"
+    },
+    "shc5Eat7TdmzGVhcBHSG5P": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 314,
+      "entropy": 7.12,
+      "fingerprint": "a6993e8d66b9"
+    },
+    "ab6WMfp26KytZi8SgnsHMP": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 359,
+      "entropy": 7.22,
+      "fingerprint": "caeb4fad3fed"
+    },
+    "rs7uKfPPDPFw8zM1AF6aUv": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 730,
+      "entropy": 1.36,
+      "fingerprint": "a1e8159836b1"
+    },
+    "3n6KzJiXDw6Xiz86ndCQoB": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 41,
+      "entropy": 6.94,
+      "fingerprint": "e47cd9a9208a"
+    },
+    "8wQ9eURvDPKahaZQxQh4tE": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 514,
+      "entropy": 6.65,
+      "fingerprint": "788ccbd71ee6"
+    },
+    "rXRReNUCseTc2hTJFUWsLh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 531,
+      "entropy": 7.25,
+      "fingerprint": "60732f149053"
+    },
     "uiAynYeZCUoVkMvE1qrQ7n": {
       "width": 1800,
       "height": 1013,
@@ -3279,6 +3363,78 @@
       "sharpness": 705,
       "entropy": 7.21,
       "fingerprint": "9aeb59c1c39f"
+    },
+    "dhSRmoFzjeuupyPTg5gnKX": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 317,
+      "entropy": 6.88,
+      "fingerprint": "5dff95c73f6f"
+    },
+    "7oBSxDyC29naukfMeWaopF": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 171,
+      "entropy": 6.94,
+      "fingerprint": "86629b75a6fc"
+    },
+    "ava9FEYpGK5DBhCHDLDztW": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 226,
+      "entropy": 6.79,
+      "fingerprint": "c5bc2c781a7a"
+    },
+    "jWRwsGRag8tk9vXP2YDoFh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1572,
+      "entropy": 6.43,
+      "fingerprint": "48f07a1ae6ac"
+    },
+    "5PpFyrQxC4Sskn3CUi3nKo": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 278,
+      "entropy": 6.35,
+      "fingerprint": "266820f75257"
+    },
+    "8A4Zp2uamo8JhhxAGBifwR": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2129,
+      "entropy": 7.64,
+      "fingerprint": "ad32659c0341"
     },
     "5tysWLbuajg3iFbPogBbwC": {
       "width": 1800,
@@ -3471,6 +3627,18 @@
       "sharpness": 1382,
       "entropy": 7.48,
       "fingerprint": "59d6dd92020a"
+    },
+    "qjaXdKxQjyS4i7xrKu5ZC4": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1080,
+      "entropy": 7.23,
+      "fingerprint": "0ff132308be0"
     }
   },
   "weak": []
