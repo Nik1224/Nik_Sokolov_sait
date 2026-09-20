@@ -92,6 +92,49 @@ export function ProjectListing({
 }: Props) {
   const listingHref = href({ locale, direction, section });
 
+  /*
+   * Ряды фильтров. Названия категорий сидят на двух осях: «Реклама» говорит,
+   * что за ролик, «Спорт» — что снимаем. В одном ряду это несравнимые пункты,
+   * и человек не понимает, по какому признаку выбирает.
+   *
+   * Разводим надвое, но только когда в обеих группах есть из чего выбирать.
+   * Ряд из одного пункта с заголовком выглядит поломкой, а не выбором, поэтому
+   * в таком случае всё остаётся одной полосой, как было.
+   */
+  const grouped = {
+    format: categories.filter((item) => item.filterGroup === 'format'),
+    subject: categories.filter((item) => item.filterGroup === 'subject'),
+  };
+  const split = grouped.format.length > 1 && grouped.subject.length > 1;
+  const categoryRows: {
+    group?: 'format' | 'subject';
+    label: string;
+    heading?: string;
+    categories: Category[];
+  }[] = split
+    ? [
+        /*
+         * Доступное имя ряда начинается со слова «Фильтр» и у одного ряда, и у
+         * двух: по нему ряд находят озвучка и тесты. Дальше идёт заголовок —
+         * два ряда с одинаковым именем были бы неразличимы на слух.
+         */
+        {
+          group: 'format' as const,
+          label: `${dict.common.filterBy}: ${dict.common.filterFormat}`,
+          heading: dict.common.filterFormat,
+          categories: grouped.format,
+        },
+        {
+          group: 'subject' as const,
+          label: `${dict.common.filterBy}: ${dict.common.filterSubject}`,
+          heading: dict.common.filterSubject,
+          categories: grouped.subject,
+        },
+      ]
+    : categories.length > 0
+      ? [{ label: dict.common.filterBy, categories }]
+      : [];
+
   return (
     <div className="container-content py-16 lg:py-24">
       <Breadcrumbs
@@ -139,14 +182,21 @@ export function ProjectListing({
         </Link>
       ) : null}
 
-      {categories.length > 0 ? (
+      {categoryRows.map((row, index) => (
         <FilterNav
-          className="mt-12"
-          label={dict.common.filterBy}
-          active={activeCategory ?? (showAll ? ALL : undefined)}
+          key={row.group ?? 'all'}
+          // Второй ряд стоит ближе к первому, чем первый к тексту над ним:
+          // так видно, что это две части одного выбора, а не два блока.
+          className={index === 0 ? 'mt-12' : 'mt-8'}
+          label={row.label}
+          heading={row.heading}
+          active={activeCategory ?? (showAll && index === 0 ? ALL : undefined)}
           items={[
-            ...(showAll ? [{ key: ALL, label: dict.common.viewAll, href: listingHref }] : []),
-            ...categories.map((category) => ({
+            // «Смотреть все» сбрасывает оба ряда, поэтому стоит один раз в первом.
+            ...(showAll && index === 0
+              ? [{ key: ALL, label: dict.common.viewAll, href: listingHref }]
+              : []),
+            ...row.categories.map((category) => ({
               key: category.slug,
               label: localizedString(category.title, locale),
               // Фильтр живёт в query: slug проекта остаётся уникальным адресом.
@@ -154,7 +204,7 @@ export function ProjectListing({
             })),
           ]}
         />
-      ) : null}
+      ))}
 
       {/* Признак для тестов: «кадры галереи» — это то, что внутри, а не любой
           figure на странице; ниже есть ещё бэкстейдж. */}

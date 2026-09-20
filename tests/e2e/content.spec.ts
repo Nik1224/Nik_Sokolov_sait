@@ -77,7 +77,7 @@ test('фильтр листинга работает и отражается в 
 
   // Ссылка ищется в панели фильтров: название категории встречается и в карточках.
   await page
-    .getByRole('navigation', { name: 'Фильтр' })
+    .getByRole('navigation', { name: /^Фильтр/ })
     .getByRole('link', { name: 'Конференции и события' })
     .click();
   await expect(page).toHaveURL(/category=conference/);
@@ -121,7 +121,7 @@ test('фильтр портфолио сужает галерею, а не ло�
   const all = await frames().count();
 
   await page
-    .getByRole('navigation', { name: 'Фильтр' })
+    .getByRole('navigation', { name: /^Фильтр/ })
     .getByRole('link', { name: 'Свадьбы' })
     .click();
   await expect(page).toHaveURL(/category=wedding/);
@@ -853,7 +853,7 @@ test('большая галерея открывается порциями, а 
 
 test('в галерее нет «Смотреть все», в списке работ есть', async ({ page }) => {
   await page.goto('/ru/private/portfolio');
-  const filter = page.getByRole('navigation', { name: 'Фильтр' });
+  const filter = page.getByRole('navigation', { name: /^Фильтр/ });
   // Свадьбы, портреты и семейные кадры вперемешку не складываются ни во что.
   await expect(filter.getByRole('link', { name: 'Смотреть все' })).toHaveCount(0);
   await expect(filter.getByRole('link', { name: 'Свадьбы' })).toBeVisible();
@@ -861,7 +861,7 @@ test('в галерее нет «Смотреть все», в списке ра
   // Список работ так и листают — подряд.
   await page.goto('/ru/business/cases');
   await expect(
-    page.getByRole('navigation', { name: 'Фильтр' }).getByRole('link', { name: 'Смотреть все' }),
+    page.getByRole('navigation', { name: /^Фильтр/ }).getByRole('link', { name: 'Смотреть все' }),
   ).toBeVisible();
 });
 

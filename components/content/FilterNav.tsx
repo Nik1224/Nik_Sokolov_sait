@@ -22,19 +22,32 @@ export type FilterItem = { key: string; label: string; href: string };
 type Props = {
   /** Доступное имя ряда: по нему его находят и озвучка, и тесты. */
   label: string;
+  /**
+   * Видимая подпись над рядом. Нужна, только когда рядов два и надо сказать,
+   * по какому признаку идёт выбор в каждом. Один ряд обходится без неё: там и
+   * так понятно, что это категории.
+   */
+  heading?: string;
   items: FilterItem[];
   /** Ключ выбранного пункта. Пусто — выбран пункт «все». */
   active?: string;
   className?: string;
 };
 
-export function FilterNav({ label, items, active, className = '' }: Props) {
+export function FilterNav({ label, heading, items, active, className = '' }: Props) {
   const { containerRef, barRef, setItem, placed } = useSlidingUnderline(active);
 
   if (items.length === 0) return null;
 
   return (
     <nav aria-label={label} className={className}>
+      {/*
+        Подпись набрана мелким капсом, как вкладки «Видео / Reels» ниже: это
+        служебная строка, а не заголовок раздела. Крупная она спорила бы с
+        самими категориями за внимание.
+      */}
+      {heading ? <p className="label mb-3 text-bone-faint">{heading}</p> : null}
+
       {/*
         Линия лежит рядом со списком, а не внутри: `span` среди `li` — это
         сломанная разметка списка. Точкой отсчёта для обоих служит эта обёртка.
