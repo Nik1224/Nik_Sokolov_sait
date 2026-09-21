@@ -98,8 +98,14 @@ function collect(): { byCategory: Map<string, Collected>; skipped: Map<string, n
 
     // Свежие работы впереди: портфолио читают сверху, и первым должен стоять
     // сегодняшний уровень, а не то, с чего всё начиналось.
-    const ordered = [...(project.videos as CatalogVideo[])].sort((a, b) =>
-      b.createdAt.localeCompare(a.createdAt),
+    // Ролики, которые владелец попросил поставить первыми, идут в его порядке.
+    const first = rule.first ?? [];
+    const rank = (video: CatalogVideo) => {
+      const index = first.indexOf(video.videoId);
+      return index === -1 ? first.length : index;
+    };
+    const ordered = [...(project.videos as CatalogVideo[])].sort(
+      (a, b) => rank(a) - rank(b) || b.createdAt.localeCompare(a.createdAt),
     );
 
     for (const video of ordered) {

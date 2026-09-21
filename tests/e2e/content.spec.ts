@@ -78,7 +78,7 @@ test('фильтр листинга работает и отражается в 
   // Ссылка ищется в панели фильтров: название категории встречается и в карточках.
   await page
     .getByRole('navigation', { name: /^Фильтр/ })
-    .getByRole('link', { name: 'Конференции и события' })
+    .getByRole('link', { name: 'События и конференции' })
     .click();
   await expect(page).toHaveURL(/category=conference/);
 

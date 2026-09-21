@@ -1,496 +1,11 @@
 {
-  "generatedAt": "2026-09-20T12:53:08Z",
+  "generatedAt": "2026-09-21T10:03:00Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
     "flatSharpness": 150
   },
   "posters": {
-    "7pwTsSs5jsB62xm1zG95B1": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 199,
-      "entropy": 6.05,
-      "fingerprint": "bcfa357a5006"
-    },
-    "6cMwZjV53EYkHUGSjKowYH": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 164,
-      "entropy": 6.98,
-      "fingerprint": "0f222d0b30f4"
-    },
-    "jgUvAAdGcaSQ9qtDzaebww": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 201,
-      "entropy": 6.38,
-      "fingerprint": "0e8ed8e0cb16"
-    },
-    "kcQvWkXH4D6f5d53Nj3xC6": {
-      "width": 675,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 43,
-      "entropy": 6.11,
-      "fingerprint": "232a0f64b90e"
-    },
-    "qnRSq6uw4j6NBok8yA8u7Q": {
-      "width": 1200,
-      "height": 675,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 176,
-      "entropy": 7.03,
-      "source": "frame@7s",
-      "fingerprint": "a5ec45808c5e"
-    },
-    "9paBtq4zGBVXn5RbrJMZay": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 297,
-      "entropy": 7.12,
-      "fingerprint": "1f334caadd25"
-    },
-    "tSCn83E1rvaK8QVVz1QRdN": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1224,
-      "entropy": 6.23,
-      "fingerprint": "7166642a9d34"
-    },
-    "fj2oS4LJv3FQFA7h4hd7ZP": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 839,
-      "entropy": 6.66,
-      "fingerprint": "fd41ea85ac1c"
-    },
-    "dhP1GQDVNEPcmvUdPrTqAX": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 528,
-      "entropy": 6.87,
-      "fingerprint": "c4665e4e1cd7"
-    },
-    "eTYp5Ci3tgHwJGBFbgWTom": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 255,
-      "entropy": 7.21,
-      "fingerprint": "0c8642ff1cfd"
-    },
-    "46YbJik1TWt78p6Tr2euuC": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 696,
-      "entropy": 6.01,
-      "fingerprint": "8c81626425dc"
-    },
-    "wkij2n39cdympAVGexzJaq": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1150,
-      "entropy": 7.43,
-      "fingerprint": "7b7014ff46ef"
-    },
-    "vUixzDdG6d8CCrDCvsbpCL": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 746,
-      "entropy": 7.36,
-      "fingerprint": "35e39c796783"
-    },
-    "tpaFVu8W3bAQVdxWzpmqmZ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2223,
-      "entropy": 6.92,
-      "fingerprint": "df95b5c32e26"
-    },
-    "4Z3C9f2bsfo1SVyhrTwczQ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 770,
-      "entropy": 7.1,
-      "fingerprint": "1c4fdd84b9cf"
-    },
-    "5QXizBVFiZLFcEs6VXAx3U": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 55,
-      "entropy": 5.61,
-      "fingerprint": "4c2080508594"
-    },
-    "5vfkkJwJemQAqjt2XPBuZD": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 490,
-      "entropy": 7.21,
-      "fingerprint": "c2d752c248ae"
-    },
-    "sA2M426ViPiCK8y5mgtU8H": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 225,
-      "entropy": 6.2,
-      "fingerprint": "c3b7d4cf5f2f"
-    },
-    "5JFmMWsLTw4QyUtcjBSGoc": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1754,
-      "entropy": 6.36,
-      "fingerprint": "cbf8ad384533"
-    },
-    "nMQR5Ts4t8KMd9D5LSTc3o": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 984,
-      "entropy": 7.32,
-      "fingerprint": "6164ae9b0fe0"
-    },
-    "emZ5PXJkgghHbrmPj8Rfh8": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 278,
-      "entropy": 6.57,
-      "fingerprint": "3e5a0defc950"
-    },
-    "qZRLids9KAz5xQgB5JFJ7G": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 227,
-      "entropy": 6.9,
-      "fingerprint": "480a33a110d2"
-    },
-    "xmZXyQL3rhCSYNU2HEAmKL": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 627,
-      "entropy": 7.13,
-      "fingerprint": "e73a52375157"
-    },
-    "0qQv24Nd82SUFndJFYPFN1": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 760,
-      "entropy": 7.13,
-      "fingerprint": "00fadec8facf"
-    },
-    "kXt99kxHWZkaEHemXJYQPn": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 610,
-      "entropy": 6.94,
-      "fingerprint": "2115a4df8b0b"
-    },
-    "8hNxxqYiYaRghn8UVS4s8W": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 76,
-      "entropy": 6.65,
-      "fingerprint": "9b7c9bdbeac4"
-    },
-    "5WFwNMhYAx6dRcUqn2M15v": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 67,
-      "entropy": 5.39,
-      "fingerprint": "23d857d19521"
-    },
-    "qD4fLSFNf5yQvva6Zh3pPS": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 377,
-      "entropy": 6.97,
-      "fingerprint": "fa9ce2e43339"
-    },
-    "297fDfHwkSrE7Xm9SPs1Mp": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 672,
-      "entropy": 7.14,
-      "fingerprint": "11e3f1855e89"
-    },
-    "dVmb7hBRwpfcKh9YfQVNeD": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 298,
-      "entropy": 6.92,
-      "fingerprint": "39b5c8a75bac"
-    },
-    "tMhX48Dt2V1hGmHjt1p1Po": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 131,
-      "entropy": 6.84,
-      "fingerprint": "263546c0ca13"
-    },
-    "rv1txvpwTUfYPuJaJ7S52Y": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 992,
-      "entropy": 7.16,
-      "fingerprint": "758cdb17ad25"
-    },
-    "uRHTeDW9rJeC2e6JMo8Buu": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 992,
-      "entropy": 7.16,
-      "fingerprint": "ac96f4530ff4"
-    },
-    "4AjDTfZJ8YoRTycjPBpcUp": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 54,
-      "entropy": 7.36,
-      "fingerprint": "9694fceddd60"
-    },
-    "0skaPwmrZXbHApV7gNT8LM": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 82,
-      "entropy": 6.17,
-      "fingerprint": "afb0fd70fb41"
-    },
-    "jdeaRK7nfhG7J3D5PTQZoK": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 88,
-      "entropy": 6.64,
-      "fingerprint": "58086013c84c"
-    },
-    "mLb9GQX732HHj6nmEQijYs": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 325,
-      "entropy": 7.58,
-      "fingerprint": "fb1b326719c2"
-    },
-    "5YQizY2GQ81yPFZr9n3YV3": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 665,
-      "entropy": 7.19,
-      "fingerprint": "e450382f9477"
-    },
-    "8pRKstN9k52S6NufoyunY7": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 243,
-      "entropy": 7.05,
-      "fingerprint": "a5b4290ee205"
-    },
-    "xwXqv1A8L7S4AWvXT8MAKN": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 338,
-      "entropy": 7.18,
-      "fingerprint": "5547629b8953"
-    },
-    "xujT48PSmBAJYhRHYoMRXR": {
-      "width": 900,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 116,
-      "entropy": 6.57,
-      "fingerprint": "33ca6f32b68b"
-    },
     "4iWQZPPSVnrbnVrpXfM9NC": {
       "width": 900,
       "height": 1200,
@@ -509,10 +24,10 @@
         600,
         1200
       ],
-      "sharpness": 218,
+      "sharpness": 219,
       "entropy": 6.92,
       "source": "frame@7s",
-      "fingerprint": "1ead92a0e410"
+      "fingerprint": "6553e746fe85"
     },
     "kY7siUmeyQ7y6BsSowamPt": {
       "width": 900,
@@ -624,6 +139,17 @@
       "entropy": 7.12,
       "fingerprint": "d6f22a3d0a3d"
     },
+    "hAVYTrZ3sJUuKhvccjKcKq": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 771,
+      "entropy": 7.3,
+      "fingerprint": "a996806f96ab"
+    },
     "6dFyqTx6JDd28aLTfYLpJf": {
       "width": 900,
       "height": 1200,
@@ -702,28 +228,71 @@
       "source": "frame@7s",
       "fingerprint": "3f4ee6d5ba08"
     },
-    "hAVYTrZ3sJUuKhvccjKcKq": {
+    "jdeaRK7nfhG7J3D5PTQZoK": {
       "width": 900,
       "height": 1200,
       "sizes": [
         600,
         1200
       ],
-      "sharpness": 771,
-      "entropy": 7.3,
-      "fingerprint": "a996806f96ab"
+      "sharpness": 88,
+      "entropy": 6.64,
+      "fingerprint": "58086013c84c"
     },
-    "4RcfQRweBG4oe6s57vkjyi": {
-      "width": 1013,
-      "height": 1800,
+    "mLb9GQX732HHj6nmEQijYs": {
+      "width": 900,
+      "height": 1200,
       "sizes": [
         600,
-        1200,
-        1800
+        1200
       ],
-      "sharpness": 614,
-      "entropy": 6.97,
-      "fingerprint": "64fe01a25c88"
+      "sharpness": 325,
+      "entropy": 7.58,
+      "fingerprint": "fb1b326719c2"
+    },
+    "5YQizY2GQ81yPFZr9n3YV3": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 665,
+      "entropy": 7.19,
+      "fingerprint": "e450382f9477"
+    },
+    "8pRKstN9k52S6NufoyunY7": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 243,
+      "entropy": 7.05,
+      "fingerprint": "a5b4290ee205"
+    },
+    "xwXqv1A8L7S4AWvXT8MAKN": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 338,
+      "entropy": 7.18,
+      "fingerprint": "5547629b8953"
+    },
+    "xujT48PSmBAJYhRHYoMRXR": {
+      "width": 900,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 116,
+      "entropy": 6.57,
+      "fingerprint": "33ca6f32b68b"
     },
     "7MWuaR4yHbvV3yAAsretXG": {
       "width": 1013,
@@ -785,6 +354,222 @@
       "entropy": 6.45,
       "fingerprint": "92dbc0234fbe"
     },
+    "sTJ8ZwUMyRCRHaK1wQbkWn": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 130,
+      "entropy": 5.56,
+      "fingerprint": "ff3d3da0d0de"
+    },
+    "2rQYQujQ8xJm6XYxk8kxvm": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 69,
+      "entropy": 6.05,
+      "fingerprint": "e014eea76c08"
+    },
+    "2YJmRVhgRWHwPHjgaym2eb": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 82,
+      "entropy": 6.97,
+      "fingerprint": "28fef5a8b545"
+    },
+    "ceHqKdkqTh5gGPptNtBa6U": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 84,
+      "entropy": 6.96,
+      "fingerprint": "96570f57c344"
+    },
+    "sU9QuGgccRh5yysNzzMQMF": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 717,
+      "entropy": 7.31,
+      "fingerprint": "9535c39296aa"
+    },
+    "kXrmBSZkbug2GWdH5hCYxY": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1382,
+      "entropy": 7.48,
+      "fingerprint": "59d6dd92020a"
+    },
+    "4RcfQRweBG4oe6s57vkjyi": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 614,
+      "entropy": 6.97,
+      "fingerprint": "64fe01a25c88"
+    },
+    "cfm4pTrBLBzJP3XqSayWEQ": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 93,
+      "entropy": 7.07,
+      "fingerprint": "743898b08691"
+    },
+    "dMGAYhB9NRxFZ2tLstTMhX": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 139,
+      "entropy": 6.85,
+      "fingerprint": "d89c8d8df32e"
+    },
+    "8oy7tfBWLpsP4Qpm5WqKYM": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 59,
+      "entropy": 6.46,
+      "fingerprint": "1f7de2c9173d"
+    },
+    "nmqLD8hRjskC87CyTFssvK": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 114,
+      "entropy": 7.49,
+      "fingerprint": "a3a8f3eb999a"
+    },
+    "0Hedqyf8vegKDyyhpP9iKU": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 695,
+      "entropy": 7.35,
+      "fingerprint": "da9424ea70b6"
+    },
+    "svhkVB1gTPHqZKb45VE5LH": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 418,
+      "entropy": 6.91,
+      "fingerprint": "dec9ff215bdc"
+    },
+    "2jgzv2NGwx6H7brpcEX2aG": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 164,
+      "entropy": 6.92,
+      "fingerprint": "f4f144765d34"
+    },
+    "gEocQFg9oM9mqH51DNS4wy": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 169,
+      "entropy": 7.09,
+      "fingerprint": "ac174c1d319d"
+    },
+    "pbyqjbsBD4ZDoCKHnLo5p8": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 101,
+      "entropy": 7.16,
+      "fingerprint": "9d8db1d2edca"
+    },
+    "6dFnRfNCsHbRq1v83A6rhB": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 219,
+      "entropy": 6.61,
+      "fingerprint": "e776087ed667"
+    },
+    "a8UsHeXpdeQ2Mv3e42tP73": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 257,
+      "entropy": 6.58,
+      "fingerprint": "c936ceffaf6a"
+    },
     "szZwW73KTrN9LP8qkFMPGi": {
       "width": 1013,
       "height": 1800,
@@ -797,7 +582,7 @@
       "entropy": 7.67,
       "fingerprint": "d59c846913c8"
     },
-    "82E6s5Zp1r52oikhVNVPAo": {
+    "qtjHYWZVVTnxoAua37i94E": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -805,9 +590,428 @@
         1200,
         1800
       ],
-      "sharpness": 320,
-      "entropy": 6.49,
-      "fingerprint": "292dfca48cb9"
+      "sharpness": 557,
+      "entropy": 6.86,
+      "fingerprint": "514b272e3e48"
+    },
+    "6cMwZjV53EYkHUGSjKowYH": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 164,
+      "entropy": 6.98,
+      "fingerprint": "0f222d0b30f4"
+    },
+    "jgUvAAdGcaSQ9qtDzaebww": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1230,
+      "entropy": 7.18,
+      "fingerprint": "c566a567b509"
+    },
+    "qnRSq6uw4j6NBok8yA8u7Q": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 925,
+      "entropy": 6.91,
+      "fingerprint": "aa01e4dc9abb"
+    },
+    "fj2oS4LJv3FQFA7h4hd7ZP": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 186,
+      "entropy": 7.23,
+      "fingerprint": "5314c82e6f4e"
+    },
+    "kcQvWkXH4D6f5d53Nj3xC6": {
+      "width": 675,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 240,
+      "entropy": 6.16,
+      "fingerprint": "08ae95de53e0"
+    },
+    "dhP1GQDVNEPcmvUdPrTqAX": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 68,
+      "entropy": 7.45,
+      "fingerprint": "084d26dfa0ea"
+    },
+    "9paBtq4zGBVXn5RbrJMZay": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 297,
+      "entropy": 7.12,
+      "fingerprint": "1f334caadd25"
+    },
+    "xmZXyQL3rhCSYNU2HEAmKL": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 627,
+      "entropy": 7.13,
+      "fingerprint": "e73a52375157"
+    },
+    "tSCn83E1rvaK8QVVz1QRdN": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 108,
+      "entropy": 6.87,
+      "fingerprint": "e74a4f239617"
+    },
+    "tMhX48Dt2V1hGmHjt1p1Po": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 131,
+      "entropy": 6.84,
+      "fingerprint": "263546c0ca13"
+    },
+    "vUixzDdG6d8CCrDCvsbpCL": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 746,
+      "entropy": 7.36,
+      "fingerprint": "35e39c796783"
+    },
+    "7pwTsSs5jsB62xm1zG95B1": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1319,
+      "entropy": 6.72,
+      "fingerprint": "2de43aae4f68"
+    },
+    "0skaPwmrZXbHApV7gNT8LM": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 82,
+      "entropy": 6.17,
+      "fingerprint": "afb0fd70fb41"
+    },
+    "tpaFVu8W3bAQVdxWzpmqmZ": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2223,
+      "entropy": 6.92,
+      "fingerprint": "df95b5c32e26"
+    },
+    "4Z3C9f2bsfo1SVyhrTwczQ": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 770,
+      "entropy": 7.1,
+      "fingerprint": "1c4fdd84b9cf"
+    },
+    "sA2M426ViPiCK8y5mgtU8H": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 225,
+      "entropy": 6.2,
+      "fingerprint": "c3b7d4cf5f2f"
+    },
+    "46YbJik1TWt78p6Tr2euuC": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 297,
+      "entropy": 6.59,
+      "fingerprint": "0cb5486db781"
+    },
+    "wkij2n39cdympAVGexzJaq": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1150,
+      "entropy": 7.43,
+      "fingerprint": "7b7014ff46ef"
+    },
+    "0qQv24Nd82SUFndJFYPFN1": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 760,
+      "entropy": 7.13,
+      "fingerprint": "00fadec8facf"
+    },
+    "5QXizBVFiZLFcEs6VXAx3U": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1003,
+      "entropy": 7.3,
+      "fingerprint": "1cc98689cdea"
+    },
+    "5vfkkJwJemQAqjt2XPBuZD": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 490,
+      "entropy": 7.21,
+      "fingerprint": "c2d752c248ae"
+    },
+    "5JFmMWsLTw4QyUtcjBSGoc": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 382,
+      "entropy": 7.28,
+      "fingerprint": "e3eb392c5f91"
+    },
+    "8hNxxqYiYaRghn8UVS4s8W": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 627,
+      "entropy": 7.3,
+      "fingerprint": "9543fc901a68"
+    },
+    "5WFwNMhYAx6dRcUqn2M15v": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 67,
+      "entropy": 5.39,
+      "fingerprint": "23d857d19521"
+    },
+    "qD4fLSFNf5yQvva6Zh3pPS": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 377,
+      "entropy": 6.97,
+      "fingerprint": "fa9ce2e43339"
+    },
+    "rv1txvpwTUfYPuJaJ7S52Y": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 992,
+      "entropy": 7.16,
+      "fingerprint": "758cdb17ad25"
+    },
+    "uRHTeDW9rJeC2e6JMo8Buu": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 992,
+      "entropy": 7.16,
+      "fingerprint": "ac96f4530ff4"
+    },
+    "4AjDTfZJ8YoRTycjPBpcUp": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 54,
+      "entropy": 7.36,
+      "fingerprint": "9694fceddd60"
+    },
+    "297fDfHwkSrE7Xm9SPs1Mp": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 672,
+      "entropy": 7.14,
+      "fingerprint": "11e3f1855e89"
+    },
+    "nMQR5Ts4t8KMd9D5LSTc3o": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 984,
+      "entropy": 7.32,
+      "fingerprint": "6164ae9b0fe0"
+    },
+    "kXt99kxHWZkaEHemXJYQPn": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 610,
+      "entropy": 6.94,
+      "fingerprint": "2115a4df8b0b"
+    },
+    "dVmb7hBRwpfcKh9YfQVNeD": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 298,
+      "entropy": 6.92,
+      "fingerprint": "39b5c8a75bac"
+    },
+    "eTYp5Ci3tgHwJGBFbgWTom": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 255,
+      "entropy": 7.21,
+      "fingerprint": "0c8642ff1cfd"
+    },
+    "emZ5PXJkgghHbrmPj8Rfh8": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 72,
+      "entropy": 7.03,
+      "fingerprint": "a8f128b8eb63"
+    },
+    "qZRLids9KAz5xQgB5JFJ7G": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 227,
+      "entropy": 6.9,
+      "fingerprint": "480a33a110d2"
     },
     "7UUQLR8e24yuqabtzcfKUE": {
       "width": 899,
@@ -816,10 +1020,9 @@
         600,
         1200
       ],
-      "sharpness": 634,
-      "entropy": 5.06,
-      "source": "frame@7s",
-      "fingerprint": "9a59e9974e2f"
+      "sharpness": 208,
+      "entropy": 5.16,
+      "fingerprint": "c26ac272637b"
     },
     "6ioQpR8JLtjQuDBgJCD7rN": {
       "width": 899,
@@ -852,10 +1055,9 @@
         600,
         1200
       ],
-      "sharpness": 1039,
-      "entropy": 6.78,
-      "source": "frame@7s",
-      "fingerprint": "84a4943de581"
+      "sharpness": 531,
+      "entropy": 4.73,
+      "fingerprint": "0bf96f479ff6"
     },
     "wpWWNBv1r5XM9rHpwsJhmj": {
       "width": 899,
@@ -876,10 +1078,9 @@
         600,
         1200
       ],
-      "sharpness": 894,
-      "entropy": 5.55,
-      "source": "frame@7s",
-      "fingerprint": "34d1ef32dda6"
+      "sharpness": 333,
+      "entropy": 5.83,
+      "fingerprint": "424a2beea583"
     },
     "sQAJ4ALoGiYGrPKQkj8HMM": {
       "width": 899,
@@ -900,10 +1101,9 @@
         600,
         1200
       ],
-      "sharpness": 1272,
+      "sharpness": 245,
       "entropy": 5.36,
-      "source": "frame@7s",
-      "fingerprint": "37c1c6d7f1f5"
+      "fingerprint": "9f904da00a9a"
     },
     "3dkrJ9vk1mCdNNNn9MktV2": {
       "width": 899,
@@ -912,10 +1112,9 @@
         600,
         1200
       ],
-      "sharpness": 1236,
-      "entropy": 6.94,
-      "source": "frame@7s",
-      "fingerprint": "66d8547cc2cf"
+      "sharpness": 656,
+      "entropy": 5.26,
+      "fingerprint": "23480cb5df11"
     },
     "gwrZxTrKd8izfGMtcz175v": {
       "width": 899,
@@ -948,10 +1147,9 @@
         600,
         1200
       ],
-      "sharpness": 1499,
-      "entropy": 7.08,
-      "source": "frame@7s",
-      "fingerprint": "53687acd267c"
+      "sharpness": 511,
+      "entropy": 7.15,
+      "fingerprint": "247f0d03e91a"
     },
     "tHRPyLZ8NuvxCEMv3xtsPk": {
       "width": 899,
@@ -960,10 +1158,9 @@
         600,
         1200
       ],
-      "sharpness": 767,
-      "entropy": 5.03,
-      "source": "frame@7s",
-      "fingerprint": "ae3f243362b8"
+      "sharpness": 270,
+      "entropy": 6.44,
+      "fingerprint": "97ea365c8d0d"
     },
     "5csVCSmEeSD8TZkYNTE1Jm": {
       "width": 899,
@@ -972,10 +1169,9 @@
         600,
         1200
       ],
-      "sharpness": 680,
-      "entropy": 6.29,
-      "source": "frame@7s",
-      "fingerprint": "4a91d8f1f99d"
+      "sharpness": 569,
+      "entropy": 6.43,
+      "fingerprint": "ccc108473e05"
     },
     "eT4vN76QckkYhVkQMKuosL": {
       "width": 899,
@@ -1056,10 +1252,9 @@
         600,
         1200
       ],
-      "sharpness": 932,
-      "entropy": 6.06,
-      "source": "frame@7s",
-      "fingerprint": "8992a1ea67e5"
+      "sharpness": 915,
+      "entropy": 6.07,
+      "fingerprint": "22aeedafa7ae"
     },
     "xi6C1wNqwzq9nPkt6wyG3g": {
       "width": 899,
@@ -1068,10 +1263,9 @@
         600,
         1200
       ],
-      "sharpness": 839,
-      "entropy": 4.9,
-      "source": "frame@7s",
-      "fingerprint": "6652434dd2d1"
+      "sharpness": 212,
+      "entropy": 4.85,
+      "fingerprint": "cee70d87b513"
     },
     "b15X9CG5ZnDByD9LyQsh23": {
       "width": 899,
@@ -1104,10 +1298,9 @@
         600,
         1200
       ],
-      "sharpness": 746,
-      "entropy": 5.6,
-      "source": "frame@7s",
-      "fingerprint": "1604954d5549"
+      "sharpness": 448,
+      "entropy": 6.72,
+      "fingerprint": "2fe7b3f08837"
     },
     "cCUUAZtbuMGcSRqME3wXHa": {
       "width": 899,
@@ -1116,10 +1309,9 @@
         600,
         1200
       ],
-      "sharpness": 1058,
-      "entropy": 6.25,
-      "source": "frame@7s",
-      "fingerprint": "d1f4f0274d3b"
+      "sharpness": 339,
+      "entropy": 6.1,
+      "fingerprint": "0ca6b632c271"
     },
     "wYYEgdV2BZhkqg45ALEiQM": {
       "width": 899,
@@ -1128,10 +1320,9 @@
         600,
         1200
       ],
-      "sharpness": 1195,
-      "entropy": 6.9,
-      "source": "frame@7s",
-      "fingerprint": "21b564100d5b"
+      "sharpness": 427,
+      "entropy": 6.39,
+      "fingerprint": "c44e3e3f0608"
     },
     "spZvxSBX5sbrAAx6NnBGE8": {
       "width": 899,
@@ -1140,10 +1331,9 @@
         600,
         1200
       ],
-      "sharpness": 1640,
-      "entropy": 5.53,
-      "source": "frame@7s",
-      "fingerprint": "6adc312e20c7"
+      "sharpness": 1070,
+      "entropy": 5.74,
+      "fingerprint": "63c0b91a193f"
     },
     "0dKTg9cQuDpJCmj7Zof4dL": {
       "width": 899,
@@ -1152,10 +1342,9 @@
         600,
         1200
       ],
-      "sharpness": 1172,
-      "entropy": 5.41,
-      "source": "frame@7s",
-      "fingerprint": "26d9fdaa108d"
+      "sharpness": 711,
+      "entropy": 5.9,
+      "fingerprint": "3b8ea46a4f45"
     },
     "ted3G3ehphYEwnmD7qX75h": {
       "width": 899,
@@ -1164,10 +1353,9 @@
         600,
         1200
       ],
-      "sharpness": 1044,
-      "entropy": 6.32,
-      "source": "frame@7s",
-      "fingerprint": "840562a4b270"
+      "sharpness": 380,
+      "entropy": 4.24,
+      "fingerprint": "d122426af77c"
     },
     "5KHGg2YKZJyP6z9WpoqryM": {
       "width": 899,
@@ -1176,10 +1364,9 @@
         600,
         1200
       ],
-      "sharpness": 1188,
-      "entropy": 6.14,
-      "source": "frame@7s",
-      "fingerprint": "62dc538e9fd9"
+      "sharpness": 350,
+      "entropy": 7.19,
+      "fingerprint": "f1101a6494f6"
     },
     "8MHHdac74UZ5A5mHtK8L1R": {
       "width": 899,
@@ -1188,10 +1375,9 @@
         600,
         1200
       ],
-      "sharpness": 1024,
-      "entropy": 6.18,
-      "source": "frame@7s",
-      "fingerprint": "21faa896d0c9"
+      "sharpness": 319,
+      "entropy": 5.75,
+      "fingerprint": "497a34dfec12"
     },
     "famccDqbEWbeD1tNHVdXU8": {
       "width": 899,
@@ -1200,10 +1386,9 @@
         600,
         1200
       ],
-      "sharpness": 962,
-      "entropy": 5.4,
-      "source": "frame@7s",
-      "fingerprint": "f7554b410a6b"
+      "sharpness": 410,
+      "entropy": 4.62,
+      "fingerprint": "f3a3d2af44e6"
     },
     "fVBsh5JNrAqeV95Tn3zKve": {
       "width": 899,
@@ -1217,7 +1402,7 @@
       "source": "frame@7s",
       "fingerprint": "62a2850376a7"
     },
-    "xxbY6pb4YZGp85ME4SJTAf": {
+    "stS3jocMTzS9rB5MTSCUEj": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -1225,9 +1410,93 @@
         1200,
         1800
       ],
-      "sharpness": 694,
-      "entropy": 6.89,
-      "fingerprint": "c2c12a69d0ca"
+      "sharpness": 633,
+      "entropy": 6.92,
+      "fingerprint": "84c36638fe4a"
+    },
+    "rurTLNMk8HZjghA1U26ABU": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1931,
+      "entropy": 7.61,
+      "fingerprint": "8a1206d05660"
+    },
+    "6QXtBvZKv5pmbTG8aGreNY": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 369,
+      "entropy": 7.01,
+      "fingerprint": "0cd5761a3c8f"
+    },
+    "gDX5uw7ScPJ5a9q33guAV5": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2860,
+      "entropy": 7.76,
+      "fingerprint": "4d7d9ad83935"
+    },
+    "8mB1TizzCxZcWPHXEbC3rT": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 406,
+      "entropy": 7.44,
+      "fingerprint": "7b0e7a83819e"
+    },
+    "n7pQnn4U6Qyf6qG6AZqvcD": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2688,
+      "entropy": 6.93,
+      "fingerprint": "155b09c0a090"
+    },
+    "xtctbQeC9dnTgXj58m11Kh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1070,
+      "entropy": 7.14,
+      "fingerprint": "3d802522bf96"
+    },
+    "gLNjriMPdiZaHukFLoSse4": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 524,
+      "entropy": 7.23,
+      "fingerprint": "0dd6a502f672"
     },
     "7Mvz3KxrMDzzPuxx5GfJik": {
       "width": 1800,
@@ -1240,54 +1509,6 @@
       "sharpness": 881,
       "entropy": 6.9,
       "fingerprint": "73b3558eff94"
-    },
-    "cJZRVvow4475vpJY8X9E19": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1872,
-      "entropy": 7.69,
-      "fingerprint": "42762e8dc81e"
-    },
-    "6eEsjJNyu3uH9AdyPKuGRG": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 345,
-      "entropy": 6.32,
-      "fingerprint": "a14c666257c4"
-    },
-    "ahUBooxgkdJ4ErDvQihLCC": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 885,
-      "entropy": 7.52,
-      "fingerprint": "ab1b3cf1ce0d"
-    },
-    "vmwXTC6jWn8NLNGFbZLguY": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 312,
-      "entropy": 6.87,
-      "fingerprint": "7049778bbaa1"
     },
     "5gyRvpukoShnPeryk1gKKt": {
       "width": 1200,
@@ -1313,7 +1534,7 @@
       "entropy": 6.29,
       "fingerprint": "4c8509674b0d"
     },
-    "xtctbQeC9dnTgXj58m11Kh": {
+    "cJZRVvow4475vpJY8X9E19": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -1321,9 +1542,69 @@
         1200,
         1800
       ],
-      "sharpness": 1070,
-      "entropy": 7.14,
-      "fingerprint": "3d802522bf96"
+      "sharpness": 1872,
+      "entropy": 7.69,
+      "fingerprint": "42762e8dc81e"
+    },
+    "ahUBooxgkdJ4ErDvQihLCC": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 885,
+      "entropy": 7.52,
+      "fingerprint": "ab1b3cf1ce0d"
+    },
+    "vmwXTC6jWn8NLNGFbZLguY": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 312,
+      "entropy": 6.87,
+      "fingerprint": "7049778bbaa1"
+    },
+    "6eEsjJNyu3uH9AdyPKuGRG": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 345,
+      "entropy": 6.32,
+      "fingerprint": "a14c666257c4"
+    },
+    "xxbY6pb4YZGp85ME4SJTAf": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 694,
+      "entropy": 6.89,
+      "fingerprint": "c2c12a69d0ca"
+    },
+    "h8nns3xaoBBecP62x4pzMS": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 91,
+      "entropy": 5.43,
+      "fingerprint": "25e4fe120863"
     },
     "k6FbW7vn3RqKFDR5f57eoP": {
       "width": 1800,
@@ -1381,81 +1662,9 @@
         1200,
         1800
       ],
-      "sharpness": 4869,
-      "entropy": 3.86,
-      "fingerprint": "a1b46d4abd71"
-    },
-    "4iDyL7xFCANnaqByzQhxLa": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 396,
-      "entropy": 6.71,
-      "fingerprint": "5d8b3a493ec8"
-    },
-    "3Zch6tA8KrjYz8ojnJDRGN": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 552,
-      "entropy": 5.99,
-      "fingerprint": "47a34915617e"
-    },
-    "dMkVEmD8kAB513wWsRRVf7": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 40,
-      "entropy": 6.35,
-      "fingerprint": "ada68cc7ef34"
-    },
-    "dDMHfRgss8g6NVVqmDZAcR": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 596,
-      "entropy": 7.5,
-      "fingerprint": "927fa53a7ad5"
-    },
-    "gLNjriMPdiZaHukFLoSse4": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 524,
-      "entropy": 7.23,
-      "fingerprint": "0dd6a502f672"
-    },
-    "h8nns3xaoBBecP62x4pzMS": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 91,
-      "entropy": 5.43,
-      "fingerprint": "25e4fe120863"
+      "sharpness": 2602,
+      "entropy": 6.79,
+      "fingerprint": "265331943615"
     },
     "deE2DxuE79AdMHGdgk2Gke": {
       "width": 1800,
@@ -1505,54 +1714,6 @@
       "entropy": 7.33,
       "fingerprint": "a42a80ef6389"
     },
-    "n7pQnn4U6Qyf6qG6AZqvcD": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 361,
-      "entropy": 4.27,
-      "fingerprint": "b2f24718ef1b"
-    },
-    "8mB1TizzCxZcWPHXEbC3rT": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 406,
-      "entropy": 7.44,
-      "fingerprint": "7b0e7a83819e"
-    },
-    "mEnbVefktzeAsbCR89YER2": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 125,
-      "entropy": 5.73,
-      "fingerprint": "29693e006d94"
-    },
-    "sF1yWLYKVvidpqanHSHBqQ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 805,
-      "entropy": 7.6,
-      "fingerprint": "bf20732f3962"
-    },
     "urX5vLW6mAT5RVLUtDAnqn": {
       "width": 1800,
       "height": 1013,
@@ -1577,19 +1738,7 @@
       "entropy": 7.58,
       "fingerprint": "a645cb6925c0"
     },
-    "a42h2D9axbsZ9ctbdBnydi": {
-      "width": 675,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 96,
-      "entropy": 6.96,
-      "source": "frame@7s",
-      "fingerprint": "7a8dccb0419a"
-    },
-    "hL9ZUE9uq5VQxuktXQzgYi": {
+    "3Zch6tA8KrjYz8ojnJDRGN": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -1597,11 +1746,11 @@
         1200,
         1800
       ],
-      "sharpness": 258,
-      "entropy": 7.63,
-      "fingerprint": "9018dafe4639"
+      "sharpness": 197,
+      "entropy": 7.35,
+      "fingerprint": "de1490d5ecec"
     },
-    "kn5YEzcPbf2gkVE12u2TEc": {
+    "dDMHfRgss8g6NVVqmDZAcR": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -1609,320 +1758,33 @@
         1200,
         1800
       ],
-      "sharpness": 1724,
-      "entropy": 7.49,
-      "fingerprint": "216e2418c49e"
+      "sharpness": 596,
+      "entropy": 7.5,
+      "fingerprint": "927fa53a7ad5"
     },
-    "tcFkvFMLfgnemJE7B91Tyz": {
-      "width": 1800,
-      "height": 1013,
+    "4iDyL7xFCANnaqByzQhxLa": {
+      "width": 1013,
+      "height": 1800,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 1796,
-      "entropy": 5.78,
-      "fingerprint": "516f098c7802"
-    },
-    "hSHkDoLFMBGTH93q3zykAL": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 274,
+      "sharpness": 396,
       "entropy": 6.71,
-      "fingerprint": "e466721c12ca"
+      "fingerprint": "5d8b3a493ec8"
     },
-    "q1Nqzrb866bwinP244wnME": {
-      "width": 1800,
-      "height": 1013,
+    "dMkVEmD8kAB513wWsRRVf7": {
+      "width": 1013,
+      "height": 1800,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 2583,
-      "entropy": 7.17,
-      "fingerprint": "01da7afcc6a8"
-    },
-    "vRtJvS4VAS98yTzjxZPjDu": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2583,
-      "entropy": 7.17,
-      "fingerprint": "90609dd3e08d"
-    },
-    "aVUUkthXsGbF9kh1U9DUCn": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 612,
-      "entropy": 7.44,
-      "fingerprint": "91b7d7619002"
-    },
-    "38inADPAsNhSBNLv774U9W": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 943,
-      "entropy": 7.25,
-      "fingerprint": "549c87967523"
-    },
-    "vnwY2VdShteAtyRA61MCur": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 221,
-      "entropy": 7.52,
-      "fingerprint": "4bf0e2ec12b7"
-    },
-    "vBMm4U3fRKH91eVgVG5ciJ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 164,
-      "entropy": 6.01,
-      "fingerprint": "6936e9d42dd7"
-    },
-    "ca3jWsV7cesYbF3D4aUcQb": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 624,
-      "entropy": 7.19,
-      "fingerprint": "7770e9f01971"
-    },
-    "tL3HGaa7FnTt9i6gQ1Ba8e": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 162,
+      "sharpness": 366,
       "entropy": 7.01,
-      "fingerprint": "bb243bb76064"
-    },
-    "55S1nXiv7QhTxy6bfDwnda": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 639,
-      "entropy": 7.4,
-      "fingerprint": "a3ab71e59f7b"
-    },
-    "8bMnbkTukg4yh35p9QL6qx": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 151,
-      "entropy": 7.22,
-      "fingerprint": "a70011c379fc"
-    },
-    "mKiZ8ZbErKc6kswXJCRzPm": {
-      "width": 660,
-      "height": 1200,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 741,
-      "entropy": 7.37,
-      "fingerprint": "c62301530064"
-    },
-    "kL8CQLH2XiaYoWGSQ8YaC7": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 222,
-      "entropy": 6.9,
-      "fingerprint": "0dc949346d92"
-    },
-    "jADP7Hs7hPaqaLaVmatY69": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2601,
-      "entropy": 7.34,
-      "fingerprint": "b5f7c2efae90"
-    },
-    "jp3FUyi7h6m7uQRw66XH96": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 179,
-      "entropy": 6.66,
-      "fingerprint": "0e193b96948d"
-    },
-    "eGyh5aFZCBhj6Ya68UorpC": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 437,
-      "entropy": 7.18,
-      "fingerprint": "6155e2310821"
-    },
-    "jX7w3a7b269XtyjKgt5VNT": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 402,
-      "entropy": 6.18,
-      "fingerprint": "c4d4d777c925"
-    },
-    "5SPzWtrreQQsYvZ9dXzdiY": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 282,
-      "entropy": 7.37,
-      "fingerprint": "98f71ee6260d"
-    },
-    "jizgobNaz2jMrtU6wikjpp": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 4681,
-      "entropy": 7.3,
-      "fingerprint": "3ca883179b5b"
-    },
-    "4SP2XFfPzWqnL2RayM8A9o": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1117,
-      "entropy": 6.79,
-      "fingerprint": "202349323fe9"
-    },
-    "7yrXX8FghiiwSJxBpzpBLo": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 348,
-      "entropy": 6.83,
-      "fingerprint": "7f5278ec9426"
-    },
-    "aifU2KpMeJAf9vXzfqbhgi": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 480,
-      "entropy": 6.44,
-      "fingerprint": "a6e8c91cbc5a"
-    },
-    "vmasDNGbABxrUXtrdvx4Nf": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 897,
-      "entropy": 6.1,
-      "fingerprint": "a214d50d773b"
-    },
-    "53w1M3dzAk7dSk2oQHJnEy": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1242,
-      "entropy": 6.86,
-      "fingerprint": "49e667dbdd8f"
-    },
-    "a3pMSctP9BiL8t52XUJxMe": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 80,
-      "entropy": 7.31,
-      "fingerprint": "2016aa810066"
+      "fingerprint": "181458828fe6"
     },
     "eyUV5Sk7RviaUXEcACr26n": {
       "width": 1800,
@@ -1935,54 +1797,6 @@
       "sharpness": 452,
       "entropy": 7.56,
       "fingerprint": "2ceb560991d2"
-    },
-    "epCeEr7ccpLCNYbFEbGi1a": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 947,
-      "entropy": 7.33,
-      "fingerprint": "8b4c1ff94aed"
-    },
-    "pX8KR3FrRUrK6EgA6vbpZx": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 3073,
-      "entropy": 7.64,
-      "fingerprint": "8a02172f10b4"
-    },
-    "5sKjnLLJJpyhHt3WXvu5Eq": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 330,
-      "entropy": 6.15,
-      "fingerprint": "432df0ff304a"
-    },
-    "um31Xko9khxh6Te7gudJJZ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 115,
-      "entropy": 5.81,
-      "fingerprint": "14bb91019201"
     },
     "74Bf2RjK3C7bSxDz65HeRq": {
       "width": 1800,
@@ -2020,7 +1834,7 @@
       "entropy": 7.05,
       "fingerprint": "4cf9c9c71cea"
     },
-    "gzegqTkNcNN5JmrZpUxvLL": {
+    "9SMR8LN2EwbLC2fX38rpZD": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2028,11 +1842,11 @@
         1200,
         1800
       ],
-      "sharpness": 1289,
-      "entropy": 7.17,
-      "fingerprint": "c591ca9292ea"
+      "sharpness": 524,
+      "entropy": 6.84,
+      "fingerprint": "b0e5313afc7e"
     },
-    "5cKnURvLoty8NHtt6cPnhM": {
+    "5pHzBeec1gQDdzkyiPk6iv": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2040,9 +1854,45 @@
         1200,
         1800
       ],
-      "sharpness": 1228,
-      "entropy": 6.88,
-      "fingerprint": "806fbd2b0ff3"
+      "sharpness": 726,
+      "entropy": 6.68,
+      "fingerprint": "b9b6e35ba93b"
+    },
+    "q2skgYQBt8kUtKJvLVCruV": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 582,
+      "entropy": 7.21,
+      "fingerprint": "3ca444c9ff0f"
+    },
+    "epCeEr7ccpLCNYbFEbGi1a": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 947,
+      "entropy": 7.33,
+      "fingerprint": "8b4c1ff94aed"
+    },
+    "pX8KR3FrRUrK6EgA6vbpZx": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 3073,
+      "entropy": 7.64,
+      "fingerprint": "8a02172f10b4"
     },
     "7mzJ8HFhqBtuyDWXa8woum": {
       "width": 1800,
@@ -2052,9 +1902,9 @@
         1200,
         1800
       ],
-      "sharpness": 1655,
-      "entropy": 1.26,
-      "fingerprint": "9d8595258da0"
+      "sharpness": 457,
+      "entropy": 7.39,
+      "fingerprint": "5df24fb92ee0"
     },
     "nTqpPKCFVpgnY8hjNcJEPJ": {
       "width": 1013,
@@ -2079,30 +1929,6 @@
       "sharpness": 292,
       "entropy": 7.6,
       "fingerprint": "5aae67c9f3c7"
-    },
-    "76XF4L4nceQ2XwA1s7uFL4": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1301,
-      "entropy": 7.21,
-      "fingerprint": "c3fbad2bde33"
-    },
-    "42wLmd5HjuqRb1h7WT5NQ9": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 156,
-      "entropy": 7.03,
-      "fingerprint": "bda69ba9b46d"
     },
     "nNjrGM4eCiJbfGVY27UkWA": {
       "width": 1800,
@@ -2140,54 +1966,6 @@
       "entropy": 6.64,
       "fingerprint": "2ef1d9da1a20"
     },
-    "q2skgYQBt8kUtKJvLVCruV": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 582,
-      "entropy": 7.21,
-      "fingerprint": "3ca444c9ff0f"
-    },
-    "0iM4SCmmoF8gs4iPY7DD8w": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 276,
-      "entropy": 6.81,
-      "fingerprint": "7d061ba32a5b"
-    },
-    "gCc4SUftQrqe4K2svkXgd5": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 226,
-      "entropy": 7.26,
-      "fingerprint": "d10a1069634c"
-    },
-    "9SMR8LN2EwbLC2fX38rpZD": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 524,
-      "entropy": 6.84,
-      "fingerprint": "b0e5313afc7e"
-    },
     "qQMBgMee2JQ1aFFXin6Nh7": {
       "width": 1800,
       "height": 1013,
@@ -2200,7 +1978,7 @@
       "entropy": 7.02,
       "fingerprint": "7afdc286b61f"
     },
-    "5pHzBeec1gQDdzkyiPk6iv": {
+    "gzegqTkNcNN5JmrZpUxvLL": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2208,9 +1986,45 @@
         1200,
         1800
       ],
-      "sharpness": 726,
-      "entropy": 6.68,
-      "fingerprint": "b9b6e35ba93b"
+      "sharpness": 1289,
+      "entropy": 7.17,
+      "fingerprint": "c591ca9292ea"
+    },
+    "5cKnURvLoty8NHtt6cPnhM": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1228,
+      "entropy": 6.88,
+      "fingerprint": "806fbd2b0ff3"
+    },
+    "76XF4L4nceQ2XwA1s7uFL4": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1301,
+      "entropy": 7.21,
+      "fingerprint": "c3fbad2bde33"
+    },
+    "42wLmd5HjuqRb1h7WT5NQ9": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 156,
+      "entropy": 7.03,
+      "fingerprint": "bda69ba9b46d"
     },
     "izuXUReisJy4UY9uo5uTgg": {
       "width": 1800,
@@ -2224,7 +2038,7 @@
       "entropy": 6.48,
       "fingerprint": "3809592c2508"
     },
-    "0Hedqyf8vegKDyyhpP9iKU": {
+    "0iM4SCmmoF8gs4iPY7DD8w": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2232,11 +2046,11 @@
         1200,
         1800
       ],
-      "sharpness": 695,
-      "entropy": 7.35,
-      "fingerprint": "da9424ea70b6"
+      "sharpness": 276,
+      "entropy": 6.81,
+      "fingerprint": "7d061ba32a5b"
     },
-    "svhkVB1gTPHqZKb45VE5LH": {
+    "5sKjnLLJJpyhHt3WXvu5Eq": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2244,11 +2058,107 @@
         1200,
         1800
       ],
-      "sharpness": 418,
-      "entropy": 6.91,
-      "fingerprint": "dec9ff215bdc"
+      "sharpness": 330,
+      "entropy": 6.15,
+      "fingerprint": "432df0ff304a"
     },
-    "2jgzv2NGwx6H7brpcEX2aG": {
+    "um31Xko9khxh6Te7gudJJZ": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 115,
+      "entropy": 5.81,
+      "fingerprint": "14bb91019201"
+    },
+    "gCc4SUftQrqe4K2svkXgd5": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 226,
+      "entropy": 7.26,
+      "fingerprint": "d10a1069634c"
+    },
+    "5tysWLbuajg3iFbPogBbwC": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 234,
+      "entropy": 6.9,
+      "fingerprint": "4192b7bc2344"
+    },
+    "qLxzkkfwL2nwdzuznGST7i": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 74,
+      "entropy": 7.33,
+      "fingerprint": "2c086358d3c7"
+    },
+    "taQQMtGyNKZsdbdbbrtoKy": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 170,
+      "entropy": 5.22,
+      "fingerprint": "dba48afbb737"
+    },
+    "vw6vFdVXRECdkiR4CP9h6s": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 281,
+      "entropy": 6.77,
+      "fingerprint": "a78e02991ab5"
+    },
+    "7ZaVaQmeo8bgZbmCBhTQUA": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 156,
+      "entropy": 6.49,
+      "fingerprint": "61ee7258721e"
+    },
+    "0XF65E7ctN6vNLj2HZrvFg": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 144,
+      "entropy": 6.31,
+      "fingerprint": "de75bbc569bc"
+    },
+    "vBMm4U3fRKH91eVgVG5ciJ": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2257,10 +2167,22 @@
         1800
       ],
       "sharpness": 164,
-      "entropy": 6.92,
-      "fingerprint": "f4f144765d34"
+      "entropy": 6.01,
+      "fingerprint": "6936e9d42dd7"
     },
-    "6dFnRfNCsHbRq1v83A6rhB": {
+    "hL9ZUE9uq5VQxuktXQzgYi": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 258,
+      "entropy": 7.63,
+      "fingerprint": "9018dafe4639"
+    },
+    "eGyh5aFZCBhj6Ya68UorpC": {
       "width": 1013,
       "height": 1800,
       "sizes": [
@@ -2268,11 +2190,11 @@
         1200,
         1800
       ],
-      "sharpness": 219,
-      "entropy": 6.61,
-      "fingerprint": "e776087ed667"
+      "sharpness": 437,
+      "entropy": 7.18,
+      "fingerprint": "6155e2310821"
     },
-    "gEocQFg9oM9mqH51DNS4wy": {
+    "kn5YEzcPbf2gkVE12u2TEc": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2280,11 +2202,11 @@
         1200,
         1800
       ],
-      "sharpness": 169,
-      "entropy": 7.09,
-      "fingerprint": "ac174c1d319d"
+      "sharpness": 1724,
+      "entropy": 7.49,
+      "fingerprint": "216e2418c49e"
     },
-    "pbyqjbsBD4ZDoCKHnLo5p8": {
+    "38inADPAsNhSBNLv774U9W": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2292,11 +2214,23 @@
         1200,
         1800
       ],
-      "sharpness": 101,
-      "entropy": 7.16,
-      "fingerprint": "9d8db1d2edca"
+      "sharpness": 943,
+      "entropy": 7.25,
+      "fingerprint": "549c87967523"
     },
-    "2rQYQujQ8xJm6XYxk8kxvm": {
+    "hSHkDoLFMBGTH93q3zykAL": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 274,
+      "entropy": 6.71,
+      "fingerprint": "e466721c12ca"
+    },
+    "8bMnbkTukg4yh35p9QL6qx": {
       "width": 1013,
       "height": 1800,
       "sizes": [
@@ -2304,11 +2238,22 @@
         1200,
         1800
       ],
-      "sharpness": 69,
-      "entropy": 6.05,
-      "fingerprint": "e014eea76c08"
+      "sharpness": 151,
+      "entropy": 7.22,
+      "fingerprint": "a70011c379fc"
     },
-    "sTJ8ZwUMyRCRHaK1wQbkWn": {
+    "mKiZ8ZbErKc6kswXJCRzPm": {
+      "width": 660,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 741,
+      "entropy": 7.37,
+      "fingerprint": "c62301530064"
+    },
+    "vnwY2VdShteAtyRA61MCur": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2316,11 +2261,11 @@
         1200,
         1800
       ],
-      "sharpness": 1857,
-      "entropy": 6.24,
-      "fingerprint": "0d5c1b7245d8"
+      "sharpness": 221,
+      "entropy": 7.52,
+      "fingerprint": "4bf0e2ec12b7"
     },
-    "2YJmRVhgRWHwPHjgaym2eb": {
+    "4SP2XFfPzWqnL2RayM8A9o": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2328,11 +2273,11 @@
         1200,
         1800
       ],
-      "sharpness": 82,
-      "entropy": 6.97,
-      "fingerprint": "28fef5a8b545"
+      "sharpness": 1117,
+      "entropy": 6.79,
+      "fingerprint": "202349323fe9"
     },
-    "92tQ8DvSvteM3gHrwGnPqu": {
+    "tL3HGaa7FnTt9i6gQ1Ba8e": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2340,11 +2285,23 @@
         1200,
         1800
       ],
-      "sharpness": 778,
-      "entropy": 7.33,
-      "fingerprint": "5e793779fb83"
+      "sharpness": 162,
+      "entropy": 7.01,
+      "fingerprint": "bb243bb76064"
     },
-    "a8UsHeXpdeQ2Mv3e42tP73": {
+    "55S1nXiv7QhTxy6bfDwnda": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 639,
+      "entropy": 7.4,
+      "fingerprint": "a3ab71e59f7b"
+    },
+    "kL8CQLH2XiaYoWGSQ8YaC7": {
       "width": 1013,
       "height": 1800,
       "sizes": [
@@ -2352,11 +2309,11 @@
         1200,
         1800
       ],
-      "sharpness": 227,
-      "entropy": 6.31,
-      "fingerprint": "32adf6828a5f"
+      "sharpness": 222,
+      "entropy": 6.9,
+      "fingerprint": "0dc949346d92"
     },
-    "cfm4pTrBLBzJP3XqSayWEQ": {
+    "jADP7Hs7hPaqaLaVmatY69": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2364,11 +2321,35 @@
         1200,
         1800
       ],
-      "sharpness": 93,
-      "entropy": 7.07,
-      "fingerprint": "743898b08691"
+      "sharpness": 2601,
+      "entropy": 7.34,
+      "fingerprint": "b5f7c2efae90"
     },
-    "8oy7tfBWLpsP4Qpm5WqKYM": {
+    "aifU2KpMeJAf9vXzfqbhgi": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 480,
+      "entropy": 6.44,
+      "fingerprint": "a6e8c91cbc5a"
+    },
+    "jp3FUyi7h6m7uQRw66XH96": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 179,
+      "entropy": 6.66,
+      "fingerprint": "0e193b96948d"
+    },
+    "a3pMSctP9BiL8t52XUJxMe": {
       "width": 1013,
       "height": 1800,
       "sizes": [
@@ -2376,71 +2357,11 @@
         1200,
         1800
       ],
-      "sharpness": 59,
-      "entropy": 6.46,
-      "fingerprint": "1f7de2c9173d"
-    },
-    "dMGAYhB9NRxFZ2tLstTMhX": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 139,
-      "entropy": 6.85,
-      "fingerprint": "d89c8d8df32e"
-    },
-    "nmqLD8hRjskC87CyTFssvK": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 49,
-      "entropy": 6.07,
-      "fingerprint": "0ff864079337"
-    },
-    "ceHqKdkqTh5gGPptNtBa6U": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 84,
-      "entropy": 6.96,
-      "fingerprint": "96570f57c344"
-    },
-    "qtjHYWZVVTnxoAua37i94E": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 557,
-      "entropy": 6.86,
-      "fingerprint": "514b272e3e48"
-    },
-    "sU9QuGgccRh5yysNzzMQMF": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 717,
+      "sharpness": 80,
       "entropy": 7.31,
-      "fingerprint": "9535c39296aa"
+      "fingerprint": "2016aa810066"
     },
-    "bk3HyFp5bEcGJnziw9Uhu9": {
+    "ca3jWsV7cesYbF3D4aUcQb": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2448,11 +2369,11 @@
         1200,
         1800
       ],
-      "sharpness": 1688,
-      "entropy": 7.6,
-      "fingerprint": "8d1081355371"
+      "sharpness": 624,
+      "entropy": 7.19,
+      "fingerprint": "7770e9f01971"
     },
-    "ktUSkXWVhCq21FGRJP9Vz5": {
+    "5SPzWtrreQQsYvZ9dXzdiY": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2460,11 +2381,23 @@
         1200,
         1800
       ],
-      "sharpness": 387,
-      "entropy": 6.4,
-      "fingerprint": "1e6deb84d6e4"
+      "sharpness": 282,
+      "entropy": 7.37,
+      "fingerprint": "98f71ee6260d"
     },
-    "auQCYsaXM8xHLcDxqDRLsb": {
+    "a42h2D9axbsZ9ctbdBnydi": {
+      "width": 675,
+      "height": 1200,
+      "sizes": [
+        600,
+        1200
+      ],
+      "sharpness": 96,
+      "entropy": 6.96,
+      "source": "frame@7s",
+      "fingerprint": "7a8dccb0419a"
+    },
+    "tcFkvFMLfgnemJE7B91Tyz": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2472,9 +2405,105 @@
         1200,
         1800
       ],
-      "sharpness": 378,
-      "entropy": 6.6,
-      "fingerprint": "3f03328ef50a"
+      "sharpness": 1796,
+      "entropy": 5.78,
+      "fingerprint": "516f098c7802"
+    },
+    "jizgobNaz2jMrtU6wikjpp": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1083,
+      "entropy": 7.35,
+      "fingerprint": "29a645f77e1a"
+    },
+    "vmasDNGbABxrUXtrdvx4Nf": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 897,
+      "entropy": 6.1,
+      "fingerprint": "a214d50d773b"
+    },
+    "q1Nqzrb866bwinP244wnME": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2583,
+      "entropy": 7.17,
+      "fingerprint": "01da7afcc6a8"
+    },
+    "vRtJvS4VAS98yTzjxZPjDu": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2583,
+      "entropy": 7.17,
+      "fingerprint": "90609dd3e08d"
+    },
+    "7yrXX8FghiiwSJxBpzpBLo": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 348,
+      "entropy": 6.83,
+      "fingerprint": "7f5278ec9426"
+    },
+    "aVUUkthXsGbF9kh1U9DUCn": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 612,
+      "entropy": 7.44,
+      "fingerprint": "91b7d7619002"
+    },
+    "53w1M3dzAk7dSk2oQHJnEy": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 361,
+      "entropy": 7.07,
+      "fingerprint": "072941cc5db3"
+    },
+    "jX7w3a7b269XtyjKgt5VNT": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 130,
+      "entropy": 6.98,
+      "fingerprint": "37eb4c01f18c"
     },
     "2j9LMPLrKAwkn758CxVvFS": {
       "width": 1800,
@@ -2488,6 +2517,30 @@
       "entropy": 7.58,
       "fingerprint": "6c0ee0930969"
     },
+    "auQCYsaXM8xHLcDxqDRLsb": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 378,
+      "entropy": 6.6,
+      "fingerprint": "3f03328ef50a"
+    },
+    "bk3HyFp5bEcGJnziw9Uhu9": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1688,
+      "entropy": 7.6,
+      "fingerprint": "8d1081355371"
+    },
     "4sJGRq9bzZ7ZtTevrnCXRL": {
       "width": 1800,
       "height": 1013,
@@ -2500,17 +2553,41 @@
       "entropy": 7.25,
       "fingerprint": "dc0380dd9466"
     },
-    "6RKQZ3fHoZ9hZTEyVLifVL": {
-      "width": 1200,
-      "height": 1800,
+    "npJtmBYdaeQNjMugYwkWT5": {
+      "width": 1800,
+      "height": 1013,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 490,
-      "entropy": 7.33,
-      "fingerprint": "a41b99c69716"
+      "sharpness": 204,
+      "entropy": 6.78,
+      "fingerprint": "bf647f99dd79"
+    },
+    "fw2DVpLrLoHQVZWcxn4A1w": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 146,
+      "entropy": 6.82,
+      "fingerprint": "3b7b66d5c695"
+    },
+    "x21bwBFjn1C197SRLGvFWU": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 552,
+      "entropy": 6.84,
+      "fingerprint": "51502b1fa8fb"
     },
     "rGZYpW7Ecp4tA9VG7CVpkz": {
       "width": 1800,
@@ -2548,18 +2625,6 @@
       "entropy": 7.42,
       "fingerprint": "a884518a2047"
     },
-    "npJtmBYdaeQNjMugYwkWT5": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 204,
-      "entropy": 6.78,
-      "fingerprint": "bf647f99dd79"
-    },
     "dYiRDGQTDDt6zn2UM6doa8": {
       "width": 1800,
       "height": 1013,
@@ -2584,30 +2649,6 @@
       "entropy": 6.9,
       "fingerprint": "f99e81940c1b"
     },
-    "fw2DVpLrLoHQVZWcxn4A1w": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 146,
-      "entropy": 6.82,
-      "fingerprint": "3b7b66d5c695"
-    },
-    "x21bwBFjn1C197SRLGvFWU": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 552,
-      "entropy": 6.84,
-      "fingerprint": "51502b1fa8fb"
-    },
     "oBXrSWgEEeQNE2VkNMvsQW": {
       "width": 1800,
       "height": 1013,
@@ -2631,6 +2672,42 @@
       "sharpness": 452,
       "entropy": 6.99,
       "fingerprint": "3ea0e2f574d7"
+    },
+    "ktUSkXWVhCq21FGRJP9Vz5": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 387,
+      "entropy": 6.4,
+      "fingerprint": "1e6deb84d6e4"
+    },
+    "oLnPbJxrbjosyW5m9qqkBQ": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 361,
+      "entropy": 7.17,
+      "fingerprint": "ac6b972a8a22"
+    },
+    "i8LLLZmfRaj8Xy9KfRFkRA": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 275,
+      "entropy": 6.84,
+      "fingerprint": "cb1ed689ae2a"
     },
     "7YNfAcvuREB57VfuLmYzqU": {
       "width": 1800,
@@ -2704,30 +2781,6 @@
       "entropy": 6.98,
       "fingerprint": "524a5cfd44c4"
     },
-    "i8LLLZmfRaj8Xy9KfRFkRA": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 275,
-      "entropy": 6.84,
-      "fingerprint": "cb1ed689ae2a"
-    },
-    "oLnPbJxrbjosyW5m9qqkBQ": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 361,
-      "entropy": 7.17,
-      "fingerprint": "ac6b972a8a22"
-    },
     "9BKu2yGjRSr9p3gpzJqAVa": {
       "width": 1800,
       "height": 1013,
@@ -2772,9 +2825,33 @@
         1200,
         1800
       ],
-      "sharpness": 281,
-      "entropy": 3.68,
-      "fingerprint": "ee97385f8b95"
+      "sharpness": 137,
+      "entropy": 6.81,
+      "fingerprint": "4f1c4b68c529"
+    },
+    "dzzUtHrMcii5fTHC6JYZxS": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 419,
+      "entropy": 7.17,
+      "fingerprint": "f9d8011221b1"
+    },
+    "dt6mXLL1hGXvFZLEr2UFsy": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1431,
+      "entropy": 7.45,
+      "fingerprint": "e03152ec09de"
     },
     "09rAECJbKPsqSTChfJT9kj": {
       "width": 1800,
@@ -2884,7 +2961,7 @@
       "entropy": 7.44,
       "fingerprint": "6a1134edda72"
     },
-    "dzzUtHrMcii5fTHC6JYZxS": {
+    "dL2wstvYtf2KX6oVJM4q8S": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -2892,33 +2969,9 @@
         1200,
         1800
       ],
-      "sharpness": 419,
-      "entropy": 7.17,
-      "fingerprint": "f9d8011221b1"
-    },
-    "dt6mXLL1hGXvFZLEr2UFsy": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1431,
-      "entropy": 7.45,
-      "fingerprint": "e03152ec09de"
-    },
-    "45NHvcj7xqWNz39bkEHPJw": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1436,
-      "entropy": 7.45,
-      "fingerprint": "8e7f5c1ddab7"
+      "sharpness": 82,
+      "entropy": 6.97,
+      "fingerprint": "0fac92bc4d21"
     },
     "4fajG9XypvtmJgi2grmwFw": {
       "width": 1013,
@@ -2932,17 +2985,29 @@
       "entropy": 7.26,
       "fingerprint": "0eac8ca42f4b"
     },
-    "jfJyfWPDaJWPu5HdPWT5Pa": {
+    "tzjRDqbdnSJPKcvsRRLx57": {
+      "width": 1013,
+      "height": 1800,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 107,
+      "entropy": 6.96,
+      "fingerprint": "4cd881e12b6a"
+    },
+    "hexp5ojBBPDuxgLskFf97T": {
       "width": 675,
       "height": 1200,
       "sizes": [
         600,
         1200
       ],
-      "sharpness": 110,
-      "entropy": 7.41,
+      "sharpness": 415,
+      "entropy": 7.2,
       "source": "frame@7s",
-      "fingerprint": "d5c57020ada0"
+      "fingerprint": "2cce2c037bf5"
     },
     "fsQLEACayTyZKGHz3rr9F9": {
       "width": 1800,
@@ -2992,17 +3057,17 @@
       "entropy": 7.17,
       "fingerprint": "46e24181f876"
     },
-    "dL2wstvYtf2KX6oVJM4q8S": {
-      "width": 1800,
-      "height": 1013,
+    "q5zr4Xi6yEFkDiZaczkRR7": {
+      "width": 1013,
+      "height": 1800,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 82,
-      "entropy": 6.97,
-      "fingerprint": "0fac92bc4d21"
+      "sharpness": 51,
+      "entropy": 7.01,
+      "fingerprint": "6241ab052734"
     },
     "923T83nyJaHuXU5zg78GZX": {
       "width": 1800,
@@ -3016,31 +3081,19 @@
       "entropy": 6.96,
       "fingerprint": "8d563747a691"
     },
-    "tzjRDqbdnSJPKcvsRRLx57": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 107,
-      "entropy": 6.96,
-      "fingerprint": "4cd881e12b6a"
-    },
-    "hexp5ojBBPDuxgLskFf97T": {
+    "jfJyfWPDaJWPu5HdPWT5Pa": {
       "width": 675,
       "height": 1200,
       "sizes": [
         600,
         1200
       ],
-      "sharpness": 415,
-      "entropy": 7.2,
+      "sharpness": 110,
+      "entropy": 7.41,
       "source": "frame@7s",
-      "fingerprint": "2cce2c037bf5"
+      "fingerprint": "d5c57020ada0"
     },
-    "q5zr4Xi6yEFkDiZaczkRR7": {
+    "dhSRmoFzjeuupyPTg5gnKX": {
       "width": 1013,
       "height": 1800,
       "sizes": [
@@ -3048,143 +3101,23 @@
         1200,
         1800
       ],
-      "sharpness": 51,
-      "entropy": 7.01,
-      "fingerprint": "6241ab052734"
+      "sharpness": 317,
+      "entropy": 6.88,
+      "fingerprint": "5dff95c73f6f"
     },
-    "gnRkBibpLyE75fwYjvywPU": {
-      "width": 1800,
-      "height": 1013,
+    "7oBSxDyC29naukfMeWaopF": {
+      "width": 1013,
+      "height": 1800,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 3617,
-      "entropy": 7.21,
-      "fingerprint": "2b1288f1634a"
-    },
-    "qLxUY7FejUMw56LipNwdWa": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 496,
-      "entropy": 6.91,
-      "fingerprint": "ea9d9cb181a5"
-    },
-    "a1VS5od4Dzo5Z4C4E5aQwG": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 858,
-      "entropy": 7.33,
-      "fingerprint": "cfc0bbed1ef1"
-    },
-    "fss6fHeG7u8iyuA4LSx3yx": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 102,
-      "entropy": 6.18,
-      "fingerprint": "3f03771baf27"
-    },
-    "7K4suDJZpm1sKJZkgpkp9J": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 809,
-      "entropy": 5.72,
-      "fingerprint": "96ab3bb82140"
-    },
-    "aQzfxPrLAz2b5n4Cb5d2B5": {
-      "width": 1200,
-      "height": 675,
-      "sizes": [
-        600,
-        1200
-      ],
-      "sharpness": 511,
-      "entropy": 7.03,
-      "source": "frame@7s",
-      "fingerprint": "d6c022f5638d"
-    },
-    "rdHSzNtZSXz4s9EUvhN5R8": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 386,
-      "entropy": 6.06,
-      "fingerprint": "aeea3ec8ecf3"
-    },
-    "shc5Eat7TdmzGVhcBHSG5P": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 314,
-      "entropy": 7.12,
-      "fingerprint": "a6993e8d66b9"
-    },
-    "ab6WMfp26KytZi8SgnsHMP": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 359,
-      "entropy": 7.22,
-      "fingerprint": "caeb4fad3fed"
-    },
-    "rs7uKfPPDPFw8zM1AF6aUv": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 730,
-      "entropy": 1.36,
-      "fingerprint": "a1e8159836b1"
-    },
-    "3n6KzJiXDw6Xiz86ndCQoB": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 41,
+      "sharpness": 171,
       "entropy": 6.94,
-      "fingerprint": "e47cd9a9208a"
+      "fingerprint": "86629b75a6fc"
     },
-    "8wQ9eURvDPKahaZQxQh4tE": {
+    "qjaXdKxQjyS4i7xrKu5ZC4": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3192,11 +3125,11 @@
         1200,
         1800
       ],
-      "sharpness": 514,
-      "entropy": 6.65,
-      "fingerprint": "788ccbd71ee6"
+      "sharpness": 1080,
+      "entropy": 7.23,
+      "fingerprint": "0ff132308be0"
     },
-    "rXRReNUCseTc2hTJFUWsLh": {
+    "ava9FEYpGK5DBhCHDLDztW": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3204,9 +3137,45 @@
         1200,
         1800
       ],
-      "sharpness": 531,
-      "entropy": 7.25,
-      "fingerprint": "60732f149053"
+      "sharpness": 226,
+      "entropy": 6.79,
+      "fingerprint": "c5bc2c781a7a"
+    },
+    "jWRwsGRag8tk9vXP2YDoFh": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 1572,
+      "entropy": 6.43,
+      "fingerprint": "48f07a1ae6ac"
+    },
+    "5PpFyrQxC4Sskn3CUi3nKo": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 278,
+      "entropy": 6.35,
+      "fingerprint": "266820f75257"
+    },
+    "8A4Zp2uamo8JhhxAGBifwR": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 2129,
+      "entropy": 7.64,
+      "fingerprint": "ad32659c0341"
     },
     "uiAynYeZCUoVkMvE1qrQ7n": {
       "width": 1800,
@@ -3292,31 +3261,67 @@
       "entropy": 7.21,
       "fingerprint": "9aeb59c1c39f"
     },
-    "dhSRmoFzjeuupyPTg5gnKX": {
-      "width": 1013,
-      "height": 1800,
+    "rXRReNUCseTc2hTJFUWsLh": {
+      "width": 1800,
+      "height": 1013,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 317,
-      "entropy": 6.88,
-      "fingerprint": "5dff95c73f6f"
+      "sharpness": 531,
+      "entropy": 7.25,
+      "fingerprint": "60732f149053"
     },
-    "7oBSxDyC29naukfMeWaopF": {
-      "width": 1013,
-      "height": 1800,
+    "shc5Eat7TdmzGVhcBHSG5P": {
+      "width": 1800,
+      "height": 1013,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 171,
+      "sharpness": 182,
+      "entropy": 6.21,
+      "fingerprint": "95d8ce5e5c5a"
+    },
+    "rdHSzNtZSXz4s9EUvhN5R8": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 386,
+      "entropy": 6.06,
+      "fingerprint": "aeea3ec8ecf3"
+    },
+    "rs7uKfPPDPFw8zM1AF6aUv": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 862,
+      "entropy": 7.23,
+      "fingerprint": "225311136605"
+    },
+    "3n6KzJiXDw6Xiz86ndCQoB": {
+      "width": 1800,
+      "height": 1013,
+      "sizes": [
+        600,
+        1200,
+        1800
+      ],
+      "sharpness": 41,
       "entropy": 6.94,
-      "fingerprint": "86629b75a6fc"
+      "fingerprint": "e47cd9a9208a"
     },
-    "ava9FEYpGK5DBhCHDLDztW": {
+    "8wQ9eURvDPKahaZQxQh4tE": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3324,11 +3329,11 @@
         1200,
         1800
       ],
-      "sharpness": 226,
-      "entropy": 6.79,
-      "fingerprint": "c5bc2c781a7a"
+      "sharpness": 514,
+      "entropy": 6.65,
+      "fingerprint": "788ccbd71ee6"
     },
-    "jWRwsGRag8tk9vXP2YDoFh": {
+    "fss6fHeG7u8iyuA4LSx3yx": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3336,11 +3341,11 @@
         1200,
         1800
       ],
-      "sharpness": 1572,
-      "entropy": 6.43,
-      "fingerprint": "48f07a1ae6ac"
+      "sharpness": 102,
+      "entropy": 6.18,
+      "fingerprint": "3f03771baf27"
     },
-    "5PpFyrQxC4Sskn3CUi3nKo": {
+    "a1VS5od4Dzo5Z4C4E5aQwG": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3348,47 +3353,11 @@
         1200,
         1800
       ],
-      "sharpness": 278,
-      "entropy": 6.35,
-      "fingerprint": "266820f75257"
-    },
-    "8A4Zp2uamo8JhhxAGBifwR": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2129,
-      "entropy": 7.64,
-      "fingerprint": "ad32659c0341"
-    },
-    "5tysWLbuajg3iFbPogBbwC": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 234,
-      "entropy": 6.9,
-      "fingerprint": "4192b7bc2344"
-    },
-    "qLxzkkfwL2nwdzuznGST7i": {
-      "width": 1013,
-      "height": 1800,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 74,
+      "sharpness": 858,
       "entropy": 7.33,
-      "fingerprint": "2c086358d3c7"
+      "fingerprint": "cfc0bbed1ef1"
     },
-    "taQQMtGyNKZsdbdbbrtoKy": {
+    "qLxUY7FejUMw56LipNwdWa": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3396,11 +3365,11 @@
         1200,
         1800
       ],
-      "sharpness": 170,
-      "entropy": 5.22,
-      "fingerprint": "dba48afbb737"
+      "sharpness": 1057,
+      "entropy": 7.33,
+      "fingerprint": "dfd4626e873f"
     },
-    "vw6vFdVXRECdkiR4CP9h6s": {
+    "gnRkBibpLyE75fwYjvywPU": {
       "width": 1800,
       "height": 1013,
       "sizes": [
@@ -3408,33 +3377,33 @@
         1200,
         1800
       ],
-      "sharpness": 354,
-      "entropy": 6.28,
-      "fingerprint": "7377c6149f3a"
+      "sharpness": 423,
+      "entropy": 7.46,
+      "fingerprint": "0a6e51c17bad"
     },
-    "7ZaVaQmeo8bgZbmCBhTQUA": {
-      "width": 1013,
-      "height": 1800,
+    "7K4suDJZpm1sKJZkgpkp9J": {
+      "width": 1800,
+      "height": 1013,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 98,
-      "entropy": 5.47,
-      "fingerprint": "3ef20dcfe1af"
+      "sharpness": 332,
+      "entropy": 7.29,
+      "fingerprint": "c78d511b183b"
     },
-    "0XF65E7ctN6vNLj2HZrvFg": {
-      "width": 1013,
-      "height": 1800,
+    "aQzfxPrLAz2b5n4Cb5d2B5": {
+      "width": 1800,
+      "height": 1013,
       "sizes": [
         600,
         1200,
         1800
       ],
-      "sharpness": 176,
-      "entropy": 5.58,
-      "fingerprint": "a055be0c9bab"
+      "sharpness": 1226,
+      "entropy": 7.49,
+      "fingerprint": "cd894b0f672e"
     },
     "h3jF24N15c2VgZaQEXNxX7": {
       "width": 1800,
@@ -3461,16 +3430,16 @@
       "fingerprint": "2cfbfd32b0fd"
     },
     "seovNfejdCm8k2XdyEPYTY": {
-      "width": 675,
-      "height": 1200,
+      "width": 1013,
+      "height": 1800,
       "sizes": [
         600,
-        1200
+        1200,
+        1800
       ],
-      "sharpness": 41,
-      "entropy": 5.59,
-      "source": "frame@6s",
-      "fingerprint": "6660d3ecb6b7"
+      "sharpness": 111,
+      "entropy": 6.85,
+      "fingerprint": "4f414fb2aff4"
     },
     "gdB7bHHY5x8wVntDszuedi": {
       "width": 1013,
@@ -3495,111 +3464,8 @@
       "sharpness": 574,
       "entropy": 6.96,
       "fingerprint": "7873effd3672"
-    },
-    "6QXtBvZKv5pmbTG8aGreNY": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 369,
-      "entropy": 7.01,
-      "fingerprint": "0cd5761a3c8f"
-    },
-    "stS3jocMTzS9rB5MTSCUEj": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 633,
-      "entropy": 6.92,
-      "fingerprint": "84c36638fe4a"
-    },
-    "rurTLNMk8HZjghA1U26ABU": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1931,
-      "entropy": 7.61,
-      "fingerprint": "8a1206d05660"
-    },
-    "gDX5uw7ScPJ5a9q33guAV5": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2860,
-      "entropy": 7.76,
-      "fingerprint": "4d7d9ad83935"
-    },
-    "kXrmBSZkbug2GWdH5hCYxY": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1382,
-      "entropy": 7.48,
-      "fingerprint": "59d6dd92020a"
-    },
-    "qjaXdKxQjyS4i7xrKu5ZC4": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 1080,
-      "entropy": 7.23,
-      "fingerprint": "0ff132308be0"
     }
   },
   "weak": [],
-  "unplayable": [
-    {
-      "project": "Ивенты",
-      "title": "Красота_со_вкусом",
-      "videoId": "0Zs8w6KzyyocArc1hTNAMq"
-    },
-    {
-      "project": "Ивенты",
-      "title": "Sesderma_edit",
-      "videoId": "iHnJRnaE5ziGZbXM63EbJS"
-    },
-    {
-      "project": "Школьные",
-      "title": "Rolik",
-      "videoId": "taw99ZJAvUr7GfSMMT7trz"
-    },
-    {
-      "project": "Школьные",
-      "title": "Rolik_posledniy_Zvonok",
-      "videoId": "72rmRbvXx55zYLiaDzhZHw"
-    },
-    {
-      "project": "Школьные",
-      "title": "Rolik_posledniy_Zvonok",
-      "videoId": "n1TcGaHAPawYAgsGnMFpqr"
-    },
-    {
-      "project": "Школьные",
-      "title": "Rolik_posledniy_Zvonok",
-      "videoId": "jW26dufzwt77TZeDuCsyXL"
-    }
-  ]
+  "unplayable": []
 }
