@@ -46,15 +46,10 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
     video: { ru: 'Свадебный фильм', en: 'Wedding film' },
     reel: { ru: 'Вертикальный ролик со свадьбы', en: 'Vertical wedding reel' },
   },
-  /*
-   * Проект называется «Частные события», но внутри дни рождения и крестины —
-   * детские праздники. На сайте они в категории детских событий: у категории
-   * «Частные события» по замыслу только альбомы, без роликов и вкладок.
-   */
   'Private · Частные события': {
-    categorySlug: 'kids',
-    video: { ru: 'Съёмка детского праздника', en: "Filmed at a child's party" },
-    reel: { ru: 'Вертикальный ролик с детского праздника', en: "Vertical reel from a child's party" },
+    categorySlug: 'private-event',
+    video: { ru: 'Съёмка частного события', en: 'Private event film' },
+    reel: { ru: 'Вертикальный ролик с частного события', en: 'Vertical reel from a private event' },
   },
   'Private · Школьные': {
     categorySlug: 'school',
