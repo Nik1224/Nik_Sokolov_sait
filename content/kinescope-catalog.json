@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-21T09:59:42Z",
+  "generatedAt": "2026-09-21T10:49:31Z",
   "source": "Kinescope API v1, GET /v1/projects + /v1/videos",
-  "total": 334,
+  "total": 329,
   "categories": [
     {
       "name": "Business · Реклама и имиджевое видео",
@@ -1343,7 +1343,7 @@
     },
     {
       "name": "Business · События и конференции",
-      "count": 32,
+      "count": 31,
       "videos": [
         {
           "title": "Съёмка конференции — Bastion",
@@ -1575,17 +1575,6 @@
           "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/d548e25d-3f94-4c96-844a-8460cc979088/0b139d2a-1614-4fdb-a3cc-99206a7206f4.jpg",
           "createdAt": "2025-10-03T08:41:18.364022Z",
           "kinescopeId": "639e3fad-16d4-4e04-b011-7db70fe0a86c"
-        },
-        {
-          "title": "Съёмка события — ProfcosmoNeO",
-          "videoId": "gwUxE9q5cViFULZ27WKJjX",
-          "embed": "https://kinescope.io/embed/gwUxE9q5cViFULZ27WKJjX",
-          "watch": "https://kinescope.io/gwUxE9q5cViFULZ27WKJjX",
-          "durationSeconds": 2895.64,
-          "resolution": "1920x1080",
-          "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/f33c42e2-0842-405e-bc9a-4ab8f2287f6b/9ce7c612-a3cc-4790-ba90-dfe4361d81e6.jpg",
-          "createdAt": "2025-11-23T10:27:02.533167Z",
-          "kinescopeId": "7dc9c688-084d-4128-a440-0ae9217b58cb"
         },
         {
           "title": "Съёмка события — RST Nik Sokolov",
@@ -3277,7 +3266,7 @@
     },
     {
       "name": "Business · Производство",
-      "count": 11,
+      "count": 7,
       "videos": [
         {
           "title": "Ролик о производстве",
@@ -3322,50 +3311,6 @@
           "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/cc2d4f8e-3c33-41f3-8db5-38c4789cbf09/019ab546-e3f2-7409-b94a-ad5757bf9863.jpg",
           "createdAt": "2025-11-24T09:51:34.586332Z",
           "kinescopeId": "83763cb8-31d6-494c-926e-a165be821eaf"
-        },
-        {
-          "title": "Ролик о производстве — Led Si V2",
-          "videoId": "fsQLEACayTyZKGHz3rr9F9",
-          "embed": "https://kinescope.io/embed/fsQLEACayTyZKGHz3rr9F9",
-          "watch": "https://kinescope.io/fsQLEACayTyZKGHz3rr9F9",
-          "durationSeconds": 44.24,
-          "resolution": "1920x1080",
-          "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/bdc9a480-ed77-486c-a9f8-0388190b4424/019c8fb5-e650-7eda-9479-4e58671aba6c.jpg",
-          "createdAt": "2026-02-24T12:52:39.563303Z",
-          "kinescopeId": "751f55bb-e530-4c46-9c0b-ed80d8630876"
-        },
-        {
-          "title": "Ролик о производстве — Led Si V3",
-          "videoId": "0rjCFxpZMPZmfG42wz2LcS",
-          "embed": "https://kinescope.io/embed/0rjCFxpZMPZmfG42wz2LcS",
-          "watch": "https://kinescope.io/0rjCFxpZMPZmfG42wz2LcS",
-          "durationSeconds": 66.44,
-          "resolution": "1920x1080",
-          "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/8f46ac00-1bee-4d17-bb06-57013e0560b4/019c90ab-cc92-7282-8030-a86d1a5bd66e.jpg",
-          "createdAt": "2026-02-24T17:20:49.098292Z",
-          "kinescopeId": "038913af-d2b2-4c57-9a09-ec50d7b45898"
-        },
-        {
-          "title": "Ролик о производстве — Led Si V4",
-          "videoId": "qMn6mz6RzPz2oGFV1ZqBEV",
-          "embed": "https://kinescope.io/embed/qMn6mz6RzPz2oGFV1ZqBEV",
-          "watch": "https://kinescope.io/qMn6mz6RzPz2oGFV1ZqBEV",
-          "durationSeconds": 81.96,
-          "resolution": "1920x1080",
-          "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/283a2ec2-efbc-4f76-b1c7-e81c4da69f84/019c90ab-bcfe-7e47-98a3-a8553fc2e6e0.jpg",
-          "createdAt": "2026-02-24T17:20:49.349345Z",
-          "kinescopeId": "c8b0cbcc-e078-47a0-be28-69db189075cd"
-        },
-        {
-          "title": "Ролик о производстве — LedSi V1",
-          "videoId": "aaG22i78idBYagTBVdcZe3",
-          "embed": "https://kinescope.io/embed/aaG22i78idBYagTBVdcZe3",
-          "watch": "https://kinescope.io/aaG22i78idBYagTBVdcZe3",
-          "durationSeconds": 93.24,
-          "resolution": "1920x1080",
-          "poster": "https://kinescopecdn.net/a6c47622-930c-4582-a160-ed67428e6525/posters/56ae1128-0317-4bc5-9ae2-5e0f56e3bd7f/019c6608-2292-782c-bac2-6db2bd718339.jpg",
-          "createdAt": "2026-02-16T10:37:49.828944Z",
-          "kinescopeId": "4a3c9a86-13ef-46ca-b055-38bbe78749d0"
         },
         {
           "title": "Ролик о производстве — V4, вертикальный",

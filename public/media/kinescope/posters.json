@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T10:03:00Z",
+  "generatedAt": "2026-09-21T10:49:48Z",
   "thresholds": {
     "sharpnessMin": 40,
     "flatEntropy": 5.2,
@@ -1654,18 +1654,6 @@
       "entropy": 7.34,
       "fingerprint": "7abe60433662"
     },
-    "gwUxE9q5cViFULZ27WKJjX": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2602,
-      "entropy": 6.79,
-      "fingerprint": "265331943615"
-    },
     "deE2DxuE79AdMHGdgk2Gke": {
       "width": 1800,
       "height": 1013,
@@ -3008,54 +2996,6 @@
       "entropy": 7.2,
       "source": "frame@7s",
       "fingerprint": "2cce2c037bf5"
-    },
-    "fsQLEACayTyZKGHz3rr9F9": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 2927,
-      "entropy": 7.34,
-      "fingerprint": "40ef798ed7ca"
-    },
-    "0rjCFxpZMPZmfG42wz2LcS": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 3345,
-      "entropy": 7.49,
-      "fingerprint": "634006f95e6b"
-    },
-    "qMn6mz6RzPz2oGFV1ZqBEV": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 6627,
-      "entropy": 7.55,
-      "fingerprint": "e2104248ef8b"
-    },
-    "aaG22i78idBYagTBVdcZe3": {
-      "width": 1800,
-      "height": 1013,
-      "sizes": [
-        600,
-        1200,
-        1800
-      ],
-      "sharpness": 885,
-      "entropy": 7.17,
-      "fingerprint": "46e24181f876"
     },
     "q5zr4Xi6yEFkDiZaczkRR7": {
       "width": 1013,
