@@ -455,11 +455,11 @@ function brandFilm(
  * Подписи к роликам владелец уточнит в CMS.
  */
 const brandFilms: MediaAsset[] = [
-  brandFilm('epica-short', 'pbyqjbsBD4ZDoCKHnLo5p8', 'Имиджевый ролик Epica', 'Epica brand film'),
-  brandFilm('short-final', 'ceHqKdkqTh5gGPptNtBa6U', 'Имиджевый ролик бренда', 'Brand film'),
+  brandFilm('epica-short', 'pbyqjbsBD4ZDoCKHnLo5p8', 'Рекламный ролик Epica', 'Epica commercial'),
+  brandFilm('short-final', 'ceHqKdkqTh5gGPptNtBa6U', 'Имиджевый ролик мебельной фабрики «Алиса»', 'Brand film for the Alisa furniture factory'),
   brandFilm('tennis', 'sU9QuGgccRh5yysNzzMQMF', 'Съёмка на теннисном корте', 'Filmed on a tennis court'),
   brandFilm('collection-2025', 'sTJ8ZwUMyRCRHaK1wQbkWn', 'Ролик о коллекции 2025 года', 'Film about the 2025 collection'),
-  brandFilm('shampoo', 'cfm4pTrBLBzJP3XqSayWEQ', 'Предметно-имиджевый ролик шампуня', 'Shampoo product and brand film'),
+  brandFilm('shampoo', 'cfm4pTrBLBzJP3XqSayWEQ', 'Рекламный ролик шампуня', 'Shampoo commercial'),
 ];
 
 export const categories: Category[] = [
@@ -469,58 +469,27 @@ export const categories: Category[] = [
   { _id: 'cat.portrait', slug: 'portrait', title: { ru: 'Портрет', en: 'Portrait' }, directions: ['private'], filterGroup: 'subject', order: 2, gallery: portraitGallery, backstage: portraitBackstage, preview: preview('portrait', 'Кадр с портретной съёмки', 'Frame from a portrait shoot', 1280) },
   { _id: 'cat.family', slug: 'family', title: { ru: 'Семья', en: 'Family' }, directions: ['private'], filterGroup: 'subject', order: 3, gallery: familyGallery, preview: preview('family', 'Кадр с семейной съёмки', 'Frame from a family shoot', 1280) },
   { _id: 'cat.love-story', slug: 'love-story', title: { ru: 'Love story', en: 'Love story' }, directions: ['private'], filterGroup: 'subject', order: 4, preview: preview('love-story', 'Кадр со съёмки love story', 'Frame from a love story shoot', 1280) },
-  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], filterGroup: 'subject', order: 5,  preview: preview('private-event', 'Кадр со съёмки частного события', 'Frame from a private event shoot', 1280) },
+  { _id: 'cat.private-event', slug: 'private-event', title: { ru: 'Частные события', en: 'Private events' }, directions: ['private'], filterGroup: 'subject', order: 5, videos: kinescopeVideos('private-event'), reels: kinescopeReels('private-event'), preview: preview('private-event', 'Кадр со съёмки частного события', 'Frame from a private event shoot', 1280) },
   // Категории ветки BUSINESS названы владельцем и идут в его порядке: он так же
   // называет их клиенту, а клиент ищет глазами то, за чем пришёл.
-  { _id: 'cat.education', slug: 'education', title: { ru: 'Обучающие ролики', en: 'Training videos' }, description: { ru: 'Внутреннее обучение: спикер в кадре, презентация на экране, серия выпусков в одном свете и стиле.', en: 'In-house training: a speaker on camera, slides on screen, a series of episodes in one look.' }, directions: ['business'], filterGroup: 'format', order: 6, videos: kinescopeVideos('education'), reels: kinescopeReels('education') },
+  { _id: 'cat.education', slug: 'education', title: { ru: 'Обучающие ролики и подкасты', en: 'Training videos and podcasts' }, description: { ru: 'Обучение и разговорные форматы: спикер в кадре, презентация на экране, выпуски подкастов со светом и звуком.', en: 'Training and conversation formats: a speaker on camera, slides on screen, podcast episodes with proper light and sound.' }, directions: ['business'], filterGroup: 'format', order: 6, videos: kinescopeVideos('education'), reels: kinescopeReels('education') },
   { _id: 'cat.manufacturing', slug: 'manufacturing', title: { ru: 'Производство', en: 'Manufacturing' }, description: { ru: 'Цеха, линии и люди за работой. Съёмка идёт на действующем производстве и не останавливает смену.', en: 'Shop floors, lines and people at work. Filmed on a working site without stopping the shift.' }, directions: ['business'], filterGroup: 'subject', order: 7, videos: kinescopeVideos('manufacturing'), reels: kinescopeReels('manufacturing') },
-  { _id: 'cat.podcast', slug: 'podcast', title: { ru: 'Подкасты', en: 'Podcasts' }, description: { ru: 'Разговорные форматы со светом и звуком: выпуски снимаются блоками, к каждому — вертикальные нарезки.', en: 'Conversation formats with proper light and sound: episodes shot in blocks, each with vertical cutdowns.' }, directions: ['business'], filterGroup: 'format', order: 8, videos: kinescopeVideos('podcast'), reels: kinescopeReels('podcast') },
-  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама', en: 'Advertising' }, description: { ru: 'Проекты со сценарием и подготовкой: раскадровка, локации, собранная под задачу команда.', en: 'Projects with a script and preparation: storyboard, locations, a crew assembled for the task.' }, directions: ['business', 'production'], filterGroup: 'format', order: 9, videos: kinescopeVideos('commercial'), reels: kinescopeReels('commercial') },
-  {
-    _id: 'cat.brand-video',
-    slug: 'brand-video',
-    title: { ru: 'Имиджевые видео', en: 'Brand films' },
-    description: {
-      ru: 'Фильм о компании: чем занимаетесь, как устроена работа и кто за ней стоит.',
-      en: 'A film about the company: what you do, how the work is run and who stands behind it.',
-    },
-    directions: ['business'], filterGroup: 'format',
-    order: 10,
-    /*
-     * Ролики владельца, не demo. Лежат на Kinescope: своими файлами такое не
-     * отдаётся — исходники весят десятки мегабайт и в репозитории дали бы этот
-     * вес каждой сборке навсегда, без перемотки и без подстройки под скорость
-     * сети. То же правило, что у бэкстейджа и у клипа в кейсе юбилея.
-     *
-     * Постеры сняты с самих роликов и лежат рядом в трёх размерах: подставлять
-     * первый кадр силами сервиса нельзя — он часто пустой, и превью выходит
-     * серым прямоугольником.
-     */
-    videos: [...brandFilms, ...kinescopeVideos('brand-video')],
-    reels: kinescopeReels('brand-video'),
-  },
+  { _id: 'cat.commercial', slug: 'commercial', title: { ru: 'Реклама и имиджевое видео', en: 'Advertising and brand films' }, description: { ru: 'От ролика для карточки товара до фильма о компании: чем занимаетесь, как устроена работа и кто за ней стоит.', en: 'From a product card video to a film about the company: what you do, how the work is run and who stands behind it.' }, directions: ['business'], filterGroup: 'format', order: 9, videos: [...brandFilms, ...kinescopeVideos('commercial')], reels: kinescopeReels('commercial') },
   { _id: 'cat.product', slug: 'product', title: { ru: 'Предметная съёмка', en: 'Product' }, description: { ru: 'Товар и упаковка для каталога, сайта и маркетплейсов: единый свет, ракурсы и ряд.', en: 'Product and packaging for catalogues, sites and marketplaces: one lighting scheme, angles and row.' }, directions: ['business'], filterGroup: 'format', order: 11, videos: kinescopeVideos('product'), reels: kinescopeReels('product') },
-  { _id: 'cat.conference', slug: 'conference', title: { ru: 'Конференции и события', en: 'Conferences and events' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business', 'production'], filterGroup: 'subject', order: 12, videos: kinescopeVideos('conference'), reels: kinescopeReels('conference') },
-  { _id: 'cat.auto-moto', slug: 'auto-moto', title: { ru: 'Авто и мото', en: 'Cars and motorcycles' }, description: { ru: 'Машина в движении и в деталях: съёмка на ходу, статика в цеху и у салона, вертикальные нарезки под объявления.', en: 'The vehicle in motion and in detail: rolling shots, statics at the shop and the showroom, vertical cutdowns for listings.' }, directions: ['business'], filterGroup: 'subject', order: 13, videos: kinescopeVideos('auto-moto'), reels: kinescopeReels('auto-moto') },
+  { _id: 'cat.conference', slug: 'conference', title: { ru: 'События и конференции', en: 'Events and conferences' }, description: { ru: 'Репортаж, который можно публиковать сразу: спикеры, зал, кулуары и детали площадки.', en: 'Coverage ready to publish the same day: speakers, the room, the foyer and venue details.' }, directions: ['business'], filterGroup: 'subject', order: 12, videos: kinescopeVideos('conference'), reels: kinescopeReels('conference') },
+  { _id: 'cat.auto-moto', slug: 'auto-moto', title: { ru: 'Детейлинг и тюнинг', en: 'Detailing and tuning' }, description: { ru: 'Машина в студии и в работе: от полировки и плёнки до готового результата.', en: 'The car in the studio and in the workshop: from polishing and film to the finished result.' }, directions: ['business'], filterGroup: 'subject', order: 13, videos: kinescopeVideos('auto-moto'), reels: kinescopeReels('auto-moto') },
   /*
    * Бэкстейдж как услуга, а не как рассказ о себе: съёмочную группу зовут
    * снимать чужую съёмку. У категорий есть своё поле `backstage` — там процесс
    * работы владельца, и это другое. Здесь результат, за который заплатили.
    */
-  { _id: 'cat.backstage', slug: 'backstage', title: { ru: 'Бэкстейдж', en: 'Backstage' }, description: { ru: 'Съёмка чужой съёмки: как работает площадка, что происходит между дублями и кто это делает.', en: 'Filming someone else\u2019s shoot: how the set works, what happens between takes and who makes it happen.' }, directions: ['business', 'production'], filterGroup: 'format', order: 14, videos: kinescopeVideos('backstage'), reels: kinescopeReels('backstage') },
-  { _id: 'cat.sport', slug: 'sport', title: { ru: 'Спорт', en: 'Sport' }, description: { ru: 'Тренировки, старты и финалы: съёмка идёт по ходу события и не мешает ни спортсменам, ни судьям.', en: 'Training, starts and finals: filmed as the event runs, without getting in the way of athletes or judges.' }, directions: ['business'], filterGroup: 'subject', order: 16, videos: kinescopeVideos('sport'), reels: kinescopeReels('sport') },
-  { _id: 'cat.food', slug: 'food', title: { ru: 'Еда и кухня', en: 'Food' }, description: { ru: 'Блюдо и процесс: подача крупно, работа на кухне и вертикальные ролики под доставку и меню.', en: 'The dish and the process: plating in close-up, work in the kitchen, vertical clips for delivery apps and menus.' }, directions: ['business'], filterGroup: 'subject', order: 17, videos: kinescopeVideos('food'), reels: kinescopeReels('food') },
-  { _id: 'cat.dance', slug: 'dance', title: { ru: 'Танцы', en: 'Dance' }, description: { ru: 'Движение целиком: номер с опорой на музыку, репетиция и нарезки для студии и соцсетей.', en: 'Movement in full: the routine cut to the music, rehearsals and clips for the studio and social media.' }, directions: ['business'], filterGroup: 'subject', order: 18, videos: kinescopeVideos('dance'), reels: kinescopeReels('dance') },
-  { _id: 'cat.school', slug: 'school', title: { ru: 'Школьные съёмки', en: 'School' }, description: { ru: 'Класс, выпускной и последний звонок: день целиком, без постановочных кадров на камеру.', en: 'The class, the prom and the last bell: the whole day, with nothing staged for the camera.' }, directions: ['private'], filterGroup: 'subject', order: 19, videos: kinescopeVideos('school'), reels: kinescopeReels('school') },
+  { _id: 'cat.backstage', slug: 'backstage', title: { ru: 'Бэкстейдж', en: 'Backstage' }, description: { ru: 'Съёмка чужой съёмки: как работает площадка, что происходит между дублями и кто это делает.', en: 'Filming someone else\u2019s shoot: how the set works, what happens between takes and who makes it happen.' }, directions: ['business'], filterGroup: 'format', order: 14, videos: kinescopeVideos('backstage'), reels: kinescopeReels('backstage') },
+  { _id: 'cat.sport', slug: 'sport', title: { ru: 'Спорт и танцы', en: 'Sport and dance' }, description: { ru: 'Соревнования, забеги и танцевальные номера: съёмка идёт по ходу события и не мешает ни спортсменам, ни зрителям.', en: 'Competitions, races and dance numbers: filmed as the event unfolds, without getting in the way of athletes or spectators.' }, directions: ['business'], filterGroup: 'subject', order: 16, videos: kinescopeVideos('sport'), reels: kinescopeReels('sport') },
+  { _id: 'cat.food', slug: 'food', title: { ru: 'Еда и кухня', en: 'Food and kitchen' }, description: { ru: 'Блюдо и процесс: подача крупно, работа на кухне и вертикальные ролики под доставку и меню.', en: 'The dish and the process: plating in close-up, work in the kitchen, vertical clips for delivery apps and menus.' }, directions: ['business'], filterGroup: 'subject', order: 17, videos: kinescopeVideos('food'), reels: kinescopeReels('food') },
+  { _id: 'cat.school', slug: 'school', title: { ru: 'Школьные', en: 'School' }, description: { ru: 'Класс, выпускной и последний звонок: день целиком, без постановочных кадров на камеру.', en: 'The class, the prom and the last bell: the whole day, with nothing staged for the camera.' }, directions: ['private'], filterGroup: 'subject', order: 19, videos: kinescopeVideos('school'), reels: kinescopeReels('school') },
   { _id: 'cat.medical', slug: 'medical', title: { ru: 'Медицина', en: 'Medicine' }, description: { ru: 'Клиника изнутри: приём, процедуры и оборудование. Съёмка идёт в рабочий день и не мешает ни врачам, ни пациентам.', en: 'The clinic from the inside: consultations, procedures and equipment. Filmed during a working day without getting in the way of doctors or patients.' }, directions: ['business'], filterGroup: 'subject', order: 20, videos: kinescopeVideos('medical'), reels: kinescopeReels('medical') },
-  /*
-   * Детские события — своя категория, а не часть частных событий. У тех по
-   * замыслу только альбомы: человек нажимает на съёмку и уходит в галерею
-   * целиком, отдельных кадров и вкладок там нет. Ролики туда класть нельзя,
-   * это ломает разделение, за которым следит сквозная проверка.
-   */
-  { _id: 'cat.kids', slug: 'kids', title: { ru: 'Детские события', en: "Children's events" }, description: { ru: 'Дни рождения, крестины и первые праздники: день целиком, без построений на камеру.', en: 'Birthdays, christenings and first celebrations: the whole day, with nothing staged for the camera.' }, directions: ['private'], filterGroup: 'subject', order: 21, videos: kinescopeVideos('kids'), reels: kinescopeReels('kids') },
-  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], filterGroup: 'format', order: 15, videos: kinescopeVideos('narrative'), reels: kinescopeReels('narrative') },
+  { _id: 'cat.music-video', slug: 'music-video', title: { ru: 'Музыкальные клипы', en: 'Music videos' }, directions: ['production'], filterGroup: 'format', order: 14, videos: kinescopeVideos('music-video'), reels: kinescopeReels('music-video') },
+  { _id: 'cat.narrative', slug: 'narrative', title: { ru: 'Игровое и нарратив', en: 'Narrative' }, directions: ['production'], filterGroup: 'format', order: 15, isDemo: true },
 ];
 
 /**
@@ -744,7 +713,7 @@ export const projects: Project[] = [
     _id: 'prj.podcast',
     slug: 'demo-podcast-season',
     directions: ['business'],
-    categorySlugs: ['podcast'],
+    categorySlugs: ['education'],
     year: 2025,
     featured: true,
     order: 12,

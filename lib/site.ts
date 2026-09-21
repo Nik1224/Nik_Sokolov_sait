@@ -37,7 +37,7 @@ export type Section = (typeof SECTIONS)[number];
 export const DIRECTION_SECTIONS: Record<Direction, readonly Section[]> = {
   private: ['portfolio', 'albums', 'pricing', 'blog', 'about', 'contact', 'partners'],
   business: ['portfolio', 'cases', 'pricing', 'blog', 'about', 'contact'],
-  production: ['showreel', 'work', 'experience', 'blog', 'about', 'contact'],
+  production: ['showreel', 'portfolio', 'work', 'experience', 'blog', 'about', 'contact'],
 };
 
 /**

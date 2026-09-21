@@ -78,7 +78,7 @@ test('фильтр листинга работает и отражается в 
   // Ссылка ищется в панели фильтров: название категории встречается и в карточках.
   await page
     .getByRole('navigation', { name: /^Фильтр/ })
-    .getByRole('link', { name: 'Конференции и события' })
+    .getByRole('link', { name: 'События и конференции' })
     .click();
   await expect(page).toHaveURL(/category=conference/);
 
@@ -953,11 +953,14 @@ test('love story показывается альбомами, а не отдел
   await expect(album).toHaveAttribute('target', '_blank');
 });
 
-test('частные события показываются альбомами, а не отдельными кадрами', async ({ page }) => {
+test('частные события: альбомы, под ними ролики, отдельных кадров нет', async ({ page }) => {
   await page.goto('/ru/private/portfolio?category=private-event');
 
-  await expect(page.locator('main figure')).toHaveCount(0);
-  await expect(page.locator('main fieldset label')).toHaveCount(0);
+  // Фотографии частных событий живут в альбомах, россыпью кадров их нет.
+  const tabs = page.locator('main fieldset label');
+  await expect(tabs.filter({ hasText: 'Фото' })).toHaveCount(0);
+  // Ролики из Kinescope — под альбомами, а не вместо них.
+  await expect(page.locator('main figure').first()).toBeVisible();
 
   const album = page.getByRole('link', { name: /Выпускной вечер/ });
   await expect(album).toHaveAttribute('href', /^https:\/\/lokos\.pro\/disk\//);

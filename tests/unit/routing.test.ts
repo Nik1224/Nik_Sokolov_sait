@@ -89,10 +89,11 @@ describe('доступность разделов по веткам', () => {
     expect(isSectionAvailable('production', 'cases')).toBe(false);
   });
 
-  it('портфолио есть у PRIVATE и BUSINESS, но не у PRODUCTION', () => {
+  it('портфолио есть у всех трёх веток', () => {
+    // У PRODUCTION оно появилось с музыкальными клипами из Kinescope.
     expect(isSectionAvailable('private', 'portfolio')).toBe(true);
     expect(isSectionAvailable('business', 'portfolio')).toBe(true);
-    expect(isSectionAvailable('production', 'portfolio')).toBe(false);
+    expect(isSectionAvailable('production', 'portfolio')).toBe(true);
   });
 
   it('шоурил и credits есть только в PRODUCTION', () => {
