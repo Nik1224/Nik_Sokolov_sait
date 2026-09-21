@@ -27,7 +27,7 @@ export type Tone =
  */
 const SPACE = {
   tight: 'py-[clamp(3.5rem,6vw,6rem)]',
-  normal: 'py-[clamp(5rem,9vw,10rem)]',
+  normal: 'py-[clamp(4.5rem,7.5vw,7.5rem)]',
   wide: 'py-[clamp(6.5rem,12vw,14rem)]',
 } as const;
 
@@ -106,15 +106,26 @@ export function BandHead({
   title,
   lead,
   action,
+  aside = false,
 }: {
   title: string;
   lead?: string;
   action?: { label: string; href: string };
+  /**
+   * Лид справа от заголовка, а не под ним. Для плотных разделов: строка лида
+   * под заголовком добавляет к шапке ещё треть экрана, а рядом — ничего.
+   */
+  aside?: boolean;
 }) {
   return (
     <header data-reveal className="border-t border-line pt-6">
       <div className="editorial-grid items-baseline gap-y-6">
         <h2 className="text-h2 col-span-12 m-0 uppercase text-balance lg:col-span-8">{title}</h2>
+        {lead && aside ? (
+          <p className="col-span-12 m-0 max-w-[44ch] text-bone-dim lg:col-span-4 lg:self-end lg:justify-self-end">
+            {lead}
+          </p>
+        ) : null}
         {action ? (
           <p className="col-span-12 m-0 lg:col-span-4 lg:justify-self-end">
             <Link
@@ -129,7 +140,7 @@ export function BandHead({
           </p>
         ) : null}
       </div>
-      {lead ? (
+      {lead && !aside ? (
         <p className="mt-8 max-w-[46ch] text-lead text-bone-dim lg:mt-10">{lead}</p>
       ) : null}
     </header>
