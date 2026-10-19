@@ -183,7 +183,7 @@ function Opening({
       </div>
       <span aria-hidden="true" className="hero-scrim absolute inset-0" />
 
-      <div className="container-wide relative pt-28 pb-10 lg:pb-12 lg:pt-32">
+      <div className="container-wide relative pt-28 pb-8 lg:pb-10 lg:pt-28">
         <div className="editorial-grid">
           {/*
            * Раскрытие полосы: надзаголовок, заголовок и лид выходят из-под
@@ -195,18 +195,18 @@ function Opening({
             <Rise>
               <p className="label-fine m-0 text-bone-faint">{dict.directions.business}</p>
             </Rise>
-            <Rise delay={90} className="mt-6">
+            <Rise delay={90} className="mt-5">
               <h1 className="text-display m-0 uppercase text-balance">
                 {localizedString(doc.title, locale)}
               </h1>
             </Rise>
-            <Rise delay={200} className="mt-7">
+            <Rise delay={200} className="mt-6">
               <p className="max-w-[40ch] text-lead text-bone-dim">
                 {localizedString(doc.lead, locale)}
               </p>
             </Rise>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-3 gap-y-4">
+            <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-4">
               <Cta href={href({ locale, direction: 'business', section: 'contact' })}>
                 {dict.contact.heading}
               </Cta>
@@ -235,7 +235,7 @@ function Opening({
              * он нужнее всего остального на этом экране.
              */}
             {reel?.videoId ? (
-              <div className="reel-cta mt-8">
+              <div className="reel-cta mt-5">
                 <ShowreelDialog
                   provider={reel.provider}
                   videoId={reel.videoId}
@@ -252,7 +252,7 @@ function Opening({
          * линия над ними — та же, что разделяет полосы ниже, поэтому первый
          * экран заканчивается не обрывом, а строкой.
          */}
-        <div className="mt-14 border-t border-line pt-6 lg:mt-20">
+        <div className="mt-10 border-t border-line pt-5 lg:mt-12">
           {quickLinks.length > 0 ? (
             <ul className="m-0 flex list-none flex-wrap gap-x-7 gap-y-3 p-0">
               {quickLinks.map((category) => (
@@ -269,7 +269,7 @@ function Opening({
           ) : null}
 
           <FineRow
-            className="mt-8 text-bone-faint"
+            className="mt-5 text-bone-faint"
             items={[
               dict.brand.descriptor,
               localizedString(settings.location, locale),
@@ -345,7 +345,7 @@ function Portfolio({
 }) {
   return (
     <section
-      className="band band-light py-[clamp(5rem,9vw,10rem)]"
+      className="band band-light py-[clamp(4.5rem,7.5vw,7.5rem)]"
       style={bandField('warm-grey', 'stone', 'warm-grey')}
     >
       <div className="container-wide">
@@ -373,7 +373,7 @@ function Portfolio({
             paddingInline: 'clamp(1.25rem, 4.5vw, 4.5rem)',
           }}
         >
-          {categories.map((category, position) => {
+          {categories.map((category) => {
             const cover = covers[category.slug];
             const description = localizedString(category.description, locale);
 
@@ -424,10 +424,6 @@ function Portfolio({
                     className="cover-scrim pointer-events-none absolute inset-0"
                   />
 
-                  <span className="on-image label-fine absolute left-5 top-5 text-bone">
-                    {String(position + 1).padStart(2, '0')}
-                  </span>
-
                   <div className="on-image absolute inset-x-0 bottom-0 p-5 lg:p-6">
                     <h3 className="text-h3 m-0 uppercase text-balance text-bone">
                       {localizedString(category.title, locale)}
@@ -456,11 +452,13 @@ function Portfolio({
 /* --- 04. Как устроена работа ----------------------------------------------- */
 
 /**
- * Не карточки, а полосы с волосяной линией.
+ * Шкала, а не столбик.
  *
- * Порядок работы — это последовательность, и сетка карточек её ломает: четыре
- * равных прямоугольника читаются как четыре независимых свойства. Строки,
- * идущие сверху вниз с номерами, читаются как шаги.
+ * Порядок работы — последовательность, и на широком экране она идёт слева
+ * направо по одной волосяной линии: метка шага стоит на линии, как деление.
+ * Прежде шаги шли строками во всю ширину с крупным капсом, и четыре коротких
+ * пункта занимали экран — вес раздела был несоразмерен тому, что он сообщает.
+ * На телефоне шкала складывается в столбик, порядок тот же.
  */
 function Process({
   locale,
@@ -472,25 +470,25 @@ function Process({
   doc: DirectionDoc;
 }) {
   return (
-    <Band from="warm-grey" core="ivory" to="ivory">
-      <BandHead title={dict.common.process} lead={dict.common.processLead} />
+    <Band from="warm-grey" core="ivory" to="ivory" space="tight">
+      <BandHead title={dict.common.process} lead={dict.common.processLead} aside />
 
-      <ol className="m-0 mt-14 list-none p-0 lg:mt-20">
+      <ol className="m-0 mt-10 grid list-none grid-cols-1 gap-x-8 gap-y-8 p-0 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4 lg:gap-x-10">
         {doc.highlights.map((item, position) => (
-          <li key={position} data-reveal className="border-t border-line">
-            <div className="editorial-grid items-baseline gap-y-4 py-9 lg:py-12">
-              <p className="label-fine col-span-2 m-0 text-bone-faint lg:col-span-1">
-                {String(position + 1).padStart(2, '0')}
+          <li key={position} data-reveal className="relative border-t border-line-strong pt-5">
+            {/* Деление шкалы: квадрат на линии там, где начинается шаг. */}
+            <span aria-hidden="true" className="absolute -top-[3.5px] left-0 h-1.5 w-1.5 bg-bone" />
+            <p className="label-fine m-0 text-bone-faint">
+              {String(position + 1).padStart(2, '0')}
+            </p>
+            <h3 className="text-item m-0 mt-4 text-balance text-bone">
+              {localizedString(item.title, locale)}
+            </h3>
+            {item.body ? (
+              <p className="m-0 mt-3 max-w-[36ch] text-sm leading-relaxed text-bone-dim">
+                {localizedString(item.body, locale)}
               </p>
-              <h3 className="text-h3 col-span-10 m-0 uppercase text-balance text-bone lg:col-span-3">
-                {localizedString(item.title, locale)}
-              </h3>
-              {item.body ? (
-                <p className="col-span-12 m-0 max-w-[62ch] text-bone-dim lg:col-span-8">
-                  {localizedString(item.body, locale)}
-                </p>
-              ) : null}
-            </div>
+            ) : null}
           </li>
         ))}
       </ol>
@@ -536,6 +534,11 @@ function Cases({
        * самое сильное, что есть на странице, и колонка ему мала: разворот
        * должен упираться в края.
        */}
+      {/*
+       * Своё поле у ведущей работы обязательно: без него под подписью
+       * просвечивает фон страницы, и край следующей полосы режет строку цифр.
+       */}
+      <div className="band band-cut band-light" style={bandField('paper', 'paper', 'paper')}>
       <Link
         href={href({ locale, direction: 'business', section: 'cases', slug: lead.slug })}
         className="group block"
@@ -554,7 +557,11 @@ function Cases({
             </div>
 
             {leadFigures.length > 0 ? (
-              <dl className="col-span-12 m-0 flex flex-wrap gap-x-12 gap-y-5 lg:col-span-6 lg:justify-end">
+              /*
+               * Сеткой, а не строкой с переносом: подписи у цифр разной длины,
+               * и во флексе «человек в группе» отталкивал соседа на полколонки.
+               */
+              <dl className="col-span-12 m-0 grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 lg:col-span-6">
                 {leadFigures.map((figure, position) => (
                   <div key={position}>
                     <dt className="text-h3 m-0 whitespace-nowrap text-bone">
@@ -574,9 +581,14 @@ function Cases({
           </div>
         </div>
       </Link>
+      </div>
 
       {rest.length > 0 ? (
-        <Band from="paper" core="paper" to="paper" space="tight">
+        /*
+         * Продолжение той же главы, поэтому без светового пятна полосы: оно
+         * начиналось ровно под цифрами ведущей работы и читалось швом.
+         */
+        <Band from="paper" core="paper" to="paper" space="tight" className="[--band-lift:transparent]">
           <ul className="editorial-grid m-0 list-none gap-y-14 p-0 lg:gap-y-20">
             {rest.map((project, position) => {
               const image = frameOf(project.cover);
@@ -590,6 +602,45 @@ function Cases({
                * дают тот же неровный ритм и не ломаются ни на каком числе.
                */
               const dropped = position % 2 === 1;
+              /*
+               * Сдвиг спасает ритм, но не нечётный хвост: последняя работа
+               * оставалась слева одна, а справа — пустые полэкрана. Поэтому
+               * хвост встаёт строкой во всю ширину: кадр в семь колонок,
+               * подпись рядом, снизу. Дыры нет, и полоса закрывается фразой.
+               */
+              const tail = rest.length % 2 === 1 && position === rest.length - 1;
+
+              if (tail) {
+                return (
+                  <li key={project._id} className="col-span-12">
+                    <Link
+                      href={href({ locale, direction: 'business', section: 'cases', slug: project.slug })}
+                      className="group editorial-grid items-end gap-y-6"
+                    >
+                      {image ? (
+                        <Shot
+                          image={image}
+                          ratio={16 / 9}
+                          sizes="(min-width: 1024px) 56vw, 100vw"
+                          className="col-span-12 lg:col-span-7"
+                        />
+                      ) : null}
+                      <div data-reveal className="col-span-12 lg:col-span-4 lg:col-start-9">
+                        <FineRow items={titlesOf(project)} className="text-bone-faint" />
+                        <h3 className="text-h3 m-0 mt-3 uppercase text-balance text-bone transition-colors group-hover:text-accent">
+                          {localizedString(project.title, locale)}
+                        </h3>
+                        {project.lead ? (
+                          <p className="mt-4 max-w-[46ch] text-bone-dim">
+                            {localizedString(project.lead, locale)}
+                          </p>
+                        ) : null}
+                      </div>
+                    </Link>
+                  </li>
+                );
+              }
+
               return (
                 <li
                   key={project._id}
@@ -701,8 +752,15 @@ function Pricing({
     return `${entry.priceFrom ? `${dict.pricing.from} ` : ''}${formatted}${unit ? ` / ${unit}` : ''}`;
   };
 
+  /*
+   * Колонка цены живёт, только если в ней есть хоть одна цифра. Пять «по
+   * запросу» подряд — это не прайс, а шум: то же самое сказано один раз
+   * строкой под заголовком, а описание пакета забирает освободившееся место.
+   */
+  const priced = entries.some((entry) => typeof entry.price === 'number');
+
   return (
-    <Band from="paper" core="ink" to="ivory" mode="dark" cut>
+    <Band from="paper" core="ink" to="ivory" mode="dark" cut space="tight">
       <BandHead
         title={dict.nav.pricing}
         action={{
@@ -717,44 +775,51 @@ function Pricing({
        * Строка с ценой справа читается как прайс-лист: то же содержание,
        * но видно, что это перечень, а не витрина.
        */}
-      <ul className="m-0 mt-14 list-none p-0 lg:mt-20">
+      <ul className="m-0 mt-10 list-none border-b border-line p-0 lg:mt-14">
         {entries.map((entry) => (
           /*
-           * Без номера: пакеты — перечень, а не последовательность, и «03»
-           * перед «Брендом и имиджем» не сообщает ничего. Освободившаяся
-           * колонка ушла в дело — название и цена стоят ближе к описанию.
+           * Прайс-лист, а не витрина: одна плотная строка на пакет. Название
+           * слева, справа — от чего зависит расчёт и что входит, одной строкой
+           * через тире. Без номера: пакеты — перечень, а не
+           * последовательность.
            */
           <li key={entry._id} data-reveal className="border-t border-line">
-            <div className="editorial-grid items-baseline gap-y-5 py-9 lg:py-12">
-              <h3 className="text-h3 col-span-12 m-0 uppercase text-balance text-bone lg:col-span-4">
+            <div className="editorial-grid items-baseline gap-y-2 py-5 lg:py-6">
+              <h3 className="text-item col-span-12 m-0 text-balance text-bone lg:col-span-3">
                 {localizedString(entry.title, locale)}
               </h3>
 
-              <div className="col-span-12 lg:col-span-5">
-                <p className="m-0 max-w-[52ch] text-bone-dim">
+              <div className={`col-span-12 ${priced ? 'lg:col-span-7' : 'lg:col-span-9'}`}>
+                <p className="m-0 max-w-[60ch] text-sm leading-relaxed text-bone-dim">
                   {localizedString(entry.description, locale)}
                 </p>
                 {entry.includes.length > 0 ? (
-                  <ul className="m-0 mt-5 list-none space-y-2 p-0">
-                    {entry.includes.map((line, lineIndex) => (
-                      <li key={lineIndex} className="label-fine flex gap-3 text-bone-faint">
-                        <span aria-hidden="true" className="mt-[0.45em] h-px w-3 shrink-0 bg-line-strong" />
-                        {localizedString(line, locale)}
-                      </li>
-                    ))}
-                  </ul>
+                  <FineRow
+                    className="mt-3 text-bone-faint"
+                    items={entry.includes.map((line) => localizedString(line, locale))}
+                  />
                 ) : null}
               </div>
 
-              <p className="label col-span-12 m-0 text-accent lg:col-span-3 lg:justify-self-end lg:text-right">
-                {price(entry)}
-              </p>
+              {priced ? (
+                <p className="label col-span-12 m-0 text-accent lg:col-span-2 lg:justify-self-end lg:text-right">
+                  {price(entry)}
+                </p>
+              ) : null}
             </div>
           </li>
         ))}
       </ul>
 
-      <div data-reveal className="mt-12 border-t border-line pt-10">
+      {/*
+       * Фраза про смету стоит у кнопки, а не под заголовком: она не описание
+       * раздела, а подводка к действию — «считается после брифа, так давайте
+       * бриф».
+       */}
+      <div data-reveal className="mt-8 flex flex-wrap items-baseline gap-x-8 gap-y-4">
+        {!priced ? (
+          <p className="m-0 text-sm text-bone-dim">{dict.pricing.onRequestNote}</p>
+        ) : null}
         <ContactButton
           dict={dict}
           contacts={settings.contacts}
@@ -768,6 +833,17 @@ function Pricing({
 }
 
 /* --- 07. Отзывы -------------------------------------------------------------- */
+
+/**
+ * Раздел выключен, пока нет отзывов от компаний.
+ *
+ * Те, что есть, ветке не подходят: крупный подписан одним именем без
+ * компании, второй — «ты настоящий волшебник» без сути, третий от музыкальной
+ * группы, а это PRODUCTION. Для заказчика-компании такие отзывы работают
+ * против: он ищет название фирмы, должность и что именно решили. Появятся —
+ * вернуть `true`, раскладка ниже готова.
+ */
+const SHOW_TESTIMONIALS = false;
 
 function Quotes({
   locale,
@@ -949,7 +1025,7 @@ function Contact({
    * ни тёмное, ни светлое. Спуск в него отдан подвалу, где текста нет вовсе.
    */
   return (
-    <Band from="warm-grey" core="warm-grey" to="stone" space="wide">
+    <Band from="warm-grey" core="warm-grey" to="warm-grey" space="wide">
       <div className="editorial-grid items-end gap-y-10">
         <div data-reveal className="col-span-12 lg:col-span-7">
           <h2 className="text-h1 m-0 uppercase text-balance">{dict.contact.heading}</h2>
@@ -957,6 +1033,7 @@ function Contact({
           <ContactButton
             dict={dict}
             contacts={settings.contacts}
+            label={dict.contact.write}
             className="btn btn-solo label mt-11 rounded-none bg-bone text-ink [--btn-wipe:var(--color-accent)]"
             draft={{ subject: dict.contact.directionSubject.business }}
           />
@@ -964,7 +1041,7 @@ function Contact({
 
         <div data-reveal className="col-span-12 lg:col-span-4 lg:col-start-9">
           <FineRow
-            className="text-bone-faint"
+            className="text-bone-faint lg:justify-end"
             items={[localizedString(settings.location, locale), phone?.value]}
           />
         </div>
@@ -1041,7 +1118,7 @@ export function BusinessHome({
         />
       ) : null}
 
-      {testimonials.length > 0 ? (
+      {SHOW_TESTIMONIALS && testimonials.length > 0 ? (
         <Quotes locale={locale} dict={dict} items={testimonials} />
       ) : null}
 

@@ -501,6 +501,18 @@
  * строки работают в паре с очень крупным заголовком: контраст масштабов и
  * есть то, что отличает свёрстанный разворот от последовательности блоков.
  */
+/* Заголовок строки в плотных перечнях — шаги работы, пакеты. Та же
+   гарнитура, что у заголовков, но кеглем чуть выше текста: строка должна
+   читаться как пункт прайса, а не как глава. */
+@utility text-item {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
 @utility label-fine {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
