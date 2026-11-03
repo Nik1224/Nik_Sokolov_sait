@@ -68,7 +68,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           {cta ? (
             <Link
               href={cta.href}
-              className="label bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent"
+              className="label bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent hover:text-on-accent"
             >
               {cta.label}
             </Link>

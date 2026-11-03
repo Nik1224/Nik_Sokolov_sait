@@ -248,7 +248,7 @@ export default async function Page({ params }: Props) {
           <ol className="m-0 mt-10 grid list-none gap-px bg-line p-0 md:grid-cols-2">
             {dict.pricing.factors.map((factor, index) => (
               <li key={factor.title} className="bg-ink p-6 lg:p-8">
-                <p className="label m-0 text-accent">{String(index + 1).padStart(2, '0')}</p>
+                <p className="label m-0 text-bone-faint">{String(index + 1).padStart(2, '0')}</p>
                 <h3 className="text-h3 m-0 mt-4 text-bone">{factor.title}</h3>
                 <p className="mt-3 text-bone-dim">{factor.body}</p>
               </li>

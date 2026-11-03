@@ -52,9 +52,15 @@ export function UnconfirmedTag({ dict }: { dict: Dictionary }) {
  */
 export function DemoBanner({ dict }: { dict: Dictionary }) {
   if (process.env.NODE_ENV === 'production') return null;
+  /*
+   * Полоса стоит в теле до разметки ветки, поэтому берёт базовые токены, а не
+   * токены темы: песочный акцент на бумаге PRIVATE и BUSINESS давал 1.9:1 —
+   * предупреждение нельзя было прочитать. Тревожный тон на провале читается
+   * одинаково под любой веткой.
+   */
   return (
-    <div className="border-b border-accent-dim bg-accent-dim/15 px-[var(--spacing-gutter)] py-2 text-center">
-      <p className="label text-accent">{dict.content.demoData}</p>
+    <div className="border-b border-danger/40 bg-ink-sunken px-[var(--spacing-gutter)] py-2 text-center">
+      <p className="label text-danger">{dict.content.demoData}</p>
     </div>
   );
 }

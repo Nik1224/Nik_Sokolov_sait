@@ -429,7 +429,7 @@ function Portfolio({
                       {localizedString(category.title, locale)}
                     </h3>
                     {description ? (
-                      <p className="mt-3 text-sm leading-snug text-bone-dim">{description}</p>
+                      <p className="mt-3 text-sm leading-snug text-bone">{description}</p>
                     ) : null}
                     <span
                       aria-hidden="true"
@@ -802,7 +802,7 @@ function Pricing({
               </div>
 
               {priced ? (
-                <p className="label col-span-12 m-0 text-accent lg:col-span-2 lg:justify-self-end lg:text-right">
+                <p className="label col-span-12 m-0 text-bone lg:col-span-2 lg:justify-self-end lg:text-right">
                   {price(entry)}
                 </p>
               ) : null}

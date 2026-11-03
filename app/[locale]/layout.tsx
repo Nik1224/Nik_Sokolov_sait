@@ -14,9 +14,14 @@ import { REVEAL_SCRIPT } from '@/lib/reveal';
 import { DEFAULT_LOCALE, LOCALES, isLocale, siteUrlObject } from '@/lib/site';
 import '@/styles/globals.css';
 
+/**
+ * Текстовая гарнитура по умолчанию — то лицо, на которое указывает
+ * `--font-sans` в `styles/tokens.css`. Её берут все ветки, кроме тех, что
+ * переопределяют токен у себя: BUSINESS уводит текст на гротеск ветки.
+ */
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-inter',
+  variable: '--font-sans-face',
   display: 'swap',
 });
 
