@@ -20,6 +20,7 @@ import type { ImageRef, MediaAsset } from '@/content/types';
 import {
   KINESCOPE_CATEGORIES,
   KINESCOPE_HAND_PICKED,
+  KINESCOPE_HIDDEN,
   KINESCOPE_NOT_PUBLISHED,
   type KinescopeBucket,
 } from './kinescope-map';
@@ -111,6 +112,8 @@ function collect(): { byCategory: Map<string, Collected>; skipped: Map<string, n
     for (const video of ordered) {
       // Ролик, уже подобранный руками, второй раз не показываем.
       if (KINESCOPE_HAND_PICKED.has(video.videoId)) continue;
+      // Ролик, который владелец попросил не показывать.
+      if (KINESCOPE_HIDDEN.has(video.videoId)) continue;
 
       const entry = posters[video.videoId];
       if (!entry) continue;

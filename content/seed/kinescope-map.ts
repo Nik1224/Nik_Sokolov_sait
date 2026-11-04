@@ -131,6 +131,15 @@ export const KINESCOPE_CATEGORIES: Record<string, KinescopeCategoryRule> = {
 export const KINESCOPE_NOT_PUBLISHED: ReadonlySet<string> = new Set(['Reels', 'Reels_NIk']);
 
 /**
+ * Отдельные ролики, которые владелец попросил убрать с сайта, хотя их проект
+ * публикуется. Ролик остаётся в кабинете; на сайт он не идёт.
+ */
+export const KINESCOPE_HIDDEN: ReadonlySet<string> = new Set([
+  'nnzLwjTsEMjLcHX69VrStP', // Business · Бэкстейдж — Botex, доска с фотографиями
+  'seovNfejdCm8k2XdyEPYTY', // Business · Бэкстейдж — Botex, девушка в студии
+]);
+
+/**
  * Ролики, уже подобранные руками в других файлах сида: свадебные фильмы и
  * вертикальные нарезки, бэкстейдж, имиджевые ролики, шоурил и клип в кейсе.
  *
