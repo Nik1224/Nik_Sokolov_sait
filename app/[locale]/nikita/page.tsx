@@ -18,7 +18,7 @@ import { PortfolioGallery } from '@/components/content/PortfolioGallery';
 import { MediaGallery } from '@/components/media/MediaGallery';
 import { Picture } from '@/components/media/Picture';
 import { getAlbums, getCategories, getDirection } from '@/content/queries';
-import type { ImageRef } from '@/content/types';
+import { PORTRAIT } from '@/content/portrait';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { cardHref } from '@/lib/routing';
@@ -30,16 +30,6 @@ type Props = { params: Promise<{ locale: string }> };
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
-
-const PORTRAIT: ImageRef = {
-  src: "/media/about/nikita-1800.jpg",
-  width: 1800,
-  height: 2700,
-  sources: [600, 1200, 1800].map((width) => ({
-    width,
-    src: `/media/about/nikita-${width}.jpg`,
-  })),
-};
 
 function resolveLocale(raw: string): Locale | null {
   return (LOCALES as readonly string[]).includes(raw) ? (raw as Locale) : null;

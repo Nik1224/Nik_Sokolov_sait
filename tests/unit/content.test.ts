@@ -8,12 +8,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { PORTRAIT } from '@/content/portrait';
 import { weddingReels, weddingVideos } from '@/content/seed/portfolio-galleries';
-import { localSrc } from '@/lib/media';
+import type { ImageRef, MediaAsset } from '@/content/types';
+import { localSrc, socialImage } from '@/lib/media';
 import {
   getArticle,
   getArticles,
   getArticlesForProject,
+  getDirections,
   getProject,
   getProjects,
   getProjectsForArticle,
@@ -415,6 +418,84 @@ describe('постеры роликов: srcset обещает то, что ле
       const largest = imageSize(poster.src);
       expect(poster.width, `${item._key}: width постера`).toBe(largest.width);
       expect(poster.height, `${item._key}: height постера`).toBe(largest.height);
+    }
+  });
+});
+
+describe('превью ссылки в мессенджере (§12)', () => {
+  /**
+   * Кадры на сайте лежат в WebP, а превью ссылки собирают не браузеры.
+   * У сборщиков ссылок WebP поддержан вразнобой: часть разворачивает его в
+   * картинку, часть отдаёт в переписку голый текст. Поэтому `og:image`
+   * остаётся JPEG, и рядом с каждым таким кадром лежит JPEG-двойник.
+   *
+   * Иначе эту поломку не поймать. Страница выглядит правильно, в консоли
+   * чисто, сборка проходит — пустое превью видно только в чужой переписке,
+   * то есть уже у клиента.
+   *
+   * Заглушки фикстур (`/placeholders/*.svg`) тут не проверяются: SVG не
+   * разворачивает в превью ни один сборщик, и это отдельный разговор про
+   * демо-контент, а не про формат кадров.
+   */
+  function socialFile(image: ImageRef): string | null {
+    const { url } = socialImage(image);
+    return url.startsWith('/media/') ? url : null;
+  }
+
+  function fromMedia(media: MediaAsset | undefined): ImageRef | undefined {
+    if (!media) return undefined;
+    return media.type === 'image' ? media.image : media.poster;
+  }
+
+  async function socialImages(): Promise<Array<[string, string]>> {
+    const found: Array<[string, string]> = [];
+    const add = (what: string, image: ImageRef | undefined) => {
+      if (!image) return;
+      const file = socialFile(image);
+      if (file) found.push([what, file]);
+    };
+
+    add('портрет автора', PORTRAIT);
+
+    for (const direction of await getDirections()) {
+      add(`Home ${direction._id}`, fromMedia(direction.hero));
+    }
+    for (const project of await getProjects({})) {
+      add(`проект ${project.slug}`, fromMedia(project.cover));
+    }
+    for (const article of await getArticles({})) {
+      add(`запись ${article.slug}`, fromMedia(article.cover));
+    }
+    return found;
+  }
+
+  it('у каждого кадра превью есть файл, и это JPEG', async () => {
+    const images = await socialImages();
+    /*
+     * Порог, а не точное число: записи и проекты добавляют, и подгонять
+     * счётчик под каждую — мартышкин труд. Он ловит другое: если обход
+     * контента однажды начнёт возвращать пустоту, тест не должен делать вид,
+     * что всё проверил. На момент написания кадров было 25.
+     */
+    expect(images.length, 'обход контента не нашёл кадров превью').toBeGreaterThan(20);
+
+    for (const [what, file] of images) {
+      const onDisk = join(process.cwd(), 'public', file);
+      let head: Buffer;
+      try {
+        head = readFileSync(onDisk).subarray(0, 3);
+      } catch {
+        throw new Error(
+          `${what}: превью ссылается на ${file}, а файла нет. ` +
+            'Рядом с кадром должен лежать JPEG-двойник.',
+        );
+      }
+      // SOI: ff d8 ff. Расширения мало — `.jpg` с WebP внутри сборщик ссылок
+      // не развернёт, а по имени этого не видно.
+      expect(
+        [...head],
+        `${what}: ${file} называется .jpg, но внутри не JPEG`,
+      ).toEqual([0xff, 0xd8, 0xff]);
     }
   });
 });
