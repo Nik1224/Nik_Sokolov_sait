@@ -1,0 +1,205 @@
+<!--
+  Стартовая страница для wfolio. Вставляется целиком в один блок «HTML-код».
+  Перенос START с нашего сайта: те же тексты, палитра, шрифты, карточки.
+
+  Что поменять перед вставкой — всё в блоке CONFIG внизу:
+    • links  — адреса страниц направлений в wfolio;
+    • loops  — ролики карточек (mp4 с «Диска» wfolio). Пусто — карточка без видео.
+-->
+<div class="ns-start" id="ns-start">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    .ns-start{
+      --ink:#08080a;--bone:#f2f0ec;--bone-dim:#a3a09a;--accent:#c4a77d;
+      --line:rgba(242,240,236,.12);--line-strong:rgba(242,240,236,.28);
+      --ease:cubic-bezier(.22,1,.36,1);
+      position:relative;min-height:100vh;overflow:hidden;
+      background:var(--ink);color:var(--bone);
+      font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+    }
+    .ns-start *{box-sizing:border-box;margin:0}
+    .ns-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .ns-bg iframe{position:absolute;top:50%;left:50%;width:177.78vh;min-width:100%;height:56.25vw;min-height:100%;transform:translate(-50%,-50%);border:0}
+    .ns-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--ink) 0%,rgba(8,8,10,.7) 45%,rgba(8,8,10,.45) 100%)}
+    .ns-wrap{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh;max-width:78rem;margin:0 auto;padding:0 1.5rem}
+    .ns-label{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.75rem;line-height:1.2;letter-spacing:.14em;text-transform:uppercase}
+    .ns-head{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0}
+    .ns-head a{color:var(--bone-dim);text-decoration:none}
+    .ns-head a:hover,.ns-head a[aria-current]{color:var(--bone)}
+    .ns-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 0}
+    .ns-eyebrow{color:var(--accent)}
+    .ns-h1{margin-top:1.25rem;max-width:48rem;font-weight:400;font-size:clamp(2.25rem,5vw,4rem);line-height:1.02;letter-spacing:-.03em;text-wrap:balance}
+    .ns-cards{margin-top:2.5rem;display:flex;flex-direction:column;gap:1rem}
+    .ns-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;flex:1;overflow:hidden;
+      padding:1.5rem;border:1px solid var(--line);border-radius:2px;background:rgba(8,8,10,.5);
+      -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--bone);text-decoration:none;
+      transition:height .7s var(--ease),border-color .7s var(--ease)}
+    .ns-card:hover,.ns-card:focus-visible{border-color:var(--line-strong);outline:none}
+    .ns-card video{position:absolute;top:0;bottom:0;right:0;width:42%;height:100%;object-fit:cover;pointer-events:none;transition:opacity .7s var(--ease)}
+    .ns-card .ns-shade{display:none}
+    .ns-card .ns-flash{position:absolute;inset:0;background:var(--bone);opacity:0;pointer-events:none}
+    .ns-card:hover .ns-flash{animation:ns-flash .6s var(--ease)}
+    @keyframes ns-flash{0%{opacity:0}15%{opacity:.18}100%{opacity:0}}
+    .ns-text{position:relative}
+    .ns-card.has-video .ns-text{padding-right:46%}
+    .ns-num{display:block;color:var(--accent)}
+    .ns-title{display:block;margin-top:.75rem;font-size:clamp(1.625rem,3vw,2.5rem);line-height:1.1;letter-spacing:-.02em}
+    .ns-desc{display:block;margin-top:.75rem;max-width:24rem;color:var(--bone-dim)}
+    .ns-arrow{display:inline-block;margin-top:1.5rem;transition:transform .3s var(--ease)}
+    .ns-card:hover .ns-arrow{transform:translateX(4px)}
+    .ns-foot{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;padding:1.5rem 0 2rem;color:var(--bone-dim);border-top:1px solid var(--line)}
+    .ns-foot a{color:var(--bone-dim);text-decoration:none}
+    .ns-foot a:hover{color:var(--bone)}
+
+    @media (min-width:1024px){
+      .ns-main{padding:3rem 0}
+      .ns-cards{margin-top:3.5rem;flex-direction:row;align-items:flex-end;gap:1.5rem}
+      .ns-card{height:13rem;padding:2rem}
+      .ns-card:hover,.ns-card:focus-visible{height:30rem}
+      .ns-card video{inset:0;width:100%;opacity:0}
+      .ns-card:hover video,.ns-card:focus-visible video{opacity:1}
+      .ns-card .ns-shade{display:block;position:absolute;inset:0;pointer-events:none;opacity:0;
+        background:linear-gradient(to top,var(--ink),rgba(8,8,10,.55),rgba(8,8,10,.1));transition:opacity .7s var(--ease)}
+      .ns-card:hover .ns-shade,.ns-card:focus-visible .ns-shade{opacity:1}
+      .ns-card.has-video .ns-text{padding-right:0}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .ns-card,.ns-card video,.ns-arrow{transition:none}
+      .ns-card:hover .ns-flash{animation:none}
+    }
+  </style>
+
+  <div class="ns-bg" id="ns-bg"></div>
+
+  <div class="ns-wrap">
+    <header class="ns-head">
+      <span class="ns-label">Nikita Sokolov</span>
+      <nav class="ns-label" aria-label="Язык">
+        <a href="#" data-lang="ru">RU</a> / <a href="#" data-lang="en">EN</a>
+      </nav>
+    </header>
+
+    <main class="ns-main">
+      <p class="ns-label ns-eyebrow">Photo / Video / Visual Production</p>
+      <h1 class="ns-h1" data-i18n="h1"></h1>
+      <div class="ns-cards" id="ns-cards"></div>
+    </main>
+
+    <footer class="ns-foot ns-label">
+      <span data-i18n="location"></span>
+      <a href="tel:+79895277070">+7 989 527 70 70</a>
+      <a href="https://t.me/Nik_Sokolov_pro" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://wa.me/79895277070" target="_blank" rel="noopener">WhatsApp</a>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    /* ===== CONFIG ===== */
+    var CONFIG = {
+      showreelKinescopeId: 'dSK6QkqpEZJt7vHY6rCgpD',
+      links: { private: '#', business: '#', production: '#' },
+      loops: { private: '', business: '', production: '' }
+    };
+    /* ================== */
+
+    var TEXT = {
+      ru: {
+        h1: 'Три разных способа работать вместе. Выберите свой.',
+        location: 'Москва / Весь мир',
+        cards: {
+          private: 'Свадьбы, портрет, семья. Съёмка, на которой не нужно позировать.',
+          business: 'Задачи компаний: обучение, производство, подкасты, реклама, бренд.',
+          production: 'Для продюсеров и продакшенов: шоурил, работы, credits.'
+        }
+      },
+      en: {
+        h1: 'Three different ways of working together. Choose yours.',
+        location: 'Moscow / Worldwide',
+        cards: {
+          private: 'Weddings, portraits, family. A shoot with no posing required.',
+          business: 'Business needs: training, manufacturing, podcasts, advertising, brand.',
+          production: 'For producers and production houses: showreel, work, credits.'
+        }
+      }
+    };
+    var NAMES = { private: 'Private', business: 'Business', production: 'Production' };
+    var ORDER = ['private', 'business', 'production'];
+
+    var root = document.getElementById('ns-start');
+    var hover = window.matchMedia('(hover: hover) and (min-width: 1024px)').matches;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Фон — шоурил Kinescope без звука. При «меньше движения» фона нет.
+    if (!still && CONFIG.showreelKinescopeId) {
+      var f = document.createElement('iframe');
+      f.src = 'https://kinescope.io/embed/' + CONFIG.showreelKinescopeId +
+        '?autoplay=1&muted=1&loop=1&controls=0&background=1';
+      f.allow = 'autoplay; fullscreen; encrypted-media';
+      f.setAttribute('aria-hidden', 'true');
+      f.tabIndex = -1;
+      document.getElementById('ns-bg').appendChild(f);
+    }
+
+    function render(lang) {
+      var t = TEXT[lang];
+      root.querySelectorAll('[data-i18n]').forEach(function (el) {
+        el.textContent = t[el.getAttribute('data-i18n')];
+      });
+      root.querySelectorAll('[data-lang]').forEach(function (a) {
+        if (a.getAttribute('data-lang') === lang) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+
+      var box = document.getElementById('ns-cards');
+      box.innerHTML = '';
+      ORDER.forEach(function (key, i) {
+        var a = document.createElement('a');
+        a.className = 'ns-card';
+        a.href = CONFIG.links[key];
+        var loop = CONFIG.loops[key];
+        if (loop && !still) {
+          a.classList.add('has-video');
+          var v = document.createElement('video');
+          v.src = loop; v.muted = true; v.loop = true; v.playsInline = true;
+          v.setAttribute('playsinline', ''); v.preload = 'auto';
+          v.setAttribute('aria-hidden', 'true');
+          a.appendChild(v);
+          var s = document.createElement('span'); s.className = 'ns-shade'; a.appendChild(s);
+          if (hover) {
+            a.addEventListener('mouseenter', function () { v.play().catch(function () {}); });
+            a.addEventListener('mouseleave', function () { v.pause(); v.currentTime = 0; });
+          } else {
+            new IntersectionObserver(function (e) {
+              if (e[0].isIntersecting) v.play().catch(function () {}); else v.pause();
+            }, { threshold: 0.25 }).observe(a);
+          }
+        }
+        var fl = document.createElement('span'); fl.className = 'ns-flash'; a.appendChild(fl);
+        var tx = document.createElement('span'); tx.className = 'ns-text';
+        tx.innerHTML =
+          '<span class="ns-label ns-num">0' + (i + 1) + '</span>' +
+          '<span class="ns-title">' + NAMES[key] + '</span>' +
+          '<span class="ns-desc"></span>' +
+          '<span class="ns-label ns-arrow" aria-hidden="true">→</span>';
+        tx.querySelector('.ns-desc').textContent = t.cards[key];
+        a.appendChild(tx);
+        box.appendChild(a);
+      });
+    }
+
+    root.querySelectorAll('[data-lang]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        render(a.getAttribute('data-lang'));
+      });
+    });
+
+    var initial = /locale=en|\/en(\/|$)/.test(location.href) ? 'en' : 'ru';
+    render(initial);
+  })();
+  </script>
+</div>
