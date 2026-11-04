@@ -66,6 +66,24 @@
       .ns-card:hover .ns-shade,.ns-card:focus-visible .ns-shade{opacity:1}
       .ns-card.has-video .ns-text{padding-right:0}
     }
+    /* Тема wfolio красит h1/p/a по-своему: перебиваем по id и !important. */
+    #ns-start{width:100vw!important;max-width:none!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important}
+    #ns-start h1,#ns-start p,#ns-start span,#ns-start a,#ns-start nav{
+      font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;text-transform:none!important;text-shadow:none!important}
+    #ns-start .ns-label,#ns-start .ns-label *{font-family:"JetBrains Mono",ui-monospace,monospace!important;
+      text-transform:uppercase!important;letter-spacing:.14em!important;font-size:.75rem!important;line-height:1.2!important;font-weight:400!important}
+    #ns-start .ns-h1{color:var(--bone)!important;font-weight:400!important;font-size:clamp(2.25rem,5vw,4rem)!important;
+      line-height:1.02!important;letter-spacing:-.03em!important;margin:1.25rem 0 0!important;padding:0!important}
+    #ns-start .ns-title{color:var(--bone)!important;font-size:clamp(1.625rem,3vw,2.5rem)!important;line-height:1.1!important;letter-spacing:-.02em!important;font-weight:400!important}
+    #ns-start .ns-desc{color:var(--bone-dim)!important;font-size:1rem!important;line-height:1.5!important}
+    #ns-start .ns-eyebrow,#ns-start .ns-num{color:var(--accent)!important}
+    #ns-start a{border:0!important;background-image:none!important}
+    #ns-start .ns-head span.ns-label{color:var(--bone)!important}
+    #ns-start .ns-head a,#ns-start .ns-foot a,#ns-start .ns-foot span{color:var(--bone-dim)!important}
+    #ns-start .ns-head a[aria-current],#ns-start .ns-head a:hover,#ns-start .ns-foot a:hover{color:var(--bone)!important}
+    #ns-start .ns-card{color:var(--bone)!important;border:1px solid var(--line)!important}
+    #ns-start .ns-card:hover,#ns-start .ns-card:focus-visible{border-color:var(--line-strong)!important}
+
     @media (prefers-reduced-motion:reduce){
       .ns-card,.ns-card video,.ns-arrow{transition:none}
       .ns-card:hover .ns-flash{animation:none}
