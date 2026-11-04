@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { MediaAsset } from '@/content/types';
 import { localizedString } from '@/lib/i18n/localize';
 import type { Locale } from '@/lib/site';
+import { localSrc } from '@/lib/media';
 
 type Props = {
   locale: Locale;
@@ -68,7 +69,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           {cta ? (
             <Link
               href={cta.href}
-              className="label bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent"
+              className="label bg-bone px-6 py-3.5 text-ink transition-colors hover:bg-accent hover:text-on-accent"
             >
               {cta.label}
             </Link>
@@ -90,7 +91,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
     <section>
       <div className="relative w-full overflow-hidden bg-ink-raised" style={{ aspectRatio: ratio }}>
         <img
-          src={media.poster.src}
+          src={localSrc(media.poster.src)}
           alt={source ? '' : alt}
           width={media.poster.width}
           height={media.poster.height}
@@ -101,7 +102,7 @@ export function CoverHero({ locale, eyebrow, title, lead, media, cta, secondaryC
           <video
             ref={videoRef}
             src={source}
-            poster={media.poster.src}
+            poster={localSrc(media.poster.src)}
             autoPlay
             muted
             loop

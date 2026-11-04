@@ -24,6 +24,7 @@ import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
 import { href } from '@/lib/routing';
 import type { Direction, Locale } from '@/lib/site';
+import { localSrc } from '@/lib/media';
 
 type Props = {
   categories: Category[];
@@ -223,7 +224,7 @@ function Tile({
         <video
           ref={videoRef}
           src={source}
-          poster={loop.poster.src}
+          poster={localSrc(loop.poster.src)}
           autoPlay={standing}
           muted
           loop

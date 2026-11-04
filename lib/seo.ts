@@ -11,7 +11,7 @@
 import type { Metadata } from 'next';
 import type { ImageRef, SeoFields } from '@/content/types';
 import { localizedString } from './i18n/localize';
-import { imageSrc } from './media';
+import { socialImage } from './media';
 import { absoluteUrl } from './routing';
 import { DEFAULT_LOCALE, LOCALES, type Locale, siteUrl } from './site';
 
@@ -44,7 +44,9 @@ export function buildMetadata(input: MetadataInput): Metadata {
   }
   languages['x-default'] = languages[DEFAULT_LOCALE];
 
-  const image = input.image ? imageSrc(input.image, 1200) : undefined;
+  // Не `imageSrc`: превью ссылки собирают не браузеры, и WebP им не всегда
+  // по зубам — подробности в `socialImage`.
+  const image = input.image ? socialImage(input.image, 1200) : undefined;
 
   return {
     title: input.title,
@@ -58,14 +60,14 @@ export function buildMetadata(input: MetadataInput): Metadata {
       url: canonical,
       locale: OG_LOCALE[input.locale],
       siteName: 'Nikita Sokolov',
-      images: image ? [{ url: image, width: 1200, height: 630 }] : undefined,
+      images: image ? [image] : undefined,
       publishedTime: input.publishedTime,
     },
     twitter: {
       card: image ? 'summary_large_image' : 'summary',
       title: input.title,
       description: input.description,
-      images: image ? [image] : undefined,
+      images: image ? [image.url] : undefined,
     },
   };
 }

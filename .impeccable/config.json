@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "public/proto/business.html"
+        ],
+        "createdAt": "2026-11-03T18:26:50.375Z",
+        "reason": "блюпринт арт-дирекшна 'Names running off the edges': лента имён намеренно обрезана обоими краями и движется, остановлена при prefers-reduced-motion"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "public/proto/business.html"
+        ],
+        "createdAt": "2026-11-03T18:26:50.393Z",
+        "reason": "детектор композитит видео с текстом и не видит элемент-вуаль над ним; реальный контраст замерен по 10 кадрам всего цикла — худший 6.67:1 при норме 4.5"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "public/proto/v2.html"
+        ],
+        "createdAt": "2026-11-03T18:36:41.258Z",
+        "reason": "лента имён обрезана обоими краями намеренно — приём с доски референсов; остановлена при prefers-reduced-motion"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "public/proto/v2.html"
+        ],
+        "createdAt": "2026-11-03T18:36:41.274Z",
+        "reason": "детектор берёт фон обходом вверх и не видит ни красную плашку, ни вуаль карточки; замерено по месту: белый на кнопке 4.58:1, подпись карточки 11.63:1"
+      }
+    ]
+  }
+}

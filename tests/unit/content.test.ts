@@ -8,11 +8,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { PORTRAIT } from '@/content/portrait';
 import { weddingReels, weddingVideos } from '@/content/seed/portfolio-galleries';
+import type { ImageRef, MediaAsset } from '@/content/types';
+import { localSrc, socialImage } from '@/lib/media';
 import {
   getArticle,
   getArticles,
   getArticlesForProject,
+  getDirections,
   getProject,
   getProjects,
   getProjectsForArticle,
@@ -349,8 +353,32 @@ describe('постеры роликов: srcset обещает то, что ле
    * Если перепутать, браузер сочтёт постер вдвое шире, чем он есть, и возьмёт
    * файл мельче нужного: превью размоется, и заметить это по коду нельзя.
    */
-  function jpegSize(file: string): { width: number; height: number } {
+  /**
+   * На диске лежит WebP, а в данных путь записан как `.jpg`: подмена делается
+   * в `localSrc` в одном месте, чтобы не расклеивать списки, которые сходятся
+   * по имени кадра. Проверять надо тот файл, который реально уедет в srcset,
+   * поэтому путь прогоняется через ту же функцию, что и на странице.
+   */
+  function imageSize(src: string): { width: number; height: number } {
+    const file = join(process.cwd(), 'public', localSrc(src));
     const buf = readFileSync(file);
+
+    // WebP: RIFF....WEBP, дальше VP8 / VP8L / VP8X — размер лежит по-своему.
+    if (buf.length > 16 && buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {
+      const kind = buf.toString('ascii', 12, 16);
+      if (kind === 'VP8X') {
+        return { width: buf.readUIntLE(24, 3) + 1, height: buf.readUIntLE(27, 3) + 1 };
+      }
+      if (kind === 'VP8 ') {
+        return { width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff };
+      }
+      if (kind === 'VP8L') {
+        const bits = buf.readUInt32LE(21);
+        return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+      }
+      throw new Error(`${file}: неизвестный вид WebP ${kind}`);
+    }
+
     let at = 2;
     while (at < buf.length) {
       if (buf[at] !== 0xff) throw new Error(`${file}: не JPEG`);
@@ -374,7 +402,7 @@ describe('постеры роликов: srcset обещает то, что ле
       const poster = item.poster!;
       expect(poster.sources?.length, `${item._key}: нет размеров`).toBeTruthy();
       for (const source of poster.sources!) {
-        const real = jpegSize(join(process.cwd(), 'public', source.src));
+        const real = imageSize(source.src);
         /*
          * Пиксель расхождения — это округление: файл пережат от исходных
          * пропорций ролика, а число в srcset считается от уже округлённого
@@ -387,9 +415,87 @@ describe('постеры роликов: srcset обещает то, что ле
         ).toBeLessThanOrEqual(1);
       }
       // Крупнейший файл — тот, чьи размеры уходят в width/height картинки.
-      const largest = jpegSize(join(process.cwd(), 'public', poster.src));
+      const largest = imageSize(poster.src);
       expect(poster.width, `${item._key}: width постера`).toBe(largest.width);
       expect(poster.height, `${item._key}: height постера`).toBe(largest.height);
+    }
+  });
+});
+
+describe('превью ссылки в мессенджере (§12)', () => {
+  /**
+   * Кадры на сайте лежат в WebP, а превью ссылки собирают не браузеры.
+   * У сборщиков ссылок WebP поддержан вразнобой: часть разворачивает его в
+   * картинку, часть отдаёт в переписку голый текст. Поэтому `og:image`
+   * остаётся JPEG, и рядом с каждым таким кадром лежит JPEG-двойник.
+   *
+   * Иначе эту поломку не поймать. Страница выглядит правильно, в консоли
+   * чисто, сборка проходит — пустое превью видно только в чужой переписке,
+   * то есть уже у клиента.
+   *
+   * Заглушки фикстур (`/placeholders/*.svg`) тут не проверяются: SVG не
+   * разворачивает в превью ни один сборщик, и это отдельный разговор про
+   * демо-контент, а не про формат кадров.
+   */
+  function socialFile(image: ImageRef): string | null {
+    const { url } = socialImage(image);
+    return url.startsWith('/media/') ? url : null;
+  }
+
+  function fromMedia(media: MediaAsset | undefined): ImageRef | undefined {
+    if (!media) return undefined;
+    return media.type === 'image' ? media.image : media.poster;
+  }
+
+  async function socialImages(): Promise<Array<[string, string]>> {
+    const found: Array<[string, string]> = [];
+    const add = (what: string, image: ImageRef | undefined) => {
+      if (!image) return;
+      const file = socialFile(image);
+      if (file) found.push([what, file]);
+    };
+
+    add('портрет автора', PORTRAIT);
+
+    for (const direction of await getDirections()) {
+      add(`Home ${direction._id}`, fromMedia(direction.hero));
+    }
+    for (const project of await getProjects({})) {
+      add(`проект ${project.slug}`, fromMedia(project.cover));
+    }
+    for (const article of await getArticles({})) {
+      add(`запись ${article.slug}`, fromMedia(article.cover));
+    }
+    return found;
+  }
+
+  it('у каждого кадра превью есть файл, и это JPEG', async () => {
+    const images = await socialImages();
+    /*
+     * Порог, а не точное число: записи и проекты добавляют, и подгонять
+     * счётчик под каждую — мартышкин труд. Он ловит другое: если обход
+     * контента однажды начнёт возвращать пустоту, тест не должен делать вид,
+     * что всё проверил. На момент написания кадров было 25.
+     */
+    expect(images.length, 'обход контента не нашёл кадров превью').toBeGreaterThan(20);
+
+    for (const [what, file] of images) {
+      const onDisk = join(process.cwd(), 'public', file);
+      let head: Buffer;
+      try {
+        head = readFileSync(onDisk).subarray(0, 3);
+      } catch {
+        throw new Error(
+          `${what}: превью ссылается на ${file}, а файла нет. ` +
+            'Рядом с кадром должен лежать JPEG-двойник.',
+        );
+      }
+      // SOI: ff d8 ff. Расширения мало — `.jpg` с WebP внутри сборщик ссылок
+      // не развернёт, а по имени этого не видно.
+      expect(
+        [...head],
+        `${what}: ${file} называется .jpg, но внутри не JPEG`,
+      ).toEqual([0xff, 0xd8, 0xff]);
     }
   });
 });

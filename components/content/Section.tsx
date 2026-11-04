@@ -58,7 +58,7 @@ export function Section({
               href={action.href}
               className={
                 action.variant === 'solid'
-                  ? 'label inline-block shrink-0 self-start bg-accent px-7 py-4 text-ink transition-colors hover:bg-accent-dim'
+                  ? 'label inline-block shrink-0 self-start bg-accent px-7 py-4 text-on-accent transition-colors hover:bg-accent-dim'
                   : 'label shrink-0 text-bone-dim transition-colors hover:text-bone'
               }
             >

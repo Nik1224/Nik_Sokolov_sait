@@ -642,7 +642,7 @@ test('соседние кадры подгружаются заранее', asyn
   // Считаем сами кадры, а не файлы: ширину выбирает браузер под свой экран.
   const requested = new Set<string>();
   page.on('request', (request) => {
-    const file = /\/portfolio\/wedding\/([^/]+)-\d+\.jpg/.exec(request.url());
+    const file = /\/portfolio\/wedding\/([^/]+)-\d+\.webp/.exec(request.url());
     if (file) requested.add(file[1]);
   });
 

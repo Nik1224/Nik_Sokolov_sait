@@ -152,7 +152,11 @@ export function ArticleDetail({
         ) : null}
 
         <p className="label flex flex-wrap items-center gap-3 text-bone-faint">
-          {typeLabel ? <span className="text-accent">{typeLabel}</span> : null}
+          {/* Тип записи — метка, а не то, что можно нажать, поэтому акцент ей
+              не достаётся: это правило ветки, и на бумаге BUSINESS красный в
+              этом кегле даёт 3.79:1 вместо нужных 4.5:1. Тип отличает от даты
+              не цвет, а голос: тип основным тоном, дата приглушённым. */}
+          {typeLabel ? <span className="text-bone">{typeLabel}</span> : null}
           <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, locale)}</time>
         </p>
 

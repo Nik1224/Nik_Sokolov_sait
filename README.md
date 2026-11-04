@@ -79,7 +79,7 @@ components/media/                Изображения, галерея, вид�
 content/schemas/                 Схемы Sanity — контракт контента
 content/queries/                 Слой доступа к данным (Sanity ↔ фикстуры)
 content/seed/                    Demo-данные
-lib/                             Роутинг, i18n, SEO, медиа, аналитика, формы
+lib/                             Роутинг, i18n, SEO, медиа, аналитика, связь
 styles/                          Дизайн-токены и глобальные стили
 tests/                           Unit, E2E, доступность
 ```

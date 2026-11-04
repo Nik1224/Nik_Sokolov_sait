@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прототип v2 — BUSINESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#f3f2f0;      /* нейтральный, не кремовый: cream+terracotta — штамп ИИ-лендинга */
+  --ink:#141413;
+  --soft:#67615a;        /* вторичный текст: 5.2:1 на фоне, grey-body не проходит мягче */
+  --ghost:#8d8884;       /* 3.15:1 на фоне: слово декоративное, но всё же крупный текст */
+  --red:#e5231a;         /* холоднее терракоты: cream+terracotta — тот самый штамп */
+  --on-red:#ffffff;
+  --gut:clamp(1.125rem,4vw,4rem);
+  /* Встроенных кривых не хватает: они слишком вялые. Вход и отклик — ease-out,
+     движение по экрану — ease-in-out. ease-in в интерфейсе не используется вовсе:
+     он тормозит ровно в тот момент, когда человек смотрит внимательнее всего. */
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --ease:var(--ease-out);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:Geologica,ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(1rem,.95rem+.2vw,1.125rem);line-height:1.5;
+  overflow-x:clip;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ---------- шапка ---------- */
+.top{display:flex;align-items:center;gap:clamp(1rem,3vw,2.75rem);padding:1.5rem var(--gut)}
+.top .mark{font-weight:600;letter-spacing:-.01em}
+.top nav{display:flex;gap:clamp(.9rem,2vw,1.75rem);margin-left:auto;font-size:.9375rem;color:var(--soft)}
+.pill{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:var(--red);color:var(--on-red);
+  padding:.7rem 1.4rem;border-radius:999px;
+  font-size:.9375rem;font-weight:500;
+  transition:transform 160ms var(--ease-out),background 160ms ease;
+}
+.pill:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){
+  .pill:hover{transform:translateY(-2px);background:#b82913}
+  .top nav a:hover{color:var(--ink)}
+}
+.top .pill{margin-left:clamp(.5rem,2vw,1.5rem)}
+
+/* ---------- герой ---------- */
+/* Гигантское слово шире страницы — режет его герой, а не окно браузера:
+   без этого страница ездила вбок на 86px. */
+.hero{position:relative;padding:clamp(1rem,3vh,2.5rem) 0 0;overflow:hidden}
+.hero-grid{
+  position:relative;z-index:3;
+  display:grid;grid-template-columns:repeat(12,1fr);
+  column-gap:var(--gut);row-gap:0;
+  padding-inline:var(--gut);align-items:start;
+}
+.hero h1{
+  grid-column:1/span 6;margin:0;
+  font-size:clamp(2.5rem,6vw,5.75rem);font-weight:600;
+  line-height:1.02;letter-spacing:-.035em;
+  font-variation-settings:'SHRP' 100;
+}
+.hero h1 em{font-style:normal;color:var(--soft)}
+.hero .say{grid-column:1/span 4;margin:1.25rem 0 0;max-width:34ch}
+.hero .act{grid-column:1/span 4;margin-top:1.5rem}
+/* Три факта закрывают пустоту под кнопкой: левая колонка обрывалась на
+   половине высоты кадра, и половина экрана оставалась ничем. */
+.facts{
+  grid-column:1/span 5;display:flex;flex-wrap:wrap;
+  gap:clamp(1.25rem,2.5vw,2.75rem);margin:clamp(1.75rem,4vh,3rem) 0 0;
+}
+.facts dt{margin:0;color:var(--soft);font-size:.9375rem}
+.facts dd{margin:.15rem 0 0;font-size:clamp(1.125rem,1.6vw,1.5rem);font-weight:600;letter-spacing:-.02em}
+
+/* Кадр висит в свете: маска растворяет его края в фоне, рамки нет. */
+.float{
+  grid-column:7/-1;position:relative;margin-top:-1.5rem;
+  aspect-ratio:1/1;
+}
+.float video,.float img{width:100%;height:100%;object-fit:cover;
+  -webkit-mask-image:radial-gradient(82% 88% at 52% 44%,#000 26%,transparent 76%);
+  mask-image:radial-gradient(82% 88% at 52% 44%,#000 26%,transparent 76%);
+}
+/* Подпись-карточка поверх кадра, как на референсе. */
+.tag{
+  position:absolute;right:4%;top:7%;
+  background:#141413;color:#fff;
+  padding:.85rem 1.1rem;border-radius:14px;max-width:16rem;
+  font-size:.9375rem;line-height:1.4;
+}
+.tag b{display:block;font-weight:600;margin-bottom:.15rem}
+
+/* Сцена гигантского слова: само слово плюс поле дрейфующих кадров вокруг
+   него. Перспектива на родителе — иначе `translateZ` у кадров ничего не даёт
+   и наклон читается как плоский поворот. */
+.stage{position:relative;perspective:1200px;perspective-origin:50% 40%}
+
+/* Кадры вокруг слова. Часть лежит под ним, часть над — от этого и берётся
+   глубина. Каждый дрейфует со своей длительностью, чтобы поле не пульсировало
+   в такт. */
+/*
+ * Три вида движения на одном кадре живут в трёх разных свойствах, а не в одном
+ * `transform`: дрейф — в `translate` и `rotate`, параллакс — в `transform`,
+ * который пишет скрипт. Они складываются сами и не мешают друг другу.
+ *
+ * Раньше дрейф крутил зарегистрированные переменные через `@property`. Приём
+ * работал, но интерполяция переменной идёт пересчётом стиля на основном потоке:
+ * композитор получал готовый трансформ уже после расчёта, пять элементов по
+ * шестьдесят раз в секунду. `translate` и `rotate` анимируются на композиторе.
+ */
+.chip{
+  position:absolute;border-radius:12px;overflow:hidden;
+  width:var(--w);aspect-ratio:4/3;
+  transform:translate3d(0,0,var(--dz,0px));
+  animation:drift var(--dur,22s) var(--ease-in-out) var(--delay,0s) infinite;
+}
+.chip img{width:100%;height:100%;object-fit:cover}
+.chip.over{z-index:4}
+.chip.under{z-index:0}
+/* Поле не крутится вхолостую за пределами экрана. */
+.chip:not(.seen){animation-play-state:paused}
+@keyframes drift{
+  0%,100%{transform:translate3d(0,0,var(--dz,0px)) rotate(var(--r0))}
+  50%    {transform:translate3d(var(--ax),var(--ay),var(--dz,0px)) rotate(var(--r1))}
+}
+
+/* Гигантское слово: обрезано обоими краями, лежит ПОД кадром. */
+.monument{
+  position:relative;z-index:1;overflow:hidden;margin:-2vw 0 0;
+  font-size:23vw;line-height:.78;font-weight:800;letter-spacing:-.055em;
+  color:var(--ghost);opacity:1;
+  text-align:center;white-space:nowrap;
+  width:112%;margin-left:-6%;
+  font-variation-settings:'SHRP' 100;
+  user-select:none;
+  /* Параллакс пишет скрипт в `translate` — отдельное свойство, без перехода. */
+  translate:0 0;
+}
+
+.sect-head{margin:clamp(3rem,8vh,5.5rem) 0 0;padding-inline:var(--gut);
+  font-size:clamp(1.375rem,2.4vw,2.1rem);font-weight:600;letter-spacing:-.025em;
+  font-variation-settings:'SHRP' 100}
+
+/* ---------- фраза с красными вставками ---------- */
+.claim{
+  max-width:min(62rem,92vw);margin:clamp(3rem,9vh,7rem) auto 0;
+  padding-inline:var(--gut);
+  font-size:clamp(1.375rem,2.4vw,2.1rem);line-height:1.3;
+  letter-spacing:-.02em;font-weight:500;
+}
+.claim .dim{color:var(--soft)}
+.lozenge{
+  display:inline-block;width:2.6em;height:1.05em;vertical-align:-.18em;
+  border-radius:999px;background:var(--red);margin-inline:.18em;
+}
+
+/* ---------- карточки вразнобой ---------- */
+.cards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.75rem,1.6vw,1.5rem);
+  padding:clamp(2.5rem,7vh,5rem) var(--gut) 0;align-items:start;
+  perspective:1400px;perspective-origin:50% 30%;
+}
+/* Карточка держит три слагаемых отдельно: наклон (постоянный), подъём на
+   наведении и параллакс от скролла, который ставит скрипт. Складывать их в
+   одном `transform` из разных мест нельзя — последнее объявление затирает
+   предыдущие, поэтому каждое живёт своей переменной. */
+.card{
+  --tilt:0deg;--yaw:0deg;--lift:0px;--par:0px;
+  position:relative;border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:clamp(15rem,27vw,24rem);padding:1.25rem;
+  color:var(--on-red);
+  /*
+   * Параллакс сюда не входит: он привязан к скроллу, и переход его тормозил —
+   * отрисованный сдвиг доезжал до нужного места через 240мс после того, как
+   * скролл уже остановился. Карточка отставала от пальца на четверть секунды.
+   * Скролл пишет отдельное свойство `translate`, у которого перехода нет;
+   * `transform` остался подъёму и наклону.
+   */
+  transform:translate3d(0,var(--lift),0) rotate(var(--tilt)) rotateY(var(--yaw));
+  transition:transform 220ms var(--ease-out);
+}
+.card:nth-child(1){margin-top:0;--tilt:-1.6deg;--yaw:4deg}
+.card:nth-child(2){margin-top:clamp(2rem,5vw,4.5rem);--tilt:1.2deg;--yaw:2deg}
+.card:nth-child(3){margin-top:clamp(1rem,2.5vw,2rem);--tilt:-.8deg;--yaw:-2deg}
+.card:nth-child(4){margin-top:clamp(3rem,7vw,6rem);--tilt:2deg;--yaw:-5deg}
+@media (hover:hover) and (pointer:fine){ .card:hover{--lift:-10px} }
+.card:active{--lift:-4px}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.card::before{content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(to top,rgba(14,14,13,.9) 8%,rgba(14,14,13,.45) 52%,rgba(14,14,13,.2) 100%)}
+.card.flat{background:var(--ink)}
+.card.flat::before{display:none}
+.card h3{margin:0;font-size:1.0625rem;font-weight:600;line-height:1.3}
+.card p{margin:.4rem 0 0;font-size:.9375rem;line-height:1.4;color:#cfc8bd}
+.card .dot{position:absolute;top:1.1rem;left:1.25rem;width:.5rem;height:.5rem;border-radius:999px;background:var(--red)}
+
+/* ---------- имена, обрезанные краями ---------- */
+.names{margin-top:clamp(3.5rem,10vh,7rem);overflow:hidden;padding:clamp(2rem,5vh,3.5rem) 0}
+.names-row{
+  display:flex;width:max-content;white-space:nowrap;
+  font-size:clamp(2.5rem,7vw,6.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;
+  color:var(--ink);font-variation-settings:'SHRP' 100;
+  animation:slide 42s linear infinite;
+}
+.names-row span{padding-inline:clamp(.75rem,2vw,2rem)}
+.names-row i{font-style:normal;color:var(--red)}
+@keyframes slide{to{transform:translateX(-50%)}}
+/* Пока человек читает имена, лента стоит. */
+@media (hover:hover) and (pointer:fine){
+  .names:hover .names-row{animation-play-state:paused}
+}
+.names-note{padding:1rem var(--gut) 0;color:var(--soft);max-width:44ch}
+
+/* ---------- появление ---------- */
+/* Прятать до появления берётся класс, который ставит тот же скрипт, что заводит
+   наблюдателя: не выполнился скрипт — нет и класса, страница просто видна целиком.
+   Если бы прятал сам CSS, при отказе скрипта остался бы пустой экран. */
+.reveal-ready [data-rise]{opacity:0;transform:translateY(20px)}
+.reveal-ready [data-rise].on{animation:rise 450ms var(--ease-out) both;animation-delay:var(--d,0ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:repeat(6,1fr)}
+  .hero h1,.hero .say,.hero .act{grid-column:1/-1}
+  .float{grid-column:1/-1;margin-top:1.75rem}
+  .monument{font-size:30vw;margin-top:-6vw}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .card:nth-child(n){margin-top:0}
+  .card:nth-child(2),.card:nth-child(4){margin-top:clamp(1.5rem,6vw,3rem)}
+  /* На телефоне поле кадров съедает слово и лезет под текст: оставляем два
+     по краям, остальные уходят. */
+  .chip:nth-of-type(2),.chip:nth-of-type(4),.chip:nth-of-type(5){display:none}
+  /* Подпись остаётся на кадре: в потоке она вставала прямо над гигантским
+     словом и читалась как надзаголовок к нему. */
+  .tag{left:var(--gut);right:var(--gut);top:5%;max-width:none}
+  /* Слово садится на свои поля: вылет за край делал страницу несимметричной. */
+  .monument{width:100%;margin-left:0;font-size:26vw}
+  /* Меню в строке с логотипом и кнопкой не помещается — кнопка уезжала за
+     правый край на 82px, и страница переставала быть симметричной. На телефоне
+     разделы живут в якорях самой страницы, строке меню здесь делать нечего. */
+  .top nav{display:none}
+  .claim{font-size:clamp(1.25rem,5.2vw,1.5rem)}
+}
+@media (prefers-reduced-motion:reduce){
+  .names-row{animation:none}
+  .reveal-ready [data-rise]{opacity:1;transform:none}
+  .reveal-ready [data-rise].on{animation:none}
+  .pill:hover{transform:none}
+  /* Наклон и глубина остаются — они часть композиции, а не движение.
+     Уходит только то, что само по себе ездит. */
+  .chip{animation:none}
+  .card:hover{--lift:0px}
+}
+</style>
+</head>
+<body>
+<script>
+/* Первым в теле, до разметки: иначе блоки успеют показаться и спрятаться. */
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('reveal-ready');
+}
+</script>
+
+<header class="top">
+  <a class="mark" href="#">Никита Соколов</a>
+  <nav><a href="#work">Работы</a><a href="#how">Как снимаем</a><a href="#price">Стоимость</a></nav>
+  <a class="pill" href="#talk">Обсудить съёмку</a>
+</header>
+
+<section class="hero">
+  <div class="hero-grid">
+    <h1 data-rise>Снимаем, пока<br>вы работаете</h1>
+    <p class="say" data-rise style="--d:60ms">Смена не встаёт. Конференции, реклама, обучающие серии и производство. Один подрядчик или команда, собранная под задачу.</p>
+    <div class="act" data-rise style="--d:120ms"><a class="pill" href="#work">Посмотреть работы</a></div>
+    <dl class="facts" data-rise style="--d:180ms">
+      <div><dt>Смена</dt><dd>8 часов</dd></div>
+      <div><dt>В группе</dt><dd>до 9 человек</dd></div>
+      <div><dt>Подборка</dt><dd>наутро</dd></div>
+    </dl>
+
+    <div class="float" data-rise style="--d:90ms">
+      <video src="/media/business-loop.mp4" poster="/media/business-poster.jpg" autoplay muted loop playsinline></video>
+      <div class="tag"><b>Конференция на три зала</b>Программа шла по расписанию — снимали между её пунктами.</div>
+    </div>
+  </div>
+
+  <div class="stage" aria-hidden="true">
+    <div class="monument">ВИДЕО</div>
+
+    <div class="chip under" style="left:0%;top:-30%;--w:clamp(84px,8.5vw,140px);--dz:-120px;--r0:-7deg;--r1:-4deg;--ax:14px;--ay:-18px;--dur:23s">
+      <img src="/media/cases/epica-training/9748951065e6-720.jpg" alt="" loading="lazy"></div>
+
+    <div class="chip over" style="left:-2%;top:46%;--w:clamp(96px,10vw,168px);--dz:90px;--r0:5deg;--r1:2deg;--ax:-16px;--ay:12px;--dur:19s;--delay:.6s">
+      <img src="/media/cases/sesderma-anniversary/8dcec0ddcc18-853.jpg" alt="" loading="lazy"></div>
+
+    <div class="chip under" style="right:6%;top:-34%;--w:clamp(84px,8vw,136px);--dz:-70px;--r0:6deg;--r1:9deg;--ax:-12px;--ay:16px;--dur:27s;--delay:.3s">
+      <img src="/media/cases/epica-training/af21c67866e7-720.jpg" alt="" loading="lazy"></div>
+
+    <div class="chip over" style="right:-2%;top:40%;--w:clamp(100px,10.5vw,176px);--dz:130px;--r0:-5deg;--r1:-8deg;--ax:18px;--ay:-14px;--dur:21s;--delay:1.1s">
+      <img src="/media/cases/sesderma-anniversary/eeb807ffab58-853.jpg" alt="" loading="lazy"></div>
+
+    <div class="chip under" style="left:43%;top:84%;--w:clamp(80px,8vw,132px);--dz:-40px;--r0:3deg;--r1:-2deg;--ax:-10px;--ay:-12px;--dur:25s;--delay:.9s">
+      <img src="/media/cases/epica-training/dd6e9b03c67d-720.jpg" alt="" loading="lazy"></div>
+  </div>
+</section>
+
+<p class="claim" data-rise>
+  Один и тот же порядок <span class="lozenge"></span> на репортаже,
+  на обучающей серии и на рекламном ролике.
+  <span class="dim">Меняется объём <span class="lozenge"></span> не порядок.</span>
+</p>
+
+<h2 class="sect-head" id="work" data-rise>Что снимаем</h2>
+<section class="cards" aria-labelledby="work">
+  <a class="card" href="#work" data-rise><span class="dot"></span>
+    <img src="/media/cases/sesderma-anniversary/72d155755700-1200.jpg" alt="Вечер на 300 гостей" loading="lazy">
+    <h3>События и конференции</h3><p>Репортаж, который можно публиковать в тот же день.</p>
+  </a>
+  <a class="card" href="#work" data-rise style="--d:60ms"><span class="dot"></span>
+    <img src="/media/cases/epica-training/dd7e87bf60ac-1200.jpg" alt="Съёмка обучающей серии" loading="lazy">
+    <h3>Обучающие ролики</h3><p>Восемь выпусков за два дня, свет выставлен один раз.</p>
+  </a>
+  <a class="card flat" href="#work" data-rise style="--d:120ms"><span class="dot"></span>
+    <h3>Реклама и имидж</h3><p>От ролика для карточки товара до фильма о компании.</p>
+  </a>
+  <a class="card" href="#work" data-rise style="--d:180ms"><span class="dot"></span>
+    <img src="/media/cases/epica-training/oxy-active-poster-1200.jpg" alt="Предметная съёмка" loading="lazy">
+    <h3>Производство</h3><p>Цеха и линии. Ради кадра никто ничего не останавливает.</p>
+  </a>
+</section>
+
+<section class="names" aria-label="С кем работали">
+  <div class="names-row" aria-hidden="true">
+    <span>Epica Professional<i>.</i></span><span>Panthenol<i>.</i></span><span>Hair Company<i>.</i></span><span>МОСПРОМ<i>.</i></span><span>Московский спорт<i>.</i></span><span>Федерация гимнастики<i>.</i></span>
+    <span>Epica Professional<i>.</i></span><span>Panthenol<i>.</i></span><span>Hair Company<i>.</i></span><span>МОСПРОМ<i>.</i></span><span>Московский спорт<i>.</i></span><span>Федерация гимнастики<i>.</i></span>
+  </div>
+  <p class="names-note">Компании, для которых снимали за последние три года.</p>
+</section>
+
+<script>
+const calm = matchMedia('(prefers-reduced-motion: reduce)');
+
+if ('IntersectionObserver' in window && !calm.matches) {
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}}),{rootMargin:'0px 0px -10% 0px'});
+  document.querySelectorAll('[data-rise]').forEach(el=>io.observe(el));
+} else {
+  document.querySelectorAll('[data-rise]').forEach(el=>el.classList.add('on'));
+}
+
+/*
+ * Параллакс. Каждый элемент уезжает со своей скоростью от того, насколько
+ * далеко его середина от середины экрана, — отсюда ощущение, что карточки
+ * лежат на разной глубине, а не в одной плоскости.
+ *
+ * Считаем в одном rAF на кадр и только когда скролл действительно менялся:
+ * обработчик на scroll, который трогает DOM, съедает кадры именно на тех
+ * машинах, где их и так мало. Трогаем только переменную трансформа.
+ */
+(function parallax(){
+  if (calm.matches) return;
+  const items = [
+    ...[...document.querySelectorAll('.card')].map((el,i)=>({el, k: [26,-18,14,-24][i] || 0})),
+    ...[...document.querySelectorAll('.chip')].map((el,i)=>({el, k: [-34,22,-26,30,-16][i] || 0, drifts: true})),
+    {el: document.querySelector('.monument'), k: 12},
+  ].filter(o=>o.el);
+
+  let queued = false;
+  function frame(){
+    queued = false;
+    const mid = innerHeight / 2;
+    for (const {el, k, drifts} of items) {
+      const r = el.getBoundingClientRect();
+      const near = r.bottom > -200 && r.top < innerHeight + 200;
+      /* Дрейф идёт только у того, что на экране. Прямоугольник уже посчитан
+         здесь, так что отдельный наблюдатель ради этого не нужен. */
+      if (drifts) el.classList.toggle('seen', near);
+      if (!near) continue;
+      const d = ((r.top + r.height / 2) - mid) / innerHeight;  // −1…1
+      /*
+       * `translate`, а не переменная: запись переменной инвалидирует стиль
+       * элемента и гонит пересчёт каждый кадр. Отдельное свойство трансформа
+       * уходит прямо на композитор и не задевает ни `transform` карточки,
+       * ни дрейф кадра — они живут в своих свойствах.
+       */
+      el.style.translate = '0 ' + (d * k).toFixed(1) + 'px';
+    }
+  }
+  function onScroll(){ if (!queued) { queued = true; requestAnimationFrame(frame); } }
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', onScroll, {passive:true});
+  frame();
+})();
+</script>
+</body>
+</html>

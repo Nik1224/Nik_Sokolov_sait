@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from 'react';
 import type { ImageRef } from '@/content/types';
-import { imageSrc, objectPosition } from '@/lib/media';
+import { imageSrc, objectPosition, localSrc } from '@/lib/media';
 
 type Props = {
   poster: ImageRef;
@@ -59,7 +59,7 @@ export function StartBackdrop({ poster, loopSrc, alt = '' }: Props) {
         <video
           data-backdrop="showreel"
           src={loopSrc}
-          poster={poster.src}
+          poster={localSrc(poster.src)}
           autoPlay
           muted
           loop

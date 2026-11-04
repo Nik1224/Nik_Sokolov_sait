@@ -9,9 +9,19 @@
 
 import type { ImageRef } from '@/content/types';
 
+/*
+ * То, о чём предупреждает заголовок, уже случилось: страница визитки держала
+ * свою копию этой константы, и копии разошлись — там кадр был описан до 1800,
+ * здесь только до 1200. Теперь определение одно, по широкой версии: все три
+ * файла лежат на диске, и странице, которая раньше знала о 1800, ничего не
+ * теряется.
+ */
 export const PORTRAIT: ImageRef = {
-  src: '/media/about/nikita-1200.jpg',
-  width: 1200,
-  height: 1800,
-  sources: [600, 1200].map((width) => ({ width, src: `/media/about/nikita-${width}.jpg` })),
+  src: '/media/about/nikita-1800.jpg',
+  width: 1800,
+  height: 2700,
+  sources: [600, 1200, 1800].map((width) => ({
+    width,
+    src: `/media/about/nikita-${width}.jpg`,
+  })),
 };

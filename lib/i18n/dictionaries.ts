@@ -176,6 +176,11 @@ export type Dictionary = {
     /** Третий вариант переключателя форматов внутри группы. */
     bothFormats: string;
     onRequest: string;
+    /**
+     * Одна строка вместо колонки «по запросу» у каждого пакета: пять
+     * одинаковых подписей подряд не сообщают о деньгах ничего, одна — всё то же.
+     */
+    onRequestNote: string;
     individualEstimate: string;
     extras: string;
     combinedDiscount: string;
@@ -197,6 +202,8 @@ export type Dictionary = {
     /** Заголовок блока связи и подпись кнопки. */
     heading: string;
     button: string;
+    /** Кнопка под заголовком «Связаться»: называет действие, а не повторяет заголовок. */
+    write: string;
     /** Подпись под заголовком блока связи на главной. */
     homeLead: string;
     /** Заголовок окна выбора мессенджера. */
@@ -465,6 +472,7 @@ const ru: Dictionary = {
     packagesUnit: { one: 'пакет', few: 'пакета', many: 'пакетов' },
     bothFormats: 'Фото и видео',
     onRequest: 'по запросу',
+    onRequestNote: 'Каждый формат считается сметой после короткого брифа.',
     individualEstimate: 'Индивидуальная смета',
     extras: 'Дополнительно',
     combinedDiscount: 'При заказе фото и видео вместе — скидка 10% на общий чек.',
@@ -501,6 +509,7 @@ const ru: Dictionary = {
   contact: {
     heading: 'Связаться',
     button: 'Связаться',
+    write: 'Написать',
     homeLead: 'Напишите в удобный мессенджер — отвечу лично, без анкет и ожидания.',
     pickChannel: 'Где вам удобнее написать?',
     pickChannelLead: 'Сообщение уже готово — останется отправить.',
@@ -786,6 +795,7 @@ const en: Dictionary = {
     packagesUnit: { one: 'package', few: 'packages', many: 'packages' },
     bothFormats: 'Photo and video',
     onRequest: 'on request',
+    onRequestNote: 'Every format is priced with an estimate after a short brief.',
     individualEstimate: 'Individual estimate',
     extras: 'Extras',
     combinedDiscount: 'Book photo and video together and the total is 10% lower.',
@@ -822,6 +832,7 @@ const en: Dictionary = {
   contact: {
     heading: 'Get in touch',
     button: 'Get in touch',
+    write: 'Send a message',
     homeLead: 'Write in whichever messenger suits you — I answer personally, no forms, no waiting.',
     pickChannel: 'Where would you like to write?',
     pickChannelLead: 'The message is ready — just hit send.',

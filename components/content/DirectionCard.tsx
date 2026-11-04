@@ -21,6 +21,7 @@ import { localizedString } from '@/lib/i18n/localize';
 import { directionHomeHref } from '@/lib/routing';
 import { DIRECTION_PAINT, motionAllowed, requestPaintTransition } from '@/lib/transition';
 import type { Direction, Locale } from '@/lib/site';
+import { localSrc } from '@/lib/media';
 
 type Props = {
   index: number;
@@ -147,7 +148,7 @@ export function DirectionCard({ index, direction, label, description, media, loc
           <video
             ref={videoRef}
             src={source ?? undefined}
-            poster={loop.poster.src}
+            poster={localSrc(loop.poster.src)}
             autoPlay={mode === 'always'}
             muted
             loop

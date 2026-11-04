@@ -31,6 +31,8 @@
     --color-bone-faint: #6a5b4e;
     --color-accent: #b23a2f;
     --color-accent-dim: #8a2c24;
+    /* На красном ветки читается её же бумага: 5.28:1. */
+    --color-on-accent: var(--private-ground);
     --color-danger: #a32318;
     --color-line: rgba(42, 33, 28, 0.14);
     --color-line-strong: rgba(42, 33, 28, 0.32);
@@ -117,8 +119,17 @@
     --color-bone: var(--t-ink);
     --color-bone-dim: var(--t-graphite);
     --color-bone-faint: var(--t-warm-graphite);
-    --color-accent: var(--t-warm-graphite);
-    --color-accent-dim: var(--t-ink);
+    /* Акцент ветки. Тот же красный, что у PRIVATE, и по тому же правилу:
+       он достаётся тому, что можно нажать, — активному пункту меню, кнопке,
+       стрелке перехода, — и никогда метке. Без него вся ветка была одним
+       бежево-графитовым полем без единой точки напряжения.
+
+       Как текст на бумаге ветки он годится только крупным кеглем (3.8:1 —
+       норма для крупного 3:1); мелкой строке красный не достаётся. Заливкой
+       он держит светлый текст: 4.65 к слоновой кости. */
+    --color-accent: #b23a2f;
+    --color-accent-dim: #8a2c24;
+    --color-on-accent: var(--t-ivory);
     /* Надзаголовок тише основного текста, но остаётся читаемым: песочный
        акцент базовой тёмной темы на этой бумаге даёт 1.46:1. */
     --color-eyebrow: var(--t-warm-graphite);
@@ -218,6 +229,17 @@
      * но области прокрутки не создаёт.
      */
     overflow-x: clip;
+  }
+
+  /*
+   * Ветка объявляет свою текстовую гарнитуру токеном `--font-sans`, но делает
+   * это на собственном узле — внутри body. К этому моменту `font-family` выше
+   * уже разрешена и дальше просто наследуется, поэтому переопределённый токен
+   * до текста не доходил: BUSINESS теряла гротеск ветки, на котором держится
+   * её ось резкости. Ветка применяет свой токен заново у себя.
+   */
+  [data-theme] {
+    font-family: var(--font-sans);
   }
 
   /* Изображения никогда не выталкивают layout за пределы вьюпорта. */
@@ -501,6 +523,18 @@
  * строки работают в паре с очень крупным заголовком: контраст масштабов и
  * есть то, что отличает свёрстанный разворот от последовательности блоков.
  */
+/* Заголовок строки в плотных перечнях — шаги работы, пакеты. Та же
+   гарнитура, что у заголовков, но кеглем чуть выше текста: строка должна
+   читаться как пункт прайса, а не как глава. */
+@utility text-item {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
 @utility label-fine {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -1030,8 +1064,9 @@
     --color-bone: var(--t-ink);
     --color-bone-dim: var(--t-graphite);
     --color-bone-faint: var(--t-warm-graphite);
-    --color-accent: var(--t-warm-graphite);
-    --color-accent-dim: var(--t-ink);
+    /* Акцент полоса не трогает: красный ветки держится на всех её светлых
+       ступенях, а своим графитом полоса гасила его на большей части страницы. */
+    --color-on-accent: var(--t-ivory);
     --color-eyebrow: var(--t-warm-graphite);
     --color-line: rgba(25, 25, 24, 0.18);
     --color-line-strong: rgba(25, 25, 24, 0.34);
@@ -1049,16 +1084,28 @@
      * из тёмных, поэтому поднимает и почти чёрную главу, и тёплый графит. Тон
      * самой полосы для этого не годится — на полосе своего же цвета света не
      * видно вовсе.
+     *
+     * 30%, а не 38%: лестница в шапке файла считалась по ровному тону полосы, а
+     * свет поднимает угол отдельно, и пара на нём выпадала из обещанных 4.68.
+     * На этих восьми процентах угол ещё читается как свет, а текст уже проходит.
      */
-    --band-lift: color-mix(in srgb, var(--t-stone-dark) 38%, transparent);
+    --band-lift: color-mix(in srgb, var(--t-stone-dark) 30%, transparent);
     --color-ink: var(--band-core, var(--t-graphite));
     --color-ink-raised: var(--t-warm-graphite);
     --color-ink-sunken: var(--t-ink);
+    /*
+     * Текстовая тройка на тёмном поле сдвинута на ступень вверх: нижняя,
+     * `stone`, держалась только на ровном тоне (4.73), а под светом падала до
+     * 4.1 — ниже AA. Ступеней по-прежнему три, просто взяты они выше.
+     */
     --color-bone: var(--t-ivory);
-    --color-bone-dim: var(--t-warm-grey);
-    --color-bone-faint: var(--t-stone);
+    --color-bone-dim: var(--t-paper);
+    --color-bone-faint: var(--t-warm-grey);
+    /* Здесь красный ветки не живёт: на тёплом графите он даёт 1.97:1. На
+       тёмном поле роль акцента берёт самая светлая ступень. */
     --color-accent: var(--t-warm-grey);
     --color-accent-dim: var(--t-ivory);
+    --color-on-accent: var(--t-ink);
     --color-eyebrow: var(--t-warm-grey);
     --color-line: rgba(232, 227, 219, 0.18);
     --color-line-strong: rgba(232, 227, 219, 0.34);
@@ -1427,13 +1474,19 @@ html[data-scrolled] [data-theme='business'] > header {
    сходит к середине: кадр остаётся кадром.
    -------------------------------------------------------------------------- */
 
+/* Вуаль под подписью обложки. Ступени стоят по реальному месту текста, а не на
+   глаз: заголовок начинается на 65% высоты карточки, описание занимает полосу
+   от 16% до 44%. Прежний градиент к 62% держал уже только 20% краски, и на
+   этом месте по настоящим обложкам выходило 3.6:1 у описания и 2.3:1 у
+   заголовка — ниже AA обоим. Здесь худшая пара по тем же кадрам: 6.9 и 4.4.
+   Выше 82% вуали нет вовсе: верхняя пятая часть кадра остаётся чистой. */
 [data-theme='business'] .cover-scrim {
   background: linear-gradient(
     to top,
     color-mix(in srgb, var(--t-ink) 94%, transparent) 0%,
-    color-mix(in srgb, var(--t-ink) 72%, transparent) 34%,
-    color-mix(in srgb, var(--t-ink) 20%, transparent) 62%,
-    transparent 84%
+    color-mix(in srgb, var(--t-ink) 84%, transparent) 38%,
+    color-mix(in srgb, var(--t-ink) 46%, transparent) 62%,
+    transparent 82%
   );
 }
 

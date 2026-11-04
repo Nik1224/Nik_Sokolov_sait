@@ -15,6 +15,28 @@ function isSanityAsset(src: string): boolean {
 }
 
 /**
+ * Локальные кадры лежат в WebP, а в данных по-прежнему записаны как `.jpg`.
+ *
+ * Подмена делается здесь, в одном месте, а не переписыванием восьмисот с
+ * лишним путей по всем файлам данных: имя кадра — это его опознавательный
+ * знак, он встречается в картах категорий, в ручных подборках и в
+ * исключениях, и менять расширение во всех этих списках значило бы
+ * расклеивать то, что сейчас сходится по имени.
+ *
+ * Выигрыш замерен на всей библиотеке: 202 МБ в JPEG против 143 в WebP при
+ * неотличимой на глаз картинке. Это не перекладывание в другой контейнер, а
+ * честное пережатие другим кодеком с качеством 82; пережатие в тот же JPEG
+ * пробовалось и дало всего 7%, потому что кадры уже были сжаты грамотно.
+ *
+ * Одно исключение: превью ссылки в мессенджерах. Там нужен JPEG, и подмена
+ * не применяется — см. `socialImage` ниже.
+ */
+export function localSrc(src: string): string {
+  if (isSanityAsset(src) || !src.endsWith('.jpg')) return src;
+  return src.replace(/\.jpg$/, '.webp');
+}
+
+/**
  * URL нужной ширины. Sanity CDN сам отдаёт AVIF/WebP по Accept-заголовку
  * (`auto=format`), у локальных файлов варианты пережаты заранее и перечислены
  * в `sources`. Всё остальное отдаётся как есть.
@@ -30,10 +52,61 @@ export function imageSrc(image: ImageRef, width?: number): string {
     // Берём ближайший вариант не меньше запрошенного: кадр, растянутый из
     // меньшего файла, на ретине выглядит мылом.
     const sorted = [...image.sources].sort((a, b) => a.width - b.width);
-    return (sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1]).src;
+    return localSrc((sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1]).src);
   }
 
-  return image.src;
+  return localSrc(image.src);
+}
+
+/**
+ * Кадр для превью ссылки в мессенджерах и соцсетях — всегда JPEG.
+ *
+ * На самом сайте тот же кадр отдаётся в WebP, и дело не в том, что для
+ * превью не жалко веса. Превью собирают не браузеры, а сборщики ссылок, и
+ * WebP у них поддержан вразнобой: часть разворачивает его в картинку, часть
+ * молча отдаёт ссылку голым текстом. Связь на этом сайте идёт через
+ * мессенджеры — ссылка без картинки дороже сэкономленных килобайт.
+ *
+ * Поэтому путь здесь не прогоняется через `localSrc`: у кадров, попадающих
+ * в превью, рядом лежит JPEG-двойник. Что он на месте, следит
+ * `tests/unit/content.test.ts` — иначе мессенджер покажет пустоту, а по
+ * странице этого не видно.
+ *
+ * Sanity просим про JPEG прямо (`fm=jpg`), а не через `auto=format`: формат
+ * по `Accept` сборщику ссылок достанется какой придётся.
+ *
+ * Размеры возвращаются настоящие, а не «1200×630 для всех»: по ним клиент
+ * размечает место под картинку до того, как её скачает, и у вертикального
+ * портрета, объявленного горизонтальным, превью разъезжается.
+ */
+export function socialImage(
+  image: ImageRef,
+  width = 1200,
+): { url: string; width?: number; height?: number } {
+  const ratio = aspectRatio(image);
+  const sized = (url: string, w?: number) => ({
+    url,
+    width: w,
+    height: w && ratio ? Math.round(w / ratio) : undefined,
+  });
+
+  if (isSanityAsset(image.src)) {
+    const params = new URLSearchParams({
+      fm: 'jpg',
+      fit: 'max',
+      q: '80',
+      w: String(width),
+    });
+    return sized(`${image.src}?${params.toString()}`, width);
+  }
+
+  if (image.sources?.length) {
+    const sorted = [...image.sources].sort((a, b) => a.width - b.width);
+    const pick = sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1];
+    return sized(pick.src, pick.width);
+  }
+
+  return sized(image.src, image.width);
 }
 
 export function imageSrcSet(image: ImageRef): string | undefined {
@@ -45,7 +118,7 @@ export function imageSrcSet(image: ImageRef): string | undefined {
 
   if (!image.sources?.length) return undefined;
   return image.sources
-    .map((item) => `${item.src} ${item.width}w`)
+    .map((item) => `${localSrc(item.src)} ${item.width}w`)
     .join(', ');
 }
 

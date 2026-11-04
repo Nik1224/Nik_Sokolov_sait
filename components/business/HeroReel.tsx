@@ -19,6 +19,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ImageRef } from '@/content/types';
 import { Picture } from '@/components/media/Picture';
+import { localSrc } from '@/lib/media';
 
 type Props = {
   poster: ImageRef;
@@ -70,7 +71,7 @@ export function HeroReel({ poster, loopSrc, alt }: Props) {
         <video
           ref={videoRef}
           src={source}
-          poster={poster.src}
+          poster={localSrc(poster.src)}
           autoPlay
           muted
           loop

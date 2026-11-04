@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прототип — BUSINESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* Токены ветки BUSINESS — те же, что в styles/globals.css. */
+:root {
+  --ink:        #191918;
+  --graphite:   #292927;
+  --paper:      #d5cec3;
+  --ivory:      #e8e3db;
+  --warm-grey:  #c0b8ac;
+  --accent:     #b23a2f;
+  --on-accent:  #e8e3db;
+
+  --gutter: clamp(1rem, 4vw, 4.5rem);
+  --step-small: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --step-body:  clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+  --step-lead:  clamp(1.375rem, 1.1rem + 1.1vw, 2.125rem);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Geologica, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--step-body);
+  line-height: 1.5;
+  overflow-x: clip;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ---------- Шапка ---------- */
+.bar {
+  position: fixed; inset: 0 0 auto 0; z-index: 40;
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 1.25rem var(--gutter);
+  color: var(--ivory);
+  font-size: var(--step-small); font-weight: 500;
+}
+.bar nav { display: flex; gap: clamp(1rem, 2.5vw, 2.5rem); }
+.bar a { text-decoration: none; }
+
+/* ---------- Герой: закреплённый заголовок, меняющиеся миры ---------- */
+.pin { position: relative; }
+/* Заголовок стоит, миры под ним меняются. `margin-bottom` убирает его из
+   потока: иначе первая панель начиналась бы ПОД ним, а не за ним. */
+.pin-title {
+  position: sticky; top: 0; z-index: 20;
+  height: 100svh; margin-bottom: -100svh;
+  display: grid; place-items: center;
+  pointer-events: none;
+}
+.pin-title h1 {
+  margin: 0;
+  font-size: clamp(3.25rem, 13.5vw, 13rem);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--ivory);
+  font-variation-settings: 'SHRP' 100;
+}
+.panel {
+  position: relative; z-index: 10;
+  height: 100svh;
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  align-items: end;
+  padding: 0 var(--gutter) clamp(2rem, 6vh, 4.5rem);
+}
+.panel > figure {
+  position: absolute; inset: 0; margin: 0; z-index: -1;
+  overflow: hidden;
+}
+.panel figure img, .panel figure video {
+  width: 100%; height: 100%; object-fit: cover;
+}
+/* Вуаль держит две вещи сразу: подпись внизу и заголовок, который стоит в
+   центре экрана поверх любой панели. Ровная подложка по всему кадру плюс
+   усиление снизу — проверено замером на всех четырёх кадрах. */
+.panel::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(to top,
+      color-mix(in srgb, var(--ink) 88%, transparent) 0%,
+      color-mix(in srgb, var(--ink) 70%, transparent) 26%,
+      color-mix(in srgb, var(--ink) 62%, transparent) 52%,
+      color-mix(in srgb, var(--ink) 52%, transparent) 100%);
+}
+.panel figcaption, .panel .cap {
+  grid-column: 1 / span 6;
+  color: var(--ivory);
+  font-size: var(--step-body);
+  max-width: 34ch;
+}
+.panel .cap b { display: block; font-weight: 700; font-size: var(--step-body); line-height: 1.25; }
+.panel .hero-act { grid-column: 10 / -1; justify-self: end; align-self: end; }
+@media (max-width: 760px) {
+  .panel .cap { grid-column: 1 / -1; }
+  .panel .hero-act { grid-column: 1 / -1; justify-self: start; margin-top: 1.25rem; }
+}
+
+/* Выпуск: последняя панель отдаёт страницу обычному потоку. */
+.release { padding: clamp(4.5rem, 12vh, 9rem) var(--gutter) clamp(3rem, 8vh, 6rem); }
+.release .lead {
+  margin: 0; max-width: 24ch;
+  font-size: var(--step-lead); line-height: 1.22; font-weight: 500;
+}
+.release .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.25rem; }
+.btn {
+  display: inline-block; padding: 1rem 2rem; text-decoration: none;
+  font-size: var(--step-small); font-weight: 500;
+  background: var(--ink); color: var(--paper);
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.btn:hover, .btn:focus-visible { background: var(--accent); color: var(--on-accent); }
+.btn.ghost { background: none; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn.ghost:hover, .btn.ghost:focus-visible { background: var(--ink); color: var(--paper); box-shadow: none; }
+
+/* ---------- Имена, уходящие за оба края ---------- */
+.names { background: var(--ink); color: var(--ivory); padding: clamp(2.5rem, 7vh, 5rem) 0; overflow: hidden; }
+.names-track {
+  display: flex; width: max-content; gap: 0;
+  animation: slide 46s linear infinite;
+  font-size: clamp(2.75rem, 8vw, 7.5rem);
+  font-weight: 700; line-height: 1; letter-spacing: -0.03em;
+  white-space: nowrap;
+  font-variation-settings: 'SHRP' 100;
+}
+.names-track span { padding-inline: clamp(1rem, 2.5vw, 2.5rem); }
+.names-track span::after { content: '·'; margin-left: clamp(1rem, 2.5vw, 2.5rem); color: var(--accent); }
+@keyframes slide { to { transform: translateX(-50%); } }
+.names-note { padding: 1.75rem var(--gutter) 0; font-size: var(--step-body); color: var(--warm-grey); max-width: 46ch; }
+
+/* ---------- Один глагол за раз ---------- */
+.verb { position: relative; height: 100svh; overflow: hidden; }
+.verb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.verb-word {
+  position: sticky; top: 50%; translate: 0 -50%;
+  z-index: 2; margin: 0; padding-inline: var(--gutter); text-align: center;
+  /* 11.5vw, а не 15: «ПОДГОТОВКА» — одиннадцать знаков, и на 15vw слово
+     вылезало из экрана на 23px. Размер держит самое длинное слово. */
+  font-size: clamp(2.75rem, 11.5vw, 13rem); font-weight: 800;
+  line-height: .85; letter-spacing: -0.05em; text-transform: uppercase;
+  color: var(--ivory);
+  font-variation-settings: 'SHRP' 100;
+}
+/* Ровная подложка по всему кадру: глагол стоит в центре, а не внизу. */
+.verb::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: color-mix(in srgb, var(--ink) 60%, transparent);
+}
+.verb p {
+  position: absolute; left: var(--gutter); bottom: clamp(1.5rem, 5vh, 3rem);
+  z-index: 3; margin: 0; max-width: 32ch; color: var(--ivory);
+  font-size: var(--step-body);
+}
+.verb::after {
+  content: ''; position: absolute; inset: auto 0 0 0; height: 46%; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, color-mix(in srgb, var(--ink) 84%, transparent), transparent);
+}
+
+/* ---------- Появление частей секции ---------- */
+[data-rise] { opacity: 0; transform: translateY(22px); }
+.ready [data-rise].shown { animation: rise .7s var(--ease) both; animation-delay: var(--d, 0ms); }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .names-track { animation: none; }
+  [data-rise] { opacity: 1; transform: none; }
+  .ready [data-rise].shown { animation: none; }
+  .pin-title, .verb-word { position: static; translate: none; height: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a href="#top">Никита Соколов</a>
+  <nav><a href="#work">Работы</a><a href="#how">Как снимаем</a><a href="#talk">Связаться</a></nav>
+</header>
+
+<!-- ГЕРОЙ. Заголовок стоит. Миры заказчиков под ним меняются. -->
+<section class="pin" id="top">
+  <div class="pin-title"><h1>Фото<br>и видео</h1></div>
+
+  <article class="panel">
+    <figure><video src="/media/business-loop.mp4" poster="/media/business-poster.jpg" autoplay muted loop playsinline></video></figure>
+    <div class="cap">
+      <b>Фото и видео для компаний и брендов — Москва и весь мир.</b>
+      Конференции, реклама, обучающие серии и производство. Один подрядчик или команда под задачу.
+    </div>
+    <a class="btn hero-act" href="#talk">Обсудить съёмку</a>
+  </article>
+
+  <article class="panel">
+    <figure><img src="/media/cases/epica-training/dd7e87bf60ac-1200.jpg" alt="Съёмка обучающей серии в студии" width="1200" height="800"></figure>
+    <div class="cap"><b>Обучающая серия</b>Восемь выпусков за два съёмочных дня, свет выставлен один раз.</div>
+  </article>
+
+  <article class="panel">
+    <figure><img src="/media/cases/sesderma-anniversary/72d155755700-1200.jpg" alt="Вечер на 300 гостей" width="1200" height="800"></figure>
+    <div class="cap"><b>Вечер на 300 гостей</b>Восемь часов, девять человек в группе, подборка наутро.</div>
+  </article>
+
+  <article class="panel">
+    <figure><img src="/media/cases/epica-training/oxy-active-poster-1200.jpg" alt="Предметная съёмка на производстве" width="1200" height="800"></figure>
+    <div class="cap"><b>Производство</b>Цех работает. Линию ради кадра никто не останавливает.</div>
+  </article>
+</section>
+
+<section class="release">
+  <p class="lead" data-rise>Один и тот же порядок на репортаже, на обучающей серии и на рекламном ролике. Меняется объём, не порядок.</p>
+  <div class="actions" data-rise style="--d:90ms">
+    <a class="btn" href="#talk">Обсудить съёмку</a>
+    <a class="btn ghost" href="#work">Посмотреть работы</a>
+  </div>
+</section>
+
+<!-- ИМЕНА, УХОДЯЩИЕ ЗА ОБА КРАЯ -->
+<section class="names" id="work" aria-label="Компании, с которыми работали">
+  <div class="names-track" aria-hidden="true">
+    <span>Epica Professional</span><span>Panthenol</span><span>Hair Company</span><span>ОК Студио</span><span>МОСПРОМ</span><span>Московский спорт</span><span>Федерация гимнастики</span><span>Алиса</span>
+    <span>Epica Professional</span><span>Panthenol</span><span>Hair Company</span><span>ОК Студио</span><span>МОСПРОМ</span><span>Московский спорт</span><span>Федерация гимнастики</span><span>Алиса</span>
+  </div>
+  <p class="names-note">Компании, для которых снимали конференции, рекламу, обучающие серии и производство за последние три года.</p>
+</section>
+
+<!-- ОДИН ГЛАГОЛ ЗА РАЗ -->
+<h2 class="release" id="how" style="margin:0;font-size:var(--step-lead);font-weight:700" data-rise>Как устроена смена</h2>
+
+<section class="verb">
+  <img src="/media/cases/epica-training/cf5ac70a97c0-853.jpg" alt="Разбор задачи перед съёмкой" width="853" height="569">
+  <h3 class="verb-word">Бриф</h3>
+  <p>Что снимаем, где и куда пойдёт результат. Смета считается после: до неё любая цифра была бы гаданием.</p>
+</section>
+
+<section class="verb">
+  <img src="/media/cases/sesderma-anniversary/e4eb297f42ce-853.jpg" alt="Подготовка площадки" width="853" height="569">
+  <h3 class="verb-word">Подготовка</h3>
+  <p>Локации, доступы, расписание дня и состав группы — согласованы до выезда.</p>
+</section>
+
+<section class="verb">
+  <img src="/media/cases/epica-training/205552b56890-720.jpg" alt="Съёмочный день" width="720" height="480">
+  <h3 class="verb-word">Смена</h3>
+  <p>Работаем внутри вашего графика. Производство не останавливается, конференция идёт по программе.</p>
+</section>
+
+<section class="verb">
+  <img src="/media/cases/sesderma-anniversary/ddb91d924060-853.jpg" alt="Отобранные и обработанные кадры" width="853" height="569">
+  <h3 class="verb-word">Материалы</h3>
+  <p>Отобранные кадры, смонтированные ролики и вертикальные версии под площадки — в сроки из сметы.</p>
+</section>
+
+<section class="release" id="talk">
+  <p class="lead" data-rise>Расскажите, что снимаем. Смету пришлём после короткого брифа.</p>
+  <div class="actions" data-rise style="--d:90ms"><a class="btn" href="#talk">Связаться</a></div>
+</section>
+
+<script>
+  document.documentElement.classList.add('ready');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px' });
+    document.querySelectorAll('[data-rise]').forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll('[data-rise]').forEach((el) => el.classList.add('shown'));
+  }
+</script>
+</body>
+</html>
