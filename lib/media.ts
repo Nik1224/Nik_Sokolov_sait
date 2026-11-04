@@ -15,6 +15,24 @@ function isSanityAsset(src: string): boolean {
 }
 
 /**
+ * Локальные кадры лежат в WebP, а в данных по-прежнему записаны как `.jpg`.
+ *
+ * Подмена делается здесь, в одном месте, а не переписыванием восьмисот с
+ * лишним путей по всем файлам данных: имя кадра — это его опознавательный
+ * знак, он встречается в картах категорий, в ручных подборках и в
+ * исключениях, и менять расширение во всех этих списках значило бы
+ * расклеивать то, что сейчас сходится по имени.
+ *
+ * Тот же кадр в JPEG весил в полтора раза больше при неотличимой картинке:
+ * 223 МБ против 138 на всей библиотеке. Качество не тронуто — пережат только
+ * контейнер.
+ */
+export function localSrc(src: string): string {
+  if (isSanityAsset(src) || !src.endsWith('.jpg')) return src;
+  return src.replace(/\.jpg$/, '.webp');
+}
+
+/**
  * URL нужной ширины. Sanity CDN сам отдаёт AVIF/WebP по Accept-заголовку
  * (`auto=format`), у локальных файлов варианты пережаты заранее и перечислены
  * в `sources`. Всё остальное отдаётся как есть.
@@ -30,10 +48,10 @@ export function imageSrc(image: ImageRef, width?: number): string {
     // Берём ближайший вариант не меньше запрошенного: кадр, растянутый из
     // меньшего файла, на ретине выглядит мылом.
     const sorted = [...image.sources].sort((a, b) => a.width - b.width);
-    return (sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1]).src;
+    return localSrc((sorted.find((item) => item.width >= width) ?? sorted[sorted.length - 1]).src);
   }
 
-  return image.src;
+  return localSrc(image.src);
 }
 
 export function imageSrcSet(image: ImageRef): string | undefined {
@@ -45,7 +63,7 @@ export function imageSrcSet(image: ImageRef): string | undefined {
 
   if (!image.sources?.length) return undefined;
   return image.sources
-    .map((item) => `${item.src} ${item.width}w`)
+    .map((item) => `${localSrc(item.src)} ${item.width}w`)
     .join(', ');
 }
 

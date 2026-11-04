@@ -14,6 +14,7 @@ import { BusinessHome } from '@/components/business/BusinessHome';
 import { CategoryTiles } from '@/components/content/CategoryTiles';
 import { CoverHero } from '@/components/content/CoverHero';
 import { HeroMedia } from '@/components/content/HeroMedia';
+import { PortraitHero } from '@/components/content/PortraitHero';
 import { ContactButton } from '@/components/contact/ContactButton';
 import { PriceCalculator } from '@/components/content/PriceCalculator';
 import { PricingBlock } from '@/components/content/PricingBlock';
@@ -227,8 +228,22 @@ export default async function DirectionHome({ params }: Props) {
         />
       ) : (
       <>
-      {/* Видеообложка показывается целиком, поэтому у неё своя раскладка. */}
-      {doc.hero?.type === 'video' ? (
+      {/*
+        Видеообложка показывается целиком, поэтому у неё своя раскладка — и
+        раскладок две. Широкий кадр ложится полосой во всю ширину, вертикальный
+        встаёт колонкой рядом с текстом: растянутый на всю ширину, он дал бы
+        экран высотой в полторы страницы.
+      */}
+      {doc.hero?.type === 'video' && doc.hero.poster.height > doc.hero.poster.width ? (
+        <PortraitHero
+          locale={locale}
+          title={localizedString(doc.title, locale)}
+          lead={localizedString(doc.lead, locale)}
+          media={doc.hero}
+          cta={{ label: dict.contact.heading, href: href({ locale, direction, section: 'contact' }) }}
+          secondaryCta={{ label: dict.nav[section], href: href({ locale, direction, section }) }}
+        />
+      ) : doc.hero?.type === 'video' ? (
         <CoverHero
           locale={locale}
           eyebrow={dict.directions[direction]}

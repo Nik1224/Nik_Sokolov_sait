@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { weddingReels, weddingVideos } from '@/content/seed/portfolio-galleries';
+import { localSrc } from '@/lib/media';
 import {
   getArticle,
   getArticles,
@@ -349,8 +350,32 @@ describe('постеры роликов: srcset обещает то, что ле
    * Если перепутать, браузер сочтёт постер вдвое шире, чем он есть, и возьмёт
    * файл мельче нужного: превью размоется, и заметить это по коду нельзя.
    */
-  function jpegSize(file: string): { width: number; height: number } {
+  /**
+   * На диске лежит WebP, а в данных путь записан как `.jpg`: подмена делается
+   * в `localSrc` в одном месте, чтобы не расклеивать списки, которые сходятся
+   * по имени кадра. Проверять надо тот файл, который реально уедет в srcset,
+   * поэтому путь прогоняется через ту же функцию, что и на странице.
+   */
+  function imageSize(src: string): { width: number; height: number } {
+    const file = join(process.cwd(), 'public', localSrc(src));
     const buf = readFileSync(file);
+
+    // WebP: RIFF....WEBP, дальше VP8 / VP8L / VP8X — размер лежит по-своему.
+    if (buf.length > 16 && buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {
+      const kind = buf.toString('ascii', 12, 16);
+      if (kind === 'VP8X') {
+        return { width: buf.readUIntLE(24, 3) + 1, height: buf.readUIntLE(27, 3) + 1 };
+      }
+      if (kind === 'VP8 ') {
+        return { width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff };
+      }
+      if (kind === 'VP8L') {
+        const bits = buf.readUInt32LE(21);
+        return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+      }
+      throw new Error(`${file}: неизвестный вид WebP ${kind}`);
+    }
+
     let at = 2;
     while (at < buf.length) {
       if (buf[at] !== 0xff) throw new Error(`${file}: не JPEG`);
@@ -374,7 +399,7 @@ describe('постеры роликов: srcset обещает то, что ле
       const poster = item.poster!;
       expect(poster.sources?.length, `${item._key}: нет размеров`).toBeTruthy();
       for (const source of poster.sources!) {
-        const real = jpegSize(join(process.cwd(), 'public', source.src));
+        const real = imageSize(source.src);
         /*
          * Пиксель расхождения — это округление: файл пережат от исходных
          * пропорций ролика, а число в srcset считается от уже округлённого
@@ -387,7 +412,7 @@ describe('постеры роликов: srcset обещает то, что ле
         ).toBeLessThanOrEqual(1);
       }
       // Крупнейший файл — тот, чьи размеры уходят в width/height картинки.
-      const largest = jpegSize(join(process.cwd(), 'public', poster.src));
+      const largest = imageSize(poster.src);
       expect(poster.width, `${item._key}: width постера`).toBe(largest.width);
       expect(poster.height, `${item._key}: height постера`).toBe(largest.height);
     }

@@ -388,8 +388,23 @@ export const directions: DirectionDoc[] = [
       en: 'For producers and production houses: showreel, work, credits.',
     },
     highlights: [],
-    hero: decorative('hero-production', 'wide', 4),
-    // Вертикальная петля 17 с без звука, 1,4 МБ.
+    /*
+     * Снятая петля, а не заглушка. До этого у обложки стоял `decorative`, и
+     * страница выходила к продюсеру без единого кадра: серый квадрат под
+     * вуалью на 55% не видно вовсе. Ролик всё это время лежал рядом и
+     * показывался только карточкой на стартовой.
+     *
+     * Вертикальная петля 17 с без звука, 1,4 МБ.
+     */
+    hero: {
+      _key: 'hero-production',
+      type: 'video',
+      provider: 'file',
+      poster: { src: '/media/production-poster.jpg', width: 720, height: 1282 },
+      loopSrc: '/media/production-loop.mp4',
+      alt: { ru: 'Работа на съёмочной площадке', en: 'Work on a film set' },
+      rights: 'owned',
+    },
     gatewayMedia: {
       _key: 'gw-production',
       type: 'video',

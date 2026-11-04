@@ -16,6 +16,7 @@ import { KINESCOPE_CATEGORIES, KINESCOPE_HAND_PICKED } from '@/content/seed/kine
 import catalog from '@/content/kinescope-catalog.json';
 import posterManifest from '@/public/media/kinescope/posters.json';
 import type { MediaAsset } from '@/content/types';
+import { localSrc } from '@/lib/media';
 
 const PUBLIC_DIR = join(import.meta.dirname, '..', '..', 'public');
 
@@ -45,7 +46,8 @@ describe('ролики из каталога Kinescope', () => {
       // Битый путь даёт пустое место вместо превью и прыжок вёрстки.
       const files = [media.poster.src, ...(media.poster.sources ?? []).map((s) => s.src)];
       for (const file of files) {
-        expect(existsSync(join(PUBLIC_DIR, file)), `нет файла ${file}`).toBe(true);
+        // Проверяем тот файл, который реально уедет в разметку: кадры лежат в WebP.
+        expect(existsSync(join(PUBLIC_DIR, localSrc(file))), `нет файла ${localSrc(file)}`).toBe(true);
       }
     }
   });

@@ -13,7 +13,7 @@ import type { MediaAsset } from '@/content/types';
 import { track } from '@/lib/analytics';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { localizedString } from '@/lib/i18n/localize';
-import { embedUrl } from '@/lib/media';
+import { embedUrl, localSrc } from '@/lib/media';
 import type { Locale } from '@/lib/site';
 import { Picture } from './Picture';
 
@@ -80,7 +80,7 @@ export function VideoFacade({
             controls
             autoPlay
             playsInline
-            poster={media.poster.src}
+            poster={localSrc(media.poster.src)}
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
